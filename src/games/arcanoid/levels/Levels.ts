@@ -1,5 +1,6 @@
 import wall from '../arcanoidAssets/arcanoidWall.png'
 import Level1  from './Level1'
+export type Assets = Record<string, string>
 class Levels {
 
     buildLevel() {

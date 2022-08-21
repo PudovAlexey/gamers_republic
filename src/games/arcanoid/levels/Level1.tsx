@@ -1,9 +1,12 @@
+import { GameElements } from "../ArcanoidCore"
+import { Assets } from "./Levels"
 class Level1 {
+    private wall: string
     private levelOptions = {
         rows: 5,
         cols: 3
     }
-    constructor(assets) {
+    constructor(assets: Assets) {
         this.wall = assets.wall
     }
 
@@ -11,7 +14,7 @@ class Level1 {
         const wall = this.wall
         const colls = new Array(this.levelOptions.cols).fill('')
         const rows = new Array(this.levelOptions.rows).fill('')
-        const level = {}
+        const level: GameElements = {}
         colls.forEach((_, colIdx) => {
             rows.forEach((_, rowIdx) => {
                 level[`${colIdx}_${rowIdx}`] = {
