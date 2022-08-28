@@ -53,7 +53,7 @@ class AnimationFrame {
     return {
       left: 0,
       right: this.canvasElement!.width - 100,
-      bottom: 0,
+      bottom: 20,
       top: this.canvasElement!.height,
       centerY: this.canvasElement!.height / 2,
       centerX: this.canvasElement!.width / 2,
@@ -69,7 +69,8 @@ class AnimationFrame {
   }
 
   reverseY(Y: number) {
-    return this.canvasElement!.height - 100 - Y;
+    let reverseY = this.canvasElement!.height - 100 - Y;
+    return reverseY <= 0 ? 0 : reverseY
   }
 
   makeElementPosition

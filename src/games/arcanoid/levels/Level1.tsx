@@ -3,8 +3,8 @@ import { Assets } from "./Levels"
 class Level1 {
     private wall: string
     private levelOptions = {
-        rows: 5,
-        cols: 3
+        cols: 5,
+        rows: 14
     }
     constructor(assets: Assets) {
         this.wall = assets.wall
@@ -15,13 +15,18 @@ class Level1 {
         const colls = new Array(this.levelOptions.cols).fill('')
         const rows = new Array(this.levelOptions.rows).fill('')
         const level: GameElements = {}
-        colls.forEach((_, colIdx) => {
-            rows.forEach((_, rowIdx) => {
+        const spacing = 0
+        rows.forEach((_, colIdx) => {
+            colls.forEach((_, rowIdx) => {
+                if (rowIdx === 0) colIdx = colIdx + spacing
                 level[`${colIdx}_${rowIdx}`] = {
                     img: wall,
+                    broken: false,
                     coords: [
-                        (colIdx + 1) * 200,
-                        (rowIdx + 1) * 500
+                        (colIdx) * 110 + 50,
+                        (rowIdx) * 50 + 150,
+                        100,
+                        20
                     ]
                 }
             });
