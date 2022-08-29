@@ -3,8 +3,11 @@
 export function interval(value: number, range: {
     from: number,
     to: number 
-}): boolean {
-    let where = null
+}): {
+    isValid: boolean,
+    where: undefined | "from" | "to"
+} {
+    let where
     if (value <= range.from) {
         where = 'from'
     } else if(value <= range.to) {

@@ -1,7 +1,4 @@
-export type Render = (
-  context: CanvasRenderingContext2D,
-  reverseY: (Y: number) => number
-) => void;
+
 export type Events = {
   event: string;
   element?: Element;
@@ -16,6 +13,11 @@ enum Borders {
   CenterX = "centerX",
   CenterY = "centerY",
 }
+export type Render = (
+  context: CanvasRenderingContext2D,
+  borders: Borders,
+  reverseY: (Y: number) => number
+) => void
 
 type PositionValue = 'init' | 'left' | 'center' | 'right' | number
 

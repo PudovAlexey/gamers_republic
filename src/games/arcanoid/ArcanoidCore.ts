@@ -2,14 +2,12 @@ import Levels from "./levels/Levels";
 import background from "./arcanoidAssets/background.png";
 import platform from "./arcanoidAssets/platform.png";
 import ball from "./arcanoidAssets/ball.png";
-import { Bodrders, Events } from "../../animationFrame/AnimationFrame";
+import { Borders, Events } from "../../animationFrame/AnimationFrame";
 import { interval } from "../../utils/utils";
-type NextCoords = number[]
 export type GameElement = {
   img: string;
   coords: number[];
-  nextCoords: NextCoords[]
-  speed?: number,
+  speed?: [number, number] | number,
   position?: {
 
   }
@@ -24,7 +22,11 @@ export type GameElements = Record<string, GameElement>;
 
 class ArcanoidCore extends Levels {
   private startGame: boolean = false
-    private canvas: HTMLCanvasElement | null
+  private borders: Borders | null
+  private canvas: HTMLCanvasElement | null
+  private levelBlocks: GameElements & {
+    broken: boolean
+  }  | null;
 
   private gameElements: GameElements = {
     background: {
@@ -49,12 +51,11 @@ class ArcanoidCore extends Levels {
         img: ball,
         type: "reverse",
         position: {
-            x: 'center',
+            x: ['center', 50],
             y: 'init'
           },
-        speed: [1, 1],
-          coords: [0, -30],
-          nextCoords: []
+        speed: [2, 2],
+          coords: [100, -30],
     }
   };
 
@@ -63,7 +64,7 @@ class ArcanoidCore extends Levels {
 ]
 
   movePlatform(e) {
-    const platformSpeed = this.gameElements.platform.speed
+    const platformSpeed = this.gameElements.platform.speed as number
     switch(e.key.toLowerCase()) {
         case 'a': 
         this.gameElements.platform.coords[0] -= (1 * platformSpeed)
@@ -72,15 +73,16 @@ class ArcanoidCore extends Levels {
         break;
         case 'd': 
         this.gameElements.platform.coords[0] +=  (1 * platformSpeed)
-        if (!this.startGame) this.gameElements.ball.coords[0] -= (1 * platformSpeed)
-
+        if (!this.startGame) this.gameElements.ball.coords[0] += (1 * platformSpeed)
         this.movePlatform = 'right'
+        break;
         case ' ': this.startGame = true
         break;
+        default: return false
     }
   }
 
-  borderLimits(borders, x, y, elements, elementKey) {
+  borderLimits(borders, x, y) {
     let validX = interval(x, {from: borders.left, to: borders.right})
     let validY = interval(y, {from: borders.bottom, to: borders.top})
     if (!validX.isValid) {
@@ -98,30 +100,32 @@ class ArcanoidCore extends Levels {
   }
 
   isBallOnPlatform() {
-    return interval(this.gameElements.ball.coords[0], {from: this.gameElements.platform.coords[0] - 100, to: this.gameElements.platform.coords[0] + 100}).isValid && this.gameElements.ball.coords[1] === -30
+    return interval(this.gameElements.ball.coords[0], {from: this.gameElements.platform.coords[0] - 10, to: this.gameElements.platform.coords[0] + 80}).isValid && this.gameElements.ball.coords[1] === -30
   }
 
   bounce(ball, elements, borders) {
-    const borderCoords = [
-      borders.left,
-      borders.top
-    ]
-
-    const isBouncedWall =  borderCoords.filter((coord, idx) => coord === ball.coords[idx])
+    const isBouncedWallX = interval(ball.coords[0], {from: borders.left, to:  + borders.right}).isValid
+    const isBouncedWallY = interval(ball.coords[1], {from: borders.bottom - 500, to:  + borders.top - 120}).isValid
 
     const isBouncedElements =  elements.filter(object => {
-      const isBouncedWidth = interval(ball.coords[0], {from: object.coords[0] - 110, to: object.coords[0] + 110})
-      const inBouncedHeight = interval(borders.top - ball.coords[1], {from: object.coords[1] - 110, to: object.coords[1] + 110})
+      const isBouncedWidth = interval(ball.coords[0], {from: object.coords[0] - 10, to: object.coords[0] + 110})
+      const inBouncedHeight = interval(borders.top - ball.coords[1], {from: object.coords[1], to: object.coords[1] + 110})
       return isBouncedWidth.isValid && inBouncedHeight.isValid && object.broken === false
     })
 
-    if (isBouncedWall.length || this.isBallOnPlatform()) {
-      this.gameElements.ball.speed[0] = -this.gameElements.ball.speed[0]
-      this.gameElements.ball.speed[1] = -this.gameElements.ball.speed[1]
+    if (!isBouncedWallY) {
+      this.gameElements.ball.speed![0] = -this.gameElements.ball.speed![0]
+    } else if (!isBouncedWallX) {
+      this.gameElements.ball.speed![1] = -this.gameElements.ball.speed![1]
+    }
+
+    if (this.isBallOnPlatform()) {
+      this.gameElements.ball.speed![0] = -this.gameElements.ball.speed![0]
+      // this.gameElements.ball.speed![1] = -this.gameElements.ball.speed![1]
     }
 
     if (isBouncedElements.length) {
-      this.gameElements.ball.speed[0] = -this.gameElements.ball.speed[0]
+      this.gameElements.ball.speed![0] = -this.gameElements.ball.speed![0]
       isBouncedElements.forEach(el => el.broken = true)
       console.log('bounced')
     }
@@ -136,6 +140,8 @@ class ArcanoidCore extends Levels {
             return borders['centerX']
         } else if ( typeof position === 'number') {
             return position
+        } else if(Array.isArray(position)) {
+          return position.reduce((calc, pos) => calc + parsePosition(pos),0)
         } else {
             return defaultValue
         }
@@ -158,14 +164,14 @@ class ArcanoidCore extends Levels {
   }
 
   onBallMove(ball) {
-    this.ball.coords = [
-      this.ball.coords[0] + this.ball.speed[1],
-      this.ball.coords[1] + this.ball.speed[0],
+    this.gameElements.ball.coords = [
+      this.gameElements.ball.coords[0] + this.gameElements.ball.speed![1],
+      this.gameElements.ball.coords[1] + this.gameElements.ball.speed![0],
     ]
  
     return {
       ...ball,
-      coords: this.ball.coords
+      coords: this.gameElements.coords
     } 
   }
 
@@ -176,14 +182,14 @@ class ArcanoidCore extends Levels {
     this.canvas = canvas
     this.borders = borders
     if (!this.startGame) {
-      this.levelBlocks = this.buildLevel();
+      this.levelBlocks = this.buildLevel(1);
     }
     this.onGameOver()
     const buildGameData: GameElements = {
       ...this.gameElements,
       ...this.levelBlocks,
     };
-    if (this.startGame) this.onBallMove.call(this.gameElements)
+    if (this.startGame) this.onBallMove.call(this)
     Object.keys(buildGameData).forEach((element: string, _, elements) => {
       if (buildGameData[element].broken === true) {
         return;
@@ -193,13 +199,11 @@ class ArcanoidCore extends Levels {
       }
       let drawing = new Image();
       drawing.src = buildGameData[element].img;
-      drawing.width = buildGameData[element]?.size?.width
-      drawing.height = buildGameData[element]?.size?.height
       let [x, y, ...coords] = buildGameData[element].coords;
       if (buildGameData[element].type === "reverse") {
         y = reverseY(y);
       }
-      let {xBord, yBord} = this.borderLimits(borders, x, y, buildGameData, element, reverseY)
+      let {xBord, yBord} = this.borderLimits(borders, x, y)
       context.drawImage(drawing, xBord, yBord, ...(coords as []));
     }, this);
   }
