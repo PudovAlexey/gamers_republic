@@ -5,7 +5,7 @@ export type Events = {
   action: () => void;
 }[];
 
-enum Borders {
+export enum Borders {
   Top = "top",
   Bottom = "bottom",
   Left = "left",
@@ -14,25 +14,28 @@ enum Borders {
   CenterY = "centerY",
 }
 export type Render = (
-  context: CanvasRenderingContext2D,
-  borders: Borders,
-  reverseY: (Y: number) => number
+  {
+    canvas: HTMLCanvasElement,
+    context: CanvasRenderingContext2D,
+  },
+  reverseY: (Y: number) => number,
+  borders: TBorders
 ) => void
 
-type PositionValue = 'init' | 'left' | 'center' | 'right' | number
+export type PositionValue = 'init' | 'left' | 'center' | 'right' | number
 
 type Position = {
     X: PositionValue
     Y: PositionValue
 }
 
-export type Bodrders = Record<Borders, number>;
+export type TBorders = Record<Borders, number>;
 
 class AnimationFrame {
   private exit: boolean = false;
   private canvasElement: HTMLCanvasElement | null = null;
   private context: CanvasRenderingContext2D | null = null;
-  borders: Bodrders = {
+  borders: TBorders = {
     left: 0,
     right: 0,
     top: 0,
@@ -41,7 +44,7 @@ class AnimationFrame {
     centerY: 0,
   };
   private events: Events | null = null;
-  init(canvasElement: HTMLCanvasElement, game: Render, events: Events, makeStartPosition) {
+  init(canvasElement: HTMLCanvasElement, game: Render, events: Events, makeStartPosition: (borders: TBorders) => void) {
     this.events = events;
     if (events) this.makeListeners("add");
     this.context = canvasElement.getContext("2d");
@@ -75,11 +78,9 @@ class AnimationFrame {
     return reverseY <= 0 ? 0 : reverseY
   }
 
-  makeElementPosition
-
   run(game: Render) {
-    const context = this.context;
-    const canvas = this.canvasElement;
+    const context = this.context!;
+    const canvas = this.canvasElement!;
     const borders = this.borders;
     let start = () => {
       game({ context, canvas }, this.reverseY.bind(this), borders);

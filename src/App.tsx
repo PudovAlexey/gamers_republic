@@ -1,16 +1,18 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
 import { useTheme } from '@emotion/react';
-import { ArcanoidControl } from './games/arcanoid/ArcanoidControl';
+import  Game  from './games/arcanoid/Game';
+import { Header } from './staticControls/Header/Header';
+import Footer from './staticControls/Footer/Footer';
+import Box from "@mui/material/Box";
 
-function App() {
+function App({children}) {
   const theme = useTheme()
-  console.log(theme)
   return (
-    <div className="App">
-      <ArcanoidControl/>
-    </div>
+    <Box className="App">
+      <Header/>
+      {children}
+      <Footer/>
+    </Box>
   );
 }
 

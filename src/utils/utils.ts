@@ -1,5 +1,3 @@
-// 8 - 12
-
 export function interval(value: number, range: {
     from: number,
     to: number 
