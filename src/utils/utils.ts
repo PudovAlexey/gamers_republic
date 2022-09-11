@@ -16,3 +16,19 @@ export function interval(value: number, range: {
         where 
     }
 }
+
+export function compareValue(val1, val2, mode = "standart") {
+    console.log('compare')
+    const __mode = {
+        standart: () => val1 === val2,
+        loverCase: () => val1.toLowerCase() === val2.toLowerCase(),
+        substring: () => val1.indexOf(val2) >= 0,
+        substringLower: () => val1.toLowerCase().indexOf(val2.toLowerCase()) >= 0,
+        everyOf: () => val1.every(v => v === val2),
+        someOf: () => val1.some(v => v === val2),
+        everyOfLower: () => val1.every(v => v.toLowerCase() === val2.toLowerCase()),
+        someOfLower: () => val1.some(v => v.toLowerCase() === val2.toLowerCase()),
+    }
+
+    return __mode[mode]()
+}
