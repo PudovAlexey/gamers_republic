@@ -1,4 +1,4 @@
-import React, {useCallback} from "react";
+import React, {useState} from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -23,11 +23,23 @@ export default function Games(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
+  const [filters, setFilters] = useState({
+    search: "",
+    categpryId: null,
+    range: {from: 0, to: 100}
+  })
+
   return (
     <Box sx={{ display: "flex" }}>
-      <Master/>
+      <Master
+      filters={filters}
+      setFilters={setFilters}
+      />
       <CssBaseline />
-      <Detail/>
+      <Detail  
+      filters={filters}
+      setFilters={setFilters}
+      />
     </Box>
   );
 }

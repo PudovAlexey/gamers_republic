@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { Box, Toolbar, Divider, Button, Drawer, Slider } from "@mui/material";
 import { TreeView, TreeItem } from "@mui/lab";
 import { ExpandMore, ExpandLess, ChevronRight } from "@mui/icons-material";
@@ -9,42 +9,40 @@ import SearchField from "../../../components/reusable/SearchField/SearchField";
 import RangeSlider from "../../../components/reusable/RangeSlider/RangeSlider";
 import api from "../../../api/api";
 
-function Master({}) {
-  const [filters, setFilters] = useState({
-    search: "",
-    categpryId: null,
-    range: {from: 0, to: 100}
-  })
+function Master({filters, setFilters}) {
+  let [gameCategories, setGameCategories] = useState(null)
 
+  
   function onChangeFilters(value, type) {
     setFilters(prevFilters => ({...prevFilters, [type]: value}))
   }
-  let parseGameCategories = useCallback((treeChildren, onNavCategory) => {
-    // let childContent = function (node, nodeId, forEachData) {
-    //   return forEachData(TreeItem, {
-    //     label: node.text,
-    //     nodeId,
-    //     onClick: () => onNavCategory(),
-    //   });
-    // };
-    // return makeNodesTree({
-    //   treeChildren: treeChildren,
-    //   childContent: childContent,
-    //   openFirstLeaf: true,
-    //   firstRowProps: function (leaf, id) {
-    //     return { label: leaf.node.text, nodeId: id };
-    //   },
-    // });
+  const navigate = useNavigate();
+  function onNavCategory(categoryNode) {
+    const {nodeId} = categoryNode
+    if (!categoryNode.length) onChangeFilters(nodeId, "categpryId")
+  }
+  
+  useEffect(() => {
     api.getGameCategories()
     .then(category => {
-      console.log(category)
+      let childContent = function (node, nodeId, forEachData) {
+        return forEachData(TreeItem, {
+          label: node.text,
+          nodeId,
+          onClick: () => onNavCategory(node),
+        });
+      };
+      const gameCategories = makeNodesTree({
+        treeChildren: category,
+        childContent: childContent,
+        openFirstLeaf: true,
+        firstRowProps: function (leaf, id) {
+          return { label: leaf.node.text, nodeId: id };
+        },
+      });
+      setGameCategories(gameCategories)
     })
-  }, []);
-  const navigate = useNavigate();
-  function onNavCategory(game) {
-    navigate(`/games/${game}`);
-  }
-
+  }, [])
   function onExpandMore() {}
 
   function onCollapseLess() {}
@@ -78,7 +76,7 @@ function Master({}) {
             defaultCollapseIcon={<ExpandMore />}
             defaultExpandIcon={<ChevronRight />}
           >
-            {parseGameCategories(gamesTree, onNavCategory)}
+            {gameCategories}
           </TreeView>
           <Divider />
           <RangeSlider

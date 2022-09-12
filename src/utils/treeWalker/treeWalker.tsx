@@ -1,3 +1,4 @@
+import { getNodeByPath } from "../utils";
 import { TmakeNodesTreeType } from "./types";
 
 export function forEachTreeNodes(tree, action, ...nodeData) {
@@ -68,6 +69,23 @@ export function makeNodesTree({
   return handleTreeItems(treeChildren, 0);
 }
 
+export function findTreeNodeById({ treeNode, id, nodePath = "nodeId" }) {
+  let node;
+  function findTreeNode(treeNode) {
+    let nodeId = getNodeByPath({ node: treeNode, path: nodePath });
+    if (nodeId === id) {
+      node = treeNode;
+    }
+    if (treeNode.children && !node) {
+      treeNode.children.forEach((node) => findTreeNode(node));
+    }
+
+    return node;
+  }
+
+  return findTreeNode(treeNode);
+}
+
 export function buildTree({
   nodes,
   sorter,
@@ -76,34 +94,37 @@ export function buildTree({
   idProp = "nodeId",
   parrentIdProp = "parrentId",
 }) {
-  function treeHandler(treeNodes) {
-    if (typeof sorter === "function" && treeNodes.length) {
-      treeNodes.sort(sorter);
-    }
-    let excludedNodes = [] 
-    let buildTree = treeNodes.reduce((tree, node, _, flat) => {
-      // if (node[idProp] === node[parrentIdProp]) {
-      //   throw new Error('parrentId equals nodeId')
-      // }
-      let childNodes = flat.filter(n => n[parrentIdProp] === node[idProp])
-      excludedNodes = excludedNodes.concat(...childNodes)
-      if (childNodes.length) {
-        tree.push({
+  let rootTree = nodes.filter((route) => route[parrentIdProp] === 0);
+  let inTree = nodes.filter((route) => route[parrentIdProp] !== 0);
+  let parseTreeNodes = inTree.reduce(
+    (tree, node) => {
+      let parrentNode = findTreeNodeById({
+        treeNode: tree,
+        id: node[parrentIdProp],
+        nodePath: `${nodeName}/${idProp}`,
+      });
+      if (parrentNode) {
+        if (!parrentNode[childName]) parrentNode[childName] = [];
+        parrentNode[childName].push({
           [nodeName]: node,
-          [childName]: childNodes
-        })
-      } else {
-        tree.push(node)
+          [childName]: [],
+        });
+        if (typeof sorter === "function" && parrentNode[childName]?.length) {
+          parrentNode[childName].sort(sorter);
+        }
       }
-      return tree
-    }, []);
-    if (!excludedNodes.length) {
-      return buildTree;
-    } else {
-      excludedNodes = []
-      treeHandler(buildTree)
-    };
-  }
+      return tree;
+    },
+    {
+      [nodeName]: { virtual: true },
+      [childName]: rootTree
+      .map((node) => ({
+        [nodeName]: node,
+        [childName]: [],
+      }))
+      .sort(sorter),
+    }
+  );
 
-  return treeHandler(nodes);
+  return parseTreeNodes;
 }

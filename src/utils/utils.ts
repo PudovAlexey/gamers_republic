@@ -32,3 +32,16 @@ export function compareValue(val1, val2, mode = "standart") {
 
     return __mode[mode]()
 }
+
+export function getNodeByPath({node, path}) {
+    let splitPath = path.split("/")
+    return splitPath.reduce((value, part) => {
+        if (!value) {
+            value = node[part]
+        } else {
+            value = value[part]
+        }
+        if (value === undefined || value === null) value = {} 
+        return value
+    }, null)
+}
