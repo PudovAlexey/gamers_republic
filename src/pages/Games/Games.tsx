@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -8,13 +8,13 @@ import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import Master from "./Master/Master";
 import Detail from "./Detail/Detail";
+import useDebounce from "../../hooks/useDebounce";
 
 const drawerWidth = 240;
 
 interface Props {
   window?: () => Window;
 }
-
 
 export default function Games(props: Props) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -23,23 +23,23 @@ export default function Games(props: Props) {
     setMobileOpen(!mobileOpen);
   };
 
-  const [filters, setFilters] = useState({
-    search: "",
-    categpryId: null,
-    range: {from: 0, to: 100}
-  })
+  const {
+    debounced: [filters, setFilters],
+    notDebounced: [filterValues, setFilterValues],
+  } = useDebounce(
+    {
+      search: "",
+      categpryId: null,
+      range: { from: 0, to: 100 },
+    },
+    20
+  );
 
   return (
     <Box sx={{ display: "flex" }}>
-      <Master
-      filters={filters}
-      setFilters={setFilters}
-      />
+      <Master filterValues={filterValues} setFilterValues={setFilterValues} filters={filters} setFilters={setFilters} />
       <CssBaseline />
-      <Detail  
-      filters={filters}
-      setFilters={setFilters}
-      />
+      <Detail filterValues={filterValues} setFilterValues={setFilterValues} filters={filters} setFilters={setFilters} />
     </Box>
   );
 }

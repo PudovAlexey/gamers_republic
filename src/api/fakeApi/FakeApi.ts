@@ -2,8 +2,32 @@ import { buildTree } from "../../utils/treeWalker/treeWalker";
 import { compareValue } from "../../utils/utils";
 import { GameCategories } from "./data/Games/GameCategories";
 import { gamesList } from "./data/Games/GamesList";
+import { AuthUser } from "./data/Users/AuthUser";
 
 class FakeApi {
+  async getAuthUser(token) {
+    let isAuth = AuthUser.token === token
+    let req = await this.fakeDelay(AuthUser);
+    if (!isAuth) {
+      req = await this.fakeDelay("not Auth");
+    }
+    return req
+  }
+
+ async toggleUserLike(user, gameId) {
+    if (AuthUser.token !== user?.token) {
+      return this.fakeDelay(false)
+    }
+    let newGameIds = user.likeGamesIds.filter(id => !(id === gameId))
+    if (newGameIds.length === user.likeGamesIds.length) {
+      user.likeGamesIds.push(gameId)
+    } else {
+      user.likeGamesIds = newGameIds
+    }
+   let res = await this.fakeDelay(user.likeGamesIds);
+    return res
+  }
+
   async getGameCategories() {
     const gameCategoriesTree = buildTree({nodes: GameCategories})
     let reqCategories = await this.fakeDelay(gameCategoriesTree);
@@ -14,10 +38,10 @@ class FakeApi {
 
   }
 
-  async findGameList(search) {
+  async findGameList({search}) {
     try {
       const findGamesBySearch = !search
-        ? []
+        ? gamesList
         : gamesList.filter((game) => {
             return (
               compareValue(game.game, search, "substringLower") ||

@@ -9,14 +9,14 @@ import SearchField from "../../../components/reusable/SearchField/SearchField";
 import RangeSlider from "../../../components/reusable/RangeSlider/RangeSlider";
 import api from "../../../api/api";
 
-function Master({filters, setFilters}) {
+function Master({filterValues, setFilterValues,filters, setFilters}) {
   let [gameCategories, setGameCategories] = useState(null)
 
   
   function onChangeFilters(value, type) {
     setFilters(prevFilters => ({...prevFilters, [type]: value}))
+    setFilterValues(prevFilters => ({...prevFilters, [type]: value}))
   }
-  const navigate = useNavigate();
   function onNavCategory(categoryNode) {
     const {nodeId} = categoryNode
     if (!categoryNode.length) onChangeFilters(nodeId, "categpryId")
@@ -67,7 +67,7 @@ function Master({filters, setFilters}) {
           </Toolbar>
           <Divider />
           <SearchField
-          value={filters.search}
+          value={filterValues.search}
           onChange={(value) => onChangeFilters(value, 'search')} 
           />
           <Divider />
@@ -80,8 +80,8 @@ function Master({filters, setFilters}) {
           </TreeView>
           <Divider />
           <RangeSlider
-          from={filters.range.from}
-          to={filters.range.to}
+          from={filterValues.range.from}
+          to={filterValues.range.to}
           onChange={(from, to) => onChangeFilters({from, to}, 'range')}
           />
           <Divider />

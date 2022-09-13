@@ -1,5 +1,6 @@
 export let gamesList = [
     {
+      gameId: 1,
       categoryId: 15,
       game: "arcanoid",
       description: "these is awesome",
@@ -12,6 +13,7 @@ export let gamesList = [
       rate: 4
     },
     {
+      gameId: 2,
       categoryId: 15,
       game: "Snake",
       description: "these is a Snake",
@@ -24,6 +26,7 @@ export let gamesList = [
       rate: 5
     },
     {
+      gameId: 3,
       categoryId: 15,
       game: "Mario",
       description: "these is a Mario",
