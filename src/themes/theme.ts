@@ -21,4 +21,40 @@ declare module '@mui/material/styles' {
     status: {
       danger: orange[500],
     },
+    components: {
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            width: '100%',
+            height: '50px'
+          }
+        }
+      },
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            top: '60px'
+          }
+        }
+      },
+      MuiToolbar: {
+        styleOverrides: {
+          root: {
+            minHeight: 'fit-content !important',
+            justifyContent: 'right',
+            paddingRight: '5px',
+            paddingLeft: '5px'
+          },
+
+        }
+      },
+      MuiButton: {
+        styleOverrides: {
+          root: {
+            padding: '2px 2px',
+            minWidth: 'fit-content'
+          }
+        }
+      }
+    }
   });

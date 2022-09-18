@@ -10,8 +10,16 @@ import RangeSlider from "../../../components/reusable/RangeSlider/RangeSlider";
 import api from "../../../api/api";
 
 function Master({filterValues, setFilterValues,filters, setFilters}) {
+  const [expandedTree, setExpandedTree] = React.useState<string[]>([]);
+  const [selectedTree, setSelectedTree] = React.useState<string[]>([]);
   let [gameCategories, setGameCategories] = useState(null)
+  const handleToggle = (event: React.SyntheticEvent, nodeIds: string[]) => {
+    setExpandedTree(nodeIds);
+  };
 
+  const handleSelect = (event: React.SyntheticEvent, nodeIds: string[]) => {
+    setSelectedTree(nodeIds);
+  };
   
   function onChangeFilters(value, type) {
     setFilters(prevFilters => ({...prevFilters, [type]: value}))
@@ -45,7 +53,9 @@ function Master({filterValues, setFilterValues,filters, setFilters}) {
   }, [])
   function onExpandMore() {}
 
-  function onCollapseLess() {}
+  function onCollapseLess() {
+
+  }
   return (
     <Box>
       <Drawer
@@ -57,6 +67,11 @@ function Master({filterValues, setFilterValues,filters, setFilters}) {
         }}
       >
         <Box>
+          <SearchField
+          value={filterValues.search}
+          onChange={(value) => onChangeFilters(value, 'search')} 
+          />
+          <Divider />
           <Toolbar>
             <Button onClick={onExpandMore}>
               <ExpandLess />
@@ -66,15 +81,14 @@ function Master({filterValues, setFilterValues,filters, setFilters}) {
             </Button>
           </Toolbar>
           <Divider />
-          <SearchField
-          value={filterValues.search}
-          onChange={(value) => onChangeFilters(value, 'search')} 
-          />
-          <Divider />
           <TreeView
             aria-label="file system navigator"
             defaultCollapseIcon={<ExpandMore />}
             defaultExpandIcon={<ChevronRight />}
+            expanded={expandedTree}
+            selected={selectedTree}
+            onNodeToggle={handleToggle}
+            onNodeSelect={handleSelect}
           >
             {gameCategories}
           </TreeView>
