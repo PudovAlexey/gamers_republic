@@ -1,4 +1,6 @@
 export const AuthUser = {
+    id: "",
+    username: "darkStalker",
     name: "Aleksey",
     surname: "Pudov",
     token: "testToken",

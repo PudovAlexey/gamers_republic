@@ -55,7 +55,7 @@ function GameCard({title, description, avatar, icon, hashTags, gameId}) {
     })
   }
 
-  function onShareGameLink() {
+  function onCopyLink() {
     
   }
 
