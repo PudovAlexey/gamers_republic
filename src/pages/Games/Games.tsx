@@ -39,7 +39,7 @@ export default function Games(props: Props) {
     <Box sx={{ display: "flex" }}>
       <Master filterValues={filterValues} setFilterValues={setFilterValues} filters={filters} setFilters={setFilters} />
       <CssBaseline />
-      <Detail filterValues={filterValues} setFilterValues={setFilterValues} filters={filters} setFilters={setFilters} />
+      <Detail filters={filters} />
     </Box>
   );
 }

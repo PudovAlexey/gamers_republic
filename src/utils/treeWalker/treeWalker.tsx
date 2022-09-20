@@ -1,5 +1,6 @@
+import { JsxElement } from "typescript";
 import { getNodeByPath } from "../utils";
-import { TmakeNodesTreeType } from "./types";
+import { TBuildTreeProps, TmakeNodesTreeType } from "./types";
 
 export function forEachTreeNodes(tree, action, ...nodeData) {
   if (tree.children) {
@@ -29,7 +30,7 @@ export function makeNodesTree({
   }
   function handleTreeItems(treeChildren, id) {
     if (id === 0 && openFirstLeaf) {
-      let forEachData = function (Content, props) {
+      let forEachData = function (Content) {
         return treeChildren[childName].map((leaf, idx) => {
           let updateId = `${id}-${idx}`;
           return (
@@ -42,8 +43,8 @@ export function makeNodesTree({
         });
       };
 
-      return childContent(treeChildren[nodeName], id, (content, props) =>
-        forEachData(content, props)
+      return childContent(treeChildren[nodeName], id, (content) =>
+        forEachData(content)
       );
     } else if (treeChildren[childName]) {
       let forEachData = function (Content, props) {
@@ -59,7 +60,7 @@ export function makeNodesTree({
         forEachData(content, props)
       );
     } else {
-      let content = (Content, props) => <Content {...props}></Content>;
+      let content = (Content, props): JSX.Element => <Content {...props}></Content>;
       return childContent(treeChildren[nodeName], id, (Content, props) =>
         content(Content, props)
       );
@@ -93,7 +94,7 @@ export function buildTree({
   childName = "children",
   idProp = "nodeId",
   parrentIdProp = "parrentId",
-}) {
+}: TBuildTreeProps) {
   let rootTree = nodes.filter((route) => route[parrentIdProp] === 0);
   let inTree = nodes.filter((route) => route[parrentIdProp] !== 0);
   let parseTreeNodes = inTree.reduce(
@@ -122,7 +123,7 @@ export function buildTree({
         [nodeName]: node,
         [childName]: [],
       }))
-      .sort(sorter),
+     
     }
   );
 

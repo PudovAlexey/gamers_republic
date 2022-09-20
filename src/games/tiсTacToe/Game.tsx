@@ -169,7 +169,7 @@ function Game() {
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
         {gameCount}
-        {gameTurn("Now turn is")}
+        {gameTurn("Now turn is", false)}
       </ToolbarComponent>
       <Box
         sx={{

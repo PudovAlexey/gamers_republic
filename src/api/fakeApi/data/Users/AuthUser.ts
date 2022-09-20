@@ -1,5 +1,7 @@
-export const AuthUser = {
-    id: "",
+import { User } from "../../../../types/types";
+
+export const AuthUser: User = {
+    id: 1,
     username: "darkStalker",
     name: "Aleksey",
     surname: "Pudov",

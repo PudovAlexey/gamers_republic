@@ -1,4 +1,5 @@
 import { Slider, Box, TextField } from "@mui/material";
+import { ChangeEvent } from "../../../types/types";
 function RangeSlider({from, to, onChange}) {
   function onChangeState(value, type) {
     switch(type) {
@@ -16,7 +17,7 @@ function RangeSlider({from, to, onChange}) {
             aria-label="Temperature"
             defaultValue={[from, to]}
             color="secondary"
-            onChange={(e) => onChangeState(e.target.value, 'from-to')}
+            onChange={(_, value) => onChangeState(value, 'from-to')}
           />
           <Box sx={{
             display: 'flex',
@@ -25,7 +26,7 @@ function RangeSlider({from, to, onChange}) {
           <TextField
             label="From"
             value={from}
-            onChange={(e) => onChangeState(e.target.value, 'from')}
+            onChange={(e: ChangeEvent) => onChangeState(e.target.value, 'from')}
             InputProps={{
               type: 'search',
             }}
@@ -33,7 +34,7 @@ function RangeSlider({from, to, onChange}) {
           <TextField
             label="To"
             value={to}
-            onChange={(e) => onChangeState(e.target.value, 'to')}
+            onChange={(e: ChangeEvent) => onChangeState(e.target.value, 'to')}
             InputProps={{
               type: 'search',
             }}

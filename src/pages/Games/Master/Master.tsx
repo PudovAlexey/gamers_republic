@@ -8,6 +8,7 @@ import gamesTree from "../../../games/GamesList/GamesTree";
 import SearchField from "../../../components/reusable/SearchField/SearchField";
 import RangeSlider from "../../../components/reusable/RangeSlider/RangeSlider";
 import api from "../../../api/api";
+import { Node } from "../../../utils/treeWalker/types";
 
 function Master({filterValues, setFilterValues,filters, setFilters}) {
   const [expandedTree, setExpandedTree] = React.useState<string[]>([]);
@@ -32,7 +33,7 @@ function Master({filterValues, setFilterValues,filters, setFilters}) {
   
   useEffect(() => {
     api.getGameCategories()
-    .then(category => {
+    .then((category: Node) => {
       let childContent = function (node, nodeId, forEachData) {
         return forEachData(TreeItem, {
           label: node.text,

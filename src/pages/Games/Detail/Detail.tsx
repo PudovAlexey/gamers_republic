@@ -2,14 +2,14 @@ import React, {useState, useEffect} from 'react';
 import {Typography, Toolbar, Box} from "@mui/material";
 import GameCard from './fragments/GameCard';
 import api from '../../../api/api';
-import useDebounce from '../../../hooks/useDebounce';
+import { Game } from '../../../games/GamesList/types/Games/types';
 
-function Detail({filters, setFilters}) {
+function Detail({filters}) {
     let [gameList, setGameList] = useState([])
 
     useEffect(() => {
         api.findGameList(filters)
-        .then(games => {
+        .then((games: Game[]) => {
             setGameList(games)
         })
     }, [filters])

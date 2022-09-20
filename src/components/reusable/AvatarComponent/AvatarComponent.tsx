@@ -1,4 +1,5 @@
 import { Avatar, Typography } from "@mui/material"
+import {Box} from "@mui/material"
 
 function AvatarComponent({userName, avatarSrc, name, surname}) {
     return (

@@ -10,6 +10,7 @@ import {
   Avatar,
   IconButton,
   Typography,
+  IconButtonProps,
 } from "@mui/material";
 import { pink } from '@mui/material/colors';
 
