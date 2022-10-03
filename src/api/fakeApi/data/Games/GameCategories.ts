@@ -1,4 +1,6 @@
-export const GameCategories = [
+import { FlatNode, Node } from "../../../../utils/treeWalker/types";
+
+export const GameCategories: FlatNode[] = [
     {text: "Arcades", nodeId: 1, parrentId: 0},
     {text: "Racing", nodeId: 2, parrentId: 0},
     {text: "Desktop", nodeId: 3, parrentId: 0},

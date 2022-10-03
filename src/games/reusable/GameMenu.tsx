@@ -1,10 +1,19 @@
-import React from "react";
+import React, {useMemo} from "react";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import { List, ListItemButton, ListItemText } from "@mui/material";
+import { List, ListItemButton, ListItemText, Button } from "@mui/material";
+import { findTreeNodeById, forEachTreeNodes } from "../../utils/treeWalker/treeWalker";
 
 function GameMenu({ menuTree }) {
-  const [optionNode, setOptionNode] = useState(menuTree.children);
+  const menuTreeWithIds = useMemo(() => {
+    let makeTreenodesIds = (node, parrentNode) => {
+      console.log(node)
+    }
+
+
+    return  forEachTreeNodes(menuTree, makeTreenodesIds)
+  }, [])
+  const [optionNode, setOptionNode] = useState(menuTreeWithIds.children);
 
   function onTreeItemPress(treeNode) {
     if (treeNode.children) {
@@ -13,8 +22,20 @@ function GameMenu({ menuTree }) {
         treeNode.action()
     }
   }
+
+  function onNavBack() {
+    const parrentId = optionNode[0].node.id.replace(/-\d+-\d+$/, "")
+    const parrentNode = findTreeNodeById({treeNode: menuTreeWithIds, id: parrentId, nodePath: "node/id"})
+    if (parrentNode && parrentNode.children.length && parrentId !== optionNode[0]) {
+      setOptionNode(parrentNode.children)
+    }
+  }
   return (
-    <List
+    <Box>
+        <Button sx={{
+          zIndex: 2000
+        }} onClick={() => onNavBack(optionNode)}>Back</Button>
+      <List
       sx={{
         width: "100%",
         height: "100%",
@@ -47,6 +68,7 @@ function GameMenu({ menuTree }) {
       </ListItemButton>
         ))}
     </List>
+    </Box>
   );
 }
 

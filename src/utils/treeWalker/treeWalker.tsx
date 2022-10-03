@@ -2,18 +2,18 @@ import { JsxElement } from "typescript";
 import { getNodeByPath } from "../utils";
 import { TBuildTreeProps, TmakeNodesTreeType } from "./types";
 
-export function forEachTreeNodes(tree, action, ...nodeData) {
-  if (tree.children) {
-    tree.children.forEach(
-      (treeNode, idx) =>
-        Array.isArray(treeNode.children) &&
-        forEachTreeNodes(treeNode, action, nodeData.push(idx))
-    );
-  } else {
-    action(tree);
+export function forEachTreeNodes(tree, action, parrentNode = null, nodeId = "0", nodeName = "node", childName = "children") {
+  tree[nodeName].id = nodeId;
+  if (typeof action === "function") action(tree[nodeName], parrentNode, nodeId)
+  if (Array.isArray(tree[childName]) && tree[childName].length) {
+    tree[childName].forEach((node, idx) => forEachTreeNodes(
+      node,
+      action,
+      tree,
+      `${nodeId}-${idx}`
+    ))
   }
-
-  return tree;
+  return tree
 }
 
 export function makeNodesTree({

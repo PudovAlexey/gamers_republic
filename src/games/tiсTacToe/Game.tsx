@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import Tic from "./assets/Tic.png";
 import Tac from "./assets/Tac.png";
 import { Alert, AlertTitle, Box, Toolbar, Typography } from "@mui/material";
-import { buildFieldByCoords } from "../utils/fiels";
+import { buildFieldByCoords, makeField } from "../utils/fiels";
 import DialogControl from "../../components/reusable/Dialog/DialogControl";
 import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
 import { useNavigate } from "react-router-dom";
-let fild = {
-  A: { 1: {}, 2: {}, 3: {} },
-  B: { 1: {}, 2: {}, 3: {} },
-  C: { 1: {}, 2: {}, 3: {} },
-};
+import { EField } from "../utils/types";
+// let fild = {
+//   A: { 1: {}, 2: {}, 3: {} },
+//   B: { 1: {}, 2: {}, 3: {} },
+//   C: { 1: {}, 2: {}, 3: {} },
+// };
+
+let fild = makeField(EField.TicTacToe)
 let iconsDict = {
   X: { key: "X", value: Tic },
   O: { key: "O", value: Tac },
