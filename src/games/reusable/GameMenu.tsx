@@ -18,8 +18,9 @@ function GameMenu({ menuTree }) {
   function onTreeItemPress(treeNode) {
     if (treeNode.children) {
         setOptionNode(treeNode.children);
-    } else if (treeNode.action) {
-        treeNode.action()
+    } else if (treeNode.node.action) {
+      console.log("action")
+        treeNode.node.action()
     }
   }
 

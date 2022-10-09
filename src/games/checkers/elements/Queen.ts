@@ -64,7 +64,9 @@ class Queen extends Figure {
     }
     coords.map((nextCoord) => {
       let eatMark = false;
-      if (!this.fieldState[nextCoord.coords.col][nextCoord.coords.row].key) {
+      const isKey = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row].key
+      const isHasField = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row]
+      if (isHasField && !isKey) {
         this.fieldState[nextCoord.coords.col][nextCoord.coords.row].light =
           "red";
       }
@@ -108,6 +110,18 @@ class Queen extends Figure {
       return this.fieldState;
     }
     this.makeLights(col, row);
+    const canEat = this.lights.filter(light => !!light.eat)
+    if (canEat.length) {
+      const clearNotEatLights = (column, col, row) => {
+        const isAfterEatCoords = canEat.find(eat => {
+          return JSON.stringify(this[eat.eat.key](eat.eat.coords.col, eat.eat.coords.row).coords) === JSON.stringify({col, row: +row})
+        }) 
+        if(!isAfterEatCoords) {
+          delete column.light;
+        }
+      }
+      this.forEachField(clearNotEatLights)
+    }
     return this.fieldState;
   }
   render() {

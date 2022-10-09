@@ -3,13 +3,13 @@ import Queen from "../elements/Queen"
 
 export function QueenTests(field) {
     const queen = new Queen("Red", {
-        col: "G",
-        row: "5",
+        col: "A",
+        row: "1",
     },
     field
     )
-    field["G"]["5"] = queen.render()
-    field["G"]["5"].figure = queen
+    field["A"]["1"] = queen.render()
+    field["A"]["1"].figure = queen
 
     const figure = new Figure({
         col: "F",
@@ -35,8 +35,8 @@ export function QueenTests(field) {
     -1, 
     field
     )
-    field["G"]["5"] = queen.render()
-    field["G"]["5"].figure = queen
+    field["A"]["1"] = queen.render()
+    field["A"]["1"].figure = queen
     field["F"]["4"] = figure.render()
     field["F"]["4"].figure = figure
     field["D"]["4"] = figure2.render()

@@ -41,7 +41,8 @@ class Figure {
             coords: {
                 col: nextCol,
                 row: +row - 1
-            }
+            },
+            oposite: "fromRightBottom"
         }
     }
 
@@ -54,7 +55,8 @@ class Figure {
             coords: {
                 col: nextCol,
                 row: +row + 1
-            }
+            },
+            oposite: "fromLeftBottom"
         }
     } 
 
@@ -67,7 +69,8 @@ class Figure {
             coords: {
                 col: nextCol,
                 row: +row + 1
-            }
+            },
+            oposite: "fromLeftTop"
         }
         
     } 
@@ -80,7 +83,8 @@ class Figure {
             coords: {
                 col: nextCol,
                 row: +row - 1
-            }
+            },
+            oposite: "fromRightTop"
         }
     } 
 
@@ -150,6 +154,7 @@ class Figure {
         }
         let isWasEat = false
         let isAvalibleField =  this.lights.find(light => light.col === col && +light.row === +row)
+        let isNotStep = true
         if (isAvalibleField) {
             const isEatAportunaty = (column, col, row) => {
                 const isMustEat = [
@@ -160,15 +165,25 @@ class Figure {
                 ]
                 const onTarget = this.fieldState[col][row]
                 isMustEat.forEach(inAim => {
+                    const isOnEnd = this[inAim.oposite](col, row)?.value
+                    console.log(col, row)
                     if (
                         typeof inAim?.value?.key === 'string' && 
                         this.fieldState[col][row].key && 
                         inAim?.value?.key !== this.fieldState[col][row].key &&
-                        JSON.stringify(this.coords) !== JSON.stringify(this.fieldState[col][row].figure.coords)
+                        JSON.stringify(this.coords) !== JSON.stringify(this.fieldState[col][row].figure.coords) &&
+                        isOnEnd
                         ) {
-                        const {col, row} = inAim.coords
-                        if (this[inAim.key](col, row) && this[inAim.key](col, row).key)   {
-                            this.fieldState[col][row] = {}
+                        const {col: colAim, row: rowAim} = inAim.coords
+                        const isNotKey =  !this[inAim.oposite](col, row)?.value?.key 
+                        if (this[inAim.oposite](colAim, rowAim).value && 
+                        this[inAim.oposite](colAim, rowAim).value.key &&
+                        this.fieldState[colAim][rowAim].key == this.color &&
+                        isNotKey
+                        &&
+                        !this.lights.some(light => JSON.stringify(light?.eat?.coords || {}) === JSON.stringify({col, row: +row}))
+                        )   {
+                            this.fieldState[colAim][rowAim] = {}
                         }
                     }
                 }, this)
@@ -190,19 +205,22 @@ class Figure {
             if (makeQueen) {
                 this.fieldState[col][row].updateToQueen = true
             }
-            this.lights.forEach(light => {
+            this.lights.forEach((light, idx, rows) => {
                 if (this.fieldState[light.col] && this.fieldState[light.col][light.row]) delete this.fieldState[light.col][light.row].light
-                if (light.eat) {
+                const eatTo = light.eat && this[light.eat.key](light.eat.coords.col, light.eat.coords.row)
+                if (light.eat && +eatTo.coords.row === +row && eatTo.coords.col === col) {
                     isWasEat = true
                     this.fieldState[light.eat.coords.col][light.eat.coords.row] = {}
                 }
             })
             this.lights = []
             const updatedField = this.fieldState[col][row]
+            isNotStep = false
         }
         return {
             stepTo: this.fieldState,
-            coords: this.coords, 
+            coords: this.coords,
+            isNotStep,
             isWasEat
         }
     }

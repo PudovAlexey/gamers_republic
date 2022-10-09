@@ -16,7 +16,8 @@ import Queen from "./elements/Queen";
 import { QueenTests } from "./tests/Queen";
 import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
 import GameMenu from "../reusable/GameMenu";
-import {MenuItems} from "./GameMenu";
+import {gameMenu, MenuItems} from "./GameMenu";
+import { useNavigate } from "react-router-dom";
 
 let field = makeField(EField.Chees);
 
@@ -62,11 +63,13 @@ function Game() {
     },
     firstStep: "Black",
   });
-
+  const navigate = useNavigate()
+  const menuItems = gameMenu({setStartGame, navigate})
   useEffect(() => {
-    let fillBoard = onFillBoard(field, gameParams);
-    setFieldState(fillBoard);
-  }, []);
+    // let fillBoard = onFillBoard(field, gameParams);
+    const test =  QueenTests(field, gameParams)
+    setFieldState(test);
+  }, [startGame]);
 
   function onPlayerClick(figure, col, row, eatContinue) {
     if (figure && fieldState[col][row].key) {
@@ -74,18 +77,18 @@ function Game() {
       setActiveFigure(figure);
       if (!isPlayerCanGo) return;
       let avalibleState = figure.lightAvalibleFields(eatContinue);
-      setFieldState(avalibleState);
+      setFieldState({...avalibleState});
     }
   }
 
   function onFigureGo(col, row) {
     if (activeFigure && !fieldState[col][row].key) {
-      let { stepTo, isWasEat, changeChoice, coords } = activeFigure.stepTo(
+      let { stepTo, isWasEat, changeChoice, coords, isNotStep } = activeFigure.stepTo(
         col,
         row,
         activeFigure
       );
-      if (changeChoice) return;
+      if (changeChoice || isNotStep) return;
       if (stepTo[coords.col][coords.row].updateToQueen) {
         let toQueen = stepTo[coords.col][coords.row].figure;
         delete stepTo[coords.col][coords.row].updateToQueen;
@@ -97,9 +100,9 @@ function Game() {
         stepTo[coords.col][coords.row] = queen.render();
         stepTo[coords.col][coords.row].figure = queen;
       }
-      setFieldState(stepTo);
       if (typeof isWasEat === "boolean" && !isWasEat) {
         let avalibleTurns = turn === "Red" ? "Black" : "Red";
+        setFieldState(stepTo);
         setTurn(avalibleTurns);
       } else {
         onPlayerClick(
@@ -164,7 +167,11 @@ function Game() {
           />
         </Box>
       </ToolbarComponent>
-      <GameMenu menuTree={MenuItems}/>
+      {
+        !startGame ?
+        <GameMenu menuTree={menuItems}/> :
+        null
+      }
       {buildFieldByCoords(
         fieldState,
         (col, key, colIdx, cols, row) => (
