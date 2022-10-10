@@ -1,14 +1,16 @@
 import Figure from "./Figure";
 import Red from "../assets/red_queen.png";
 import Black from "../assets/black_queen.png";
+import { TField } from "../../utils/types";
+import { TLights } from "./types";
 
-class Queen extends Figure {
+class Queen extends Figure implements TField {
   private figures = {
     Red,
     Black,
   };
 
-  private lights = [];
+  private lights: TLights[] = [];
 
   constructor(color, coords, fieldState) {
     super();
@@ -28,17 +30,24 @@ class Queen extends Figure {
       if (nextCoord.value && !nextCoord.value.key)
         this.fieldState[nextCoord.coords.col][nextCoord.coords.row].light =
           "red";
-      let light = {
+      let light: TLights = {
         col: nextCoord.coords.col,
         row: nextCoord.coords.row,
       };
       if (
         nextCoord.value &&
         nextCoord.value.key &&
-        nextCoord.value.key !== this.color
+        nextCoord.value.key !== this.color &&
+        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
+        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
       ) {
         light.eat = nextCoord;
         eatMark = true;
+      } else if (nextCoord?.value?.key && 
+        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
+        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
+        ) {
+          end = true
       }
       this.lights.push(light);
 
@@ -64,20 +73,22 @@ class Queen extends Figure {
     }
     coords.map((nextCoord) => {
       let eatMark = false;
-      const isKey = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row].key
+      const isKey = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row]?.key
       const isHasField = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row]
       if (isHasField && !isKey) {
         this.fieldState[nextCoord.coords.col][nextCoord.coords.row].light =
           "red";
       }
-      const light = {
+      const light: TLights = {
         col: nextCoord.coords.col,
         row: nextCoord.coords.row,
       };
       if (
         nextCoord.value &&
         nextCoord.value.key &&
-        nextCoord.value.key !== this.color
+        nextCoord.value.key !== this.color &&
+        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
+        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
       ) {
         light.eat = nextCoord;
         eatMark = true;

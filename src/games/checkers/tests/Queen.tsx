@@ -28,8 +28,8 @@ export function QueenTests(field) {
     field
     )
     const figure3 = new Figure({
-        col: "D",
-        row: "6",
+        col: "E",
+        row: "5",
     },
     "Black",
     -1, 
@@ -41,8 +41,8 @@ export function QueenTests(field) {
     field["F"]["4"].figure = figure
     field["D"]["4"] = figure2.render()
     field["D"]["4"].figure = figure2
-    field["D"]["6"] = figure2.render()
-    field["D"]["6"].figure = figure2
+    field["E"]["5"] = figure3.render()
+    field["E"]["5"].figure = figure3
     return field
     
 }

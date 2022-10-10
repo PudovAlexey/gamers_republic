@@ -66,9 +66,9 @@ function Game() {
   const navigate = useNavigate()
   const menuItems = gameMenu({setStartGame, navigate})
   useEffect(() => {
-    // let fillBoard = onFillBoard(field, gameParams);
-    const test =  QueenTests(field, gameParams)
-    setFieldState(test);
+    let fillBoard = onFillBoard(field, gameParams);
+    // const test =  QueenTests(field, gameParams)
+    setFieldState(fillBoard);
   }, [startGame]);
 
   function onPlayerClick(figure, col, row, eatContinue) {
@@ -105,6 +105,13 @@ function Game() {
         setFieldState(stepTo);
         setTurn(avalibleTurns);
       } else {
+        setFiguresRemaining(prev => ({
+          ...prev,
+          [activeFigure.color]: {
+            ...prev[activeFigure.color],
+            count: prev[activeFigure.color].count++
+          }
+        }))
         onPlayerClick(
           stepTo[coords.col][coords.row].figure,
           coords.col,
