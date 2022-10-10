@@ -11,7 +11,6 @@ export function gameMenu({setStartGame, navigate}) {
                 {node: {text: "Difficult Settings", control: <div>difficult</div>}} 
             ]},
             {node: {text: "Out", action: function() {
-                // console.log("out")
                 navigate("/games")
             }}, children: ""}
         ]
