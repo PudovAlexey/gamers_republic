@@ -4,11 +4,7 @@ import { EField } from "../utils/types";
 import Black from "./assets/black.png";
 import Red from "./assets/red.png";
 import {
-  Alert,
-  AlertTitle,
   Box,
-  Button,
-  Toolbar,
   Typography,
 } from "@mui/material";
 import Figure from "./elements/Figure";
@@ -16,8 +12,9 @@ import Queen from "./elements/Queen";
 import { QueenTests } from "./tests/Queen";
 import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
 import GameMenu from "../reusable/GameMenu";
-import {gameMenu} from "./GameMenu";
+import { gameMenu } from "./GameMenu";
 import { useNavigate } from "react-router-dom";
+import { parseTime } from "../../utils/timer/timer";
 
 let field = makeField(EField.Chees);
 
@@ -49,7 +46,6 @@ function onFillBoard(field, gameParams) {
 function Game() {
   let [fieldState, setFieldState] = useState(field);
   let [startGame, setStartGame] = useState(false);
-  let [stepTimer, setStepTimer] = useState(0);
   let [figuresRemaining, setFiguresRemaining] = useState({
     Red: { key: Red, count: 0 },
     Black: { key: Black, count: 0 },
@@ -64,16 +60,29 @@ function Game() {
     firstStep: "Black",
     timer: {
       isOn: true,
-      tick: 0
-    } 
+      tick: 0,
+    },
   });
-  const navigate = useNavigate()
-  const menuItems = gameMenu({setStartGame, navigate, gameParams, setGameParams})
+
   useEffect(() => {
+    setTurn(gameParams.firstStep)
     let fillBoard = onFillBoard(field, gameParams);
-    // const test =  QueenTests(field, gameParams)
-    setFieldState(fillBoard);
-  }, [startGame]);
+    setFieldState(fillBoard)
+  }, [gameParams])
+  const navigate = useNavigate();
+  const menuItems = gameMenu({
+    setStartGame,
+    navigate,
+    gameParams,
+    setGameParams,
+  });
+  useEffect(() => {
+    const isWin = Object.values(figuresRemaining).find(figure => figure.count === 12)
+    if (isWin) {
+      console.log(`${isWin.key} was win`)
+    }
+    
+  }, [figuresRemaining]);
 
   function onPlayerClick(figure, col, row, eatContinue) {
     if (figure && fieldState[col][row].key) {
@@ -81,17 +90,14 @@ function Game() {
       setActiveFigure(figure);
       if (!isPlayerCanGo) return;
       let avalibleState = figure.lightAvalibleFields(eatContinue);
-      setFieldState({...avalibleState});
+      setFieldState({ ...avalibleState });
     }
   }
 
   function onFigureGo(col, row) {
     if (activeFigure && !fieldState[col][row].key) {
-      let { stepTo, isWasEat, changeChoice, coords, isNotStep } = activeFigure.stepTo(
-        col,
-        row,
-        activeFigure
-      );
+      let { stepTo, isWasEat, changeChoice, coords, isNotStep } =
+        activeFigure.stepTo(col, row, activeFigure);
       if (changeChoice || isNotStep) return;
       if (stepTo[coords.col][coords.row].updateToQueen) {
         let toQueen = stepTo[coords.col][coords.row].figure;
@@ -109,13 +115,13 @@ function Game() {
         setFieldState(stepTo);
         setTurn(avalibleTurns);
       } else {
-        setFiguresRemaining(prev => ({
+        setFiguresRemaining((prev) => ({
           ...prev,
           [activeFigure.color]: {
             ...prev[activeFigure.color],
-            count: prev[activeFigure.color].count++
-          }
-        }))
+            count: prev[activeFigure.color].count++,
+          },
+        }));
         onPlayerClick(
           stepTo[coords.col][coords.row].figure,
           coords.col,
@@ -138,6 +144,13 @@ function Game() {
   return (
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
+        {gameParams.timer.isOn ? <Box>
+          <Typography>{parseTime({
+            duration: gameParams.timer.tick,
+            toTimeParse: true,
+            formatter: (seconds, minutes) => `${seconds}:${minutes}`
+          })}</Typography>
+        </Box> : null}
         <Box
           sx={{
             display: "flex",
@@ -178,11 +191,7 @@ function Game() {
           />
         </Box>
       </ToolbarComponent>
-      {
-        !startGame ?
-        <GameMenu menuTree={menuItems}/> :
-        null
-      }
+      {!startGame ? <GameMenu menuTree={menuItems} /> : null}
       {buildFieldByCoords(
         fieldState,
         (col, key, colIdx, cols, row) => (

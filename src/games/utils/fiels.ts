@@ -49,3 +49,9 @@ export function makeField(field: TField, pattern: any = {}) {
     return fieldMap
 
 }
+
+export function clearField(field) {
+    const clearValues = (item) => item = {}
+
+    forEachField(field, clearValues)
+}

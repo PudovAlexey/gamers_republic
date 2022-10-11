@@ -20,7 +20,11 @@ function GameMenu({ menuTree }) {
       console.log("action")
         treeNode.node.action()
     } else {
-      setOptionNode([...optionNode])
+      let makeTreenodesIds = (node, parrentNode) => {
+      }
+      forEachTreeNodes(menuTree, makeTreenodesIds)
+      const findCurrentNode = findTreeNodeById({treeNode: menuTree, id: treeNode.node.id.replace(/-\d+$/, ""), nodePath: "node/id"})
+      setOptionNode(findCurrentNode.children)
     }
   }
 

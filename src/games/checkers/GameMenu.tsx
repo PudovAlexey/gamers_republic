@@ -21,7 +21,7 @@ export function gameMenu({
     return (
       <ButtonGroup>
         <Button onClick={() =>action("Black")}>Black</Button>
-        <Button onClick={() => action("Black")}>Red</Button>
+        <Button onClick={() => action("Red")}>Red</Button>
       </ButtonGroup>
     );
   }
@@ -50,7 +50,9 @@ export function gameMenu({
       timer: { ...prev.timer, isOn: !prev.timer.isOn },
     }));
   }
-  function onChangeTimer() {}
+  function onChangeTimer() {
+    
+  }
   return {
     node: { virtual: true },
     children: [
@@ -58,7 +60,6 @@ export function gameMenu({
         node: {
           text: "Start Game",
           action: function () {
-            console.log("startGame");
             setStartGame((prev) => !prev);
           },
         },
@@ -68,20 +69,13 @@ export function gameMenu({
         children: [
           {
             node: {
-              text: "Side",
-              control: (
-                <List>
-                  <ListItem>
-                    <Typography>On Top:</Typography>
-                    <SideSelect action={onSetSide} />
-                  </ListItem>
-                </List>
-              ),
+              text: "Choose Top Side",
+              control: <SideSelect action={onSetSide} />,
             },
           },
           {
             node: {
-              text: "First Step",
+              text: "Who first Step",
               control: <SideSelect action={onSetFirstStep} />,
             },
           },
@@ -94,11 +88,11 @@ export function gameMenu({
                     <Typography>Timer On:</Typography>
                     <Switch
                       onChange={onToggleTimer}
-                      defaultChecked={!gameParams.isOn}
+                      checked={gameParams.timer.isOn}
                     />
                   </Box>
                   <Box>
-                    {/* {
+                    {
                     gameParams.timer.isOn ?
                       <Box>
                         <Typography>set Timer:</Typography>
@@ -109,7 +103,8 @@ export function gameMenu({
                         ></Input>
                       </Box>
                      : null
-                     } */}
+                     }
+                     
                      {JSON.stringify(gameParams.timer.isOn)}
                   </Box>
                 </Box>
