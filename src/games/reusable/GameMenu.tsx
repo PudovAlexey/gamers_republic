@@ -5,15 +5,13 @@ import { List, ListItemButton, ListItemText, Button } from "@mui/material";
 import { findTreeNodeById, forEachTreeNodes } from "../../utils/treeWalker/treeWalker";
 
 function GameMenu({ menuTree }) {
+  const [optionNode, setOptionNode] = useState(menuTree.children);
   const menuTreeWithIds = useMemo(() => {
     let makeTreenodesIds = (node, parrentNode) => {
-      console.log(node)
     }
-
-
     return  forEachTreeNodes(menuTree, makeTreenodesIds)
-  }, [])
-  const [optionNode, setOptionNode] = useState(menuTreeWithIds.children);
+  }, [optionNode])
+
 
   function onTreeItemPress(treeNode) {
     if (treeNode.children) {
@@ -21,6 +19,8 @@ function GameMenu({ menuTree }) {
     } else if (treeNode.node.action) {
       console.log("action")
         treeNode.node.action()
+    } else {
+      setOptionNode([...optionNode])
     }
   }
 
@@ -55,13 +55,13 @@ function GameMenu({ menuTree }) {
         right: 0
       }}
     >
-        {optionNode.map((treeNode) => (
+        {optionNode.map((treeNode, idx) => (
       <ListItemButton sx={{
         display: 'flex',
         flexDirection: "column",
         flexGrow: "0"
         
-      }} component="a" href="#simple-list" onClick={() => onTreeItemPress(treeNode)}>
+      }} key={treeNode.node.id} component="button" onClick={() => onTreeItemPress(treeNode)}>
           <ListItemText primary={treeNode.node.text}/>
           <Box>
             {treeNode.node.control}

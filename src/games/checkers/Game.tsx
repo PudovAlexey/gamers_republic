@@ -16,7 +16,7 @@ import Queen from "./elements/Queen";
 import { QueenTests } from "./tests/Queen";
 import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
 import GameMenu from "../reusable/GameMenu";
-import {gameMenu, MenuItems} from "./GameMenu";
+import {gameMenu} from "./GameMenu";
 import { useNavigate } from "react-router-dom";
 
 let field = makeField(EField.Chees);
@@ -63,7 +63,7 @@ function Game() {
     },
     firstStep: "Black",
     timer: {
-      isOn: false,
+      isOn: true,
       tick: 0
     } 
   });
