@@ -62,9 +62,13 @@ function Game() {
       bottom: "Red",
     },
     firstStep: "Black",
+    timer: {
+      isOn: false,
+      tick: 0
+    } 
   });
   const navigate = useNavigate()
-  const menuItems = gameMenu({setStartGame, navigate})
+  const menuItems = gameMenu({setStartGame, navigate, gameParams, setGameParams})
   useEffect(() => {
     let fillBoard = onFillBoard(field, gameParams);
     // const test =  QueenTests(field, gameParams)
