@@ -3,16 +3,13 @@ import { buildFieldByCoords, forEachField, makeField } from "../utils/fiels";
 import { EField } from "../utils/types";
 import Black from "./assets/black.png";
 import Red from "./assets/red.png";
-import {
-  Box,
-  Typography,
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import Figure from "./elements/Figure";
 import Queen from "./elements/Queen";
 import { QueenTests } from "./tests/Queen";
 import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
 import GameMenu from "../reusable/GameMenu";
-import { gameMenu } from "./GameMenu";
+import { gameMenu } from "./gameMenu/GameMenu";
 import { useNavigate } from "react-router-dom";
 import { parseTime } from "../../utils/timer/timer";
 
@@ -33,10 +30,8 @@ function onFillBoard(field, gameParams) {
 
     let rowAdd = col.charCodeAt() % 2 === 0 ? row % 2 === 0 : row % 2 !== 0;
     if (rowAdd && playerColor) {
-      const colorToPlay = playerColor === "Red" ? "bottom" : "top";
       let figure = new Figure({ col, row }, playerColor, sSide, field);
       return { ...figure.render(), figure };
-      // return {key: "test"}
     } else {
       return {};
     }
@@ -52,6 +47,7 @@ function Game() {
   });
   let [turn, setTurn] = useState("Red");
   let [activeFigure, setActiveFigure] = useState(null);
+  let [time, setTime] = useState("00:00");
   let [gameParams, setGameParams] = useState({
     side: {
       top: "Black",
@@ -59,30 +55,54 @@ function Game() {
     },
     firstStep: "Black",
     timer: {
-      isOn: true,
+      isOn: false,
       tick: 0,
     },
   });
 
   useEffect(() => {
-    setTurn(gameParams.firstStep)
+    setTurn(gameParams.firstStep);
     let fillBoard = onFillBoard(field, gameParams);
-    setFieldState(fillBoard)
-  }, [gameParams])
+    setFieldState({...fillBoard});
+  }, [gameParams.side, gameParams.firstStep]);
+
   const navigate = useNavigate();
   const menuItems = gameMenu({
     setStartGame,
     navigate,
     gameParams,
     setGameParams,
+    time,
+    setTime,
   });
+
   useEffect(() => {
-    const isWin = Object.values(figuresRemaining).find(figure => figure.count === 12)
+    const isWin = Object.values(figuresRemaining).find(
+      (figure) => figure.count === 12
+    );
     if (isWin) {
-      console.log(`${isWin.key} was win`)
+      console.log(`${isWin.key} was win`);
     }
-    
   }, [figuresRemaining]);
+
+
+  useEffect(() => {
+    if (!(startGame && gameParams.timer.isOn)) return
+    let startTimer = setInterval(() => {
+      const timerUpdate = gameParams.timer.tick - 1000
+      if (timerUpdate < 0) {
+        setTurn(prev => prev === "Black" ? "Red" : "Black")
+        return
+      }
+      setGameParams(prev => ({
+        ...prev,
+        timer: {...prev.timer, tick: prev.timer.tick - 1000}
+      }))
+    }, 1000)
+    return () => {
+      clearInterval(startTimer)
+    }
+  }, [turn])
 
   function onPlayerClick(figure, col, row, eatContinue) {
     if (figure && fieldState[col][row].key) {
@@ -144,13 +164,17 @@ function Game() {
   return (
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
-        {gameParams.timer.isOn ? <Box>
-          <Typography>{parseTime({
-            duration: gameParams.timer.tick,
-            toTimeParse: true,
-            formatter: (seconds, minutes) => `${seconds}:${minutes}`
-          })}</Typography>
-        </Box> : null}
+        {gameParams.timer.isOn ? (
+          <Box>
+            <Typography>
+              {parseTime({
+                duration: gameParams.timer.tick,
+                toTimeParse: true,
+                formatter: ({seconds, minutes}) => `${minutes}: ${seconds % 60}`,
+              })}
+            </Typography>
+          </Box>
+        ) : null}
         <Box
           sx={{
             display: "flex",
@@ -191,7 +215,7 @@ function Game() {
           />
         </Box>
       </ToolbarComponent>
-      {!startGame ? <GameMenu menuTree={menuItems} /> : null}
+      {!startGame ? <GameMenu props={gameParams} menuTree={menuItems} /> : null}
       {buildFieldByCoords(
         fieldState,
         (col, key, colIdx, cols, row) => (

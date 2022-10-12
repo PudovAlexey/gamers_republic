@@ -1,7 +1,7 @@
 import React, {useMemo} from "react";
 import { Box } from "@mui/system";
 import { useState } from "react";
-import { List, ListItemButton, ListItemText, Button } from "@mui/material";
+import { List, ListItemButton, ListItemText, Button, Typography } from "@mui/material";
 import { findTreeNodeById, forEachTreeNodes } from "../../utils/treeWalker/treeWalker";
 
 function GameMenu({ menuTree }) {
@@ -19,12 +19,6 @@ function GameMenu({ menuTree }) {
     } else if (treeNode.node.action) {
       console.log("action")
         treeNode.node.action()
-    } else {
-      let makeTreenodesIds = (node, parrentNode) => {
-      }
-      forEachTreeNodes(menuTree, makeTreenodesIds)
-      const findCurrentNode = findTreeNodeById({treeNode: menuTree, id: treeNode.node.id.replace(/-\d+$/, ""), nodePath: "node/id"})
-      setOptionNode(findCurrentNode.children)
     }
   }
 
@@ -37,13 +31,10 @@ function GameMenu({ menuTree }) {
   }
   return (
     <Box>
-        <Button sx={{
-          zIndex: 2000
-        }} onClick={() => onNavBack(optionNode)}>Back</Button>
       <List
       sx={{
         width: "100%",
-        height: "100%",
+        height: "150%",
         background: "rgba(0, 0, 0, .5)",
         position: 'absolute',
         color: 'white',
@@ -54,11 +45,17 @@ function GameMenu({ menuTree }) {
         justifyContent: 'center',
         gap: "75px",
         top: 0,
-        bottom: 0,
+        bottom: 200,
         left: 0,
         right: 0
       }}
     >
+        <Button variant="contained" sx={{
+          zIndex: 2000,
+          position: "relative",
+          top: "80px",
+          right: "100px",
+        }} onClick={() => onNavBack(optionNode)}>Back</Button>
         {optionNode.map((treeNode, idx) => (
       <ListItemButton sx={{
         display: 'flex',
@@ -66,7 +63,7 @@ function GameMenu({ menuTree }) {
         flexGrow: "0"
         
       }} key={treeNode.node.id} component="button" onClick={() => onTreeItemPress(treeNode)}>
-          <ListItemText primary={treeNode.node.text}/>
+          <ListItemText primary={<Typography variant="h4">{treeNode.node.text}</Typography>}/>
           <Box>
             {treeNode.node.control}
           </Box>

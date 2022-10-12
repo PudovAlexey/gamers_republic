@@ -11,9 +11,11 @@ function ToolbarComponent({ children, width, justifyContent}) {
         padding: "5px",
         width
     }}>
-    {children.map((item) => (
-      <ToolbarItem>{item}</ToolbarItem>
-    ))}
+    {children.map((item) => {
+         if (!item) return
+        return <ToolbarItem>{item}</ToolbarItem>
+      
+    })}
     </Box>
   </Toolbar>
   )

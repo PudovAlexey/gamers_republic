@@ -18,14 +18,9 @@ export function parseTime({
     hours,
     days,
   };
-  if (toTimeParse) {
-    time = Object.keys(time).reduce((parse, key) => {
-      parse[key] = time[key] < 10 ? `0${time[key]}` : time[key]
-      return parse
-    }, {})
-  }
+
   if (typeof formatter === "function") {
-    timeByType = formatter(seconds, minutes, hours, days);
+    timeByType = formatter(time)
   } else if (typeof type === "string") {
     timeByType = time[type];
   } else {
