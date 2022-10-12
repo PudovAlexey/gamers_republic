@@ -1,18 +1,18 @@
 import Black from "../assets/black.png";
 import Red from "../assets/red.png";
-import { Color, Coords, FieldState, IFigure, Side } from "./types";
+import { Color, Coords, FieldState, IFigure, Side, TNextCoords } from "./types";
 
 class Figure implements IFigure {
-  private figures = {
+   figures = {
     Red,
     Black,
   };
-  private lights = [];
+   lights = [];
   coords: Coords
   color: Color
   side: Side
   fieldState: FieldState;
-  constructor(coords, color, side, fieldState) {
+  constructor(coords?, color?, side?, fieldState?) {
     this.side = side;
     this.coords = coords;
     this.color = color;
@@ -38,7 +38,7 @@ class Figure implements IFigure {
     );
   }
 
-  fromLeftTop(col, row) {
+  fromLeftTop(col, row): TNextCoords {
     const nextCol = this.columnIntoNextStep(col, -this.side || +1);
 
     return {
@@ -52,7 +52,7 @@ class Figure implements IFigure {
     };
   }
 
-  fromRightTop(col, row) {
+  fromRightTop(col, row): TNextCoords {
     const nextCol = this.columnIntoNextStep(col, -this.side || +1);
 
     return {
@@ -66,7 +66,7 @@ class Figure implements IFigure {
     };
   }
 
-  fromRightBottom(col, row) {
+  fromRightBottom(col, row): TNextCoords {
     const nextCol = this.columnIntoNextStep(col, +this.side || -1);
 
     return {
@@ -79,7 +79,7 @@ class Figure implements IFigure {
       oposite: "fromLeftTop",
     };
   }
-  fromLeftBottom(col, row) {
+  fromLeftBottom(col, row): TNextCoords {
     const nextCol = this.columnIntoNextStep(col, +this.side || -1);
 
     return {
@@ -224,7 +224,7 @@ class Figure implements IFigure {
       if (makeQueen) {
         this.fieldState[col][row].updateToQueen = true;
       }
-      this.lights.forEach((light, idx, rows) => {
+      this.lights.forEach((light) => {
         if (this.fieldState[light.col] && this.fieldState[light.col][light.row])
           delete this.fieldState[light.col][light.row].light;
         const eatTo =

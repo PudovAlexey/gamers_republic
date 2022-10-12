@@ -4,7 +4,6 @@ export function parseTime({
   duration,
   type,
   formatter,
-  toTimeParse = false,
 }: TParseTime) {
   var seconds = Math.floor(duration / 1000);
   var minutes = Math.floor(duration / (1000 * 60));

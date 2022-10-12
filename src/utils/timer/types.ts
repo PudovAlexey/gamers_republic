@@ -7,7 +7,6 @@ export enum TimerType {
 
 export type TParseTime = {
     duration: number,
-    type: TimerType,
-    formatter: (TimerType) => string,
-    toTimeParse: boolean
+    type?: TimerType,
+    formatter?: (TimerType) => string,
 }

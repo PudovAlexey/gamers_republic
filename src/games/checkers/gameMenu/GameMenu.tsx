@@ -16,8 +16,7 @@ export function gameMenu({
   navigate,
   gameParams,
   setGameParams,
-  time,
-  setTime
+  turn
 }) {
   function SideSelect({action}) {
     return (
@@ -74,7 +73,7 @@ export function gameMenu({
           {
             node: {
               text: "Timer",
-              control: <MenuTimer setGameParams={setGameParams} gameParams={gameParams}/>,
+              control: <MenuTimer turn={turn} setGameParams={setGameParams} gameParams={gameParams}/>,
             },
           },
         ],

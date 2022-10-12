@@ -33,6 +33,7 @@ function GameMenu({ menuTree }) {
     <Box>
       <List
       sx={{
+        backdropFilter: "blur(5px)",
         width: "100%",
         height: "150%",
         background: "rgba(0, 0, 0, .5)",
@@ -55,7 +56,7 @@ function GameMenu({ menuTree }) {
           position: "relative",
           top: "80px",
           right: "100px",
-        }} onClick={() => onNavBack(optionNode)}>Back</Button>
+        }} onClick={onNavBack}>Back</Button>
         {optionNode.map((treeNode, idx) => (
       <ListItemButton sx={{
         display: 'flex',

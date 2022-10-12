@@ -2,18 +2,18 @@ import Figure from "./Figure";
 import Red from "../assets/red_queen.png";
 import Black from "../assets/black_queen.png";
 import { TField } from "../../utils/types";
-import { TLights } from "./types";
+import { IFigure, TLights } from "./types";
 
-class Queen extends Figure implements TField {
-  private figures = {
+class Queen extends Figure implements IFigure {
+   figures = {
     Red,
     Black,
   };
 
-  private lights: TLights[] = [];
+   lights: TLights[] = [];
 
   constructor(color, coords, fieldState) {
-    super();
+    super()
     this.coords = coords;
     this.color = color;
     this.fieldState = fieldState;

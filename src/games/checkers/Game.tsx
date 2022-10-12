@@ -47,7 +47,7 @@ function Game() {
   });
   let [turn, setTurn] = useState("Red");
   let [activeFigure, setActiveFigure] = useState(null);
-  let [time, setTime] = useState("00:00");
+  let [time, setTime] = useState(0);
   let [gameParams, setGameParams] = useState({
     side: {
       top: "Black",
@@ -59,12 +59,31 @@ function Game() {
       tick: 0,
     },
   });
-
+  useEffect(() => {
+    if (!startGame) setTime(gameParams.timer.tick)
+  }, [gameParams.timer.tick])
   useEffect(() => {
     setTurn(gameParams.firstStep);
     let fillBoard = onFillBoard(field, gameParams);
     setFieldState({...fillBoard});
   }, [gameParams.side, gameParams.firstStep]);
+
+  useEffect(() => {
+    if (gameParams.timer.tick === 0) {
+      setTurn(prev => prev === "Black" ? "Red" : "Black")
+      setGameParams((prev) => ({
+        ...prev,
+        timer: { ...prev.timer, tick: time },
+      }));
+    }
+  }, [gameParams.timer.tick])
+  useEffect(() => {
+      setGameParams((prev) => ({
+        ...prev,
+        timer: { ...prev.timer, tick: time },
+      }));
+
+  }, [turn])
 
   const navigate = useNavigate();
   const menuItems = gameMenu({
@@ -89,20 +108,21 @@ function Game() {
   useEffect(() => {
     if (!(startGame && gameParams.timer.isOn)) return
     let startTimer = setInterval(() => {
-      const timerUpdate = gameParams.timer.tick - 1000
-      if (timerUpdate < 0) {
-        setTurn(prev => prev === "Black" ? "Red" : "Black")
-        return
+      setGameParams(previous => {
+        if (previous.timer.tick < 0) {
+          setTurn(prev => prev === "Black" ? "Red" : "Black")
+          return previous
+        }
+        return {
+        ...previous,
+        timer: {...previous.timer, tick: previous.timer.tick - 1000}
       }
-      setGameParams(prev => ({
-        ...prev,
-        timer: {...prev.timer, tick: prev.timer.tick - 1000}
-      }))
+      })
     }, 1000)
     return () => {
       clearInterval(startTimer)
     }
-  }, [turn])
+  }, [turn, startGame])
 
   function onPlayerClick(figure, col, row, eatContinue) {
     if (figure && fieldState[col][row].key) {
@@ -161,17 +181,18 @@ function Game() {
     }
   }
 
+  const timer = parseTime({
+    duration: gameParams.timer.tick,
+    formatter: ({seconds, minutes}) => `${minutes}: ${seconds % 60}`,
+  })
+
   return (
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
         {gameParams.timer.isOn ? (
           <Box>
             <Typography>
-              {parseTime({
-                duration: gameParams.timer.tick,
-                toTimeParse: true,
-                formatter: ({seconds, minutes}) => `${minutes}: ${seconds % 60}`,
-              })}
+              {timer}
             </Typography>
           </Box>
         ) : null}
@@ -215,7 +236,7 @@ function Game() {
           />
         </Box>
       </ToolbarComponent>
-      {!startGame ? <GameMenu props={gameParams} menuTree={menuItems} /> : null}
+      {!startGame ? <GameMenu menuTree={menuItems} /> : null}
       {buildFieldByCoords(
         fieldState,
         (col, key, colIdx, cols, row) => (
@@ -279,7 +300,7 @@ function Game() {
             >
               {row.key ? (
                 <img
-                  onClick={() => onPlayerClick(row.figure, colKey, rowKey)}
+                  onClick={() => onPlayerClick(row.figure, colKey, rowKey, false)}
                   width={"50px"}
                   height={"50px"}
                   src={row.value}

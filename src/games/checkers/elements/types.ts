@@ -12,11 +12,12 @@ export type TField = {
     figure?: any,
     light?: string,
     key?: Color,
+    value?: string
     updateToQueen?: boolean
 }
 
 export type TLights = Coords & {
-    eat?: Coords
+    eat?: TNextCoords
 }
 
 export type FieldState = Record<string, Record<string, TField>>
@@ -30,5 +31,12 @@ export interface IFigure {
 
 export type Coords = {
     col: string,
-    row: string | number
+    row: string | number,
+}
+
+export type TNextCoords =  {
+    key: string,
+    value: TField | undefined,
+    coords: Coords,
+    oposite: string
 }

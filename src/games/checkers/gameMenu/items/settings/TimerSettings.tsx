@@ -24,7 +24,7 @@ import Timer from "../../../../../components/reusable/Timer/Timer"
       ...prev,
       timer: { ...prev.timer, tick: calc },
     }));
-  }, [time])
+  }, [time, gameParams])
 
   useEffect(() => {
     setGameParams((prev) => ({
@@ -53,7 +53,7 @@ import Timer from "../../../../../components/reusable/Timer/Timer"
             <Box>
               <Timer
                 value={time}
-                onChange={(e) => setTime(e.target.value)}
+                onChange={(e) => setTime(e)}
               />
             </Box>
            : null
