@@ -170,6 +170,7 @@ class Figure implements IFigure {
     );
     let isNotStep = true;
     if (isAvalibleField && this.fieldState[col][row].light) {
+      let vasDestroyByReason = null
       const isEatAportunaty = (_, col, row) => {
         const isMustEat = [
           this.fromLeftTop(col, row),
@@ -193,15 +194,17 @@ class Figure implements IFigure {
             if (
               this[inAim.oposite](colAim, rowAim).value &&
               this[inAim.oposite](colAim, rowAim).value.key &&
-              this.fieldState[colAim][rowAim].key == this.color &&
+              this.fieldState[colAim][rowAim].key === this.color &&
               isNotKey &&
               !this.lights.some(
                 (light) =>
                   JSON.stringify(light?.eat?.coords || {}) ===
-                  JSON.stringify({ col, row: +row })
-              )
+                  JSON.stringify({ col, row: +row }) 
+                  ) &&
+                   !vasDestroyByReason
             ) {
               this.fieldState[colAim][rowAim] = {};
+              vasDestroyByReason = {col, row}
             }
           }
         }, this);

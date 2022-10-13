@@ -33,7 +33,7 @@ declare module '@mui/material/styles' {
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            top: '60px'
+            position: "inherit"
           }
         }
       },
@@ -114,6 +114,32 @@ declare module '@mui/material/styles' {
             border: "2px solid #000000",
           }
         }
+      },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            position: "inherit",
+            background: "#1F2326",
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row",
+            alignItems: "center"
+          }
+        }
+      },
+      MuiMenuList: {
+        styleOverrides: {
+          root: {
+            fontFamily: 'Montserrat',
+            fontStyle: "normal",
+            fontWeight: 700,
+          fontSize: "14px",
+          lineHeight: "17px",
+          textAlign: "center",
+          color: "#FFFFFF",
+
+          }
+        } 
       }
     }
   });

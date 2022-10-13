@@ -12,11 +12,12 @@ import GameMenu from "../reusable/GameMenu";
 import { gameMenu } from "./gameMenu/GameMenu";
 import { useNavigate } from "react-router-dom";
 import { parseTime } from "../../utils/timer/timer";
+import { FieldTests } from "./tests/Figure";
 
 let field = makeField(EField.Chees);
 
 function onFillBoard(field, gameParams) {
-  let { side, firstStep } = gameParams;
+  let {side} = gameParams;
   return forEachField(field, (col, row) => {
     let playerColor = null;
     let sSide;
@@ -64,8 +65,9 @@ function Game() {
   }, [gameParams.timer.tick])
   useEffect(() => {
     setTurn(gameParams.firstStep);
-    let fillBoard = onFillBoard(field, gameParams);
-    setFieldState({...fillBoard});
+    // let fillBoard = onFillBoard(field, gameParams);
+    let figureTests = FieldTests(field)
+    setFieldState({...figureTests});
   }, [gameParams.side, gameParams.firstStep]);
 
   useEffect(() => {
@@ -91,8 +93,6 @@ function Game() {
     navigate,
     gameParams,
     setGameParams,
-    time,
-    setTime,
   });
 
   useEffect(() => {
