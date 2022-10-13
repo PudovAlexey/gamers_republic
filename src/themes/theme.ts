@@ -33,7 +33,51 @@ declare module '@mui/material/styles' {
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            position: "inherit"
+            position: "inherit",
+            background: "#1F2326",
+            overflow: "hidden",
+            color: "#fff",
+          },
+          root: {
+            // height: "100%",
+            position: "relative",
+            height: "100vh"
+          },
+        }
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            background: "#F8F8F8",
+            color: "#1F2326",
+          },
+          input: {
+            height: "5px"
+          }
+        }
+      },
+      MuiInputLabel: {
+
+      },
+      MuiSlider: {
+        styleOverrides: {
+          root: {
+            color: "#FF4656"
+          }
+        }
+      },
+      MuiFormLabel: {
+        styleOverrides: {
+          root: {
+            color: "#FF4656"
+          }
+        }
+      },
+      MuiDivider: {
+        styleOverrides: {
+          root: {
+            background: "#FF4656",
+            margin: "10px 0"
           }
         }
       },
@@ -85,8 +129,6 @@ declare module '@mui/material/styles' {
               height: "50%",
               bottom: '0',
               right: "50px"
-
-
             },
             position: 'relative',
             color: "#1F2326",
@@ -147,15 +189,52 @@ declare module '@mui/material/styles' {
           }
         }
       },
-      MuiDrawer: {
+      MuiCard: {
         styleOverrides: {
           root: {
-            // height: "100%",
+            background: "transparent",
+            transition: "none !important",
+            border: "none",
             position: "relative",
-            height: "70vh"
-          },
-          paper: {
-            position: "inherit"
+            zIndex: 2,
+            "&:after": {
+              content: '""',
+          position: "absolute",
+          width: "1100%",
+          height: "138%",
+  top: "20px; right: -500%",
+  background: "rgba(255,255,255, 1)",
+  transformOrigin: "45.5% 0",
+  transform: "rotate(-41deg)",
+  border: "2px solid #1F2326",
+  zIndex: 1
+            },
+          //   "&:after": {
+          //     content: '""',
+          // position: "absolute",
+          // width: "1100%",
+          // border: "2px solid #1F2326",
+          // borderLeft: "2px solid #1F2326",
+          // borderBottom: "2px solid #1F2326",
+          // borderRight: "2px solid #1F2326",
+          // height: "138%",
+          //   },
+            "&:before": {
+              content: '""',
+          position: "absolute",
+          bottom: "0px",
+
+          width: "100%",
+           borderLeft: "2px solid #1F2326",
+          borderBottom: "2px solid #1F2326",
+          borderRight: "2px solid #1F2326",
+          height: "91%",
+          zIndex: 2
+            },
+            "& > *": {
+              zIndex: 10,
+              position: "relative"
+            }
           }
         }
       }

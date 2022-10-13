@@ -24,7 +24,7 @@ function Footer() {
             position: "absolute",
             height: "200px",
             width: "200px",
-            bottom: "25px",
+            bottom: "-100px",
             left: "170px",
             borderRadius: "50%",
             background: "#fff",

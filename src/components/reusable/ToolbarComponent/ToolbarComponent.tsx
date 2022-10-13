@@ -13,7 +13,7 @@ function ToolbarComponent({ children, width, justifyContent}) {
     }}>
     {children.map((item) => {
          if (!item) return
-        return <ToolbarItem>{item}</ToolbarItem>
+        return item?.props?.children ? <ToolbarItem>{item}</ToolbarItem> : <Box></Box>
       
     })}
     </Box>

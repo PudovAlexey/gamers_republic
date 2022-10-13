@@ -19,7 +19,7 @@ function App({children}) {
       }} className="App">
       <Header/>
       <Box sx={{
-        minHeight: "calc(100vh - 280px)",
+        minHeight: "calc(100vh - 200px)",
       }}>
       {children}
       </Box>

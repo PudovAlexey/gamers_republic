@@ -11,6 +11,7 @@ import {
   IconButton,
   Typography,
   IconButtonProps,
+  Box
 } from "@mui/material";
 import { pink } from '@mui/material/colors';
 
@@ -20,7 +21,9 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { AuthContext } from "../../../../components/AuthContext/AuthContext";
+import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import api from "../../../../api/api";
+import { Link } from "react-router-dom";
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -37,7 +40,7 @@ const ExpandMore = styled((props: ExpandMoreProps) => {
   }),
 }));
 
-function GameCard({title, description, avatar, icon, hashTags, gameId}) {
+function GameCard({title, description, avatar, icon, hashTags, gameId, game, path}) {
   let [AuthUser] = useContext(AuthContext)
   const [expanded, setExpanded] = useState(false);
   const [like, setLike] = useState((AuthUser?.likeGamesIds || []).some(likeId => likeId === gameId))
@@ -62,10 +65,18 @@ function GameCard({title, description, avatar, icon, hashTags, gameId}) {
 
   return (
     <Card sx={{ maxWidth: 345 }}>
+      <Box sx={{
+        position: "absolute",
+        borderTop: "2px solid #1F2326",
+        borderRight: "2px solid #1F2326",
+        width: "86%",
+        height: "100%",
+        right: "0%"
+      }}></Box>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="game" src={avatar}>
-            R
+            {game[0].toUpperCase()}
           </Avatar>
         }
         action={
@@ -74,9 +85,12 @@ function GameCard({title, description, avatar, icon, hashTags, gameId}) {
           </IconButton>
         }
         title={title}
-        subheader={hashTags}
+        subheader={game}
       />
-      <CardMedia
+      <CardMedia sx={{
+        borderLeft: "2px solid #1F2326",
+        borderRight: "2px solid #1F2326"
+      }}
         component="img"
         height="100"
         width="200"
@@ -89,6 +103,11 @@ function GameCard({title, description, avatar, icon, hashTags, gameId}) {
         </IconButton>
         <IconButton aria-label="share">
           <ShareIcon />
+        </IconButton>
+        <IconButton aria-label="play">
+          <Link to={`/games${path}`}>
+            <VideogameAssetIcon />
+          </Link>
         </IconButton>
         <ExpandMore
           expand={expanded}

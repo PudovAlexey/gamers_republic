@@ -9,6 +9,7 @@ import SearchField from "../../../components/reusable/SearchField/SearchField";
 import RangeSlider from "../../../components/reusable/RangeSlider/RangeSlider";
 import api from "../../../api/api";
 import { Node } from "../../../utils/treeWalker/types";
+import ToolbarComponent from "../../../components/reusable/ToolbarComponent/ToolbarComponent";
 
 function Master({filterValues, setFilterValues,filters, setFilters}) {
   const [expandedTree, setExpandedTree] = React.useState<string[]>([]);
@@ -67,20 +68,24 @@ function Master({filterValues, setFilterValues,filters, setFilters}) {
           [`& .MuiDrawer-paper`]: { width: 270, boxSizing: "border-box" },
         }}
       >
+         <Divider />
         <Box>
           <SearchField
           value={filterValues.search}
           onChange={(value) => onChangeFilters(value, 'search')} 
           />
           <Divider />
-          <Toolbar>
+          <ToolbarComponent justifyContent="right" width="100%">
+            <Box></Box>
+            <Box>
             <Button onClick={onExpandMore}>
               <ExpandLess />
             </Button>
             <Button onClick={onCollapseLess}>
               <ExpandMore />
             </Button>
-          </Toolbar>
+            </Box>
+          </ToolbarComponent>
           <Divider />
           <TreeView
             aria-label="file system navigator"
