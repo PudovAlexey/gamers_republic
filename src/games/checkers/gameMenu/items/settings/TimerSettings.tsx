@@ -24,7 +24,7 @@ import Timer from "../../../../../components/reusable/Timer/Timer"
       ...prev,
       timer: { ...prev.timer, tick: calc },
     }));
-  }, [time, gameParams])
+  }, [time])
 
   useEffect(() => {
     setGameParams((prev) => ({
