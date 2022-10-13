@@ -127,19 +127,37 @@ declare module '@mui/material/styles' {
           }
         }
       },
-      MuiMenuList: {
+      MuiList: {
+        styleOverrides: {
+          root: {
+    
+          }
+        } 
+      },
+      MuiMenuItem: {
         styleOverrides: {
           root: {
             fontFamily: 'Montserrat',
             fontStyle: "normal",
-            fontWeight: 700,
+            fontWeight: "700",
           fontSize: "14px",
           lineHeight: "17px",
           textAlign: "center",
           color: "#FFFFFF",
-
           }
-        } 
+        }
+      },
+      MuiDrawer: {
+        styleOverrides: {
+          root: {
+            // height: "100%",
+            position: "relative",
+            height: "70vh"
+          },
+          paper: {
+            position: "inherit"
+          }
+        }
       }
     }
   });

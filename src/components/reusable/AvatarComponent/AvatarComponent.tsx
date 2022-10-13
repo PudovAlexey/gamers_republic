@@ -1,8 +1,9 @@
 import { Avatar, Typography } from "@mui/material"
 import {Box} from "@mui/material"
+import PersonIcon from '@mui/icons-material/Person';
 
 function AvatarComponent({userName, avatarSrc, name, surname}) {
-    return (
+    return userName ? (
         <Box>
             <Avatar src={avatarSrc}>
                 {name[0]}{surname[0]}
@@ -11,6 +12,8 @@ function AvatarComponent({userName, avatarSrc, name, surname}) {
                 {userName}
             </Typography>
         </Box>
+    ) : (
+        <Avatar src={PersonIcon}></Avatar>
     )
 } 
 

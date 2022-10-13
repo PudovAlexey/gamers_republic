@@ -15,6 +15,7 @@ import { height } from "@mui/system";
 import { MenuList } from "@mui/material";
 import Logo from "../../assets/main/Logo";
 import AuthorLogo from "../../assets/main/AuthorLogo";
+import AvatarComponent from "../../components/reusable/AvatarComponent/AvatarComponent";
 
 const pages = ["Home", "Games", "Blog", "Contact"];
 
@@ -23,7 +24,10 @@ const Header = () => {
   return (
     <AppBar sx={ { zIndex: (theme) => theme.zIndex.drawer + 1 }}>
      <Box sx={{
-      padding: "46px 73px"
+      padding: "46px 73px",
+      display: "flex",
+      justifyContent: "space-between",
+      width: "100%"
      }}>
      <Box sx={{
       display: "flex",
@@ -32,7 +36,8 @@ const Header = () => {
         display: "flex",
         justifyContent: "space-between",
         alignItems: "center",
-        width: "250px"
+        width: "150px",
+        marginRight: "86px"
       }}>
       <Logo/>
       <Box sx={{
@@ -51,7 +56,9 @@ const Header = () => {
       ))}
      </MenuList>
      </Box>
-     <Box></Box>
+     <Box>
+      <AvatarComponent/>
+     </Box>
      </Box>
     </AppBar>
   );

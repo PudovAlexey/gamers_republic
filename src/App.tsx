@@ -5,15 +5,24 @@ import { Header } from './staticControls/Header/Header';
 import Footer from './staticControls/Footer/Footer';
 import Box from "@mui/material/Box";
 import Auth from './components/AuthContext/AuthContext';
+import "normalize.css";
 
 function App({children}) {
   const theme = useTheme()
 
   return (
     <Auth>
-      <Box className="App">
+      <Box sx={{
+        position: "relative",
+        background: "url(/main/background.jpg)",
+        overflow: "hidden"
+      }} className="App">
       <Header/>
+      <Box sx={{
+        minHeight: "calc(100vh - 280px)",
+      }}>
       {children}
+      </Box>
       <Footer/>
     </Box>
     </Auth>
