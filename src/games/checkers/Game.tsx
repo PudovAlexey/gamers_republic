@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { buildFieldByCoords, forEachField, makeField } from "../utils/fiels";
-import { EField } from "../utils/types";
-import Black from "./assets/black.png";
-import Red from "./assets/red.png";
-import { Box, Typography } from "@mui/material";
-import Figure from "./elements/Figure";
-import Queen from "./elements/Queen";
-import { QueenTests } from "./tests/Queen";
-import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
-import GameMenu from "../reusable/GameMenu";
-import { gameMenu } from "./gameMenu/GameMenu";
-import { useNavigate } from "react-router-dom";
-import { parseTime } from "../../utils/timer/timer";
-import { FieldTests } from "./tests/Figure";
+import { useEffect, useState } from 'react';
+import { buildFieldByCoords, forEachField, makeField } from '../utils/fiels';
+import { EField } from '../utils/types';
+import Black from './assets/black.png';
+import Red from './assets/red.png';
+import { Box, Typography } from '@mui/material';
+import Figure from './elements/Figure';
+import Queen from './elements/Queen';
+import { QueenTests } from './tests/Queen';
+import ToolbarComponent from '../../components/reusable/ToolbarComponent/ToolbarComponent';
+import GameMenu from '../reusable/GameMenu';
+import { gameMenu } from './gameMenu/GameMenu';
+import { useNavigate } from 'react-router-dom';
+import { parseTime } from '../../utils/timer/timer';
+import { FieldTests } from './tests/Figure';
 
 let field = makeField(EField.Chees);
 
 function onFillBoard(field, gameParams) {
-  let {side} = gameParams;
+  let { side } = gameParams;
   return forEachField(field, (col, row) => {
     let playerColor = null;
     let sSide;
@@ -46,46 +46,45 @@ function Game() {
     Red: { key: Red, count: 0 },
     Black: { key: Black, count: 0 },
   });
-  let [turn, setTurn] = useState("Red");
+  let [turn, setTurn] = useState('Red');
   let [activeFigure, setActiveFigure] = useState(null);
   let [time, setTime] = useState(0);
   let [gameParams, setGameParams] = useState({
     side: {
-      top: "Black",
-      bottom: "Red",
+      top: 'Black',
+      bottom: 'Red',
     },
-    firstStep: "Black",
+    firstStep: 'Black',
     timer: {
       isOn: false,
       tick: 0,
     },
   });
   useEffect(() => {
-    if (!startGame) setTime(gameParams.timer.tick)
-  }, [gameParams.timer.tick])
+    if (!startGame) setTime(gameParams.timer.tick);
+  }, [gameParams.timer.tick]);
   useEffect(() => {
     setTurn(gameParams.firstStep);
     // let fillBoard = onFillBoard(field, gameParams);
-    let figureTests = FieldTests(field)
-    setFieldState({...figureTests});
+    let figureTests = FieldTests(field);
+    setFieldState({ ...figureTests });
   }, [gameParams.side, gameParams.firstStep]);
 
   useEffect(() => {
     if (gameParams.timer.tick === 0) {
-      setTurn(prev => prev === "Black" ? "Red" : "Black")
+      setTurn((prev) => (prev === 'Black' ? 'Red' : 'Black'));
       setGameParams((prev) => ({
         ...prev,
         timer: { ...prev.timer, tick: time },
       }));
     }
-  }, [gameParams.timer.tick])
+  }, [gameParams.timer.tick]);
   useEffect(() => {
-      setGameParams((prev) => ({
-        ...prev,
-        timer: { ...prev.timer, tick: time },
-      }));
-
-  }, [turn])
+    setGameParams((prev) => ({
+      ...prev,
+      timer: { ...prev.timer, tick: time },
+    }));
+  }, [turn]);
 
   const navigate = useNavigate();
   const menuItems = gameMenu({
@@ -104,25 +103,24 @@ function Game() {
     }
   }, [figuresRemaining]);
 
-
   useEffect(() => {
-    if (!(startGame && gameParams.timer.isOn)) return
+    if (!(startGame && gameParams.timer.isOn)) return;
     let startTimer = setInterval(() => {
-      setGameParams(previous => {
+      setGameParams((previous) => {
         if (previous.timer.tick < 0) {
-          setTurn(prev => prev === "Black" ? "Red" : "Black")
-          return previous
+          setTurn((prev) => (prev === 'Black' ? 'Red' : 'Black'));
+          return previous;
         }
         return {
-        ...previous,
-        timer: {...previous.timer, tick: previous.timer.tick - 1000}
-      }
-      })
-    }, 1000)
+          ...previous,
+          timer: { ...previous.timer, tick: previous.timer.tick - 1000 },
+        };
+      });
+    }, 1000);
     return () => {
-      clearInterval(startTimer)
-    }
-  }, [turn, startGame])
+      clearInterval(startTimer);
+    };
+  }, [turn, startGame]);
 
   function onPlayerClick(figure, col, row, eatContinue) {
     if (figure && fieldState[col][row].key) {
@@ -150,8 +148,8 @@ function Game() {
         stepTo[coords.col][coords.row] = queen.render();
         stepTo[coords.col][coords.row].figure = queen;
       }
-      if (typeof isWasEat === "boolean" && !isWasEat) {
-        let avalibleTurns = turn === "Red" ? "Black" : "Red";
+      if (typeof isWasEat === 'boolean' && !isWasEat) {
+        let avalibleTurns = turn === 'Red' ? 'Black' : 'Red';
         setFieldState(stepTo);
         setTurn(avalibleTurns);
       } else {
@@ -172,7 +170,7 @@ function Game() {
           stepTo[coords.col][coords.row].figure.lights &&
           !stepTo[coords.col][coords.row].figure.lights.length
         ) {
-          let avalibleTurns = turn === "Red" ? "Black" : "Red";
+          let avalibleTurns = turn === 'Red' ? 'Black' : 'Red';
           setTurn(avalibleTurns);
         }
         return;
@@ -183,48 +181,46 @@ function Game() {
 
   const timer = parseTime({
     duration: gameParams.timer.tick,
-    formatter: ({seconds, minutes}) => `${minutes}: ${seconds % 60}`,
-  })
+    formatter: ({ seconds, minutes }) => `${minutes}: ${seconds % 60}`,
+  });
 
   return (
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
         {gameParams.timer.isOn ? (
           <Box>
-            <Typography>
-              {timer}
-            </Typography>
+            <Typography>{timer}</Typography>
           </Box>
         ) : null}
         <Box
           sx={{
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
-          <Typography>{figuresRemaining["Red"].count}</Typography>
+          <Typography>{figuresRemaining['Red'].count}</Typography>
           <img
             height="30px"
             width="30px"
-            src={figuresRemaining["Red"].key}
+            src={figuresRemaining['Red'].key}
             alt="Red"
           />
-          :<Typography>{figuresRemaining["Black"].count}</Typography>
+          :<Typography>{figuresRemaining['Black'].count}</Typography>
           <img
             height="30px"
             width="30px"
-            src={figuresRemaining["Black"].key}
+            src={figuresRemaining['Black'].key}
             alt="Black"
           />
         </Box>
         <Box
           sx={{
-            display: "flex",
-            gap: "10px",
-            alignItems: "center",
-            justifyContent: "center",
+            display: 'flex',
+            gap: '10px',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Typography>Now turn is:</Typography>
@@ -244,8 +240,8 @@ function Game() {
             <Box
               key={row}
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               {key}
@@ -254,20 +250,20 @@ function Game() {
             <Box
               key={`${colIdx}_${row}`}
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               {colIdx === cols.length - 1 &&
                 row.map((i) => (
                   <Box
                     sx={{
-                      width: "60px",
-                      alignContent: "center",
-                      background: "white",
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
+                      width: '60px',
+                      alignContent: 'center',
+                      background: 'white',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
                     }}
                   >
                     {i}
@@ -279,7 +275,7 @@ function Game() {
         (row, colKey, rowKey, colIdx, cols) => {
           let isBlack =
             colKey.charCodeAt() % 2 === 0 ? rowKey % 2 === 0 : rowKey % 2 !== 0;
-          let coloredBoard = isBlack ? "black" : "";
+          let coloredBoard = isBlack ? 'black' : '';
           return (
             <Box
               onClick={() => onFigureGo(colKey, rowKey)}
@@ -288,21 +284,23 @@ function Game() {
                 backgroundColor: row.light
                   ? `${row.light} !important`
                   : `${coloredBoard} !important`,
-                border: "2px solid black",
-                width: "60px",
-                height: "60px",
-                alignContent: "center",
-                background: "white",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
+                border: '2px solid black',
+                width: '60px',
+                height: '60px',
+                alignContent: 'center',
+                background: 'white',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
               {row.key ? (
                 <img
-                  onClick={() => onPlayerClick(row.figure, colKey, rowKey, false)}
-                  width={"50px"}
-                  height={"50px"}
+                  onClick={() =>
+                    onPlayerClick(row.figure, colKey, rowKey, false)
+                  }
+                  width={'50px'}
+                  height={'50px'}
                   src={row.value}
                   alt={row.key}
                 />

@@ -1,22 +1,26 @@
-import Levels from "./levels/Levels";
-import background from "./arcanoidAssets/background.png";
-import platform from "./arcanoidAssets/platform.png";
-import ball from "./arcanoidAssets/ball.png";
-import { Borders, Events, PositionValue } from "../../animationFrame/AnimationFrame";
-import { interval } from "../../utils/utils";
-import { GameSettings } from "./types";
-type Position = number | PositionValue | [PositionValue, number]
+import Levels from './levels/Levels';
+import background from './arcanoidAssets/background.png';
+import platform from './arcanoidAssets/platform.png';
+import ball from './arcanoidAssets/ball.png';
+import {
+  Borders,
+  Events,
+  PositionValue,
+} from '../../animationFrame/AnimationFrame';
+import { interval } from '../../utils/utils';
+import { GameSettings } from './types';
+type Position = number | PositionValue | [PositionValue, number];
 export type GameElement = {
-  broken?: boolean 
+  broken?: boolean;
   img: string;
   coords: number[];
   speed?: [number, number] | number;
-  position?: {x: Position, y: Position};
+  position?: { x: Position; y: Position };
   size?: {
     width: string;
     height: string;
   };
-  type?: "normal" | "reverse";
+  type?: 'normal' | 'reverse';
 };
 
 export type GameElements = Record<string, GameElement>;
@@ -25,8 +29,8 @@ class ArcanoidCore extends Levels {
   private startGame: boolean = false;
   private borders: Borders | null;
   private canvas: HTMLCanvasElement | null;
-  startGameReady: boolean = false
-  gameSettings: GameSettings | null = null
+  startGameReady: boolean = false;
+  gameSettings: GameSettings | null = null;
   private levelBlocks:
     | (GameElements & {
         broken: boolean;
@@ -40,24 +44,24 @@ class ArcanoidCore extends Levels {
     },
     platform: {
       img: platform,
-      type: "reverse",
+      type: 'reverse',
       position: {
-        x: "center",
-        y: "init",
+        x: 'center',
+        y: 'init',
       },
       speed: 10,
       size: {
-        width: "5px",
-        height: "5px",
+        width: '5px',
+        height: '5px',
       },
       coords: [0, 0],
     },
     ball: {
       img: ball,
-      type: "reverse",
+      type: 'reverse',
       position: {
-        x: ["center", 50],
-        y: "init",
+        x: ['center', 50],
+        y: 'init',
       },
       speed: [2, 2],
       coords: [100, -30],
@@ -65,31 +69,31 @@ class ArcanoidCore extends Levels {
   };
 
   constructor(gameSettings: GameSettings, startGameReady: boolean) {
-    super()
-    this.gameSettings = gameSettings
-    this.startGameReady = startGameReady
+    super();
+    this.gameSettings = gameSettings;
+    this.startGameReady = startGameReady;
   }
 
   events: Events = [
-    { event: "keypress", action: this.movePlatform.bind(this) },
+    { event: 'keypress', action: this.movePlatform.bind(this) },
   ];
 
   movePlatform(e) {
     const platformSpeed = this.gameElements.platform.speed as number;
     switch (e.key.toLowerCase()) {
-      case "a":
+      case 'a':
         this.gameElements.platform.coords[0] -= 1 * platformSpeed;
         if (!this.startGame)
           this.gameElements.ball.coords[0] -= 1 * platformSpeed;
         // this.movePlatform = "left";
         break;
-      case "d":
+      case 'd':
         this.gameElements.platform.coords[0] += 1 * platformSpeed;
         if (!this.startGame)
           this.gameElements.ball.coords[0] += 1 * platformSpeed;
         // this.movePlatform = "right";
         break;
-      case " ":
+      case ' ':
         if (this.startGameReady) this.startGame = true;
         break;
       default:
@@ -101,11 +105,11 @@ class ArcanoidCore extends Levels {
     let validX = interval(x, { from: borders.left, to: borders.right });
     let validY = interval(y, { from: borders.bottom, to: borders.top });
     if (!validX.isValid) {
-      const startFrom = validX.where === "from" ? borders.left : borders.right;
+      const startFrom = validX.where === 'from' ? borders.left : borders.right;
       x = startFrom;
     }
     if (!validY.isValid) {
-      let startFrom = validY.where === "from" ? borders.bottom : borders.top;
+      let startFrom = validY.where === 'from' ? borders.bottom : borders.top;
       y = startFrom;
     }
     return {
@@ -162,7 +166,7 @@ class ArcanoidCore extends Levels {
     if (isBouncedElements.length) {
       this.gameElements.ball.speed![0] = -this.gameElements.ball.speed![0];
       isBouncedElements.forEach((el) => (el.broken = true));
-      console.log("bounced");
+      console.log('bounced');
     }
   }
 
@@ -170,9 +174,9 @@ class ArcanoidCore extends Levels {
     function parsePosition(position, defaultValue) {
       if (borders[position]) {
         return borders[position];
-      } else if (position === "center") {
-        return borders["centerX"];
-      } else if (typeof position === "number") {
+      } else if (position === 'center') {
+        return borders['centerX'];
+      } else if (typeof position === 'number') {
         return position;
       } else if (Array.isArray(position)) {
         return position.reduce(
@@ -200,7 +204,7 @@ class ArcanoidCore extends Levels {
 
   onGameOver() {
     if (this.gameElements.ball.coords[1] <= -100) {
-      console.log("gameOver");
+      console.log('gameOver');
       this.gameElements.ball.coords = [0, -30];
       this.startGame = false;
     }
@@ -243,15 +247,15 @@ class ArcanoidCore extends Levels {
       this.onBallMove.call(this);
     }
     Object.keys(buildGameData).forEach((element: string, _, elements) => {
-      const isBroken = buildGameData[element]?.broken
+      const isBroken = buildGameData[element]?.broken;
       if (isBroken === true) {
         return;
       }
-      if (element == "ball") {
+      if (element == 'ball') {
         this.bounce(
           buildGameData[element],
           elements
-            .filter((e) => !(e == "ball" || e == "background"))
+            .filter((e) => !(e == 'ball' || e == 'background'))
             .map((i) => buildGameData[i]),
           this.borders
         );
@@ -259,7 +263,7 @@ class ArcanoidCore extends Levels {
       let drawing = new Image();
       drawing.src = buildGameData[element].img;
       let [x, y, ...coords] = buildGameData[element].coords;
-      if (buildGameData[element].type === "reverse") {
+      if (buildGameData[element].type === 'reverse') {
         y = reverseY(y);
       }
       let { xBord, yBord } = this.borderLimits(borders, x, y);

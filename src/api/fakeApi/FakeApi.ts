@@ -1,51 +1,49 @@
-import { buildTree } from "../../utils/treeWalker/treeWalker";
-import { compareValue } from "../../utils/utils";
-import { GameCategories } from "./data/Games/GameCategories";
-import { gamesList } from "./data/Games/GamesList";
-import { AuthUser } from "./data/Users/AuthUser";
+import { buildTree } from '../../utils/treeWalker/treeWalker';
+import { compareValue } from '../../utils/utils';
+import { GameCategories } from './data/Games/GameCategories';
+import { gamesList } from './data/Games/GamesList';
+import { AuthUser } from './data/Users/AuthUser';
 
 class FakeApi {
   async getAuthUser(token) {
-    let isAuth = AuthUser.token === token
+    let isAuth = AuthUser.token === token;
     let req = await this.fakeDelay(AuthUser);
     if (!isAuth) {
-      req = await this.fakeDelay("not Auth");
+      req = await this.fakeDelay('not Auth');
     }
-    return req
+    return req;
   }
 
- async toggleUserLike(user, gameId) {
+  async toggleUserLike(user, gameId) {
     if (AuthUser.token !== user?.token) {
-      return this.fakeDelay(false)
+      return this.fakeDelay(false);
     }
-    let newGameIds = user.likeGamesIds.filter(id => !(id === gameId))
+    let newGameIds = user.likeGamesIds.filter((id) => !(id === gameId));
     if (newGameIds.length === user.likeGamesIds.length) {
-      user.likeGamesIds.push(gameId)
+      user.likeGamesIds.push(gameId);
     } else {
-      user.likeGamesIds = newGameIds
+      user.likeGamesIds = newGameIds;
     }
-   let res = await this.fakeDelay(user.likeGamesIds);
-    return res
+    let res = await this.fakeDelay(user.likeGamesIds);
+    return res;
   }
 
   async getGameCategories() {
-    const gameCategoriesTree = buildTree({nodes: GameCategories})
+    const gameCategoriesTree = buildTree({ nodes: GameCategories });
     let reqCategories = await this.fakeDelay(gameCategoriesTree);
-    return reqCategories
+    return reqCategories;
   }
 
-  async getGameByCategoryId(categoryId) {
+  async getGameByCategoryId(categoryId) {}
 
-  }
-
-  async findGameList({search}) {
+  async findGameList({ search }) {
     try {
       const findGamesBySearch = !search
         ? gamesList
         : gamesList.filter((game) => {
             return (
-              compareValue(game.game, search, "substringLower") ||
-              compareValue(game.hashTags, search, "someOfLower")
+              compareValue(game.game, search, 'substringLower') ||
+              compareValue(game.hashTags, search, 'someOfLower')
             );
           });
       let reqGamesList = await this.fakeDelay(findGamesBySearch);

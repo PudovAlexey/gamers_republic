@@ -1,11 +1,11 @@
-import { SvgIcon } from "@mui/material";
+import { SvgIcon } from '@mui/material';
 
 function Logo({ size, fill, ...props }) {
   return (
     <SvgIcon
       sx={{
-        width: "auto",
-        height: size || "40px",
+        width: 'auto',
+        height: size || '40px',
       }}
       {...props}
     >

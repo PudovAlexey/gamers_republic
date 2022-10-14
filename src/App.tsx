@@ -1,30 +1,30 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useTheme } from '@emotion/react';
-import  Game  from './games/arcanoid/Game';
 import { Header } from './staticControls/Header/Header';
+import "./styles.css"
 import Footer from './staticControls/Footer/Footer';
-import Box from "@mui/material/Box";
+import Box from '@mui/material/Box';
 import Auth from './components/AuthContext/AuthContext';
-import "normalize.css";
+import 'normalize.css';
+import { mainStyles } from './styles';
 
-function App({children}) {
-  const theme = useTheme()
-
+function App({ children }) {
+  const theme = useTheme();
+  const styles = mainStyles(theme)
   return (
     <Auth>
-      <Box sx={{
-        position: "relative",
-        background: "url(/main/background.jpg)",
-        overflow: "hidden"
-      }} className="App">
-      <Header/>
-      <Box sx={{
-        minHeight: "calc(100vh - 200px)",
-      }}>
-      {children}
+      <Box sx={styles.backgroundIcon}>
+      <Box sx={styles.backgroundOverlay} 
+        className="App">
+        <Header />
+        <Box
+          sx={styles.mainPage}
+        >
+          {children}
+        </Box>
+        <Footer />
       </Box>
-      <Footer/>
-    </Box>
+      </Box>
     </Auth>
   );
 }

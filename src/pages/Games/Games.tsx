@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import AppBar from "@mui/material/AppBar";
-import Box from "@mui/material/Box";
-import CssBaseline from "@mui/material/CssBaseline";
-import IconButton from "@mui/material/IconButton";
-import MenuIcon from "@mui/icons-material/Menu";
-import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
-import Master from "./Master/Master";
-import Detail from "./Detail/Detail";
-import useDebounce from "../../hooks/useDebounce";
+import React, { useState } from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import CssBaseline from '@mui/material/CssBaseline';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Master from './Master/Master';
+import Detail from './Detail/Detail';
+import useDebounce from '../../hooks/useDebounce';
+import MasterDetail from '../../components/reusable/MasterDetail/MasterDetail';
 
 const drawerWidth = 240;
 
@@ -28,7 +29,7 @@ export default function Games(props: Props) {
     notDebounced: [filterValues, setFilterValues],
   } = useDebounce(
     {
-      search: "",
+      search: '',
       categpryId: null,
       range: { from: 0, to: 100 },
     },
@@ -36,10 +37,23 @@ export default function Games(props: Props) {
   );
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Master filterValues={filterValues} setFilterValues={setFilterValues} filters={filters} setFilters={setFilters} />
-      <CssBaseline />
-      <Detail filters={filters} />
-    </Box>
+    <MasterDetail
+    Master={{
+      control: Master,
+      params: {
+      filterValues: filterValues,
+      setFilterValues: setFilterValues,
+      filters: filters,
+      setFilters: setFilters
+    
+      }
+    }}
+    Detail={{
+      control: Detail,
+      params: {
+        filters: filters
+      }
+    }}
+    />
   );
 }

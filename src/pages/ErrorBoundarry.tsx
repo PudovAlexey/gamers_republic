@@ -1,6 +1,9 @@
-import React from "react";
+import React from 'react';
 
-class ErrorBoundary extends React.Component<{children}, { hasError: boolean }> {
+class ErrorBoundary extends React.Component<
+  { children },
+  { hasError: boolean }
+> {
   constructor(props) {
     super(props);
     this.state = { hasError: false };
@@ -13,7 +16,7 @@ class ErrorBoundary extends React.Component<{children}, { hasError: boolean }> {
 
   componentDidCatch(error, errorInfo) {
     // You can also log the error to an error reporting service
-    console.log("something went wrong: " + JSON.stringify(errorInfo));
+    console.log('something went wrong: ' + JSON.stringify(errorInfo));
   }
 
   render() {

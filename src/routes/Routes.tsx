@@ -1,32 +1,32 @@
-import { Route, Routes } from "react-router-dom";
-import Games from "../pages/Games/Games";
-import MainPage from "../pages/Main/MainPage";
-import GamesList from "../games/GamesList/GamesList";
+import { Route, Routes } from 'react-router-dom';
+import Games from '../pages/Games/Games';
+import MainPage from '../pages/Main/MainPage';
+import GamesList from '../games/GamesList/GamesList';
 type RouteEl = {
   path?: string;
   virtual?: boolean;
   component?: JSX.Element;
 };
 type RouteTree = {
-  node: RouteEl,
-  children?: RouteTree[]
+  node: RouteEl;
+  children?: RouteTree[];
 };
 const routes: RouteTree = {
-  node: { virtual: true, path: "" },
+  node: { virtual: true, path: '' },
   children: [
     {
-      node: { path: "/", component: <MainPage /> },
+      node: { path: '/', component: <MainPage /> },
     },
     {
-      node: { path: "/games", component: <Games /> },
+      node: { path: '/games', component: <Games /> },
       children: [
         {
-           node: 
-          {
-             path: "/:gameId", component: <GamesList /> 
-        } 
-      }
-    ],
+          node: {
+            path: '/:gameId',
+            component: <GamesList />,
+          },
+        },
+      ],
     },
   ],
 };
@@ -44,7 +44,7 @@ let treeRoutes = [];
       />
     );
   }
-})(routes, "");
+})(routes, '');
 
 function RouterComponent() {
   return <Routes>{treeRoutes}</Routes>;

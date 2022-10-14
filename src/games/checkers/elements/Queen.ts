@@ -1,19 +1,19 @@
-import Figure from "./Figure";
-import Red from "../assets/red_queen.png";
-import Black from "../assets/black_queen.png";
-import { TField } from "../../utils/types";
-import { IFigure, TLights } from "./types";
+import Figure from './Figure';
+import Red from '../assets/red_queen.png';
+import Black from '../assets/black_queen.png';
+import { TField } from '../../utils/types';
+import { IFigure, TLights } from './types';
 
 class Queen extends Figure implements IFigure {
-   figures = {
+  figures = {
     Red,
     Black,
   };
 
-   lights: TLights[] = [];
+  lights: TLights[] = [];
 
   constructor(color, coords, fieldState) {
-    super()
+    super();
     this.coords = coords;
     this.color = color;
     this.fieldState = fieldState;
@@ -29,7 +29,7 @@ class Queen extends Figure implements IFigure {
     function handleToBorder(nextCoord, eatMark, end) {
       if (nextCoord.value && !nextCoord.value.key)
         this.fieldState[nextCoord.coords.col][nextCoord.coords.row].light =
-          "red";
+          'red';
       let light: TLights = {
         col: nextCoord.coords.col,
         row: nextCoord.coords.row,
@@ -39,15 +39,18 @@ class Queen extends Figure implements IFigure {
         nextCoord.value.key &&
         nextCoord.value.key !== this.color &&
         this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
-        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
+        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value
+          .key
       ) {
         light.eat = nextCoord;
         eatMark = true;
-      } else if (nextCoord?.value?.key && 
+      } else if (
+        nextCoord?.value?.key &&
         this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
-        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
-        ) {
-          end = true
+        this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value
+          .key
+      ) {
+        end = true;
       }
       this.lights.push(light);
 
@@ -73,11 +76,15 @@ class Queen extends Figure implements IFigure {
     }
     coords.map((nextCoord) => {
       let eatMark = false;
-      const isKey = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row]?.key
-      const isHasField = this.fieldState[nextCoord.coords.col] && this.fieldState[nextCoord.coords.col][nextCoord.coords.row]
+      const isKey =
+        this.fieldState[nextCoord.coords.col] &&
+        this.fieldState[nextCoord.coords.col][nextCoord.coords.row]?.key;
+      const isHasField =
+        this.fieldState[nextCoord.coords.col] &&
+        this.fieldState[nextCoord.coords.col][nextCoord.coords.row];
       if (isHasField && !isKey) {
         this.fieldState[nextCoord.coords.col][nextCoord.coords.row].light =
-          "red";
+          'red';
       }
       const light: TLights = {
         col: nextCoord.coords.col,
@@ -88,7 +95,8 @@ class Queen extends Figure implements IFigure {
         nextCoord.value.key &&
         nextCoord.value.key !== this.color &&
         this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value &&
-        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value.key
+        !this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row).value
+          .key
       ) {
         light.eat = nextCoord;
         eatMark = true;
@@ -96,12 +104,12 @@ class Queen extends Figure implements IFigure {
       this.lights.push(light);
       if (eatMark) {
         handleToBorder.call(
-            this,
-            this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row),
-            eatMark,
-            true
-          );
-          return  
+          this,
+          this[nextCoord.key](nextCoord.coords.col, nextCoord.coords.row),
+          eatMark,
+          true
+        );
+        return;
       }
       handleToBorder.call(
         this,
@@ -121,17 +129,21 @@ class Queen extends Figure implements IFigure {
       return this.fieldState;
     }
     this.makeLights(col, row);
-    const canEat = this.lights.filter(light => !!light.eat)
+    const canEat = this.lights.filter((light) => !!light.eat);
     if (canEat.length) {
       const clearNotEatLights = (column, col, row) => {
-        const isAfterEatCoords = canEat.find(eat => {
-          return JSON.stringify(this[eat.eat.key](eat.eat.coords.col, eat.eat.coords.row).coords) === JSON.stringify({col, row: +row})
-        }) 
-        if(!isAfterEatCoords) {
+        const isAfterEatCoords = canEat.find((eat) => {
+          return (
+            JSON.stringify(
+              this[eat.eat.key](eat.eat.coords.col, eat.eat.coords.row).coords
+            ) === JSON.stringify({ col, row: +row })
+          );
+        });
+        if (!isAfterEatCoords) {
           delete column.light;
         }
-      }
-      this.forEachField(clearNotEatLights)
+      };
+      this.forEachField(clearNotEatLights);
     }
     return this.fieldState;
   }

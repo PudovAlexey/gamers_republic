@@ -1,4 +1,3 @@
-
 export type Events = {
   event: string;
   element?: Element;
@@ -6,28 +5,25 @@ export type Events = {
 }[];
 
 export enum Borders {
-  Top = "top",
-  Bottom = "bottom",
-  Left = "left",
-  Right = "right",
-  CenterX = "centerX",
-  CenterY = "centerY",
+  Top = 'top',
+  Bottom = 'bottom',
+  Left = 'left',
+  Right = 'right',
+  CenterX = 'centerX',
+  CenterY = 'centerY',
 }
 export type Render = (
-  {
-    canvas: HTMLCanvasElement,
-    context: CanvasRenderingContext2D,
-  },
+  { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D },
   reverseY: (Y: number) => number,
   borders: TBorders
-) => void
+) => void;
 
-export type PositionValue = 'init' | 'left' | 'center' | 'right' | number
+export type PositionValue = 'init' | 'left' | 'center' | 'right' | number;
 
 type Position = {
-    X: PositionValue
-    Y: PositionValue
-}
+  X: PositionValue;
+  Y: PositionValue;
+};
 
 export type TBorders = Record<Borders, number>;
 
@@ -44,13 +40,18 @@ class AnimationFrame {
     centerY: 0,
   };
   private events: Events | null = null;
-  init(canvasElement: HTMLCanvasElement, game: Render, events: Events, makeStartPosition: (borders: TBorders) => void) {
+  init(
+    canvasElement: HTMLCanvasElement,
+    game: Render,
+    events: Events,
+    makeStartPosition: (borders: TBorders) => void
+  ) {
     this.events = events;
-    if (events) this.makeListeners("add");
-    this.context = canvasElement.getContext("2d");
+    if (events) this.makeListeners('add');
+    this.context = canvasElement.getContext('2d');
     this.canvasElement = canvasElement;
     this.borders = this.calculateBorders();
-    makeStartPosition(this.borders)
+    makeStartPosition(this.borders);
     this.run(game);
   }
 
@@ -65,7 +66,7 @@ class AnimationFrame {
     };
   }
 
-  private makeListeners(toDo: "add" | "remove") {
+  private makeListeners(toDo: 'add' | 'remove') {
     this.events!.forEach(({ element, action, event }) => {
       element
         ? element[`${toDo}EventListener`](event, action)
@@ -75,7 +76,7 @@ class AnimationFrame {
 
   reverseY(Y: number) {
     let reverseY = this.canvasElement!.height - 100 - Y;
-    return reverseY <= 0 ? 0 : reverseY
+    return reverseY <= 0 ? 0 : reverseY;
   }
 
   run(game: Render) {
@@ -93,7 +94,7 @@ class AnimationFrame {
   }
 
   onExit() {
-    this.makeListeners("remove");
+    this.makeListeners('remove');
     this.exit = true;
   }
 }

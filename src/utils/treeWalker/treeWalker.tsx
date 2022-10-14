@@ -1,31 +1,35 @@
-import { JsxElement } from "typescript";
-import { getNodeByPath } from "../utils";
-import { TBuildTreeProps, TmakeNodesTreeType } from "./types";
+import { JsxElement } from 'typescript';
+import { getNodeByPath } from '../utils';
+import { TBuildTreeProps, TmakeNodesTreeType } from './types';
 
-export function forEachTreeNodes(tree, action, parrentNode = null, nodeId = "0", nodeName = "node", childName = "children") {
+export function forEachTreeNodes(
+  tree,
+  action,
+  parrentNode = null,
+  nodeId = '0',
+  nodeName = 'node',
+  childName = 'children'
+) {
   tree[nodeName].id = nodeId;
-  if (typeof action === "function") action(tree[nodeName], parrentNode, nodeId)
+  if (typeof action === 'function') action(tree[nodeName], parrentNode, nodeId);
   if (Array.isArray(tree[childName]) && tree[childName].length) {
-    tree[childName].forEach((node, idx) => forEachTreeNodes(
-      node,
-      action,
-      tree,
-      `${nodeId}-${idx}`
-    ))
+    tree[childName].forEach((node, idx) =>
+      forEachTreeNodes(node, action, tree, `${nodeId}-${idx}`)
+    );
   }
-  return tree
+  return tree;
 }
 
 export function makeNodesTree({
   treeChildren,
-  nodeName = "node",
-  childName = "children",
+  nodeName = 'node',
+  childName = 'children',
   childContent,
   sorter,
   openFirstLeaf = false,
   firstRowProps,
 }: TmakeNodesTreeType) {
-  if (typeof sorter === "function" && treeChildren[childName]?.length) {
+  if (typeof sorter === 'function' && treeChildren[childName]?.length) {
     treeChildren[childName].sort(sorter);
   }
   function handleTreeItems(treeChildren, id) {
@@ -60,7 +64,9 @@ export function makeNodesTree({
         forEachData(content, props)
       );
     } else {
-      let content = (Content, props): JSX.Element => <Content {...props}></Content>;
+      let content = (Content, props): JSX.Element => (
+        <Content {...props}></Content>
+      );
       return childContent(treeChildren[nodeName], id, (Content, props) =>
         content(Content, props)
       );
@@ -70,7 +76,7 @@ export function makeNodesTree({
   return handleTreeItems(treeChildren, 0);
 }
 
-export function findTreeNodeById({ treeNode, id, nodePath = "nodeId" }) {
+export function findTreeNodeById({ treeNode, id, nodePath = 'nodeId' }) {
   let node;
   function findTreeNode(treeNode) {
     let nodeId = getNodeByPath({ node: treeNode, path: nodePath });
@@ -90,10 +96,10 @@ export function findTreeNodeById({ treeNode, id, nodePath = "nodeId" }) {
 export function buildTree({
   nodes,
   sorter,
-  nodeName = "node",
-  childName = "children",
-  idProp = "nodeId",
-  parrentIdProp = "parrentId",
+  nodeName = 'node',
+  childName = 'children',
+  idProp = 'nodeId',
+  parrentIdProp = 'parrentId',
 }: TBuildTreeProps) {
   let rootTree = nodes.filter((route) => route[parrentIdProp] === 0);
   let inTree = nodes.filter((route) => route[parrentIdProp] !== 0);
@@ -110,7 +116,7 @@ export function buildTree({
           [nodeName]: node,
           [childName]: [],
         });
-        if (typeof sorter === "function" && parrentNode[childName]?.length) {
+        if (typeof sorter === 'function' && parrentNode[childName]?.length) {
           parrentNode[childName].sort(sorter);
         }
       }
@@ -118,12 +124,10 @@ export function buildTree({
     },
     {
       [nodeName]: { virtual: true },
-      [childName]: rootTree
-      .map((node) => ({
+      [childName]: rootTree.map((node) => ({
         [nodeName]: node,
         [childName]: [],
-      }))
-     
+      })),
     }
   );
 

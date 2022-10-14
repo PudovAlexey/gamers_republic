@@ -1,16 +1,16 @@
-import Black from "../assets/black.png";
-import Red from "../assets/red.png";
-import { Color, Coords, FieldState, IFigure, Side, TNextCoords } from "./types";
+import Black from '../assets/black.png';
+import Red from '../assets/red.png';
+import { Color, Coords, FieldState, IFigure, Side, TNextCoords } from './types';
 
 class Figure implements IFigure {
-   figures = {
+  figures = {
     Red,
     Black,
   };
-   lights = [];
-  coords: Coords
-  color: Color
-  side: Side
+  lights = [];
+  coords: Coords;
+  color: Color;
+  side: Side;
   fieldState: FieldState;
   constructor(coords?, color?, side?, fieldState?) {
     this.side = side;
@@ -42,13 +42,13 @@ class Figure implements IFigure {
     const nextCol = this.columnIntoNextStep(col, -this.side || +1);
 
     return {
-      key: "fromLeftTop",
+      key: 'fromLeftTop',
       value: this.fieldState[nextCol] && this.fieldState[nextCol][+row - 1],
       coords: {
         col: nextCol,
         row: +row - 1,
       },
-      oposite: "fromRightBottom",
+      oposite: 'fromRightBottom',
     };
   }
 
@@ -56,13 +56,13 @@ class Figure implements IFigure {
     const nextCol = this.columnIntoNextStep(col, -this.side || +1);
 
     return {
-      key: "fromRightTop",
+      key: 'fromRightTop',
       value: this.fieldState[nextCol] && this.fieldState[nextCol][+row + 1],
       coords: {
         col: nextCol,
         row: +row + 1,
       },
-      oposite: "fromLeftBottom",
+      oposite: 'fromLeftBottom',
     };
   }
 
@@ -70,26 +70,26 @@ class Figure implements IFigure {
     const nextCol = this.columnIntoNextStep(col, +this.side || -1);
 
     return {
-      key: "fromRightBottom",
+      key: 'fromRightBottom',
       value: this.fieldState[nextCol] && this.fieldState[nextCol][+row + 1],
       coords: {
         col: nextCol,
         row: +row + 1,
       },
-      oposite: "fromLeftTop",
+      oposite: 'fromLeftTop',
     };
   }
   fromLeftBottom(col, row): TNextCoords {
     const nextCol = this.columnIntoNextStep(col, +this.side || -1);
 
     return {
-      key: "fromLeftBottom",
+      key: 'fromLeftBottom',
       value: this.fieldState[nextCol] && this.fieldState[nextCol][+row - 1],
       coords: {
         col: nextCol,
         row: +row - 1,
       },
-      oposite: "fromRightTop",
+      oposite: 'fromRightTop',
     };
   }
 
@@ -117,7 +117,7 @@ class Figure implements IFigure {
         isMustEat.push(getNextStepByEat);
         this.fieldState[getNextStepByEat.coords.col][
           getNextStepByEat.coords.row
-        ].light = "red";
+        ].light = 'red';
         this.lights.push({
           col: getNextStepByEat.coords.col,
           row: getNextStepByEat.coords.row,
@@ -150,7 +150,7 @@ class Figure implements IFigure {
     let canStep = [this.fromLeftTop(col, row), this.fromRightTop(col, row)];
     canStep.forEach((step) => {
       if (this.canLight(step.coords.col, step.coords.row)) {
-        this.fieldState[step.coords.col][step.coords.row].light = "red";
+        this.fieldState[step.coords.col][step.coords.row].light = 'red';
         this.lights.push({
           col: step.coords.col,
           row: step.coords.row,
@@ -170,7 +170,7 @@ class Figure implements IFigure {
     );
     let isNotStep = true;
     if (isAvalibleField && this.fieldState[col][row].light) {
-      let vasDestroyByReason = null
+      let vasDestroyByReason = null;
       const isEatAportunaty = (_, col, row) => {
         const isMustEat = [
           this.fromLeftTop(col, row),
@@ -182,7 +182,7 @@ class Figure implements IFigure {
           const isOnEnd = this[inAim.oposite](col, row)?.value;
           console.log(col, row);
           if (
-            typeof inAim?.value?.key === "string" &&
+            typeof inAim?.value?.key === 'string' &&
             this.fieldState[col][row].key &&
             inAim?.value?.key !== this.fieldState[col][row].key &&
             JSON.stringify(this.coords) !==
@@ -199,12 +199,12 @@ class Figure implements IFigure {
               !this.lights.some(
                 (light) =>
                   JSON.stringify(light?.eat?.coords || {}) ===
-                  JSON.stringify({ col, row: +row }) 
-                  ) &&
-                   !vasDestroyByReason
+                  JSON.stringify({ col, row: +row })
+              ) &&
+              !vasDestroyByReason
             ) {
               this.fieldState[colAim][rowAim] = {};
-              vasDestroyByReason = {col, row}
+              vasDestroyByReason = { col, row };
             }
           }
         }, this);

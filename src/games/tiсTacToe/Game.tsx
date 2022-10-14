@@ -1,22 +1,22 @@
-import React, { useEffect, useState } from "react";
-import Tic from "./assets/Tic.png";
-import Tac from "./assets/Tac.png";
-import { Alert, AlertTitle, Box, Toolbar, Typography } from "@mui/material";
-import { buildFieldByCoords, makeField } from "../utils/fiels";
-import DialogControl from "../../components/reusable/Dialog/DialogControl";
-import ToolbarComponent from "../../components/reusable/ToolbarComponent/ToolbarComponent";
-import { useNavigate } from "react-router-dom";
-import { EField } from "../utils/types";
+import React, { useEffect, useState } from 'react';
+import Tic from './assets/Tic.png';
+import Tac from './assets/Tac.png';
+import { Alert, AlertTitle, Box, Toolbar, Typography } from '@mui/material';
+import { buildFieldByCoords, makeField } from '../utils/fiels';
+import DialogControl from '../../components/reusable/Dialog/DialogControl';
+import ToolbarComponent from '../../components/reusable/ToolbarComponent/ToolbarComponent';
+import { useNavigate } from 'react-router-dom';
+import { EField } from '../utils/types';
 // let fild = {
 //   A: { 1: {}, 2: {}, 3: {} },
 //   B: { 1: {}, 2: {}, 3: {} },
 //   C: { 1: {}, 2: {}, 3: {} },
 // };
 
-let fild = makeField(EField.TicTacToe)
+let fild = makeField(EField.TicTacToe);
 let iconsDict = {
-  X: { key: "X", value: Tic },
-  O: { key: "O", value: Tac },
+  X: { key: 'X', value: Tic },
+  O: { key: 'O', value: Tac },
 };
 
 function compareWin(fieldState, turn) {
@@ -43,7 +43,7 @@ function compareWin(fieldState, turn) {
   );
   let isWinByLine = steps.some(
     (step, _, allSteps) =>
-      line("column", allSteps, step) || line("row", allSteps, step)
+      line('column', allSteps, step) || line('row', allSteps, step)
   );
   let isWinByDiagonal = steps.filter(
     (step) => +step.row === step.column.charCodeAt() - 64
@@ -58,7 +58,7 @@ function compareWin(fieldState, turn) {
   if (isWin) {
     return isWin;
   } else if (allSteps.length === isDraw.length) {
-    return "draw";
+    return 'draw';
   } else {
     return false;
   }
@@ -68,10 +68,10 @@ function Game() {
   let [dialogOpen, setDialogOpen] = useState(false);
   let [draw, setDraw] = useState(false);
   let [fieldState, setFieldState] = useState(fild);
-  let [turnState, setTurnState] = useState("X");
+  let [turnState, setTurnState] = useState('X');
   let [players, setPlayers] = useState({
-    O: { username: "darkStalker", avatar: "" },
-    X: { username: "darkStalker", avatar: "" },
+    O: { username: 'darkStalker', avatar: '' },
+    X: { username: 'darkStalker', avatar: '' },
   });
   let [countWin, setCountWin] = useState({
     O: 0,
@@ -82,33 +82,33 @@ function Game() {
     <Typography>
       <img
         style={{
-          marginLeft: "10px",
+          marginLeft: '10px',
         }}
         height="30px"
         width="30px"
-        src={iconsDict["O"].value}
+        src={iconsDict['O'].value}
       />
-      : {countWin["O"]}
+      : {countWin['O']}
       <img
         style={{
-          marginLeft: "10px",
+          marginLeft: '10px',
         }}
         height="30px"
         width="30px"
-        src={iconsDict["X"].value}
+        src={iconsDict['X'].value}
       />
-      : {countWin["X"]}
+      : {countWin['X']}
     </Typography>
   );
   let gameTurn = (text, isResult) => {
     let reverseState;
-    if (isResult) reverseState = turnState === "X" ? "O" : "X";
+    if (isResult) reverseState = turnState === 'X' ? 'O' : 'X';
     return (
       <Typography variant="h5">
-        {text}: {""}
+        {text}: {''}
         <img
           style={{
-            marginLeft: "10px",
+            marginLeft: '10px',
           }}
           height="30px"
           width="30px"
@@ -127,7 +127,7 @@ function Game() {
     );
   };
   function onStartNewGame() {
-    let reverseState = turnState === "X" ? "O" : "X";
+    let reverseState = turnState === 'X' ? 'O' : 'X';
     setTurnState(reverseState);
     setFieldState(fild);
     setDialogOpen(false);
@@ -138,11 +138,11 @@ function Game() {
     setFieldState(fild);
     setDraw(false);
     setDialogOpen(false);
-    navigate("/games");
+    navigate('/games');
   }
 
   function onPlayerClick(row, column) {
-    let nextTurn = turnState === "X" ? "O" : "X";
+    let nextTurn = turnState === 'X' ? 'O' : 'X';
 
     if (!fieldState[row][column]?.key)
       setFieldState((prevState) => ({
@@ -154,12 +154,12 @@ function Game() {
   }
 
   useEffect(() => {
-    let opositTurn = turnState === "X" ? "O" : "X";
+    let opositTurn = turnState === 'X' ? 'O' : 'X';
     let isWin = compareWin(fieldState, opositTurn);
-    if (isWin === "draw") {
+    if (isWin === 'draw') {
       setDraw(true);
       setDialogOpen(true);
-      console.log("draw");
+      console.log('draw');
     } else if (isWin) {
       setCountWin((prevCount) => ({
         ...prevCount,
@@ -172,15 +172,15 @@ function Game() {
     <Box>
       <ToolbarComponent justifyContent="right" width="30%">
         {gameCount}
-        {gameTurn("Now turn is", false)}
+        {gameTurn('Now turn is', false)}
       </ToolbarComponent>
       <Box
         sx={{
-          height: "100%",
-          margin: "auto auto",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
+          height: '100%',
+          margin: 'auto auto',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
         {buildFieldByCoords(
@@ -188,8 +188,8 @@ function Game() {
           (col) => (
             <Box
               sx={{
-                display: "flex",
-                justifyContent: "center",
+                display: 'flex',
+                justifyContent: 'center',
               }}
             >
               {col}
@@ -200,20 +200,20 @@ function Game() {
               <Box
                 onClick={() => onPlayerClick(colKey, rowKey)}
                 sx={{
-                  border: "2px solid black",
-                  width: "150px",
-                  height: "150px",
-                  alignContent: "center",
-                  background: "white",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
+                  border: '2px solid black',
+                  width: '150px',
+                  height: '150px',
+                  alignContent: 'center',
+                  background: 'white',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
                 }}
               >
                 {row.value ? (
                   <img width="90%" height="90%" src={row.value} alt={row.key} />
                 ) : (
-                  ""
+                  ''
                 )}
               </Box>
             );
@@ -223,11 +223,11 @@ function Game() {
       <DialogControl
         dialogActions={[
           {
-            text: "startNewGame",
+            text: 'startNewGame',
             onClick: onStartNewGame,
           },
           {
-            text: "Out",
+            text: 'Out',
             onClick: onOut,
           },
         ]}
@@ -238,8 +238,8 @@ function Game() {
         <Box>
           <Typography variant="h5">
             {draw
-              ? "The match ended in a draw"
-              : gameTurn("At these match was win is", true)}
+              ? 'The match ended in a draw'
+              : gameTurn('At these match was win is', true)}
           </Typography>
           <Typography variant="h6">
             current game score is: {gameCount}
