@@ -206,7 +206,7 @@ export const theme = createTheme({
             height: '138%',
             top: '20px; right: -500%',
             background: '#1F2326',
-            color: ""
+            color: "",
             transformOrigin: '45.5% 0',
             transform: 'rotate(-41deg)',
             border: '2px solid #1F2326',
