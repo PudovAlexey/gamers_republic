@@ -1,6 +1,41 @@
-/* @font-face {
-    font-family: 'DrulWide';
+@font-face {
+    font-family: 'Druk Wide';
+    font-style: ;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/Druk_Wide/DrukWideMedium/DrukWideMedium.ttf') format('ttf');
+    unicode-range: "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F";
+  }
+  @font-face {
+    font-family: 'Druk Wide';
     font-style: normal;
-    font-weight: normal;
-    src: url('/fonts/Druk_Wide/DrukWideMedium/Druk\ Wide\ Medium.ttf');
-} */
+    font-weight: bold;
+    font-display: swap;
+    src: url('/fonts/Druk_Wide/DrukWideBold/DrukWideBold.ttf') format('ttf');
+    unicode-range: "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F";
+  }
+  @font-face {
+    font-family: 'Druk Wide';
+    font-style: normal;
+    font-weight: 400;
+    font-weight: bold;
+    font-display: swap;
+    src: url('/fonts/Druk_Wide/DrukWideBoldRegular/DrukWideBoldRegular.ttf') format('ttf');
+    unicode-range: "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F";
+  }
+  @font-face {
+    font-family: 'Druk Wide';
+    font-style: normal;
+    font-weight: bold;
+    font-display: swap;
+    src: url('/fonts/Druk_Wide/DrukWideCyBoldRegular/DrukWideCyBoldRegular.ttf') format('ttf');
+    unicode-range: "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F";
+  }
+  @font-face {
+    font-family: 'Druk Wide';
+    font-style: medium;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/Druk_Wide/DrukWideMediumRegular/DrukWideMediumRegular.ttf') format('ttf');
+    unicode-range: "U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F";
+  }

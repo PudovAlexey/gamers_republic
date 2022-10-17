@@ -1,11 +1,12 @@
 a {
     color: inherit;
     text-decoration: none;
+    line-height: 0;
 }
-
+/* 
 @font-face {
     font-family: 'DrulWide';
     font-style: normal;
     font-weight: normal;
-    src: url('/public/fonts/Druk_Wide/DrukWideMedium/Druk\ Wide\ Medium.ttf');
-}
+    src: url('/public/fonts/Druk_Wide/DrukWideMedium/DrukWideMedium.ttf');
+} */

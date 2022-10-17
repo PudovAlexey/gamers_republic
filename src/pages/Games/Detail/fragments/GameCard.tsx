@@ -89,11 +89,6 @@ function GameCard({
             {game[0].toUpperCase()}
           </Avatar>
         }
-        action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
-          </IconButton>
-        }
         title={title}
         subheader={game}
       />

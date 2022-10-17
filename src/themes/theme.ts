@@ -198,6 +198,9 @@ export const theme = createTheme({
           transition: 'none !important',
           border: 'none',
           position: 'relative',
+          fontFamily: 'Druk Wide',
+          fontStyle: "normal",
+          fontWeight: 500,
           zIndex: 2,
           '&:after': {
             content: '""',
@@ -243,9 +246,37 @@ export const theme = createTheme({
     MuiCardHeader: {
       styleOverrides: {
         root: {
-          baclground: "#1F2326"
+          baclground: "#1F2326",
+          // position: "initial"
+          zIndex: 11
+        },
+        subheader: {
+          fontSize: "16px",
+          letterSpacing: "0.1em",
+          fontFamily: 'Druk Wide',
+          fontStyle: "normal",
+          fontWeight: 500,
+          textOverflow: "eclipsis",
+          // "-webkit-text-stroke": "1px #fff",
+          color: "#FF4656",
+          whiteSpace: "nowrap",
+     
+          textTransform: "uppercase",
+       
+        },
+        avatar: {
+          position: "relative",
+          left: "8px"
         }
       }
     },
+    MuiCardMedia: {
+      styleOverrides: {
+        root: {
+          position: "relative",
+          left: "18px"
+        }
+      }
+    }
   },
 });
