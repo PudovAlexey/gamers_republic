@@ -270,11 +270,10 @@ export const theme = createTheme({
         }
       }
     },
-    MuiCardMedia: {
+    MuiIconButton: {
       styleOverrides: {
         root: {
-          position: "relative",
-          left: "18px"
+          color: "white"
         }
       }
     }
