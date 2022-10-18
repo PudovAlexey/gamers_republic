@@ -10,32 +10,45 @@ import {
   ListItem,
   ListItemButton,
   ListItemAvatar,
-  ListItemText
+  ListItemText,
+  Checkbox
 } from '@mui/material';
-import Timer from '../../../components/reusable/Timer/Timer';
-import { CheckBox } from '@mui/icons-material';
 function ModeSettings({ gameParams, setGameParams}) {
+  const [gameMode, setGameMode] = useState(gameParams)
 
-    function onChangeMode(variant) {
-        console.log(variant)
+    function onChangeMode(variant, variantIdx) {
+      setGameMode(param => {
+          const updateWith = param.gameWith.map(item => ({
+            ...item,
+            checked: item.key === variant.key
+          }))
+          return {
+            ...param,
+            gameWith: updateWith
+          }
+        })
     }
- 
+
+    useEffect(() => {
+      setGameParams({...gameMode})
+    }, [gameMode])
   return (
    <>
     <List dense sx={{
        width: '100%',   
     }}>
         {
-            gameParams.gameWith.map((variant, idx) => {
+            gameMode.gameWith.map((variant, idx) => {
                 const Icon = variant.value
                 return (
                     <ListItem
+                onClick={() => onChangeMode(variant)}
                 key={idx}
                 secondaryAction={
-                  <CheckBox
+                  <Checkbox
                     edge="end"
-                    onChange={() => onChangeMode(variant)}
                     checked={variant.checked}
+                    onClick={() => onChangeMode(variant)}
                     inputProps={{ 'aria-labelledby': idx }}
                   />
                 }

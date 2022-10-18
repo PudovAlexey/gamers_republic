@@ -106,17 +106,7 @@ function GameMenu({ menuTree }) {
                 zIndex: -1,
               },
               "&:hover": {
-                animation: "slidein 2s",
-                // position: 'absolute',
-                // width: '1158%',
-                // height: '1000%',
-                // top: '20px; right: -500%',
-                // background: 'red',
-                // color: "",
-                // transformOrigin: '48.3% 0',
-                // transform: 'rotate(-41deg)',
-                // zIndex: -1,
-                // transition: ".2s ease-out"
+                animation: "gameMenu 2s",
               }
             }}
             key={treeNode.node.id}
