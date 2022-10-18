@@ -7,11 +7,11 @@ import DialogControl from '../../components/reusable/Dialog/DialogControl';
 import ToolbarComponent from '../../components/reusable/ToolbarComponent/ToolbarComponent';
 import { useNavigate } from 'react-router-dom';
 import { EField } from '../utils/types';
-// let fild = {
-//   A: { 1: {}, 2: {}, 3: {} },
-//   B: { 1: {}, 2: {}, 3: {} },
-//   C: { 1: {}, 2: {}, 3: {} },
-// };
+import GroupIcon from '@mui/icons-material/Group';
+import ComputerIcon from '@mui/icons-material/Computer';
+import CompassCalibrationIcon from '@mui/icons-material/CompassCalibration';
+import { GameItems } from './gameMenu/GameItems';
+import GameMenu from '../reusable/GameMenu';
 
 let fild = makeField(EField.TicTacToe);
 let iconsDict = {
@@ -69,6 +69,28 @@ function Game() {
   let [draw, setDraw] = useState(false);
   let [fieldState, setFieldState] = useState(fild);
   let [turnState, setTurnState] = useState('X');
+  const [startGame, setStartGame] = useState<boolean>(false)
+  const [gameParams, setGameParams] = useState({
+    gameWith: [
+      {
+        key: "pc",
+            value: ComputerIcon
+      },
+      {
+        key: "koop",
+        value: GroupIcon,
+        checked: true
+    },
+    {
+      key: "online",
+        value: CompassCalibrationIcon
+    }
+],
+    timer: {
+      isOn: false,
+      tick: 0
+    }
+  })
   let [players, setPlayers] = useState({
     O: { username: 'darkStalker', avatar: '' },
     X: { username: 'darkStalker', avatar: '' },
@@ -77,6 +99,13 @@ function Game() {
     O: 0,
     X: 0,
   });
+
+  const gameItems = GameItems({
+    navigate,
+    setStartGame,
+    gameParams,
+    setGameParams
+  })
 
   let gameCount = (
     <Typography>
@@ -174,6 +203,7 @@ function Game() {
         {gameCount}
         {gameTurn('Now turn is', false)}
       </ToolbarComponent>
+      {!startGame ? <GameMenu menuTree={gameItems} /> : null}
       <Box
         sx={{
           height: '100%',

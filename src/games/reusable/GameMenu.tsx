@@ -7,6 +7,7 @@ import {
   ListItemText,
   Button,
   Typography,
+  ListItem,
 } from '@mui/material';
 import {
   findTreeNodeById,
@@ -53,15 +54,16 @@ function GameMenu({ menuTree }) {
           height: '150%',
           background: 'rgba(0, 0, 0, .5)',
           position: 'absolute',
+          gap: "30px",
+          bottom: "100px",
+
           color: 'white',
           margin: 'auto auto',
           flexDirection: 'column',
           alignItems: 'center',
           display: 'flex',
           justifyContent: 'center',
-          gap: '75px',
           top: 0,
-          bottom: 200,
           left: 0,
           right: 0,
         }}
@@ -70,20 +72,52 @@ function GameMenu({ menuTree }) {
           variant="contained"
           sx={{
             zIndex: 2000,
-            position: 'relative',
-            top: '80px',
-            right: '100px',
+            position: 'fixed',
+            left: "4%",
+            top: '32%',
           }}
           onClick={onNavBack}
-        >
+          >
           Back
         </Button>
         {optionNode.map((treeNode, idx) => (
-          <ListItemButton
+          treeNode.node.control ? <ListItem
             sx={{
-              display: 'flex',
+              display: "flex",
               flexDirection: 'column',
-              flexGrow: '0',
+              background: "transparent",
+              // border: "2px solid #F8F8F8",
+              width: "90%",
+              height: "max-content",
+              overflowY: "hidden",
+              overflowX: "hidden",
+              border: "none",
+              position: "relative",
+              "&:after": {
+                content: '""',
+                position: 'absolute',
+                width: '1158%',
+                height: '1000%',
+                top: '20px; right: -500%',
+                background: '#F8F8F8',
+                color: "",
+                transformOrigin: '48.3% 0',
+                transform: 'rotate(-41deg)',
+                zIndex: -1,
+              },
+              "&:hover": {
+                animation: "slidein 2s",
+                // position: 'absolute',
+                // width: '1158%',
+                // height: '1000%',
+                // top: '20px; right: -500%',
+                // background: 'red',
+                // color: "",
+                // transformOrigin: '48.3% 0',
+                // transform: 'rotate(-41deg)',
+                // zIndex: -1,
+                // transition: ".2s ease-out"
+              }
             }}
             key={treeNode.node.id}
             component="button"
@@ -94,8 +128,25 @@ function GameMenu({ menuTree }) {
                 <Typography variant="h4">{treeNode.node.text}</Typography>
               }
             />
-            <Box>{treeNode.node.control}</Box>
-          </ListItemButton>
+            {treeNode.node.control}
+          </ListItem> :
+          <ListItemButton
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            flexGrow: '0',
+          }}
+          key={treeNode.node.id}
+          component="button"
+          onClick={() => onTreeItemPress(treeNode)}
+        >
+          <ListItemText
+            primary={
+              <Typography variant="h4">{treeNode.node.text}</Typography>
+            }
+          />
+          <Box>{treeNode.node.control}</Box>
+        </ListItemButton>
         ))}
       </List>
     </Box>
