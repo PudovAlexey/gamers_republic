@@ -16,6 +16,7 @@ import { useTheme } from '@emotion/react';
 import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { oposite } from './utils/utils';
 import pcTurn from './gameModes/pc';
+import PC from './gameModes/pc';
 
 const fild = makeField(EField.TicTacToe);
 const iconsDict = {
@@ -76,6 +77,7 @@ function Game() {
   const [fieldState, setFieldState] = useState(fild);
   const [turnState, setTurnState] = useState('X');
   const [activeMode, setActiveMode] = useState(null)
+  const [pc, setPc] = useState()
   const [startGame, setStartGame] = useState<boolean>(false)
   let [countWin, setCountWin] = useState({
     O: 0,
@@ -104,7 +106,6 @@ function Game() {
   })
 
   function onPlayerClick(row, column) {
-    let nextTurn = oposite(turnState)
 
     if (!fieldState[row][column]?.key) {
       let updateFieldState = {
@@ -112,12 +113,22 @@ function Game() {
         [row]: { ...fieldState[row], [column]: iconsDict[turnState] },
       }
       switch(activeMode) {
-        case "koop":  setTurnState(nextTurn);
-        case "pc": updateFieldState = pcTurn(fieldState, oposite(turnState))
+        case "koop": switchTurnToAnotherUser(updateFieldState)
+        case "pc": switchToPcTurn(updateFieldState)
       }
-
-      setFieldState(updateFieldState);
     }
+  }
+
+  function switchTurnToAnotherUser(updateFieldState) {
+    let nextTurn = oposite(turnState)
+    setTurnState(nextTurn);
+    setFieldState(updateFieldState);
+  }
+
+  function switchToPcTurn(updateFieldState) {
+    console.log('pc')
+    setFieldState(updateFieldState)
+    pc.stepTo(updateFieldState)
   }
 
   useEffect(() => {
@@ -139,6 +150,13 @@ function Game() {
     const activeMode = gameParams.gameWith.find(mode=> mode.checked)
     setActiveMode(activeMode.key)
   }, [gameParams.gameWith])
+
+  useEffect(() => {
+    if (startGame && activeMode === 'pc') {
+      const pc = new PC(oposite(turnState), fieldState)
+      setPc(pc)
+    }
+  }, [startGame])
   return (
     <Box>
       <Toolbar
