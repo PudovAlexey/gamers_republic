@@ -128,7 +128,8 @@ function Game() {
   function switchToPcTurn(updateFieldState) {
     console.log('pc')
     setFieldState(updateFieldState)
-    pc.stepTo(updateFieldState)
+    const afterPCPlay = pc.stepTo(updateFieldState)
+    setFieldState(afterPCPlay)
   }
 
   useEffect(() => {
@@ -153,7 +154,7 @@ function Game() {
 
   useEffect(() => {
     if (startGame && activeMode === 'pc') {
-      const pc = new PC(oposite(turnState), fieldState)
+      const pc = new PC(oposite(turnState), fieldState, iconsDict)
       setPc(pc)
     }
   }, [startGame])

@@ -5,11 +5,15 @@ import { forEachField } from "../../utils/fiels"
 class PC {
     side
     fieldState
-    stepCount
+    stepCount = 0
     value
-    constructor(side, fieldState) {
+    iconsDict
+    winCenter = false
+    warnings = []
+    constructor(side, fieldState, iconsDict) {
         this.side = side
         this.fieldState = fieldState
+        this.iconsDict = iconsDict
     }
 
     columnIntoNextStep(col, nextTo) {
@@ -52,32 +56,62 @@ class PC {
         } : null
     }
 
+    checkHorisontal(col, row) {
+        let empty
+        const isWarning = this.fieldState[col].filter((item, idx) => {
+            if (!item.key) empty = idx
+            return item.key
+        })
+        if (isWarning.length === 2) {
+            this.warnings({
+                col: empty,
+                row:
+            })
+        }
+    }
+    checkVertical(col, row) {
+
+    }
+    checkLeftDiagonal(col, row) {
+
+    }
+    checkRightDiagonal(col, row) {
+
+    }
+
+
     avalibleSteps() {
         const canStep = []
         const fieldState = this.fieldState
-        function getBetween(col, row) {
+        function checkField(col, row) {
+            if (col === "A") this.checkVertical(row)
+            if (+row === 0) this.checkHorisontal(col)
+            if (col === "A" && row === 0) this.checkLeftDiagonal(col, row)
+            if (col === "A" && row === 2 ) this.checkRightDiagonal(col, row)
             if (!fieldState[col][row].key) {
                 canStep.push({col, row})
             }
             return fieldState[col][row]
         }
     
-        forEachField(this.fieldState, getBetween)
+        forEachField(this.fieldState, checkField)
         return canStep
     }
 
     onFirstStep() {
-        if (this.fieldState['A']['1'].key) {
+        if (this.fieldState['B']['1'].key) {
             this.onRandomDiagonal()
         } else {
-            this.fieldState['A']['1'] = {
-                key: 'O',
-                value: this.value
-            }
+            this.fieldState['B']['1'] = this.render
+            this.winCenter = true
         }
     }
 
     onRandomDiagonal() {
+        if (this.winCenter) {
+            this.onDefence()
+            return;
+        }
         const diahonalVariants = [
             {col: 'A', row: 0},
             {col: 'A', row: 2},
@@ -87,57 +121,36 @@ class PC {
 
     const randomIdx = randomUnit(0, diahonalVariants.length)
     const coords = diahonalVariants[randomIdx]
-    this.fieldState[coords.col][coords.row]        
+    this.fieldState[coords.col][coords.row] = this.render
     }
 
-    onStep() {
+    onDefence() {
+         const avalibleSteps = this.avalibleSteps()
+        if (avalibleSteps.length) {
+            // this.fieldState[isBlock[0].col][isBlock[0].row]
+            let findStep = false
+            avalibleSteps
+        }
 
+    }
+
+    get render() {
+        return {
+            key: this.side,
+            value: this.iconsDict[this.side].value
+        }
     }
 
     stepTo(fieldState) {
         this.fieldState = fieldState
         switch(this.stepCount) {
             case 0: this.onFirstStep()
+            break;
             case 1: this.onRandomDiagonal()
-            default: onStep() 
+            break;
+            default: this.onDefence() 
         }
-        // const avalibleSteps = this.avalibleSteps()
-        // if (avalibleSteps.length) {
-        //     // this.fieldState[isBlock[0].col][isBlock[0].row]
-        //     avalibleSteps.forEach(step => {
-        //         let checkWarning = [
-        //             this.checkLeft(step.col, step.row),
-        //             this.checkRight(step.col, step.row),
-        //             this.checkBottom(step.col, step.row),
-        //             this.checkTop(step.col, step.row),
-        //         ]
-
-        //         checkWarning = checkWarning.reduce((completeWarnings, warning) => {
-        //             if (!warning) {
-        //                 return completeWarnings
-        //             }
-        //             if (warning.item === 'checkLeft' || warning.item === 'checkRight') {
-        //                 const topBottom = [
-        //                     this.checkTop(warning.coords.col, warning.coords.row),
-        //                     this.checkBottom(warning.coords.col, warning.coords.row)
-        //                 ] 
-        //                 topBottom.forEach(candidate => candidate && completeWarnings.push(candidate))
-        //             } else if (warning.item === 'checkTop' || warning.item === 'checkBottom') {
-        //                 const leftRight = [
-        //                     this.checkLeft(warning.coords.col, warning.coords.row),
-        //                     this.checkRight(warning.coords.col, warning.coords.row)
-        //                 ] 
-        //                 leftRight.forEach(candidate => candidate && completeWarnings.push(candidate))
-
-        //             }
-        //             completeWarnings.push(warning)
-        //             return completeWarnings
-        //         }, [], this)
-
-               
-            // }, this)
-        // }
-
+        ++this.stepCount
         return this.fieldState
     }
 
