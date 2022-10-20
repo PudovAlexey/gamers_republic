@@ -126,10 +126,15 @@ function Game() {
   }
 
   function switchToPcTurn(updateFieldState) {
-    console.log('pc')
     setFieldState(updateFieldState)
+   setTurnState(oposite(turnState))
+   setTimeout(() => {
+    console.log('think')
     const afterPCPlay = pc.stepTo(updateFieldState)
-    setFieldState(afterPCPlay)
+    setFieldState({...afterPCPlay})
+    setTurnState(turnState)
+   }, 200)
+
   }
 
   useEffect(() => {
