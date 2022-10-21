@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Tic from './assets/Tic.png';
 import Tac from './assets/Tac.png';
 import { Box } from '@mui/material';
@@ -15,10 +15,8 @@ import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
 import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { oposite } from './utils/utils';
-import pcTurn from './gameModes/pc';
 import PC from './gameModes/pc';
 
-const fild = makeField(EField.TicTacToe);
 const iconsDict = {
   X: { key: 'X', value: Tic },
   O: { key: 'O', value: Tac },
@@ -69,6 +67,9 @@ function compareWin(fieldState, turn) {
   }
 }
 function Game() {
+  const fild = useMemo(() => {
+    return makeField(EField.TicTacToe)
+  }, [])
   const theme = useTheme()
   const navigate = useNavigate();
   const styles = styleComponent(theme)
@@ -133,7 +134,7 @@ function Game() {
     const afterPCPlay = pc.stepTo(updateFieldState)
     setFieldState({...afterPCPlay})
     setTurnState(turnState)
-   }, 200)
+   }, 1000)
 
   }
 
@@ -158,11 +159,16 @@ function Game() {
   }, [gameParams.gameWith])
 
   useEffect(() => {
-    if (startGame && activeMode === 'pc') {
+    if (startGame && activeMode === 'pc' && dialogOpen === false) {
       const pc = new PC(oposite(turnState), fieldState, iconsDict)
       setPc(pc)
+      const check = oposite(turnState)
+      if (check === 'X') {
+        const firstStep = pc.stepTo()
+        setFieldState(firstStep)
+      }
     }
-  }, [startGame])
+  }, [startGame, dialogOpen])
   return (
     <Box>
       <Toolbar

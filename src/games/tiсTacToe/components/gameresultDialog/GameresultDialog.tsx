@@ -3,6 +3,7 @@ import { Typography, Box } from "@mui/material"
 import { useNavigate } from "react-router-dom";
 import GameTurn from "../gameTurn/GameTurn";
 import GameCount from "../gameCount/GameCount";
+import { clearField } from "../../../utils/fiels";
 function GameresultDialog({
     dialogOpen, 
     setDialogOpen,
@@ -19,6 +20,7 @@ function GameresultDialog({
     function onStartNewGame() {
         let reverseState = turnState === 'X' ? 'O' : 'X';
         setTurnState(reverseState);
+        console.log(clearField(fild))
         setFieldState(fild);
         setDialogOpen(false);
         setDraw(false);

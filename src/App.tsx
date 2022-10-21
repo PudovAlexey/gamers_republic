@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import Auth from './components/AuthContext/AuthContext';
 import 'normalize.css';
 import { mainStyles } from './styles';
-import {mainFonts} from "./fonts"
+ import "./fonts.css"
 
 function App({ children }) {
   const theme = useTheme();

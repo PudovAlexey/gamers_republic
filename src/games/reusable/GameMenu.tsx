@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box } from '@mui/system';
 import { useState } from 'react';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import {
   List,
   ListItemButton,
@@ -74,13 +75,16 @@ function GameMenu({ menuTree }) {
             zIndex: 2000,
             position: 'fixed',
             left: "4%",
-            top: '32%',
+            top: '28%',
+            backgroundColor: "#ff4655",
+            width: "150px",
+            height: "66px"
           }}
           onClick={onNavBack}
           >
-          Back
+          <ArrowBackIosIcon/>
         </Button>
-        {optionNode.map((treeNode, idx) => (
+        {optionNode.map((treeNode) => (
           treeNode.node.control ? <ListItem
             sx={{
               display: "flex",

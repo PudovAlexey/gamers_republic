@@ -1,11 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Button,
-  ButtonGroup,
-  Switch,
-  Typography,
-  Box,
-  Input,
   List,
   ListItem,
   ListItemButton,
@@ -14,40 +8,43 @@ import {
   Checkbox
 } from '@mui/material';
 function ModeSettings({ gameParams, setGameParams}) {
-  const [gameMode, setGameMode] = useState(gameParams)
+  const selectedVariant = useMemo(() => {
+    return gameParams.gameWith.find(i => i.checked)
+  }, [])
+  const [selectedMode, setSelectedMode] = useState(selectedVariant.key)
 
-    function onChangeMode(variant, variantIdx) {
-      setGameMode(param => {
-          const updateWith = param.gameWith.map(item => ({
-            ...item,
-            checked: item.key === variant.key
-          }))
-          return {
-            ...param,
-            gameWith: updateWith
-          }
-        })
+    function onChangeMode(variant) {
+      setSelectedMode(variant.key)
     }
 
     useEffect(() => {
-      setGameParams({...gameMode})
-    }, [gameMode])
+      setGameParams(param => {
+        const updateWith = param.gameWith.map(item => ({
+          ...item,
+          checked: item.key === selectedMode
+        }))
+        return {
+          ...param,
+          gameWith: updateWith
+        }
+      })
+    }, [selectedMode])
   return (
    <>
     <List dense sx={{
        width: '100%',   
     }}>
         {
-            gameMode.gameWith.map((variant, idx) => {
+            gameParams.gameWith.map((variant, idx) => {
                 const Icon = variant.value
                 return (
                     <ListItem
                 onClick={() => onChangeMode(variant)}
-                key={idx}
+                key={variant.key}
                 secondaryAction={
                   <Checkbox
                     edge="end"
-                    checked={variant.checked}
+                    checked={variant.key === selectedMode}
                     onClick={() => onChangeMode(variant)}
                     inputProps={{ 'aria-labelledby': idx }}
                   />

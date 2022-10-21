@@ -276,6 +276,6 @@ export const theme = createTheme({
           color: "white"
         }
       }
-    }
+    },
   },
 });
