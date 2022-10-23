@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Tic from './assets/Tic.png';
 import Tac from './assets/Tac.png';
 import { Box } from '@mui/material';
-import { buildFieldByCoords, makeField } from '../utils/fiels';
+import { buildFieldByCoords, forEachField, makeField } from '../utils/fiels';
 import Toolbar from './components/toolbar/Toolbar';
 import { useNavigate } from 'react-router-dom';
 import { EField } from '../utils/types';
@@ -14,58 +14,13 @@ import GameMenu from '../reusable/GameMenu';
 import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
 import GameresultDialog from './components/gameresultDialog/GameresultDialog';
-import { oposite } from './utils/utils';
+import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc';
 
 const iconsDict = {
   X: { key: 'X', value: Tic },
   O: { key: 'O', value: Tac },
 };
-
-function compareWin(fieldState, turn) {
-  let line = (key, all, item) =>
-    all.filter((s) => s[key] === item[key]).length === 3;
-  let isDraw = [];
-  let allSteps = [];
-  let steps = Object.keys(fieldState).reduce(
-    (activeColumns, column) => {
-      Object.keys(fieldState[column]).forEach((row, rowIdx) => {
-        allSteps.push(fieldState[column][row]?.key);
-        if (fieldState[column][row]?.key)
-          isDraw.push(fieldState[column][row]?.key);
-        if (fieldState[column][row]?.key === turn) {
-          activeColumns.push({
-            column,
-            row,
-          });
-        }
-      });
-      return activeColumns;
-    },
-    []
-  );
-  let isWinByLine = steps.some(
-    (step, _, allSteps) =>
-      line('column', allSteps, step) || line('row', allSteps, step)
-  );
-  let isWinByDiagonal = steps.filter(
-    (step) => +step.row === step.column.charCodeAt() - 64
-  );
-  let isWinByOpositeDiagonal = steps.filter(
-    (step) => +step.row === -(step.column.charCodeAt() - 68)
-  );
-  let isWin =
-    isWinByLine ||
-    isWinByDiagonal.length === 3 ||
-    isWinByOpositeDiagonal.length === 3;
-  if (isWin) {
-    return isWin;
-  } else if (allSteps.length === isDraw.length) {
-    return 'draw';
-  } else {
-    return false;
-  }
-}
 function Game() {
   const fild = useMemo(() => {
     return makeField(EField.TicTacToe)
@@ -90,10 +45,10 @@ function Game() {
         key: "pc",
             value: ComputerIcon,
             checked: true
-      },
-      {
-        key: "koop",
-        value: GroupIcon,
+          },
+          {
+            key: "koop",
+            value: GroupIcon,
     },
     {
       key: "online",
@@ -107,7 +62,9 @@ function Game() {
   })
 
   function onPlayerClick(row, column) {
-
+    if (pc && pc.think) {
+      return
+    }
     if (!fieldState[row][column]?.key) {
       let updateFieldState = {
         ...fieldState,
@@ -129,22 +86,21 @@ function Game() {
   function switchToPcTurn(updateFieldState) {
     setFieldState(updateFieldState)
    setTurnState(oposite(turnState))
-   setTimeout(() => {
-    console.log('think')
-    const afterPCPlay = pc.stepTo(updateFieldState)
+  pc.stepTo(JSON.parse(JSON.stringify(updateFieldState)))
+  .then(afterPCPlay => {
     setFieldState({...afterPCPlay})
     setTurnState(turnState)
-   }, 1000)
-
+  })
   }
 
   useEffect(() => {
     let opositTurn = oposite(turnState)
-    let isWin = compareWin(fieldState, opositTurn);
-    if (isWin === 'draw') {
+    let compareResult = compareWin(fieldState, opositTurn);
+    const result = compareResult.showResult()
+    if (result === 'draw') {
       setDraw(true);
       setDialogOpen(true);
-    } else if (isWin) {
+    } else if (result) {
       setCountWin((prevCount) => ({
         ...prevCount,
         [opositTurn]: prevCount[opositTurn]++,
@@ -164,8 +120,8 @@ function Game() {
       setPc(pc)
       const check = oposite(turnState)
       if (check === 'X') {
-        const firstStep = pc.stepTo()
-        setFieldState(firstStep)
+        pc.stepTo(JSON.parse(JSON.stringify(fieldState)))
+        .then(firstStep => setFieldState(firstStep))
       }
     }
   }, [startGame, dialogOpen])
