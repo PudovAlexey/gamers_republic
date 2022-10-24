@@ -95,7 +95,7 @@ function Game() {
 
   useEffect(() => {
     let opositTurn = oposite(turnState)
-    let compareResult = compareWin(fieldState, opositTurn);
+    let compareResult = compareWin(fieldState, opositTurn, true);
     const result = compareResult.showResult()
     if (result === 'draw') {
       setDraw(true);

@@ -4,7 +4,7 @@ export function oposite(oposite) {
     return oposite === 'X' ? 'O' : 'X';
 }
 
-export function compareWin(fieldState, turn) {
+export function compareWin(fieldState, turn, checkWin) {
     let vertical = []
     let horisontal = []
     const diagonalLeft = []
@@ -14,19 +14,20 @@ export function compareWin(fieldState, turn) {
     let startDiagonalLeft = 0
     let startDiagonalRight = 2
     let isDraw = true
+    const checkCount = checkWin ? 3 : 2
     const compareField = (col, row) => {
       const coords = {
         col,
         row
       }
-      if (+row === 0 && horisontal.length !== 3 && col !== 'A') {
+      if (+row === 0 && horisontal.length !== checkCount && col !== 'A') {
         horisontal = []
         checkHorisontal = String.fromCharCode(checkHorisontal.charCodeAt() + 1)
       }
   
       if (col === checkHorisontal && turn === fieldState[col][row].key) {
         horisontal.push(coords)
-      } if (+row === checkVertical && vertical.length !== 3) {
+      } if (+row === checkVertical && vertical.length !== checkCount) {
         vertical = []
         for (let i = 0; i <= 2; i++) {
             let charCode = 65 + i
