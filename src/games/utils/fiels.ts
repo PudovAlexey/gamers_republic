@@ -27,6 +27,14 @@ export function forEachField(field, action) {
   return field;
 }
 
+export function runByAllFields(fields, dump) {
+  const result = (col, row) => {
+    dump(col, row)
+    return fields[col][row]
+  }
+  forEachField(fields, result)
+}
+
 export function makeField(field: TField, pattern: any = {}) {
   let startLetter = 65;
   let __data = {
