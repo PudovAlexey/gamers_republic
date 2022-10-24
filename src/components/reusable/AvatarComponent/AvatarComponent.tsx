@@ -1,8 +1,16 @@
 import { Avatar, Typography } from '@mui/material';
 import { Box } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
+import { type } from '@testing-library/user-event/dist/type';
 
-function AvatarComponent({ userName, avatarSrc, name, surname }) {
+type TControlType = {
+  userName?: string,
+  avatarSrc?: string,
+  name?: string,
+  surname?: string
+}
+
+function AvatarComponent({ userName, avatarSrc, name, surname }: TControlType) {
   return userName ? (
     <Box>
       <Avatar src={avatarSrc}>

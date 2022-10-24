@@ -18,7 +18,7 @@ function RangeSlider({ from, to, onChange }) {
     <Box>
       <Slider
         aria-label="Temperature"
-        defaultValue={[from, to]}
+        value={[from, to]}
         color="secondary"
         onChange={(_, value) => onChangeState(value, 'from-to')}
       />
