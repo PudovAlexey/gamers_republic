@@ -88,7 +88,7 @@ class PC {
     const compareRow = (col, row) => {
       const coords = { col, row };
       if (
-        row === checkField &&
+        +row === +checkField &&
         col === String.fromCharCode(65 + checkField)
       ) {
         if (!fieldState[col][row].key)  empty = coords
@@ -107,7 +107,7 @@ class PC {
     const compareRow = (col, row) => {
       const coords = { col, row };
       if (
-        row === checkRow &&
+        +row === +checkRow &&
         col === String.fromCharCode(65 + checkCol)
       ) {
         if (!fieldState[col][row].key)  empty = coords
@@ -155,10 +155,10 @@ class PC {
     const isDefenced = this.onDefence();
     if (isDefenced) return;
     const diahonalVariants = [
-      { col: 'A', row: 1 },
-      { col: 'B', row: 0 },
-      { col: 'B', row: 2 },
-      { col: 'C', row: 1 },
+      { col: 'A', row: 0 },
+      { col: 'A', row: 2 },
+      { col: 'C', row: 0 },
+      { col: 'C', row: 2 },
     ];
     const randomIdx = randomUnit(0, diahonalVariants.length - 1);
     const coords = diahonalVariants[randomIdx];
@@ -166,42 +166,57 @@ class PC {
   }
 
   rangeSteps(steps) {
-      const fieldState = this.fieldState
-    function canWin(coords) {
-        
+    function checkState(key, config) {
+      switch(key) {
+        case side: config.friendly++
+        break;
+        case undefined: config.empty++
+        break;
+        default: config.rival++
+      }
+      return config
     }
-    const indexedVariants = []
-    steps.forEach((step, _, allSteps) => {
-        const {col, row} = step
-        const corner = this.fieldCorners.find(corner => {
-            const {col: cornerCol, row: cornerRow} = corner
-            return col === cornerCol && row === cornerRow
-        })
-
-        if (corner) {
-            const env = {
-                vertical: [],
-                horisontal: [],
-            }
-            allSteps.forEach(step => {
-                if (step.col === corner.col) {
-                    env.vertical.push(step)
-                } if (step.row === corner.row) {
-                    env.horisontal.push(step)
-                }
-            })
-          const indexVariants = Object.keys(env).reduce((indexed, variant, idx) => {
-            const byVertice = env[variant]
-            const winWariant = byVertice.some(e => canWin(e))
-
-            indexed[idx] = winWariant
-            return indexed
-            }, [])
-           indexedVariants.push(indexVariants)
+    const fieldState = this.fieldState
+    const side = this.side
+    function rangeStep(step) {
+      const {col:stepCol, row:stepRow}  = step
+      const checkSteps = {
+        friendly: 0,
+        empty: 0,
+        rival: 0
+      }
+      const horisontalConfig = Object.values(fieldState[stepCol]).reduce((config, step) => {
+        const {key} = step
+        config = checkState(key, config)
+        return config
+      }, {...checkSteps})
+      let verticalConfig = {...checkSteps}
+      const vertical = (col, row) => {
+        if (row === stepRow) {
+          let {key} = fieldState[col][stepRow]
+          verticalConfig = checkState(key, verticalConfig)
         }
-    }, this)
-    const bestStep = indexedVariants.flat().sort((a, b) => b.index - a.index)[0]
-    return bestStep
+      }
+      runByAllFields(fieldState, vertical)
+    // console.log(horisontalConfig, verticalConfig)
+    let rangeUnits = [horisontalConfig, verticalConfig].reduce((range, unit) => {
+      const priority = [{'friendly': 2}, {'empty': 1}, {'rival': 0}]
+      const calculate = priority.reduce((rangeUnit, item) => {
+        return rangeUnit + rangeUnit + unit[Object.keys(item)[0]] + Object.values(item)[0]
+      }, 0)
+      return range + calculate
+    }, 0)
+
+      return rangeUnits
+    }
+    return steps.map(step => {
+      const checkRange = rangeStep(step)
+      return {
+        ...step,
+        range: checkRange
+      }
+    })
+    .sort((a, b) => b.range - a.range)[0]
   }
 
   onDefence() {
@@ -216,11 +231,6 @@ class PC {
       return true;
     } else if (this.stepCount > 1) {
         const {col, row} = this.rangeSteps(avalibleSteps.canStep)
-    //   const randomIdx = randomUnit(0, avalibleSteps.canStep.length - 1);
-    //   const coords = avalibleSteps.canStep[randomIdx];
-    //   if (coords) {
-    //     this.fieldState[coords.col][coords.row] = this.render;
-    //   }
     this.fieldState[col][row] = this.render;
     }
   }

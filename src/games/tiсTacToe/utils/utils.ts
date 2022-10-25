@@ -13,6 +13,7 @@ export function compareWin(fieldState, turn, checkWin) {
     let checkVertical = 0
     let startDiagonalLeft = 0
     let startDiagonalRight = 2
+    let startDiagonalRightCol = 0
     let isDraw = true
     const checkCount = checkWin ? 3 : 2
     const compareField = (col, row) => {
@@ -41,9 +42,11 @@ export function compareWin(fieldState, turn, checkWin) {
       } if (startDiagonalLeft === +row && col === String.fromCharCode(startDiagonalLeft + 65) && turn === fieldState[col][row].key) {
         diagonalLeft.push(coords)
         startDiagonalLeft++
-      } if (startDiagonalRight === +row && col === String.fromCharCode(startDiagonalRight + 65) && turn === fieldState[col][row].key) {
+      } if (startDiagonalRight === +row && col === String.fromCharCode(startDiagonalRightCol + 65) && turn === fieldState[col][row].key) {
+        console.log('right')
         diagonalRight.push(coords)
         startDiagonalRight--
+        startDiagonalRightCol++
       } if (!fieldState[col][row].key) {
         isDraw = false
       }
