@@ -1,14 +1,15 @@
 import { useTheme } from "@emotion/react";
 import { Typography } from "@mui/material";
 import { styleComponent } from "../../styles";
+import { oposite } from "../../utils/utils";
 
-function GameTurn({text,isResult, turnState, iconsDict}) {
+function GameTurn({text, isResult, turnState, iconsDict}) {
     const theme = useTheme()
     const styles = styleComponent(theme)
     let reverseState;
-    if (isResult) reverseState = turnState === 'X' ? 'O' : 'X';
+    if (isResult) reverseState = oposite(turnState);
     return (
-      <Typography variant="h5">
+        <Typography variant="h6">
         {text}: {''}
         <img
           style={styles.icon}

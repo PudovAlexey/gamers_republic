@@ -6,13 +6,20 @@ export function GameItems({
     navigate,
     setStartGame,
     gameParams,
-    setGameParams
+    setGameParams,
+    pause,
+    setPause
 }) {
     return {
         node: {virtual: true},
         children: [
             {
-                node: {
+                node: pause ? {
+                    text: "Resume",
+                    action: function () {
+                        setPause((prev) => !prev);
+                      },
+                } : {
                     text: "Start Game",
                     action: function () {
                         setStartGame((prev) => !prev);

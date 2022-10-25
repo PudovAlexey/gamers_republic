@@ -1,27 +1,30 @@
-import { Button } from "@mui/material"
+import { Button, Box } from "@mui/material"
 import ToolbarComponent from "../../../../components/reusable/ToolbarComponent/ToolbarComponent"
 import MenuIcon from '@mui/icons-material/Menu';
 import GameCount from "../gameCount/GameCount";
 import GameTurn from "../gameTurn/GameTurn";
-function Toolbar({countWin, iconsDict, turnState}) {
+function Toolbar({countWin, iconsDict, turnState, setPause}) {
 
     function onOpenMenu() {
-        console.log('menu must be open')
+        console.log('pause')
+       setPause(true)
     }
     return (
-        <ToolbarComponent justifyContent="right" width="30%">
-        {/* {gameCount} */}
+        <ToolbarComponent justifyContent="right" width="100%">
+        <Box>
         <GameCount 
         iconsDict={iconsDict}
         countWin={countWin}
         />
-        {/* {gameTurn('Now turn is', false)} */}
+        </Box>
+        <Box>
         <GameTurn
         text={"Now turn is"}
         isResult={false}
         turnState={turnState}
         iconsDict={iconsDict}
         />
+        </Box>
         <Button onClick={onOpenMenu}>
             <MenuIcon/>
         </Button>

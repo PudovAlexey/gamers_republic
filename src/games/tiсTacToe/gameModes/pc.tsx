@@ -22,10 +22,6 @@ class PC {
   }
   calculateCorners(fieldState) {
     let corners = []
-    // const startCol = 'A'
-    // const endCol = Object.keys(fieldState).reverse()[0]
-    // const startRow = 0
-    // const endRow = Object.keys(Object.values(fieldState)[0]).reverse()[0]
     const points = [
         'A',
         Object.keys(fieldState).reverse()[0],
@@ -160,12 +156,14 @@ class PC {
       { col: 'C', row: 0 },
       { col: 'C', row: 2 },
     ];
-    const randomIdx = randomUnit(0, diahonalVariants.length - 1);
-    const coords = diahonalVariants[randomIdx];
+    const freeVariants = diahonalVariants.filter(variant => !this.fieldState[variant.col][variant.row].key, this)
+    const randomIdx = randomUnit(0, freeVariants.length - 1);
+    const coords = freeVariants[randomIdx];
     this.fieldState[coords.col][coords.row] = this.render;
   }
 
   rangeSteps(steps) {
+    const fieldCorners = this.fieldCorners
     function checkState(key, config) {
       switch(key) {
         case side: config.friendly++
@@ -183,11 +181,17 @@ class PC {
       const checkSteps = {
         friendly: 0,
         empty: 0,
-        rival: 0
+        rival: 0,
+        corner: 0
       }
-      const horisontalConfig = Object.values(fieldState[stepCol]).reduce((config, step) => {
+      const horisontalConfig = Object.values(fieldState[stepCol]).reduce((config, step, idx) => {
+        
         const {key} = step
         config = checkState(key, config)
+        const isCorner = fieldCorners.find(corner => corner.col === stepCol && +corner.row === idx)
+        if (isCorner) {
+          config.corner++
+        }
         return config
       }, {...checkSteps})
       let verticalConfig = {...checkSteps}
@@ -195,12 +199,15 @@ class PC {
         if (row === stepRow) {
           let {key} = fieldState[col][stepRow]
           verticalConfig = checkState(key, verticalConfig)
+          const isCorner = fieldCorners.find(corner => corner.col === col && +corner.row === +stepRow)
+          if (isCorner) {
+            verticalConfig.corner++
+          }
         }
       }
       runByAllFields(fieldState, vertical)
-    // console.log(horisontalConfig, verticalConfig)
     let rangeUnits = [horisontalConfig, verticalConfig].reduce((range, unit) => {
-      const priority = [{'friendly': 2}, {'empty': 1}, {'rival': 0}]
+      const priority = [{'friendly': 2}, {'empty': 1}, {'corner': 0.5}, {'rival': 0}]
       const calculate = priority.reduce((rangeUnit, item) => {
         return rangeUnit + rangeUnit + unit[Object.keys(item)[0]] + Object.values(item)[0]
       }, 0)
@@ -230,8 +237,9 @@ class PC {
       this.fieldState[preventDanger.col][preventDanger.row] = this.render;
       return true;
     } else if (this.stepCount > 1) {
-        const {col, row} = this.rangeSteps(avalibleSteps.canStep)
-    this.fieldState[col][row] = this.render;
+       const coords = this.rangeSteps(avalibleSteps.canStep)
+       if (coords)
+    this.fieldState[coords.col][coords.row] = this.render;
     }
   }
 

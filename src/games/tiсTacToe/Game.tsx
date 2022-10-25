@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState, useContext } from 'react';
 import Tic from './assets/Tic.png';
 import Tac from './assets/Tac.png';
 import { Box } from '@mui/material';
@@ -16,6 +16,7 @@ import { useTheme } from '@emotion/react';
 import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc';
+import { AuthContext } from '../../components/AuthContext/AuthContext';
 
 const iconsDict = {
   X: { key: 'X', value: Tic },
@@ -25,6 +26,7 @@ function Game() {
   const fild = useMemo(() => {
     return makeField(EField.TicTacToe)
   }, [])
+  const [AuthUser] = useContext(AuthContext)
   const theme = useTheme()
   const navigate = useNavigate();
   const styles = styleComponent(theme)
@@ -33,12 +35,43 @@ function Game() {
   const [fieldState, setFieldState] = useState(fild);
   const [turnState, setTurnState] = useState('X');
   const [activeMode, setActiveMode] = useState(null)
+  const [pause, setPause] = useState(false)
   const [pc, setPc] = useState()
   const [startGame, setStartGame] = useState<boolean>(false)
-  let [countWin, setCountWin] = useState({
-    O: 0,
-    X: 0,
-  });
+  console.log(AuthUser)
+  const users = useMemo(() => {
+    return {
+      me: {key: 'X', countWin: 0, data: {
+        userName: AuthUser?.username,
+        avatarSrc: AuthUser?.avatar,
+  
+      }},
+      rival: {key: 'O', countWin: 0, data: {
+        userName: "",
+        avatarSrc: "",
+      }}
+    }
+  }, [AuthUser])
+  const [countWin, setCountWin] = useState(users)
+  useEffect(() => {
+    if (AuthUser) {
+      setCountWin({...{
+        me: {key: 'X', countWin: 0, data: {
+          userName: AuthUser?.username,
+          avatarSrc: AuthUser?.avatar,
+          name: AuthUser?.name,
+          surname: AuthUser?.surname
+    
+        }},
+        rival: {key: 'O', countWin: 0, data: {
+          userName: "",
+          avatarSrc: "",
+        }}
+      }})
+    }
+
+  }, [AuthUser])
+
   const [gameParams, setGameParams] = useState({
     gameWith: [
       {
@@ -72,7 +105,10 @@ function Game() {
       }
       switch(activeMode) {
         case "koop": switchTurnToAnotherUser(updateFieldState)
+        break;
         case "pc": switchToPcTurn(updateFieldState)
+        break;
+        case 'online': switchStepToRival(updateFieldState)
       }
     }
   }
@@ -93,6 +129,10 @@ function Game() {
   })
   }
 
+  function switchStepToRival(updateFieldState) {
+    console.log('rival steps')
+  }
+
   useEffect(() => {
     let opositTurn = oposite(turnState)
     let compareResult = compareWin(fieldState, opositTurn, true);
@@ -101,10 +141,12 @@ function Game() {
       setDraw(true);
       setDialogOpen(true);
     } else if (result) {
-      setCountWin((prevCount) => ({
-        ...prevCount,
-        [opositTurn]: prevCount[opositTurn]++,
-      }));
+      const whoIsWin = Object.keys(countWin).find(isWinKey => 
+        countWin[isWinKey].key === opositTurn)
+        setCountWin(prev => ({
+          ...prev,
+          [whoIsWin]: {...prev[whoIsWin], countWin: prev[whoIsWin].countWin++}
+        }))
       setDialogOpen(true);
     }
   }, [turnState]);
@@ -128,16 +170,19 @@ function Game() {
   return (
     <Box>
       <Toolbar
+      setPause={setPause}
       countWin={countWin} 
       iconsDict={iconsDict}
       turnState={turnState}
       />
-      {!startGame ? <GameMenu menuTree={GameItems({
+      {!(!startGame || pause)  ? null : <GameMenu menuTree={GameItems({
     navigate,
     setStartGame,
     gameParams,
-    setGameParams
-  })} /> : null}
+    setGameParams,
+    pause,
+    setPause
+  })} />}
       <Box
         sx={styles.field}
       >

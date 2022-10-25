@@ -3,6 +3,7 @@ import { Box } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 
 function AvatarComponent({ userName, avatarSrc, name, surname }) {
+  console.log(userName)
   return userName ? (
     <Box>
       <Avatar src={avatarSrc}>

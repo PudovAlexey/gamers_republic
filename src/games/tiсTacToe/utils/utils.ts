@@ -21,7 +21,7 @@ export function compareWin(fieldState, turn, checkWin) {
         col,
         row
       }
-      if (+row === 0 && horisontal.length !== checkCount && col !== 'A') {
+      if (+row === 0 && horisontal.lesngth !== checkCount && col !== 'A') {
         horisontal = []
         checkHorisontal = String.fromCharCode(checkHorisontal.charCodeAt() + 1)
       }
@@ -43,7 +43,6 @@ export function compareWin(fieldState, turn, checkWin) {
         diagonalLeft.push(coords)
         startDiagonalLeft++
       } if (startDiagonalRight === +row && col === String.fromCharCode(startDiagonalRightCol + 65) && turn === fieldState[col][row].key) {
-        console.log('right')
         diagonalRight.push(coords)
         startDiagonalRight--
         startDiagonalRightCol++
@@ -78,3 +77,7 @@ export function compareWin(fieldState, turn, checkWin) {
         }
     }
   }
+
+  // makeKeyByUser() {
+
+  // }
