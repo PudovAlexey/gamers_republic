@@ -1,12 +1,11 @@
-import { randomUnit } from '../../../utils/utils';
-import { forEachField, runByAllFields } from '../../utils/fiels';
-import { compareWin, oposite } from '../utils/utils';
+import { randomUnit } from '../../../../utils/utils';
+import { forEachField, runByAllFields } from '../../../utils/fiels';
+import { compareWin, oposite } from '../../utils/utils';
 
 class PC {
   side;
   fieldState;
-  stepCount = 0;
-  value;
+  stepCount: number = 0;
   iconsDict;
   winCenter = false;
   think = false;
