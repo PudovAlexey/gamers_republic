@@ -17,7 +17,12 @@ import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc/pc';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
-import { EGameItems, EGameModes, TIconsDict } from './types';
+import {TIconsDict } from './ts/types';
+import {EGameItems} from './ts/types'
+import { EGameModes } from './ts/enums';
+import { switchToPcTurn } from './gameModes/pc/services/pcHelper';
+import { switchStepToRival } from './gameModes/online/services/onlineHelper';
+import { switchTurnToAnotherUser } from './gameModes/koop/services/koopHelper';
 
 const iconsDict: TIconsDict = {
   X: { key: EGameItems.X, value: Tic },
@@ -42,7 +47,7 @@ function Game() {
   const users = useMemo(() => {
     return {
       me: {
-        key: 'X',
+        key: EGameItems.X,
         countWin: 0,
         data: {
           userName: AuthUser?.username,
@@ -50,7 +55,7 @@ function Game() {
         },
       },
       rival: {
-        key: 'O',
+        key: EGameItems.O,
         countWin: 0,
         data: {
           userName: '',
@@ -75,7 +80,7 @@ function Game() {
             },
           },
           rival: {
-            key: 'O',
+            key: EGameItems.O,
             countWin: 0,
             data: {
               userName: '',
@@ -90,16 +95,16 @@ function Game() {
   const [gameParams, setGameParams] = useState({
     gameWith: [
       {
-        key: 'pc',
+        key: EGameModes.Pc,
         value: ComputerIcon,
         checked: true,
       },
       {
-        key: 'koop',
+        key: EGameModes.Koop,
         value: GroupIcon,
       },
       {
-        key: 'online',
+        key: EGameModes.Online,
         value: CompassCalibrationIcon,
       },
     ],
@@ -120,36 +125,26 @@ function Game() {
       };
       switch (activeMode) {
         case 'koop':
-          switchTurnToAnotherUser(updateFieldState);
+          switchTurnToAnotherUser({
+            turnState,
+            setTurnState,
+            setFieldState,
+            updateFieldState
+          })
           break;
         case 'pc':
-          switchToPcTurn(updateFieldState);
+          switchToPcTurn({
+            setFieldState,
+            setTurnState,
+            updateFieldState,
+            turnState,
+            pc
+          })
           break;
         case 'online':
           switchStepToRival(updateFieldState);
       }
     }
-  }
-
-  function switchTurnToAnotherUser(updateFieldState) {
-    let nextTurn = oposite(turnState);
-    setTurnState(nextTurn);
-    setFieldState(updateFieldState);
-  }
-
-  function switchToPcTurn(updateFieldState) {
-    setFieldState(updateFieldState);
-    setTurnState(oposite(turnState));
-    pc.stepTo(JSON.parse(JSON.stringify(updateFieldState))).then(
-      (afterPCPlay) => {
-        setFieldState({ ...afterPCPlay });
-        setTurnState(turnState);
-      }
-    );
-  }
-
-  function switchStepToRival(updateFieldState) {
-    console.log('rival steps');
   }
 
   useEffect(() => {

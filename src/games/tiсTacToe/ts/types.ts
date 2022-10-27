@@ -1,15 +1,5 @@
 import { type } from "os";
-
- enum EGameItems {
-    X = 'X',
-    O = 'O'
-}
-
-enum EGameModes {
-    Pc = 'pc',
-    Koop = 'koop',
-    Online = 'online'
-}
+import { EGameItems } from "./enums";
 
 type TDictValues = {key: EGameItems.X, value: string}
 
@@ -34,7 +24,7 @@ type TGamersConfig = {
 
 type TGameParams = {
     gameWith: {
-        key: EGameModes,
+        key: EGameItems,
         value: string,
         checked?: boolean
     }
@@ -44,9 +34,7 @@ type TGameParams = {
     }
 }
 
-export {
+export type {
     TIconsDict,
-    EGameItems,
-    EGameModes
 }
 
