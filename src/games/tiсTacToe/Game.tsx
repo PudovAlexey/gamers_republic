@@ -17,7 +17,7 @@ import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc/pc';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
-import { TIconsDict } from './ts/types';
+import { TGamersConfig, TIconsDict } from './ts/types';
 import { EGameItems } from './ts/enums';
 import { EGameModes } from './ts/enums';
 import { createPc, switchToPcTurn } from './gameModes/pc/services/pcHelper';
@@ -44,54 +44,29 @@ function Game() {
   const [pause, setPause] = useState<boolean>(false);
   const [pc, setPc] = useState(null);
   const [startGame, setStartGame] = useState<boolean>(false);
-  const users = useMemo(() => {
-    return {
-      me: {
-        key: EGameItems.X,
-        countWin: 0,
-        data: {
-          userName: AuthUser?.username,
-          avatarSrc: AuthUser?.avatar,
-        },
+  const [countWin, setCountWin] = useState<TGamersConfig>({
+    me: {
+      key: EGameItems.X,
+      countWin: 0,
+      data: {
+        username: AuthUser?.username,
+        avatar: AuthUser?.avatar,
       },
-      rival: {
-        key: EGameItems.O,
-        countWin: 0,
-        data: {
-          userName: 'GAEEKQWKEWKD',
-          avatarSrc: '',
-        },
+    },
+    rival: {
+      key: EGameItems.O,
+      countWin: 0,
+      data: {
+        username: '',
+        avatar: '',
       },
-    };
-  }, [AuthUser]);
-  const [countWin, setCountWin] = useState(users);
+    },
+  });
   useEffect(() => {
-    if (AuthUser) {
-      setCountWin({
-        ...{
-          me: {
-            key: EGameItems.X,
-            countWin: 0,
-            data: {
-              userName: AuthUser?.username,
-              avatarSrc: AuthUser?.avatar,
-              name: AuthUser?.name,
-              surname: AuthUser?.surname,
-            },
-          },
-          rival: {
-            key: EGameItems.O,
-            countWin: 0,
-            data: {
-              userName: 'pc',
-              avatarSrc: '',
-              name: 'GAEEKQWKEWKD',
-              surname: 'GAEEKQWKEWKD',
-            },
-          },
-        },
-      });
-    }
+      setCountWin((prev) => ({
+        ...prev,
+        me: {...prev.me, data: AuthUser}
+      }))
   }, [AuthUser]);
 
   const [gameParams, setGameParams] = useState({
@@ -146,34 +121,39 @@ function Game() {
   }
 
   useEffect(() => {
+    let whiIsWin = null
+    let changeTurn: boolean = false
     let opositTurn = oposite(turnState);
     let compareResult = compareWin(fieldState, opositTurn, true);
     const result = compareResult.showResult();
     if (result === 'draw') {
+      changeTurn = true
       setDraw(true);
       setDialogOpen(true);
     } else if (result) {
-      const whoIsWin = Object.keys(countWin).find(
+      changeTurn = true
+      whiIsWin = Object.keys(countWin).find(
         (isWinKey) => countWin[isWinKey].key === opositTurn
       );
-      const loser = Object.keys(countWin).find(i => i !== whoIsWin)
-      setCountWin((prev) => {
-        return {
-          ...prev,
-          [loser]: {
-            ...prev[loser],
-            data: prev[whoIsWin].data
-          },
-          [whoIsWin]: { 
-            ...prev[whoIsWin],
-            data: prev[loser].data,
-            countWin: 
-            prev[whoIsWin].countWin++
-          },
-        }
-      });
       setDialogOpen(true);
     }
+    if (!changeTurn) {
+      return;
+    }
+
+    setCountWin((prev) => {
+      let next
+      const reverseDatas = Object.keys(prev)
+      next = {...prev[reverseDatas[0]].data}
+      prev[reverseDatas[0]].data = {...prev[reverseDatas[1]].data}
+      prev[reverseDatas[1]].data = next
+      if (whiIsWin) {
+        prev[whiIsWin].countWin++
+      }
+      return {
+        ...prev
+      }
+    });
   }, [turnState]);
 
   useEffect(() => {
@@ -193,6 +173,7 @@ function Game() {
           fieldState,
           iconsDict,
           setPc,
+          setCountWin
         });
         break;
       case EGameModes.Online:

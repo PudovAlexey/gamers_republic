@@ -26,7 +26,13 @@ const styleComponent = function (theme) {
         background: 'white',
         display: 'flex',
         justifyContent: 'center',
+      },
+      game_count: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'spaceBetween',
         alignItems: 'center',
+        gap: '5px'
       }
     },
   })

@@ -12,8 +12,10 @@ type TUserData = {
     key: EGameItems,
     countWin: number,
     data: {
-        userName: string,
-        avatarSrc: string
+        username: string,
+        avatar?: string,
+        name?: string,
+        surname?: string
     }
 }
 
@@ -36,5 +38,6 @@ type TGameParams = {
 
 export type {
     TIconsDict,
+    TGamersConfig
 }
 

@@ -3,15 +3,17 @@ import ToolbarComponent from "../../../../components/reusable/ToolbarComponent/T
 import MenuIcon from '@mui/icons-material/Menu';
 import GameCount from "../gameCount/GameCount";
 import GameTurn from "../gameTurn/GameTurn";
+import { styleComponent } from "../../styles";
+import { useTheme } from "@emotion/react";
 function Toolbar({countWin, iconsDict, turnState, setPause}) {
-
+    const theme = useTheme()
+    const styles = styleComponent(theme)
     function onOpenMenu() {
-        console.log('pause')
        setPause(true)
     }
     return (
         <ToolbarComponent justifyContent="right" width="100%">
-        <Box>
+        <Box sx={styles.game_count}>
         <GameCount 
         iconsDict={iconsDict}
         countWin={countWin}

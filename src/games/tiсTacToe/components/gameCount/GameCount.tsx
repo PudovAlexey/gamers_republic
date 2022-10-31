@@ -1,35 +1,44 @@
 import { useTheme } from "@emotion/react"
-import { Typography } from "@mui/material"
+import { Box, Typography } from "@mui/material"
 import AvatarComponent from "../../../../components/reusable/AvatarComponent/AvatarComponent"
 import { styleComponent } from "../../styles"
-function GameCount({iconsDict, countWin}) {
+import { TGamersConfig, TIconsDict } from "../../ts/types"
+
+type TControlProps = {
+  iconsDict: TIconsDict
+  countWin: TGamersConfig
+}
+
+function GameCount({iconsDict, countWin}: TControlProps) {
     const {me, rival} = countWin
     const theme = useTheme()
     const styles = styleComponent(theme)
-    console.log(me.data.avatarSrc)
     return (
-        <Typography>
+        <>
         <AvatarComponent
-        avatarSrc={me.data.avatarSrc}
-        userName={me.data.userName}
-        name={me.data.name}
-        surname={me.data.surname}
-        />
+        avatar={me?.data?.avatar}
+        username={me?.data?.username}
+        name={me?.data?.name}
+        surname={me?.data?.surname}
+        />  
         <img
         style={styles.icon}
           src={iconsDict[me.key].value}
         />
-        : {countWin.me.countWin}
+        : <Typography variant="h4">{countWin.me.countWin}</Typography>
+        <Typography variant="h4">-VS-</Typography>
         <AvatarComponent
-        avatarSrc={rival.data.avatarSrc}
-        userName={rival.data.userName}
+         avatar={rival.data.avatar}
+         username={rival.data.username}
+         name={rival.data.name}
+         surname={rival.data.surname}
         />
         <img
           style={styles.icon}
           src={iconsDict[rival.key].value}
         />
-        : {countWin.rival.countWin}
-      </Typography>
+        : <Typography variant="h4">{countWin.rival.countWin}</Typography>
+      </>
     )
 }
 

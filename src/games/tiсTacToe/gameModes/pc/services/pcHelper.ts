@@ -1,5 +1,6 @@
 import { EGameItems, EGameModes } from '../../../ts/enums';
 import { oposite } from '../../../utils/utils';
+import ComputerIcon from '@mui/icons-material/Computer';
 import PC from '../pc';
 
 function switchToPcTurn({
@@ -40,10 +41,15 @@ function createPc({
   fieldState,
   iconsDict,
   setPc,
+  setCountWin
 }) {
   if (startGame && activeMode === EGameModes.Pc && dialogOpen === false) {
     const pc = new PC(oposite(turnState), fieldState, iconsDict);
     setPc(pc);
+    setCountWin(prev => ({
+      ...prev,
+      rival: {...prev.rival, data: {username: 'PC', avatar: ComputerIcon}}
+    }))
 
     const check = oposite(turnState);
     if (check === EGameItems.X) {
