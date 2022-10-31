@@ -17,10 +17,10 @@ import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc/pc';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
-import {TIconsDict } from './ts/types';
-import {EGameItems} from './ts/types'
+import { TIconsDict } from './ts/types';
+import { EGameItems } from './ts/enums';
 import { EGameModes } from './ts/enums';
-import { switchToPcTurn } from './gameModes/pc/services/pcHelper';
+import { createPc, switchToPcTurn } from './gameModes/pc/services/pcHelper';
 import { switchStepToRival } from './gameModes/online/services/onlineHelper';
 import { switchTurnToAnotherUser } from './gameModes/koop/services/koopHelper';
 
@@ -58,7 +58,7 @@ function Game() {
         key: EGameItems.O,
         countWin: 0,
         data: {
-          userName: '',
+          userName: 'GAEEKQWKEWKD',
           avatarSrc: '',
         },
       },
@@ -70,7 +70,7 @@ function Game() {
       setCountWin({
         ...{
           me: {
-            key: 'X',
+            key: EGameItems.X,
             countWin: 0,
             data: {
               userName: AuthUser?.username,
@@ -83,8 +83,10 @@ function Game() {
             key: EGameItems.O,
             countWin: 0,
             data: {
-              userName: '',
+              userName: 'pc',
               avatarSrc: '',
+              name: 'GAEEKQWKEWKD',
+              surname: 'GAEEKQWKEWKD',
             },
           },
         },
@@ -114,36 +116,32 @@ function Game() {
     },
   });
 
-  function onPlayerClick(row, column) {
-    if (pc && pc.think) {
-      return;
-    }
-    if (!fieldState[row][column]?.key) {
-      let updateFieldState = {
-        ...fieldState,
-        [row]: { ...fieldState[row], [column]: iconsDict[turnState] },
-      };
-      switch (activeMode) {
-        case 'koop':
-          switchTurnToAnotherUser({
-            turnState,
-            setTurnState,
-            setFieldState,
-            updateFieldState
-          })
-          break;
-        case 'pc':
-          switchToPcTurn({
-            setFieldState,
-            setTurnState,
-            updateFieldState,
-            turnState,
-            pc
-          })
-          break;
-        case 'online':
-          switchStepToRival(updateFieldState);
-      }
+  function onPlayerClick(row, col) {
+    const coords = { row, col };
+    switch (activeMode) {
+      case EGameModes.Koop:
+        switchTurnToAnotherUser({
+          turnState,
+          setTurnState,
+          setFieldState,
+          fieldState,
+          iconsDict,
+          coords,
+        });
+        break;
+      case EGameModes.Pc:
+        switchToPcTurn({
+          setFieldState,
+          setTurnState,
+          fieldState,
+          iconsDict,
+          coords,
+          turnState,
+          pc,
+        });
+        break;
+      case EGameModes.Online:
+        switchStepToRival(coords);
     }
   }
 
@@ -158,10 +156,22 @@ function Game() {
       const whoIsWin = Object.keys(countWin).find(
         (isWinKey) => countWin[isWinKey].key === opositTurn
       );
-      setCountWin((prev) => ({
-        ...prev,
-        [whoIsWin]: { ...prev[whoIsWin], countWin: prev[whoIsWin].countWin++ },
-      }));
+      const loser = Object.keys(countWin).find(i => i !== whoIsWin)
+      setCountWin((prev) => {
+        return {
+          ...prev,
+          [loser]: {
+            ...prev[loser],
+            data: prev[whoIsWin].data
+          },
+          [whoIsWin]: { 
+            ...prev[whoIsWin],
+            data: prev[loser].data,
+            countWin: 
+            prev[whoIsWin].countWin++
+          },
+        }
+      });
       setDialogOpen(true);
     }
   }, [turnState]);
@@ -172,17 +182,26 @@ function Game() {
   }, [gameParams.gameWith]);
 
   useEffect(() => {
-    if (startGame && activeMode === 'pc' && dialogOpen === false) {
-      const pc = new PC(oposite(turnState), fieldState, iconsDict);
-      setPc(pc);
-      const check = oposite(turnState);
-      if (check === 'X') {
-        pc.stepTo(JSON.parse(JSON.stringify(fieldState))).then((firstStep) =>
-          setFieldState(firstStep)
-        );
-      }
+    switch (activeMode) {
+      case EGameModes.Pc:
+        createPc({
+          dialogOpen,
+          activeMode,
+          startGame,
+          turnState,
+          setFieldState,
+          fieldState,
+          iconsDict,
+          setPc,
+        });
+        break;
+      case EGameModes.Online:
+        break;
+      case EGameModes.Koop:
+        break;
     }
   }, [startGame, dialogOpen]);
+
   return (
     <Box>
       <Toolbar

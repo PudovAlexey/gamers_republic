@@ -6,10 +6,10 @@ function AvatarComponent({ userName, avatarSrc, name, surname }) {
   console.log(userName)
   return userName ? (
     <Box>
-      <Avatar src={avatarSrc}>
+      {/* <Avatar src={avatarSrc}>
         {name[0]}
         {surname[0]}
-      </Avatar>
+      </Avatar> */}
       <Typography>{userName}</Typography>
     </Box>
   ) : (
