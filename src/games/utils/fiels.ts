@@ -35,7 +35,7 @@ export function runByAllFields(fields, dump) {
   forEachField(fields, result)
 }
 
-export function makeField(field: TField, pattern: any = {}) {
+export function makeField(field: TField, pattern: any = {}): Record<string, object> {
   let startLetter = 65;
   let __data = {
     chees: { cols: 8, rows: 8 },

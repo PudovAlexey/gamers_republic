@@ -8,30 +8,31 @@ import { useTheme } from '@emotion/react';
 
 function MasterDetail({ Master, Detail }) {
   const theme = useTheme()
-  const masterControl = useRef()
+  const masterControl = useRef<HTMLElement>(null)
   const MasterControl = Master.control
   const DetailControl = Detail.control
   const styles = stylesComponent(theme)
 
   function onStartMoveMaster(e) {
-    // console.log(e, masterControl)
+    if (!masterControl?.current) {
+      return false
+    }
+    const {style, offsetWidth} = masterControl.current
+    function handleResizeMaster({clientX}) {
+      const count = currentRightPosition - clientX
+      console.log(count)
+      
+      style.width =
+      offsetWidth - (currentRightPosition - clientX) + 'px'
+    }
     const currentRightPosition = e.currentTarget.getBoundingClientRect().x
-    if (masterControl.current) {
-      function handleResizeMaster({clientX}) {
-        const count = currentRightPosition - clientX
-        console.log(count)
-        
-        masterControl.current.style.width =
-        masterControl.current.offsetWidth - (currentRightPosition - clientX) + 'px'
-      }
+    
       document.addEventListener('mousemove', handleResizeMaster)
       function onResizeEnd() {
         document.removeEventListener('mousemove', handleResizeMaster)
         document.removeEventListener('mousemove', onResizeEnd)
       }
-
       document.addEventListener('mouseup', onResizeEnd)
-    }
   }
   return (
     <Box sx={{ display: 'flex' }}>

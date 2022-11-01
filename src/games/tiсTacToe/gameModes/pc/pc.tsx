@@ -183,13 +183,13 @@ class PC {
         rival: 0,
         corner: 0
       }
-      const horisontalConfig = Object.values(fieldState[stepCol]).reduce((config, step, idx) => {
+      const horisontalConfig = Object.values(fieldState[stepCol]).reduce((config, step: {key: string}, idx) => {
         
         const {key} = step
-        config = checkState(key, config)
+        let configData: {corner: number} = checkState(key, config)
         const isCorner = fieldCorners.find(corner => corner.col === stepCol && +corner.row === idx)
         if (isCorner) {
-          config.corner++
+          configData.corner++
         }
         return config
       }, {...checkSteps})

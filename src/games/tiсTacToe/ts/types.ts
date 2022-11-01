@@ -1,7 +1,7 @@
 import { type } from "os";
 import { EGameItems } from "./enums";
 
-type TDictValues = {key: EGameItems.X, value: string}
+type TDictValues = {key: EGameItems, value: string}
 
 type TIconsDict = {
     [EGameItems.X]: TDictValues
@@ -36,6 +36,11 @@ type TGameParams = {
     }
 }
 
+type TCoords = {
+    col: 'A' | 'B' | 'C'
+    row: 1 | 2 | 3
+}
+
 type TValue = {
     key?: EGameItems
     value?: string
@@ -56,6 +61,7 @@ type TGameField = {
 export type {
     TIconsDict,
     TGamersConfig,
-    TGameField
+    TGameField,
+    TCoords
 }
 

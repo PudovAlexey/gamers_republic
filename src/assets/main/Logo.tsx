@@ -1,6 +1,9 @@
 import { SvgIcon } from '@mui/material';
-
-function Logo({ size, fill, ...props }) {
+type TControlProps = {
+  size?: string | number
+  fill?: string 
+}
+function Logo({ size, fill, ...props }: TControlProps) {
   return (
     <SvgIcon
       sx={{

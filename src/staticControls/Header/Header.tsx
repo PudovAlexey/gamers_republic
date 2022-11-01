@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useContext} from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -17,6 +17,7 @@ import Logo from '../../assets/main/Logo';
 import AuthorLogo from '../../assets/main/AuthorLogo';
 import AvatarComponent from '../../components/reusable/AvatarComponent/AvatarComponent';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../../components/AuthContext/AuthContext';
 
 const pages = [
   {
@@ -42,6 +43,7 @@ const pages = [
 ];
 
 const Header = () => {
+  const [AuthUser] = useContext(AuthContext);
   return (
     <AppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Box
@@ -90,7 +92,7 @@ const Header = () => {
           </MenuList>
         </Box>
         <Box>
-          <AvatarComponent />
+          <AvatarComponent {...AuthUser} />
         </Box>
       </Box>
     </AppBar>

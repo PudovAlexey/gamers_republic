@@ -17,7 +17,7 @@ import GameresultDialog from './components/gameresultDialog/GameresultDialog';
 import { compareWin, oposite } from './utils/utils';
 import PC from './gameModes/pc/pc';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
-import { TGamersConfig, TIconsDict } from './ts/types';
+import { TGameField, TGamersConfig, TIconsDict } from './ts/types';
 import { EGameItems } from './ts/enums';
 import { EGameModes } from './ts/enums';
 import { createPc, switchToPcTurn } from './gameModes/pc/services/pcHelper';
@@ -38,7 +38,7 @@ function Game() {
   const styles = styleComponent(theme);
   const [dialogOpen, setDialogOpen] = useState<boolean>(false);
   const [draw, setDraw] = useState<boolean>(false);
-  const [fieldState, setFieldState] = useState(fild);
+  const [fieldState, setFieldState] = useState<TGameField>(fild);
   const [turnState, setTurnState] = useState<EGameItems>(EGameItems.X);
   const [activeMode, setActiveMode] = useState<EGameModes | null>(null);
   const [pause, setPause] = useState<boolean>(false);
