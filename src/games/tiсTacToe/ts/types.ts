@@ -36,8 +36,26 @@ type TGameParams = {
     }
 }
 
+type TValue = {
+    key?: EGameItems
+    value?: string
+}
+
+type TGameRow = {
+    1: TValue
+    2: TValue
+    3: TValue
+}
+
+type TGameField = {
+    A: TGameRow
+    B: TGameRow
+    C: TGameRow
+}
+
 export type {
     TIconsDict,
-    TGamersConfig
+    TGamersConfig,
+    TGameField
 }
 

@@ -9,6 +9,7 @@ function ToolbarItem({ children }) {
         borderRadius: '20% 0 0 0',
         padding: '5px 8px',
         color: '#F8F8F8',
+        height: 'fit-content'
       }}
     >
       {children}

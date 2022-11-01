@@ -133,23 +133,28 @@ function Game() {
     } else if (result) {
       changeTurn = true
       whiIsWin = Object.keys(countWin).find(
-        (isWinKey) => countWin[isWinKey].key === opositTurn
+        (isWinKey) => countWin[isWinKey].key == opositTurn
       );
       setDialogOpen(true);
     }
     if (!changeTurn) {
       return;
     }
-
+    let renders = 0
     setCountWin((prev) => {
+      if (renders > 0) {
+        return prev
+      }
       let next
       const reverseDatas = Object.keys(prev)
-      next = {...prev[reverseDatas[0]].data}
-      prev[reverseDatas[0]].data = {...prev[reverseDatas[1]].data}
-      prev[reverseDatas[1]].data = next
+      next = prev[reverseDatas[0]].key
+      prev[reverseDatas[0]].key = prev[reverseDatas[1]].key
+      prev[reverseDatas[1]].key = next
+      
       if (whiIsWin) {
         prev[whiIsWin].countWin++
       }
+      renders++
       return {
         ...prev
       }

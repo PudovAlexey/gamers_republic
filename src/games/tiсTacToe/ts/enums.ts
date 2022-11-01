@@ -9,7 +9,13 @@ enum EGameModes {
     Online = 'online'
 }
 
+enum EFieldParams {
+    Col = 'col',
+    Row = 'row'
+}
+
 export {
     EGameItems,
-    EGameModes
+    EGameModes,
+    EFieldParams
 }

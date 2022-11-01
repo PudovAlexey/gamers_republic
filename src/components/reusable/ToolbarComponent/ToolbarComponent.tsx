@@ -11,6 +11,7 @@ function ToolbarComponent({ children, width, justifyContent }) {
         sx={{
           display: 'flex',
           justifyContent: 'space-between',
+          alignItems: 'center',
           padding: '5px',
           width,
         }}

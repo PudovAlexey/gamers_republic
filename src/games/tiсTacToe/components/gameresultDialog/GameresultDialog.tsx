@@ -4,6 +4,23 @@ import { useNavigate } from "react-router-dom";
 import GameTurn from "../gameTurn/GameTurn";
 import GameCount from "../gameCount/GameCount";
 import { clearField } from "../../../utils/fiels";
+import { oposite } from "../../utils/utils";
+import { EGameItems } from "../../ts/enums";
+import { TGameField, TGamersConfig, TIconsDict } from "../../ts/types";
+
+type TControlProps = {
+  dialogOpen: boolean
+  setDialogOpen: (value: boolean) => void
+  turnState: EGameItems
+  setTurnState: (value: EGameItems) => void
+  setDraw: (value: boolean) => void
+  fild: TGameField
+  iconsDict: TIconsDict
+  draw: boolean
+  countWin: TGamersConfig
+  setFieldState: (value: TGameField) => void
+}
+
 function GameresultDialog({
     dialogOpen, 
     setDialogOpen,
@@ -15,10 +32,10 @@ function GameresultDialog({
     iconsDict,
     draw,
     countWin
-}) {
+}: TControlProps) {
     const navigate = useNavigate()
     function onStartNewGame() {
-        let reverseState = turnState === 'X' ? 'O' : 'X';
+        let reverseState = oposite(turnState);
         setTurnState(reverseState);
         console.log(clearField(fild))
         setFieldState(fild);
