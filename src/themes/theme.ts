@@ -22,14 +22,6 @@ export const theme = createTheme({
     danger: orange[500],
   },
   components: {
-    MuiInputBase: {
-      styleOverrides: {
-        root: {
-          width: '100%',
-          height: '50px',
-        },
-      },
-    },
     MuiDrawer: {
       styleOverrides: {
         paper: {
@@ -96,13 +88,6 @@ export const theme = createTheme({
           background: '#FF4656',
           color: '#1F2326',
           marginBottom: '15px',
-        },
-      },
-    },
-    MuiAppBar: {
-      styleOverrides: {
-        root: {
-          position: 'inherit',
         },
       },
     },
