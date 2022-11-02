@@ -29,9 +29,9 @@ const iconsDict: TIconsDict = {
   O: { key: EGameItems.O, value: Tac },
 };
 function Game() {
-  const fild = useMemo(() => {
+  const fild: TGameField = useMemo(() => {
     return makeField(EField.TicTacToe);
-  }, []);
+  }, []) as TGameField;
   const [AuthUser] = useContext(AuthContext);
   const theme = useTheme();
   const navigate = useNavigate();
