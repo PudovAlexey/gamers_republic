@@ -2,6 +2,7 @@ import { Route, Routes } from 'react-router-dom';
 import Games from '../pages/Games/Games';
 import MainPage from '../pages/Main/MainPage';
 import GamesList from '../games/GamesList/GamesList';
+import LoginPage from '../pages/LoginPage/LoginPage';
 type RouteEl = {
   path?: string;
   virtual?: boolean;
@@ -16,6 +17,9 @@ const routes: RouteTree = {
   children: [
     {
       node: { path: '/', component: <MainPage /> },
+    },
+    {
+      node: { path: '/login', component: <LoginPage /> },
     },
     {
       node: { path: '/games', component: <Games /> },

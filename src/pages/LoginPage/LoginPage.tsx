@@ -1,34 +1,33 @@
 import React, {useState} from 'react'
-import { TextField, Box } from "@mui/material"
+import { TextField, Box, Button } from "@mui/material"
+import useFieldControl from '../../hooks/useFieldControl'
+import { styleComponent } from './styles'
+import { useTheme } from '@emotion/react'
 
 
 function LoginPage({}) {
-    const [login, setLogin] = useState<string>("")
-    const [password, setPassword] = useState<string>("")
-    
-    function onChangeLogin(e: React.ChangeEvent<InputEvent>) {
-        const {value} = e.target
-        setPassword(value)
-    }
+    const theme = useTheme()
+    const styles = styleComponent(theme)
+    const [record, output] = useFieldControl()
 
-    function onChangePassword(e: React.ChangeEvent<InputEvent>) {
-        const {value} = e.target
-        setPassword(value)
+    function onLoginPress() {
+        console.log(output)
     }
 
     return (
-        <Box>
+       <Box sx={styles.login.layout}>
+         <Box sx={styles.login}>
             <TextField
                 type={'text'}
-                value={login}
-                onChange={(e) => onChangeLogin(e)}
+                {...record('text')}
              />
             <TextField
             type={'password'}
-            value={password}
-            onChange={(e) => onChangePassword(e)}
+            {...record('password')}
             />
+            <Button onClick={onLoginPress}>Login</Button>
         </Box>
+       </Box>
     )
 }
 
