@@ -1,17 +1,33 @@
 import React, {useState} from 'react'
-import { TextField, Box, Button } from "@mui/material"
+import { TextField, Box, Button, IconButton } from "@mui/material"
 import useFieldControl from '../../hooks/useFieldControl'
 import { styleComponent } from './styles'
 import { useTheme } from '@emotion/react'
-
+import { MessageToast } from '../../components/reusable/MessageToast/MessageToast'
+import api from '../../api/api'
 
 function LoginPage({}) {
     const theme = useTheme()
     const styles = styleComponent(theme)
     const [record, output] = useFieldControl()
+    const [authToast, setAuthToast] = useState<boolean>(false)
+    const [errorToast, setErrorToast] = useState<boolean>(false)
 
     function onLoginPress() {
-        console.log(output)
+        if () {
+            api.login(output)
+            .then(res => {
+                if (typeof res === 'boolean' && res) {
+                    setAuthToast(true)
+                } else {
+                    setErrorToast(true)
+                }
+            })
+        }
+    }
+
+    function onResetPassword() {
+        
     }
 
     return (
@@ -25,7 +41,18 @@ function LoginPage({}) {
             type={'password'}
             {...record('password')}
             />
-            <Button onClick={onLoginPress}>Login</Button>
+            <Box>
+            <IconButton onClick={onResetPassword}>Forgot password</IconButton>
+            <IconButton onClick={onLoginPress}>Login</IconButton>
+            <MessageToast
+            delay={3000}
+            show={authToast}
+            setShow={setAuthToast}
+            title={"Validation Error"}
+            message={"Error UserName"}
+            severity={"error"}
+            />
+            </Box>
         </Box>
        </Box>
     )
