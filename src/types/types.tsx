@@ -1,6 +1,8 @@
 export type AnyProps = Record<string, any>;
 
 export type User = {
+  email: string;
+  password: string;
   id: number;
   username: string;
   name: string;

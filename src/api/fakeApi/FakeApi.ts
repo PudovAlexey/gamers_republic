@@ -3,6 +3,7 @@ import { compareValue } from '../../utils/utils';
 import { GameCategories } from './data/Games/GameCategories';
 import { gamesList } from './data/Games/GamesList';
 import { AuthUser } from './data/Users/AuthUser';
+import { Users } from './data/Users/UserList';
 
 class FakeApi {
   async getAuthUser(token) {
@@ -12,6 +13,16 @@ class FakeApi {
       req = await this.fakeDelay('not Auth');
     }
     return req;
+  }
+
+  async login(data) {
+    let AuthUser = Users.find(user => user.email === data.email && user.password === data.password)
+    let req = await this.fakeDelay(AuthUser);
+    if (req) {
+      return req
+    } else {
+      return {message: 'incorrect email or password'}
+    }
   }
 
   async toggleUserLike(user, gameId) {

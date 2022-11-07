@@ -21,12 +21,39 @@ function checkUserName(value) {
    }
 }
 
-export function validators(value, type) {
+function checkPassword(value) {
+  const validate = /(?=.*[0-9])(?=.*[!@#$%^&*])(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z!@#$%^&*]{6,}/g.test(value)
+
+  return validate || {
+    message: 'password must has at least 6 of more symbols' + 
+              '1 UpperCase latter, 1 number and 1 speciphic symbol' 
+  }
+}
+
+function validators(value, type) {
     const __data = {
         email: () => checkEmail(value),
         name: () => checkName(value, 'name'),
         surname: () => checkName(value, 'surname'),
-        userName: () => checkUserName(value)
+        userName: () => checkUserName(value),
+        password: () => checkPassword(value)
     }
     return __data[type]()
+}
+
+function checkAll(check) {
+  return check.reduce((check, {value, type}) => {
+    const checkItem = validators(value, type)
+    if (checkItem?.message) {
+      if (typeof check === 'boolean') check = []
+      check.push(checkItem)
+    }
+    return check
+  }, true)
+}
+
+export {
+  validators,
+  checkAll
+
 }
