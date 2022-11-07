@@ -18,32 +18,25 @@ import AuthorLogo from '../../assets/main/AuthorLogo';
 import AvatarComponent from '../../components/reusable/AvatarComponent/AvatarComponent';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
-
-const pages = [
-  {
-    text: 'Home',
-    route: '/',
-  },
-  {
-    text: 'Games',
-    route: '/games',
-  },
-  {
-    text: 'News',
-    route: '/news',
-  },
-  {
-    text: 'Records',
-    route: '/records',
-  },
-  {
-    text: 'Contact',
-    route: '/contact',
-  },
-];
+import { menuItems } from './menuItems';
+import useLocalStorage from '../../hooks/useLocalStorage';
+import { styleComponent } from './styles';
+import { useTheme } from '@emotion/react';
 
 const Header = () => {
-  const [AuthUser] = useContext(AuthContext);
+  const [AuthUser, setAuthUser] = useContext(AuthContext);
+  const {removeItemByPath} = useLocalStorage()
+  const pallete = useTheme()
+  const styles = styleComponent(pallete)
+
+  function onOpenTeamMenuPopover() {
+    
+  }
+
+  function onLogoutPress() {
+    setAuthUser(null)
+    removeItemByPath('authToken')
+  }
   return (
     <AppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
       <Box
@@ -84,15 +77,29 @@ const Header = () => {
               justifyContent: 'space-around',
             }}
           >
-            {pages.map((page) => (
+            {menuItems.map((page) => (
               <MenuItem>
                 <Link to={page.route}>{page.text}</Link>
               </MenuItem>
             ))}
           </MenuList>
         </Box>
-        <Box>
+        <Box sx={styles.header.userInfo}>
           <AvatarComponent {...AuthUser} />
+          {AuthUser ? (
+            <MenuItem>
+              <Link to="/login">Login</Link>
+            </MenuItem>
+          ) :
+           <Button onClick={onLogoutPress}>Logout</Button>
+          }
+          {
+            AuthUser ? (
+              <MenuItem>
+                <Button onClick={onOpenTeamMenuPopover}>Add Friends</Button>
+              </MenuItem>
+            )
+          }
         </Box>
       </Box>
     </AppBar>

@@ -104,7 +104,14 @@ export const theme = createTheme({
         root: {
           padding: '2px 2px',
           minWidth: 'fit-content',
+          color: '#F8F8F8'
         },
+        contained: {
+          background: "#FF4656"
+        },
+        outlined: {
+          background: "#FF4656"
+        }
       },
     },
     MuiDialog: {

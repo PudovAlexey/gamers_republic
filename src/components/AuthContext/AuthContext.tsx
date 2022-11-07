@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import api from '../../api/api';
+import useLocalStorage from '../../hooks/useLocalStorage';
 import { User } from '../../types/types';
 
 export const AuthContext = React.createContext(null);
 function Auth({ children }) {
+  let {getItemByPath} = useLocalStorage()
   let [user, setUser] = useState<User | null>(null);
+
   useEffect(() => {
-    let token = 'testToken';
+    let token = getItemByPath('authToken');
     api.getAuthUser(token).then((user: User) => {
-      setUser(user);
+      if (user) {
+        setUser(user);
+      } else {
+
+      }
     });
-  }, []);
+  }, [user]);
   return (
     <AuthContext.Provider value={[user, setUser]}>
       {children}
