@@ -98,7 +98,7 @@ const Header = () => {
               <MenuItem>
                 <Button onClick={onOpenTeamMenuPopover}>Add Friends</Button>
               </MenuItem>
-            )
+            ) : null
           }
         </Box>
       </Box>
