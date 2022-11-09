@@ -14,7 +14,7 @@ const stepsDict = {
 }
 
 function MainPage() {
-  return <Wizard stepsDict={stepsDict}/>
+  return <Wizard steps={stepsDict}/>
 }
 
 export default MainPage;

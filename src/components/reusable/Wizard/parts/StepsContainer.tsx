@@ -1,22 +1,25 @@
+import { useTheme } from "@emotion/react";
 import { Button, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useDispatch, useSelector } from "react-redux";
 import { next, prev, toStep } from "../store/stepSlice";
+import { styleComponent } from "../styles";
 
 function StepsContainer({}) {
-    const {currentStep, stepsDict} = useSelector((state) => state.wizardStep)
+    const theme = useTheme()
+    const styles = styleComponent(theme)
+    const {stepsDict} = useSelector((state) => state.wizardStep)
     const dispatch = useDispatch()
 
     function onNextPartClick(part) {
         dispatch(toStep(part))
     }
     return (
-        <Box>
-            <Typography>{currentStep}</Typography>
+        <Box sx={styles.steps}>
             {
                 Object.keys(stepsDict).map((part, idx) => (
-                    <Button
-                        key={idx}
+                    <Button sx={styles.stepButton}
+                        key={part}
                         onClick={() => onNextPartClick(part)}
                         >
                         {part}
