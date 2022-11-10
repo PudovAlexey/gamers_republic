@@ -1,16 +1,31 @@
+import { TextField } from '@mui/material';
 import { Box } from '@mui/system';
 import Wizard from '../../components/reusable/Wizard/Wizard';
 
 const stepsDict = {
   first: {
-    content: <Box>FIRST WIZARD STEP</Box>
+    content: (data, event) => {
+      const fieldName = 'step1'
+      console.log(data)
+     return <TextField value={data[fieldName] || ""} onChange={(e) => 
+    event(e.target.value, fieldName)} />
+    }
   },
   second: {
-    content: <Box>SECOND WIZARD STEP</Box>
+    content: (data, event) => {
+      console.log(data)
+      const fieldName = 'step2'
+     return <TextField value={data[fieldName] || ""} onChange={(e) => 
+    event(e.target.value, fieldName)} />
+    }
   },
   third: {
-    content: <Box>THIRD WIZARD STEP</Box>
-  }
+    content: (data, event) => {
+      const fieldName = 'step3'
+     return <TextField value={data[fieldName] || ""} onChange={(e) => 
+    event(e.target.value, fieldName)} />
+    }
+  },
 }
 
 function MainPage() {

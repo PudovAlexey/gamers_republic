@@ -1,9 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 function toNextStep(stepsDict, currentStep, stepTo) {
   const currentIndex = Object.keys(stepsDict)
   .findIndex(state => state === currentStep)
-  return stepsDict[currentIndex + stepTo] || currentIndex
+  return Object.keys(stepsDict)[currentIndex + stepTo] || false
 }
 
 const stepSlice = createSlice({
@@ -11,7 +11,8 @@ const stepSlice = createSlice({
     initialState: {
         currentStep: null,
         position: 'start',
-        stepsDict: {}
+        stepsDict: {},
+        wizardResult: {}
     },
     reducers: {
         next: (state) => {
@@ -19,16 +20,26 @@ const stepSlice = createSlice({
           if (position === 'end') {
             return
           }
-          const nextStep = toNextStep(stepsDict, currentStep, +1)
-          nextStep ? state.currentStep = nextStep : state.position = 'end'
+          const nextStep = toNextStep(current(stepsDict), currentStep, +1)
+          if (nextStep) {
+            state.currentStep = nextStep
+            state.position = null
+          } else {
+            state.position = 'end'
+          }
         },
         prev: (state) => {
           const {currentStep, stepsDict, position} = state
           if (position === 'start') {
             return
           }
-          const prevStep = toNextStep(stepsDict, currentStep, -1)
-          prevStep ? state.currentStep = prevStep : state.position = 'start'
+          const prevStep = toNextStep(current(stepsDict), currentStep, -1)
+          if (prevStep) {
+            state.currentStep = prevStep
+            state.position = null
+          } else {
+            state.position = 'start'
+          }
         },
         toStep: (state, action) => {
             state.currentStep = action.payload
@@ -44,6 +55,13 @@ const stepSlice = createSlice({
         wizardInit: (state, action) => {
           state.stepsDict = action.payload
           state.currentStep = Object.keys(action.payload)[0]
+        },
+        setWizardFieldData: (state, action) => {
+          const {field, value} = action.payload
+          state.wizardResult = JSON.parse(JSON.stringify({
+            ...state.wizardResult,
+            [field]: value
+          }))
         }
     }
 })
@@ -52,7 +70,8 @@ export const {
     next,
     prev,
     toStep,
-    wizardInit
+    wizardInit,
+    setWizardFieldData
 } = stepSlice.actions
 
 export default stepSlice.reducer

@@ -3,6 +3,9 @@ import stepSlice from '../components/reusable/Wizard/store/stepSlice'
 
 export default configureStore({
     reducer: {
-        wizardStep: stepSlice
+        wizardStep: stepSlice,
     },
+    middleware: (getDefaultMiddleware) => getDefaultMiddleware({
+        serializableCheck: false
+      }),
   })
