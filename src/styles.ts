@@ -14,6 +14,7 @@ const mainStyles = function (theme) {
             overflow: 'hidden',
           },
           mainPage: {
+            position: 'relative',
             minHeight: 'calc(100vh - 200px)',
           }
     },

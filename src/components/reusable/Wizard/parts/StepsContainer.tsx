@@ -15,7 +15,7 @@ function StepsContainer({}) {
         dispatch(toStep(part))
     }
     return (
-        <Box sx={styles.steps}>
+        <Box sx={{...styles.steps, ...styles.sideBox}}>
             {
                 Object.keys(stepsDict).map((part, idx) => (
                     <Button sx={styles.stepButton}
