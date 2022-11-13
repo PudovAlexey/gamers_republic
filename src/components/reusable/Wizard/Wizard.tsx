@@ -28,11 +28,14 @@ function Wizard({steps}: TControlProps) {
             value
         }))
     }
-    const wizard = stepsDict[currentStep]?.content(wizardResult, onChangeWizardValue)
+    const wizard = stepsDict[currentStep]?.content({
+        stepData: wizardResult[currentStep],
+        event: onChangeWizardValue,
+    })
     return (
         <Box sx={styles.wizard}>
-            <Header/>
             <WizardBody>{wizard}</WizardBody>
+            <Footer/>
         </Box>
     )
 }

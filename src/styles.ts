@@ -16,6 +16,7 @@ const mainStyles = function (theme) {
           mainPage: {
             position: 'relative',
             minHeight: 'calc(100vh - 200px)',
+            maxWidth: '96.5vw'
           }
     },
   })
