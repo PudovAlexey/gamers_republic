@@ -1,5 +1,5 @@
 import { useTheme } from "@emotion/react";
-import { Box } from "@mui/system";
+import { Paper } from "@mui/material";
 import { useSelector } from "react-redux";
 import { styleComponent } from "../../styles";
 
@@ -10,11 +10,11 @@ function Description() {
     const theme = useTheme()
     const styles = styleComponent(theme)
     return (
-        <Box sx={styles.sideBox}>
+        <Paper sx={styles.sideBox}>
             {
                 stepsDict[currentStep]?.description || null
             }
-        </Box>
+        </Paper>
     )
 }
 

@@ -19,9 +19,15 @@ const stepsDict = {
     <TestComponent {...props}/>,
   },
   second: {
+    validationRules: {
+      step2: {
+        check: (value) => !!value,
+        message: 'notNull',
+      },
+    },
     description: "description2 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     step2: {
-      check: (_, value) => !!value,
+      check: (value) => !!value,
       message: 'notNull',
     },
     content: ({stepData, event}) => {

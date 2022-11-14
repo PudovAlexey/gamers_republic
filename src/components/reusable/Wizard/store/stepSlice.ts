@@ -15,11 +15,19 @@ function validateValue({ currentStep, field, value, valuesDict = {} }) {
     : currentStep.validationRules?.[field].check(value, valuesDict);
 }
 
+function checkStepToContinue(step, validationErrors) {
+  const errorsMap = Object.values(validationErrors[step] || {});
+  return errorsMap.length === 0
+    ? false
+    : errorsMap.every((field) => field === true);
+}
+
 const stepSlice = createSlice({
   name: 'stepSlice',
   initialState: {
     showErrors: false,
     validationErrors: {},
+    openSteps: [],
     currentStep: null,
     stepsDict: {},
     wizardResult: {},
@@ -70,6 +78,7 @@ const stepSlice = createSlice({
       state.validationErrors = {
         [stepsMap[0]]: validationResult,
       };
+      state.openSteps = [stepsMap[0]];
     },
     setWizardFieldData: (state, action) => {
       const { stepsDict, currentStep, validationErrors, wizardResult } = state;
@@ -97,12 +106,11 @@ const stepSlice = createSlice({
           [field]: value,
         },
       };
-      // state.wizardResult = JSON.parse(
-      //   JSON.stringify({
-      //     ...state.wizardResult,
-      //     [field]: value,
-      //   })
-      // );
+      state.openSteps = Object.keys(steps).filter((step, idx, steps) => {
+        return idx === 0
+          ? checkStepToContinue(step, state.validationErrors)
+          : checkStepToContinue(steps[idx - 1], state.validationErrors);
+      });
     },
     showErrors: (state) => {
       state.showErrors = true;
@@ -114,11 +122,20 @@ const stepSlice = createSlice({
       state.currentStep = null;
       state.stepsDict = {};
       state.wizardResult = {};
+      state.showErrors = false
+      state.validationErrors = {}
     },
   },
 });
 
-export const { next, prev, toStep, wizardInit, setWizardFieldData, showErrors, hideErrors } =
-  stepSlice.actions;
+export const {
+  next,
+  prev,
+  toStep,
+  wizardInit,
+  setWizardFieldData,
+  showErrors,
+  hideErrors,
+} = stepSlice.actions;
 
 export default stepSlice.reducer;

@@ -1,13 +1,8 @@
-function makeTypeByStep(steps, part, currentStep, validationErrors) {
-  console.log(validationErrors?.[currentStep]);
+function makeTypeByStep(part, currentStep, openSteps) {
   let stepClass = null;
   if (currentStep === part) {
     stepClass = 'active';
-  } else if (
-    !Object.keys(validationErrors?.[currentStep] || {}).every(
-      (field) => validationErrors[currentStep][field] === true
-    )
-  ) {
+  } else if (!openSteps.some(step => part === step)) {
     stepClass = 'disabled';
   } else {
     stepClass = 'default';
