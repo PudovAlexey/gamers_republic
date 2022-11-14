@@ -6,6 +6,7 @@ import { StepsContainer } from "./StepsContainer";
 import { Paper, Typography } from "@mui/material";
 import { useSelector } from "react-redux";
 import { camelCaseToText } from "../../../../utils/formatters/formatters";
+import { Footer } from "./Footer/Footer";
 
 function WizardBody({children}) {
     const {currentStep, stepsDict} = useSelector(
@@ -19,6 +20,7 @@ function WizardBody({children}) {
            <Paper sx={styles.bodyBox}>
             <Typography variant="h4">{stepsDict[currentStep]?.title || camelCaseToText(currentStep || "")}</Typography>
             {children}
+            <Footer/>
            </Paper>
             <Description/>
         </Box>

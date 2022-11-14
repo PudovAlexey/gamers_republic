@@ -8,7 +8,10 @@ const styleComponent = function (theme) {
           alignItems: 'center',
           background: "#1F2326",
           gap: "30px",
-          paddingRight: '15px'
+          position: 'absolute',
+          bottom: 0,
+          paddingRight: "15px",
+          width: "calc(100% - 15px)"
         },
         footerButton: {
           borderRadius: '4px',
@@ -22,7 +25,7 @@ const styleComponent = function (theme) {
           minWidth: '0px'
         },
         sideBox: {
-          padding: "5px 7px 5px",
+          padding: "16px",
           width: "30%",
           maxHeight: "300px",
           background: "#1F2326",
@@ -39,12 +42,13 @@ const styleComponent = function (theme) {
           justifyContent: 'space-between',
             background: "c",
             height: "91%",
-            gap: "30px"
+            gap: "30px",
         },
         bodyBox: {
           width: '100%',
           marginBottom: "20px",
           background: "#F8F8F8",
+          position: 'relative'
         },
         steps: {
             display: 'flex',

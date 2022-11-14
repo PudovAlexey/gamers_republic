@@ -9,15 +9,17 @@ function StepsContainer({}) {
   const theme = useTheme();
   const styles = styleComponent(theme);
   const dinamcContent = dynamicStyleComponent(theme);
-  const { stepsDict, currentStep, validationErrors, openSteps } = useSelector((state) => state.wizardStep);
+  const { stepsDict, currentStep, openSteps, events, wizardResult } = useSelector((state) => state.wizardStep);
   const dispatch = useDispatch();
 
   function onNextPartClick(part, buttonType) {
     if (buttonType === 'disabled') {
         dispatch(showErrors())
     } else {
+      const {onMoveToStep} = events
         dispatch(hideErrors())
         dispatch(toStep(part));
+        onMoveToStep(wizardResult, part)
     }
   }
   return (

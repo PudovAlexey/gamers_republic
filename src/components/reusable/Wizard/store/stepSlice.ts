@@ -1,18 +1,25 @@
 import { createSlice, current } from '@reduxjs/toolkit';
+import { toNextStep } from '../parts/helpers';
 
-function toNextStep(stepsDict, currentStep, stepTo) {
-  const currentIndex = findStepIndex(stepsDict, currentStep);
-  return Object.keys(stepsDict)[currentIndex + stepTo] || false;
-}
 
-function findStepIndex(stepsDict, currentStep) {
-  return Object.keys(stepsDict).findIndex((state) => state === currentStep);
-}
 
 function validateValue({ currentStep, field, value, valuesDict = {} }) {
   return currentStep.validationRules?.[field] === undefined
     ? true
     : currentStep.validationRules?.[field].check(value, valuesDict);
+}
+
+function checkValidationRules(steps, currentStep) {
+  return Object.keys(
+    steps[currentStep]?.validationRules || {}
+  ).reduce((validationDict, field) => {
+    validationDict[field] = validateValue({
+      currentStep: steps[currentStep],
+      field,
+      value: null,
+    });
+    return validationDict;
+  }, {});
 }
 
 function checkStepToContinue(step, validationErrors) {
@@ -28,14 +35,16 @@ const stepSlice = createSlice({
     showErrors: false,
     validationErrors: {},
     openSteps: [],
+    events: {},
     currentStep: null,
     stepsDict: {},
     wizardResult: {},
   },
   reducers: {
     next: (state) => {
-      const { currentStep, stepsDict } = state;
+      const { currentStep, stepsDict, validationErrors } = state;
       const steps = current(stepsDict);
+      const oldErrors = current(validationErrors)
       const stepsMap = Object.keys(steps);
       if (stepsMap[stepsMap.length - 1] === currentStep) {
         return;
@@ -43,11 +52,18 @@ const stepSlice = createSlice({
       const nextStep = toNextStep(steps, currentStep, +1);
       if (nextStep) {
         state.currentStep = nextStep;
+        if (!oldErrors[nextStep]) {
+          state.validationErrors = {
+            ...oldErrors,
+            [nextStep]: checkValidationRules(current(stepsDict), nextStep)
+          }
+        }
       }
     },
     prev: (state) => {
-      const { currentStep, stepsDict } = state;
+      const { currentStep, stepsDict, validationErrors } = state;
       const steps = current(stepsDict);
+      const oldErrors = current(validationErrors)
       const stepsMap = Object.keys(steps);
       if (stepsMap[0] === currentStep) {
         return;
@@ -55,30 +71,40 @@ const stepSlice = createSlice({
       const prevStep = toNextStep(steps, currentStep, -1);
       if (prevStep) {
         state.currentStep = prevStep;
+
+        if (!oldErrors[prevStep]) {
+          state.validationErrors = {
+            ...oldErrors,
+            [prevStep]: checkValidationRules(current(stepsDict), prevStep)
+          }
+        }
       }
     },
     toStep: (state, action) => {
-      state.currentStep = action.payload;
+      const newStep = action.payload
+      const {stepsDict, validationErrors} = state
+      const oldErrors = current(validationErrors)
+      state.currentStep = newStep;
+      if (!oldErrors[newStep]) {
+        state.validationErrors = {
+          ...oldErrors,
+          [newStep]: checkValidationRules(current(stepsDict), newStep)
+        }
+      }
     },
     wizardInit: (state, action) => {
-      const stepsDict = action.payload;
-      const stepsMap = Object.keys(stepsDict);
-      state.stepsDict = stepsDict;
+      const steps = action.payload;
+      const stepsMap = Object.keys(steps);
+      state.stepsDict = steps;
       state.currentStep = stepsMap[0];
-      const validationResult = Object.keys(
-        stepsDict[stepsMap[0]]?.validationRules || {}
-      ).reduce((validationDict, field) => {
-        validationDict[field] = validateValue({
-          currentStep: stepsDict[stepsMap[0]],
-          field,
-          value: null,
-        });
-        return validationDict;
-      }, {});
+      const validationResult = checkValidationRules(steps, stepsMap[0])
       state.validationErrors = {
         [stepsMap[0]]: validationResult,
       };
       state.openSteps = [stepsMap[0]];
+    },
+    initEvents: (state, action) => {
+      state.events = action.payload
     },
     setWizardFieldData: (state, action) => {
       const { stepsDict, currentStep, validationErrors, wizardResult } = state;
@@ -134,6 +160,7 @@ export const {
   toStep,
   wizardInit,
   setWizardFieldData,
+  initEvents,
   showErrors,
   hideErrors,
 } = stepSlice.actions;

@@ -44,7 +44,7 @@ const stepsDict = {
     description: "description3 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
     validationRules: {
       step3: {
-        check: (_, value) => !!value,
+        check: (value) => !!value,
         message: 'notNull',
       },
     },
@@ -68,7 +68,13 @@ function MainPage() {
         marginBottom: '15px',
       }}
     >
-      <Wizard steps={stepsDict} />
+      <Wizard 
+      steps={stepsDict}
+      onComplete={(result) => console.log('result', result)}
+      onMoveBack={(result, step) => console.log('back', result, step)}
+      onMoveFront={(result, step) => console.log('front', result, step)}
+      onMoveToStep={(result, step) => console.log('toStep', result, step)}
+       />
     </Box>
   );
 }
