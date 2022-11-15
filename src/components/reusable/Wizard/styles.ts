@@ -1,4 +1,3 @@
-import { padding } from '@mui/system'
 import reactCSS from 'reactcss'
 const styleComponent = function (theme) {
   return reactCSS({

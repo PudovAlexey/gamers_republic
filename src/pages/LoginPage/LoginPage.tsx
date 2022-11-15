@@ -13,9 +13,9 @@ import { AuthToast } from './types';
 import AuthorLogo from '../../assets/main/AuthorLogo';
 
 function LoginPage() {
-    const [setUser] = useContext(AuthContext)
+  const [_, setUser] = useContext(AuthContext);
   const theme = useTheme();
-  const {setItemByPath} = useLocalStorage()
+  const { setItemByPath } = useLocalStorage();
   const styles = styleComponent(theme);
   const [record, output] = useFieldControl();
   const [{ show, message, title, severity }, setAuthToast] =
@@ -35,8 +35,8 @@ function LoginPage() {
     if (validateValues === true) {
       api.login(output).then((res?: User) => {
         if (res?.email) {
-        setUser(res)
-        setItemByPath('authToken', res.token)
+          setUser(res);
+          setItemByPath('authToken', res.token);
           setAuthToast({
             show: true,
             message: 'Login Success',
@@ -44,26 +44,26 @@ function LoginPage() {
             title: 'Login message',
           });
         } else {
-            setAuthToast({
-                show: true,
-                message: "Your data don't has in our records",
-                severity: 'error',
-                title: 'Login message',
-              });
+          setAuthToast({
+            show: true,
+            message: "Your data don't has in our records",
+            severity: 'error',
+            title: 'Login message',
+          });
         }
-    });
-} else {
-    const makeValidationMessages = validateValues.reduce(
-      (acc, { message }) => acc + message,
-      ''
-    );
-    setAuthToast({
-      show: true,
-      message: makeValidationMessages,
-      severity: 'error',
-      title: 'Validation Faild',
-    });
-}
+      });
+    } else {
+      const makeValidationMessages = validateValues.reduce(
+        (acc, { message }) => acc + message,
+        ''
+      );
+      setAuthToast({
+        show: true,
+        message: makeValidationMessages,
+        severity: 'error',
+        title: 'Validation Faild',
+      });
+    }
   }
 
   function toggleMessageToast(isShow) {
@@ -78,17 +78,30 @@ function LoginPage() {
   return (
     <Box sx={styles.login.layout}>
       <Paper sx={styles.login}>
-        <AuthorLogo size={110}/>
-        <Typography sx={styles.login.title} variant='h5'>Login to start play</Typography>
+        <AuthorLogo size={110} />
+        <Typography sx={styles.login.title} variant="h5">
+          Login to start play
+        </Typography>
         <Box sx={styles.login.inputBlock}>
-        <TextField sx={styles.login.email} label="Email" type={'text'} {...record('email')} />
-        <TextField label="Password" type={'password'} {...record('password')} />
-        <Box sx={styles.login.passwordContainer}>
-        <Button onClick={onResetPassword}>Forgot password</Button>
-        </Box>
+          <TextField
+            sx={styles.login.email}
+            label="Email"
+            type={'text'}
+            {...record('email')}
+          />
+          <TextField
+            label="Password"
+            type={'password'}
+            {...record('password')}
+          />
+          <Box sx={styles.login.passwordContainer}>
+            <Button onClick={onResetPassword}>Forgot password</Button>
+          </Box>
         </Box>
         <Box sx={styles.login.buttons}>
-          <Button variant="contained" onClick={onLoginPress}>Login</Button>
+          <Button variant="contained" onClick={onLoginPress}>
+            Login
+          </Button>
           <MessageToast
             delay={3000}
             show={show}

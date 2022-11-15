@@ -11,7 +11,7 @@ const styleComponent = function (theme) {
         flexDirection: 'column',
         position: 'absolute',
         margin: 'auto',
-        top: '170px',
+        top: '2em',
         left: 0,
         right: 0,
         alignItems: 'center',
