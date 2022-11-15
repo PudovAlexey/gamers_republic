@@ -1,9 +1,9 @@
 import React from "react";
 import { FormControl, FormHelperText, TextField } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../hooks/typedReduxHooks";
 
 function TestComponent({stepData, event}) {
-    const {validationErrors, showErrors, currentStep} = useSelector(
+    const {validationErrors, showErrors, currentStep} = useAppSelector(
         state => state.wizardStep
     )
     const fieldName = 'step1';
@@ -15,7 +15,7 @@ function TestComponent({stepData, event}) {
       />
       {
         showErrors && validationErrors?.[currentStep]?.[fieldName]?.message  ?
-        <FormHelperText>{validationErrors?.[currentStep]?.[fieldName]?.message}</FormHelperText> :
+        <FormHelperText>{String(validationErrors?.[currentStep]?.[fieldName]?.message)}</FormHelperText> :
         null
       }
       </FormControl>

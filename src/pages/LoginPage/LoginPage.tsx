@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { TextField, Box, Button, IconButton } from '@mui/material';
+import { TextField, Box, Button, Paper, Typography } from '@mui/material';
 import useFieldControl from '../../hooks/useFieldControl';
 import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
@@ -10,9 +10,10 @@ import { AuthContext } from '../../components/AuthContext/AuthContext';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { User } from '../../types/types';
 import { AuthToast } from './types';
+import AuthorLogo from '../../assets/main/AuthorLogo';
 
-function LoginPage({}) {
-    const [user, setUser] = useContext(AuthContext)
+function LoginPage() {
+    const [setUser] = useContext(AuthContext)
   const theme = useTheme();
   const {setItemByPath} = useLocalStorage()
   const styles = styleComponent(theme);
@@ -76,13 +77,17 @@ function LoginPage({}) {
 
   return (
     <Box sx={styles.login.layout}>
-      <Box sx={styles.login}>
+      <Paper sx={styles.login}>
+        <AuthorLogo size={110}/>
+        <Typography sx={styles.login.title} variant='h5'>Login to start play</Typography>
         <Box sx={styles.login.inputBlock}>
-        <TextField type={'text'} {...record('email')} />
-        <TextField type={'password'} {...record('password')} />
+        <TextField sx={styles.login.email} label="Email" type={'text'} {...record('email')} />
+        <TextField label="Password" type={'password'} {...record('password')} />
+        <Box sx={styles.login.passwordContainer}>
+        <Button onClick={onResetPassword}>Forgot password</Button>
+        </Box>
         </Box>
         <Box sx={styles.login.buttons}>
-          <Button onClick={onResetPassword}>Forgot password</Button>
           <Button variant="contained" onClick={onLoginPress}>Login</Button>
           <MessageToast
             delay={3000}
@@ -93,7 +98,7 @@ function LoginPage({}) {
             severity={severity}
           />
         </Box>
-      </Box>
+      </Paper>
     </Box>
   );
 }

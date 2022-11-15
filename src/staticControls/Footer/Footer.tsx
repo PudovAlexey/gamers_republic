@@ -1,6 +1,5 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import { AppBar } from '@mui/material';
 function Footer() {
   return (
     <Box

@@ -1,10 +1,12 @@
 import { BottomNavigation, BottomNavigationAction } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { requiredButtonsConfig } from './requiredButtonsConfig';
 import { next, prev, showErrors } from '../../store/stepSlice';
 import { dynamicStyleComponent, styleComponent } from '../../styles';
 import { useTheme } from '@emotion/react';
 import { makeTypeByStep, toNextStep } from '../helpers';
+import { useAppSelector } from '../../../../../hooks/typedReduxHooks';
+import React from 'react';
 const dispatchMethods = {
   next,
   prev,
@@ -23,13 +25,13 @@ function Footer() {
     openSteps,
     events,
     validationErrors,
-  } = useSelector((state) => state.wizardStep);
+  } = useAppSelector((state) => state.wizardStep);
   actions = { ...actions, ...requiredButtonsConfig, wizardResult };
   return (
     <BottomNavigation
       sx={styles.footerButtons}
       showLabels
-      onChange={(event) => {
+      onChange={(event: React.ChangeEvent<HTMLButtonElement>) => {
         const { id, dataset } = event.currentTarget;
         const { onComplete, onMoveBack, onMoveFront } = events;
         if (dataset?.buttontype === 'disabled') {
@@ -45,10 +47,10 @@ function Footer() {
           case 'done': onComplete(wizardResult);
             break;
           case 'prev':
-            onMoveBack(wizardResult, toNextStep(stepsDict, currentStep, -1));
+            onMoveBack(wizardResult, toNextStep(stepsDict, currentStep, -1) as string);
             break;
           case 'next':
-            onMoveFront(wizardResult, toNextStep(stepsDict, currentStep, 1));
+            onMoveFront(wizardResult, toNextStep(stepsDict, currentStep, 1) as string);
             break;
         }
       }}

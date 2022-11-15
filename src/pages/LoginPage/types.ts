@@ -2,5 +2,5 @@ export type AuthToast = {
     show: boolean,
     message: string,
     title: string,
-    severity: string 
+    severity: 'error' | 'warning' | 'info' | 'success';
 }

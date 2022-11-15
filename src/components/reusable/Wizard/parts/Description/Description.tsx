@@ -1,12 +1,10 @@
 import { useTheme } from "@emotion/react";
 import { Paper } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useAppSelector } from "../../../../../hooks/typedReduxHooks";
 import { styleComponent } from "../../styles";
 
 function Description() {
-    const {currentStep, stepsDict} = useSelector(
-        (state => state.wizardStep)
-    )
+    const {currentStep, stepsDict} = useAppSelector((state) => state.wizardStep)
     const theme = useTheme()
     const styles = styleComponent(theme)
     return (

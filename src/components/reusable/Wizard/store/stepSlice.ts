@@ -1,5 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 import { toNextStep } from '../parts/helpers';
+import { TWizardSlice } from '../ts/types';
 
 
 
@@ -29,17 +30,24 @@ function checkStepToContinue(step, validationErrors) {
     : errorsMap.every((field) => field === true);
 }
 
+const initialState: TWizardSlice = {
+  showErrors: false,
+  validationErrors: {},
+  openSteps: [],
+  events: {
+    onComplete: () => {},
+    onMoveBack: () => {},
+    onMoveFront: () => {},
+    onMoveToStep: () => {},
+  },
+  currentStep: null,
+  stepsDict: {},
+  wizardResult: {},
+}
+
 const stepSlice = createSlice({
   name: 'stepSlice',
-  initialState: {
-    showErrors: false,
-    validationErrors: {},
-    openSteps: [],
-    events: {},
-    currentStep: null,
-    stepsDict: {},
-    wizardResult: {},
-  },
+  initialState ,
   reducers: {
     next: (state) => {
       const { currentStep, stepsDict, validationErrors } = state;

@@ -1,10 +1,11 @@
 export type AnyProps = Record<string, any>;
 
 export type User = {
-  email: string;
-  password: string;
   id: number;
   username: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string
   name: string;
   surname: string;
   token: string;

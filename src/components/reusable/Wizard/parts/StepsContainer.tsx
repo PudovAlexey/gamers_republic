@@ -4,12 +4,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import {  makeTypeByStep } from './helpers';
 import { toStep, hideErrors, showErrors } from '../store/stepSlice';
 import { dynamicStyleComponent, styleComponent } from '../styles';
+import { useAppSelector } from '../../../../hooks/typedReduxHooks';
 
 function StepsContainer({}) {
   const theme = useTheme();
   const styles = styleComponent(theme);
   const dinamcContent = dynamicStyleComponent(theme);
-  const { stepsDict, currentStep, openSteps, events, wizardResult } = useSelector((state) => state.wizardStep);
+  const { stepsDict, currentStep, openSteps, events, wizardResult } = useAppSelector((state) => state.wizardStep);
   const dispatch = useDispatch();
 
   function onNextPartClick(part, buttonType) {

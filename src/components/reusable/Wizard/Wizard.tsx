@@ -1,8 +1,8 @@
 import { useTheme } from '@emotion/react';
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Footer } from './parts/Footer/Footer';
+import { useDispatch } from 'react-redux';
+import { useAppSelector } from '../../../hooks/typedReduxHooks';
 import { WizardBody } from './parts/WizardBody';
 import { setWizardFieldData, wizardInit, initEvents } from './store/stepSlice';
 import { styleComponent } from './styles';
@@ -23,7 +23,7 @@ function Wizard({
  }: TControlProps) {
   const theme = useTheme();
   const styles = styleComponent(theme);
-  const { currentStep, stepsDict, wizardResult } = useSelector(
+  const { currentStep, stepsDict, wizardResult } = useAppSelector(
     (state) => state.wizardStep
   );
   const dispatch = useDispatch();

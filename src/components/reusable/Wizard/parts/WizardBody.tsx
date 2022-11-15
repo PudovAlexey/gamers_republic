@@ -4,12 +4,12 @@ import { Box } from "@mui/system";
 import { styleComponent } from "../styles";
 import { StepsContainer } from "./StepsContainer";
 import { Paper, Typography } from "@mui/material";
-import { useSelector } from "react-redux";
 import { camelCaseToText } from "../../../../utils/formatters/formatters";
 import { Footer } from "./Footer/Footer";
+import { useAppSelector } from "../../../../hooks/typedReduxHooks";
 
 function WizardBody({children}) {
-    const {currentStep, stepsDict} = useSelector(
+    const {currentStep, stepsDict} = useAppSelector(
         (state) => state.wizardStep
     )
     const theme = useTheme()

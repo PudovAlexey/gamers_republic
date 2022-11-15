@@ -6,7 +6,7 @@ const styleComponent = function (theme) {
        login: {
         background: "#1F2326",
         maxWidth: "500px",
-        height: "240px",
+        height: "450px",
         display: 'flex',
         flexDirection: 'column',
         position: 'absolute',
@@ -14,9 +14,18 @@ const styleComponent = function (theme) {
         top: '170px',
         left: 0,
         right: 0,
+        alignItems: 'center',
         justifyContent: 'spaceBetween',
         padding: '15px 20px',
+        title: {
+          color: '#f8f8f8',
+          mb: '16px'
+        },
+        email: {
+          marginBottom: '16px'
+        },
         inputBlock: {
+          width: '100%',
           display: 'flex',
           flexDirection: 'column'
         },
@@ -27,7 +36,8 @@ const styleComponent = function (theme) {
           right: 0,
           gap: "15px",
           display: 'flex',
-          justifyContent: 'center'
+          justifyContent: 'right',  
+          paddingRight: '16px'
         },
         layout: {
             position: 'relative',

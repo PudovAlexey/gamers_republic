@@ -9,18 +9,24 @@ type TValidationRules = Record<string, {
 
 type TStepsConfig = Record<string, {
     title?: string
-    description: string | React.FC
+    description: string | React.ReactNode
     validationRules: TValidationRules
-    content: ({stepData, event}) => React.FC
+    content: ({stepData, event}) => React.ReactNode
 }>
 
-type TValidationErrors = Record<string, Record< string, boolean | {
+type TValidationErrors = Record<string, Record< string, Record<string, boolean | {
     message: string
-}>>
+}>>>
 
 type TWizardResult = Record<string, Record< string, TField<any>>>
 
 type TWizardSlice = {
+    events: {
+        onComplete: (wizardResult: TWizardResult) => void
+        onMoveBack: (wizardResult: TWizardResult, step: string) => void
+        onMoveFront: (wizardResult: TWizardResult, step: string) => void
+        onMoveToStep: (wizardResult: TWizardResult, step: string) => void
+    }
     showErrors: boolean
     validationErrors: TValidationErrors
     openSteps: string[]
