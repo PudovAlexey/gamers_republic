@@ -8,6 +8,7 @@ import Auth from './components/AuthContext/AuthContext';
 import 'normalize.css';
 import { mainStyles } from './styles';
  import "./fonts.css"
+import PartyComponent from './components/PartyComponent/PartyComponent';
 
 function App({ children }) {
   const theme = useTheme();
@@ -21,6 +22,7 @@ function App({ children }) {
         <Box
           sx={styles.mainPage}
         >
+          <PartyComponent/>
           {children}
         </Box>
         <Footer />

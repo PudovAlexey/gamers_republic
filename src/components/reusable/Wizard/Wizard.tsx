@@ -1,7 +1,7 @@
 import { useTheme } from '@emotion/react';
 import { Box } from '@mui/material';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useAppSelector } from '../../../hooks/typedReduxHooks';
 import { WizardBody } from './parts/WizardBody';
 import { setWizardFieldData, wizardInit, initEvents } from './store/stepSlice';
