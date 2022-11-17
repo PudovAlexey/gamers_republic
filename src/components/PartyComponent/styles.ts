@@ -1,10 +1,12 @@
+import zIndex from '@mui/material/styles/zIndex'
 import reactCSS from 'reactcss'
 const styleComponent = function (theme) {
   return reactCSS({
     default: {
         layout: {
             position: 'fixed',
-            right: '+200px'
+            right: '0px',
+            zIndex: 9999
         },
         partyContainer: {
             position: 'absolute',
