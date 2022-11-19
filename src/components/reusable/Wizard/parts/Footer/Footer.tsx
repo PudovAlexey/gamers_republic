@@ -81,7 +81,7 @@ function Footer() {
                 ),
               }}
               id={action}
-              data-buttonType={buttonType}
+              data-buttontype={buttonType}
               label={actions[action].label}
             />
           );
