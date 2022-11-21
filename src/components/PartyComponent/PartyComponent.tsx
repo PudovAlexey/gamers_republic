@@ -1,19 +1,35 @@
-import React, {useEffect} from 'react'
+import React, { useContext, useEffect } from 'react'
 import { useTheme } from "@emotion/react"
-import { Dataset } from "@mui/icons-material"
-import { Box, Button, Paper } from "@mui/material"
+import { Box, Button, Divider, Paper, Typography } from "@mui/material"
 import { onMovePartyContainer } from "./animation/main"
 import { partyParts } from "./config"
 import { dinamicStyles, styleComponent } from "./styles"
 import { useAppDispatch, useAppSelector } from '../../hooks/typedReduxHooks'
-import { setContainer } from './store'
+import { init } from './store'
+import { AuthContext } from '../AuthContext/AuthContext'
+import api from '../../api/api'
 
 function PartyComponent() { 
     const theme = useTheme()
     const styles = styleComponent(theme)
-    const dispatch = useAppDispatch()
+    const [AuthUser] = useContext(AuthContext);
     const {activeContainer} = useAppSelector(actions => actions.partySlice)
+    const dispatch = useAppDispatch()
 
+
+    async function onInit(roomId) {
+        const getMessagesByRoomId = await api.getMessagesByRoomId(roomId)
+        dispatch(init({
+            messages: getMessagesByRoomId
+        }))
+        
+    }
+    
+    useEffect(() => {
+        if (AuthUser && AuthUser?.roomId) {
+            onInit(AuthUser.roomId)
+        }
+    }, [AuthUser])
     function onMoveStartMovePartyContainer(e, part) {
         const partyRootContainer = e.currentTarget.closest('#partyRoot')
         onMovePartyContainer(partyRootContainer, part)
@@ -23,13 +39,18 @@ function PartyComponent() {
         <Box id="partyRoot" sx={styles.layout}>
             {
                 Object.keys(partyParts).map((part, idx) => (
-                    <Box data-partid={part} sx={styles.partyContainerItem}>
+                    <Box data-partid={part} sx={{
+                        ...styles.partyContainerItem,
+                        transform: part === 'chat' ? "translate(-28rem)" : "translate(0rem)"
+                    }}>
                         <Button onMouseDown={(e) => onMoveStartMovePartyContainer(e, part)} sx={{
                              ...styles.labelBtn,
                              ...dinamicStyles.activeLink(activeContainer === part),
                              top: (idx + 1) * 40 + 'px'
                         }} key={part}>{partyParts[part].icon}</Button>
                         <Paper  sx={styles.partyContainer}>
+                            <Typography sx={styles.partyContainerTitle} variant='h3'>{partyParts[part].label}</Typography>
+                            <Divider/>
                         {partyParts[part].component}
                         </Paper>
                     </Box>

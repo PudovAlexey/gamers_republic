@@ -7,6 +7,7 @@ export type User = {
   password?: string;
   confirmPassword?: string
   name: string;
+  roomId?: number;
   surname: string;
   token: string;
   favoriteCategories: number[];

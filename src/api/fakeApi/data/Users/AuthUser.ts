@@ -8,6 +8,7 @@ export const AuthUser: User = {
   name: 'Aleksey',
   surname: 'Pudov',
   token: 'testToken',
+  roomId: 10,
   favoriteCategories: [],
   likeGamesIds: [1, 3],
   avatar: avatar,

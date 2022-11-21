@@ -12,8 +12,14 @@ const styleComponent = function (theme) {
             position: 'absolute',
             height: "calc(100vh - 150px)",
             width: "30em",
-            left: "50px"
+            left: "50px",
+            background: "#1F2326"
 
+        },
+        partyContainerTitle: {
+            display: "flex",
+            justifyContent: 'center',
+            color: '#f8f8f8'
         },
         partyContainerItem: {
             top: '10px',

@@ -4,6 +4,8 @@ import { GameCategories } from './data/Games/GameCategories';
 import { gamesList } from './data/Games/GamesList';
 import { AuthUser } from './data/Users/AuthUser';
 import { Users } from './data/Users/UserList';
+import {messages} from './data/Chat/messages'
+import { rooms } from './data/Chat/rooms';
 
 class FakeApi {
   async getAuthUser(token) {
@@ -13,6 +15,27 @@ class FakeApi {
       req = await this.fakeDelay('not Auth');
     }
     return req;
+  }
+
+  async getMessagesByRoomId(roomId) {
+    const messagesFromChat = messages.filter(message => message.chatId === roomId)
+    let req = await this.fakeDelay(messagesFromChat);
+    if (req) {
+      return req
+    } else {
+      return {message: `Can't find messages in room ${roomId}`}
+    }
+
+  }
+
+  async getRoomById(roomId) {
+    const room = rooms.find(room => room.roomId === roomId)
+    let req = await this.fakeDelay(room);
+    if (req) {
+      return req
+    } else {
+      return {message: `Can't room by roomId ${roomId}`}
+    }
   }
 
   async login(data) {
