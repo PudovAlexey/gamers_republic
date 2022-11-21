@@ -6,14 +6,15 @@ const styleComponent = function (theme) {
         layout: {
             position: 'fixed',
             right: '0px',
-            zIndex: 9999
+            zIndex: 9999,
         },
         partyContainer: {
             position: 'absolute',
             height: "calc(100vh - 150px)",
             width: "30em",
             left: "50px",
-            background: "#1F2326"
+            background: "#1F2326",
+            maxHeight: "700px",
 
         },
         partyContainerTitle: {
