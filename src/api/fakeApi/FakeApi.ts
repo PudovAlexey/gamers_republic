@@ -19,6 +19,7 @@ class FakeApi {
 
   async getMessagesByRoomId(roomId) {
     const messagesFromChat = messages.filter(message => message.chatId === roomId)
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
     let req = await this.fakeDelay(messagesFromChat);
     if (req) {
       return req

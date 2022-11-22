@@ -9,6 +9,7 @@ import { dinamicStyles, styleComponent } from "./styles";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SendIcon from '@mui/icons-material/Send';
 import { DateViewer } from "./components/DateViewer";
+import { parseTime, parseTimeByString } from "../../../../utils/timer/timer";
 
 function ChatComponent() {
     const [AuthUser] = useContext(AuthContext)
@@ -27,7 +28,7 @@ function ChatComponent() {
                         <Box>
                             <DateViewer
                             prevMessageDate={messages[idx - 1]?.createdAt}
-                            message={createdAt}
+                            messageDate={createdAt}
                             nextMessageDate={messages[idx + 1]?.createdAt}
                             />
                             <Box sx={{
@@ -49,7 +50,12 @@ function ChatComponent() {
                             </Box>
                             <Paper sx={styles.messageText}>
                             {message}
-                            <Typography sx={styles.dateText}>{createdAt.replace(/.\d{4}$/, "")}</Typography>
+                            <Typography sx={styles.dateText}>{
+                                parseTimeByString({
+                                    time: createdAt,
+                                     formatter: ({hours, minutes}) => `${hours}:${minutes}`
+                                })
+                            }</Typography>
                                 </Paper>               
                             </Box>
                         </Box>

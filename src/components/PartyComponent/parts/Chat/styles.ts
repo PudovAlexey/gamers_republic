@@ -8,10 +8,12 @@ const styleComponent = function (theme) {
             height: "80%"
         },
         messageBox: {
-            overflow: 'auto',
+            overflowY: 'auto',
             display: 'flex',
             flexDirection: 'column-reverse',
-            gap: "15px"
+            gap: "15px",
+            overflowX: 'hidden',
+            padding: "5px 5px 5px 5px"
         },
         message: {
             display: 'flex',
