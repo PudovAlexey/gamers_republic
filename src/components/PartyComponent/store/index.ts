@@ -2,7 +2,8 @@ import { createSlice } from "@reduxjs/toolkit"
 
 const initialState = {
     activeContainer: null,
-    messages: []
+    messages: [],
+    replyMessage: null
 }
 
 const partySlice = createSlice({
@@ -15,13 +16,17 @@ const partySlice = createSlice({
         init: (store, action) => {
             const {messages} = action.payload
             store.messages = messages
+        },
+        setReplyMessage: (store, action) => {
+            store.replyMessage = action.payload
         }
     }
 })
 
 export const {
     setContainer,
-    init
+    init,
+    setReplyMessage
 } = partySlice.actions
 
 export default partySlice.reducer

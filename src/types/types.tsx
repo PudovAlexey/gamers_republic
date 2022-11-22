@@ -15,4 +15,16 @@ export type User = {
   avatar: string;
 };
 
+export type TMessage = {
+  message: string
+  createdAt: string
+  userId: number
+  chatId: number
+  replyFrom?: {
+    messageId: number,
+    userId: number
+  }
+  messageId: number
+}
+
 export type ChangeEvent = React.ChangeEvent<HTMLInputElement>;
