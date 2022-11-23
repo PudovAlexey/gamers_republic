@@ -5,9 +5,12 @@ import { IconButton, Paper, Typography } from '@mui/material';
 import { styleComponent } from '../styles';
 import { useTheme } from '@emotion/react';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAppSelector } from '../../../../../hooks/typedReduxHooks';
 function ReplyMessage() {
   const theme = useTheme();
   const styles = styleComponent(theme);
+  const {replyMessage} = useAppSelector((selector) => selector.partySlice)
+  if (!replyMessage) return null
   return (
     <Paper sx={styles.replyBox}>
       <ReplyIcon />
@@ -16,8 +19,7 @@ function ReplyMessage() {
         <Box sx={styles.replyMessageInfo}>
           <Typography sx={styles.replyUserName}>Pudov Aleksey</Typography>
           <Typography sx={styles.replyMessage}>
-            Here Some message Here Some message Here Some message Here Some
-            message
+            {replyMessage.message}
           </Typography>
         </Box>
       </Box>

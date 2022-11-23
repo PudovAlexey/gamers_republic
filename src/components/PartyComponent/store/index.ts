@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, current } from "@reduxjs/toolkit"
 
 const initialState = {
     activeContainer: null,
@@ -18,7 +18,12 @@ const partySlice = createSlice({
             store.messages = messages
         },
         setReplyMessage: (store, action) => {
-            store.replyMessage = action.payload
+            const messages = current(store.messages)
+            store.replyMessage = 
+            messages.find(message => message.messageId === action.payload)
+        },
+        removeReplyMessage: (store) => {
+            store.replyMessage = null
         }
     }
 })

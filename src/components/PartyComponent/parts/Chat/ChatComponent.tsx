@@ -9,7 +9,7 @@ import {
 } from '@mui/material';
 import { Box } from '@mui/system';
 import { useContext } from 'react';
-import { useAppSelector } from '../../../../hooks/typedReduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/typedReduxHooks';
 import { AuthContext } from '../../../AuthContext/AuthContext';
 import AvatarComponent from '../../../reusable/AvatarComponent/AvatarComponent';
 import { dinamicStyles, styleComponent } from './styles';
@@ -20,15 +20,18 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { parseTime, parseTimeByString } from '../../../../utils/timer/timer';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { ReplyMessage } from './components/ReplyMessage';
+import { setReplyMessage } from '../../store';
+import { AddsViewer } from './components/addsViewer/AddsViewer';
 
 function ChatComponent() {
   const [AuthUser] = useContext(AuthContext);
   const { messages } = useAppSelector((store) => store.partySlice);
+  const dispatch = useAppDispatch()
   const theme = useTheme();
   const styles = styleComponent(theme);
 
-  function onReplyMessagePress() {
-
+  function onReplyMessagePress(messageId) {
+    dispatch(setReplyMessage(messageId))
   }
 
   function onShowMenuButtonPress() {
@@ -38,7 +41,7 @@ function ChatComponent() {
   return (
     <Box sx={styles.layout}>
       <Box sx={styles.messageBox}>
-        {messages.map(({ message, userId, createdAt }, idx, messages) => {
+        {messages.map(({ message, userId, createdAt, messageId, adds }, idx, messages) => {
           return (
             <Box>
               <DateViewer
@@ -63,7 +66,7 @@ function ChatComponent() {
                       sx={styles.messageAvatar}
                       {...AuthUser}
                     />
-                    <IconButton onClick={onReplyMessagePress}>
+                    <IconButton onClick={() => onReplyMessagePress(messageId)}>
                         <ReplyIcon/>
                     </IconButton>
                     <IconButton onClick={onShowMenuButtonPress} aria-label='menu'>
@@ -72,6 +75,9 @@ function ChatComponent() {
                   </Box>
                   <Paper sx={styles.messageText}>
                     {message}
+                    {adds && (
+                      <AddsViewer adds={adds}/>
+                    )}
                     <Typography sx={styles.dateText}>
                       {parseTimeByString({
                         time: createdAt,
