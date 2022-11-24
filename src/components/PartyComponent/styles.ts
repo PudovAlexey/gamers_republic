@@ -30,7 +30,6 @@ const styleComponent = function (theme) {
 
         },
         labelBtn: {
-            // left: '-20px',
             height: '35px',
             width: '50px',
             position: 'relative',
