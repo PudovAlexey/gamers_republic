@@ -1,8 +1,10 @@
-// const addConfig = {
-//     img: <ImageGalery/>
-//     audio: <AudioGalery/>
-// }
+import { ImageGalery } from "../../../../../reusable/ImageGalery/ImageGalety"
 
-// export {
-//     addConfig
-// }
+const addConfig = {
+    img: <ImageGalery/>
+    audio: <AudioGalery/>
+}
+
+export {
+    addConfig
+}

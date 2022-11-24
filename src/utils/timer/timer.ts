@@ -1,4 +1,4 @@
-import { TParseTime } from './types';
+import { TParseTime, TTime } from './types';
 
 export function parseTime({ duration, type, formatter }: TParseTime) {
   const seconds = Math.floor(duration / 1000);
@@ -27,20 +27,24 @@ export function parseTime({ duration, type, formatter }: TParseTime) {
 export function parseTimeByString({
   time,
   type,
-  formatter
+  formatter,
+}: {
+  time: string;
+  type?: TTime;
+  formatter?: (values: Record<TTime, string>) => string;
 }) {
-  const date = new Date(time)
-  const addZero = (time) =>  time <= 9 ? `0${time}` : String(time)
-  const parseDate: Record<string, string> = {
+  const date = new Date(time);
+  const addZero = (time) => (time <= 9 ? `0${time}` : String(time));
+  const parseDate: Record<TTime, string> = {
     seconds: addZero(date.getSeconds()),
     minutes: addZero(date.getMinutes()),
     hours: addZero(date.getHours()),
     day: addZero(date.getDate()),
     month: addZero(date.getMonth() + 1),
-    stringMonth: date.toLocaleString("en-US", {
-      month: 'long'
+    stringMonth: date.toLocaleString('en-US', {
+      month: 'long',
     }),
-    year: addZero(date.getFullYear())
+    year: addZero(date.getFullYear()),
   };
 
   let timeByType;
@@ -51,5 +55,5 @@ export function parseTimeByString({
   } else {
     timeByType = parseDate;
   }
-  return timeByType
+  return timeByType;
 }

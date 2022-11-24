@@ -17,7 +17,7 @@ import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SendIcon from '@mui/icons-material/Send';
 import { DateViewer } from './components/DateViewer';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { parseTime, parseTimeByString } from '../../../../utils/timer/timer';
+import { parseTimeByString } from '../../../../utils/timer/timer';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { ReplyMessage } from './components/ReplyMessage';
 import { setReplyMessage } from '../../store';
@@ -36,6 +36,14 @@ function ChatComponent() {
 
   function onShowMenuButtonPress() {
 
+  }
+
+  function onAddAddsButtonPress() {
+
+  }
+
+  function onSendMessageButtonPress() {
+    
   }
 
   return (
@@ -101,8 +109,8 @@ function ChatComponent() {
             endAdornment: (
               <InputAdornment position="end">
                 <Box sx={styles.chatTools}>
-                  <CameraAltIcon />
-                  <SendIcon />
+                  <CameraAltIcon onClick={onAddAddsButtonPress} />
+                  <SendIcon onClick={onSendMessageButtonPress} />
                 </Box>
               </InputAdornment>
             ),

@@ -21,8 +21,13 @@ export type TMessage = {
   userId: number
   chatId: number
   replyFrom?: {
-    messageId: number,
+    messageId: number
     userId: number
+  },
+  edited?: string
+  adds?: {
+    img?: string[]
+    audio?: string[]
   }
   messageId: number
 }
