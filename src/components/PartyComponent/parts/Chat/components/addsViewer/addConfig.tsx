@@ -1,7 +1,7 @@
 import { ReactJSXElement } from "@emotion/react/types/jsx-namespace"
-import { AudioGalery } from "../../../../../reusable/AudioGalery/AudioGalery"
 import { ImageGalery } from "../../../../../reusable/ImageGalery/ImageGalety"
-import { ShowMoreModal } from "./parts/ImagesGalery/ImagesGalery"
+import { ShowMoreModal } from "./ShowMoreModal"
+import { VoiseAddsGalery } from "./VoiseAddsGalery/VoiseAddsGalery"
 
 type TConfig = Record<string, 
 (props: any) => ReactJSXElement >
@@ -21,7 +21,7 @@ const addConfig: TConfig = {
     audio: (audios) => <ShowMoreModal
     maxShow={4} 
     items={[...audios]}
-    renderItems={(items) => <AudioGalery audios={items}/>}
+    renderItems={(items) => <VoiseAddsGalery audios={items}/>}
     />
 }
 

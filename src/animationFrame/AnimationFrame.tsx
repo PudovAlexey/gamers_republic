@@ -12,8 +12,10 @@ export enum Borders {
   CenterX = 'centerX',
   CenterY = 'centerY',
 }
-export type Render = (
-  { canvas: HTMLCanvasElement, context: CanvasRenderingContext2D },
+export type Render = ({ 
+  canvas, 
+  context 
+},
   reverseY: (Y: number) => number,
   borders: TBorders
 ) => void;

@@ -7,8 +7,11 @@ const styleParams = {
   disabled: { container: { transform: 'translate(0em)' }, btn: {transform: 'translate(-0em)'}},
 };
 
-function onMovePartyContainerClick(partyContainer, activeContainer) {
-  Array.from(partyContainer.children).forEach((parrent) => {
+function onMovePartyContainerClick(
+  partyContainer: HTMLElement, 
+  activeContainer: HTMLElement
+  ) {
+  Array.from(partyContainer.children).forEach((parrent: HTMLElement) => {
     const [btn] = Array.from(parrent.children);
     setStylesByObject(btn, {transform: 'translate(0em)'})
     let params = {};
@@ -29,7 +32,7 @@ function onMovePartyContainerClick(partyContainer, activeContainer) {
 
 function onDrugPartyContainer(partyContainer, activeContainer) {
   let moveTo = null;
-  const [btn, container] = Array.from(activeContainer.children);
+  const [btn, container]: HTMLElement[] = Array.from(activeContainer.children);
   const bodyRight = $.rect($.byEl('body')).right;
   let prevX = 0;
   let init = true;
@@ -48,8 +51,8 @@ function onDrugPartyContainer(partyContainer, activeContainer) {
     ) {
       const coords = bodyRight - pageX;
       activeContainer.style.transform = `translate(${-coords + 'px'})`;
-      Array.from(partyContainer.children).forEach(parrent => {
-        const [btn, container] = Array.from(parrent.children)
+      Array.from(partyContainer.children).forEach((parrent: HTMLElement) => {
+        const [btn] = Array.from(parrent.children)
         if (!(activeContainer && activeContainer !== parrent)) {
             setStylesByObject(btn, {transform: 'translate(0em)'})
         }
@@ -67,8 +70,6 @@ function onDrugPartyContainer(partyContainer, activeContainer) {
         container.offsetWidth -
         1) *
         100;
-    const activeContainerRight = bodyRight - $.rect(activeContainer).right;
-    activeContainerRight / activeContainer.offsetWidth;
     const completeClose = moveTo === 'left' ? 10 : 90;
     const isActivate = calculatePercantageToClose >= completeClose || !activeContainer.style.transform ||  /0/.test(activeContainer.style.transform) ? activeContainer : null 
     store.dispatch(setContainer(isActivate?.dataset?.partid || isActivate))
@@ -85,7 +86,7 @@ function onDrugPartyContainer(partyContainer, activeContainer) {
 
 function onMovePartyContainer(partyContainer, part) {
   const activeContainer = Array.from(partyContainer.children).find(
-    (container) => container.dataset.partid === part
+    (container: HTMLElement) => container.dataset.partid === part
   );
   onDrugPartyContainer(partyContainer, activeContainer);
 }

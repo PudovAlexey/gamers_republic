@@ -7,7 +7,7 @@ import InputLabel from '@mui/material/InputLabel'
 
 type TComponentProps = {
 value: string
-onChange: (value: string) => void
+onChange?: (value: string) => void
 title?: string
 placeholder?: string
 validationRules?: {

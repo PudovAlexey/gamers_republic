@@ -1,11 +1,14 @@
-import { IconButton, Typography } from "@mui/material"
+import { IconButton, Typography, useTheme } from "@mui/material"
 import { Box } from "@mui/system"
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../../../hooks/typedReduxHooks";
-import { onExit, onInit } from "./store/playAudioSlice";
+import { onExit, onInit, onStartPlayMusic } from "./store/playAudioSlice";
+import { stylesComponent } from "./styles";
 
 function AudioViewer({audio}) {
+    const theme = useTheme()
+    const styles = stylesComponent(theme)
     const canvasEl = useRef()
     const audioEl = useRef()
     const dispatch = useAppDispatch()
@@ -13,24 +16,28 @@ function AudioViewer({audio}) {
     useEffect(() => {
         if (canvasEl.current) {
             dispatch(onInit({
-                canvas: canvasEl
+                canvas: canvasEl.current
             }))
         }
         return () => {
             dispatch(onExit())
         }
-    })
+    }, [])
 
     function togglePlay() {
-
+        if (audioEl.current) {
+            dispatch(onStartPlayMusic({
+                player: audioEl.current
+            }))
+        }
     }
 
     return (
-        <Box>
+        <Box sx={styles.voiseBox}>
             <IconButton onClick={togglePlay}>
                 <PlayArrowIcon/>
             </IconButton>
-           <Box>
+           <Box sx={styles.voiseProgress}>
            <audio ref={audioEl}>
                 <source 
                 type="audio/mp3"
@@ -38,7 +45,7 @@ function AudioViewer({audio}) {
                 >
                 </source>
             </audio>
-            <canvas ref={canvasEl} width={1200} height={250}></canvas>
+            <canvas style={styles.canvas} ref={canvasEl} width={"600"} height={"250"}></canvas>
            </Box>
            <Typography>0.00/1.15</Typography>
         </Box>

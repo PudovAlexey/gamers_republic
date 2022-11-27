@@ -8,6 +8,7 @@ import Auth from './components/AuthContext/AuthContext';
 import 'normalize.css';
 import { mainStyles } from './styles';
  import "./fonts.css"
+ import './types.d.ts'
 import PartyComponent from './components/PartyComponent/PartyComponent';
 
 function App({ children }) {

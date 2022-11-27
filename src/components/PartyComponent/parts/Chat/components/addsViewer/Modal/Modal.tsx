@@ -1,4 +1,4 @@
-import DialogControl from "../../../../../../../../reusable/Dialog/DialogControl"
+import DialogControl from "../../../../../../reusable/Dialog/DialogControl"
 
 function Modal({items, show, setShowModal, renderItems}) {
     function onShowMoreImagesPress() {
