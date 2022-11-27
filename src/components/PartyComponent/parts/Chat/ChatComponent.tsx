@@ -22,6 +22,7 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import { ReplyMessage } from './components/ReplyMessage';
 import { setReplyMessage } from '../../store';
 import { AddsViewer } from './components/addsViewer/AddsViewer';
+import { Message } from './components/Message/Message';
 
 function ChatComponent() {
   const [AuthUser] = useContext(AuthContext);
@@ -81,19 +82,11 @@ function ChatComponent() {
                         <MoreVertIcon/>
                     </IconButton>
                   </Box>
-                  <Paper sx={styles.messageText}>
-                    {message}
-                    {adds && (
-                      <AddsViewer adds={adds}/>
-                    )}
-                    <Typography sx={styles.dateText}>
-                      {parseTimeByString({
-                        time: createdAt,
-                        formatter: ({ hours, minutes }) =>
-                          `${hours}:${minutes}`,
-                      })}
-                    </Typography>
-                  </Paper>
+                  <Message
+                   message={message}
+                   adds={adds}
+                   createdAt={createdAt}
+                  />
                 </Box>
               </Box>
             </Box>

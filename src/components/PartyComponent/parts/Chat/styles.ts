@@ -109,6 +109,15 @@ const styleComponent = function (theme) {
         },
         chatInput: {
             borderRadius: "0px 0px 4px 4px"
+        },
+        showAdd: {
+            backgroundColor: "#1F2326",
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            height: "15px",
+            width: '100%',
+            borderRadius: "4px"
         }
     },
   })

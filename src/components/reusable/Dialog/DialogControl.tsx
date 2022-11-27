@@ -6,10 +6,26 @@ import {
   DialogTitle,
   IconButton,
 } from '@mui/material';
-import { useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
 
-function DialogControl({ title, children, open, setOpen, dialogActions }) {
+type TControlProps = {
+  title: string;
+  open: boolean;
+  setOpen: (value: boolean) => void;
+  children: JSX.Element
+  dialogActions?: {
+    text: string;
+    onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  }[];
+};
+
+function DialogControl({
+  title,
+  children,
+  open,
+  setOpen,
+  dialogActions,
+}: TControlProps) {
   const handleClose = () => {
     setOpen(!open);
   };
@@ -24,7 +40,7 @@ function DialogControl({ title, children, open, setOpen, dialogActions }) {
       <DialogContent>{children}</DialogContent>
       {dialogActions && dialogActions.length ? (
         <DialogActions>
-          {dialogActions.map((action, idx) => {
+          {(dialogActions || []).map((action, idx) => {
             return (
               <Button key={`action-${idx}`} onClick={action.onClick}>
                 {action.text}

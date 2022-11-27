@@ -6,12 +6,12 @@ const messages: TMessage[] = [
   {
     message:
       "Here audio",
-      createdAt: 	"2019.01.30 15:00",
+      createdAt: 	"2005.01.30 15:00",
       userId: 1,
       chatId: 10,
       adds: {
-        img: [batmanImg],
-        audio: [ramstainAudio]
+        img: [batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg],
+        audio: [ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio]
       },
       replyFrom: {
         messageId: 35,

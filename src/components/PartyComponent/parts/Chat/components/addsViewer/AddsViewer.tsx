@@ -1,13 +1,27 @@
 import { Box } from "@mui/system"
+import { addConfig } from "./addConfig"
 
-function AddsViewer({adds}) {
+type TControlProps = {
+    adds: {
+        img: Record<string, string[]>
+        audio: Record<string, string[]>
+    }
+}
+
+function AddsViewer({adds}: TControlProps) {
     return (
-    //     <audio
-    //     controls
-    //     >
-    //     <source type="audio/mp3" src={adds['audio'][0]}></source>
-    //     Your blowser is not support
-    // </audio>
+        <Box>
+            {Object.keys(adds || {}).map(add => {
+                return (
+                    <Box>
+                        {typeof addConfig[add] === 'function' ? 
+                addConfig[add](adds[add]) :
+                null
+            }
+                    </Box>
+                )
+            })}
+        </Box>
     )
 }
 
