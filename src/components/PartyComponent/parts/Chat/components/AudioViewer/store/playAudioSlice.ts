@@ -1,20 +1,41 @@
 import { createSlice, current } from '@reduxjs/toolkit';
 
+function onStopHandler() {
+  let onStop = true
+  return {
+    changeStop: (change) => {
+      console.log(change)
+      return onStop = change
+    },
+    getStop: () => {
+      console.log(onStop)
+      return onStop
+    }
+  }
+}
+
+const onStop = onStopHandler()
+
 const initialState: {
   canvas: HTMLCanvasElement | null
-  canvasContext: CanvasRenderingContext2D | null
+  audioControls: Record<string, {
+    play: boolean,
+    context: CanvasRenderingContext2D
+  }>
   audioContext: AudioContext | null
   analyser: AnalyserNode | null
   dataArray: Uint8Array
+  contextCreated: boolean
+  sourseNode: AudioBufferSourceNode
   bufferLength: any | null
   width: number | null
   height: number | null
-  play: boolean
 } = {
-  play: false,
+  contextCreated: false,
   canvas: null,
-  canvasContext: null,
+  audioControls: {},
   audioContext: null,
+  sourseNode: null,
   analyser: null,
   dataArray: null,
   bufferLength: null,
@@ -29,45 +50,86 @@ const playAudioSlice = createSlice({
   initialState,
   reducers: {
     onInit: (state, action) => {
-      const { canvas } = action.payload;
+      const { canvas, playerId } = action.payload;
       state.canvas = canvas;
       state.width = canvas.width;
       state.height = canvas.height;
-      state.canvasContext = canvas.getContext('2d');
+      let audioControls = state.audioControls
+      if (!audioControls) {
+        audioControls = {}
+      } else {
+        audioControls = current(state.audioControls)
+      }
+      
+      state.audioControls = {
+        ...audioControls,
+        [playerId]: {
+          play: false,
+          context: canvas.getContext('2d')
+        }
+      }
     },
     onStartPlayMusic: (state, action) => {
+    
+      const { player, playerId } = action.payload;
       state.play = !state.play
       const width = state.width
       const height = state.height
-      const audioContext = new window.AudioContext();
-      const canvasContext = state.canvasContext
-      const analyser = audioContext.createAnalyser();
-      const bufferLength = analyser.frequencyBinCount;
+      let audioContext
+      let analyser
+      let sourseNode
+      const audioControls = current(state.audioControls)
+      const currentControl = audioControls[playerId]
+      state.audioControls = {
+        ...audioControls,
+        [playerId]: {
+          ...audioControls[playerId],
+          play: !currentControl.play
+        }
+      }
+      if (currentControl.play) {
+        onStop.changeStop(false)
+        player.pause(0)
+      } else {
+        onStop.changeStop(true)
+        player.play(0)
+      }
+      if (!state.contextCreated) {
+        audioContext = new window.AudioContext();
+         state.audioContext = audioContext
+        analyser = audioContext.createAnalyser();
+        analyser.fftSize = 512;
+        state.audioContext = audioContext;
+        state.play = !state.play
+         player.childNodes[0].onplay = (e) => {
+           state.audioContext.resume();
+         };
+   
+         player.childNodes[0].addEventListener('play', () =>
+           state.audioContext.resume()
+           );
+           
+           sourseNode = audioContext.createMediaElementSource(player);
+           state.sourseNode = sourseNode
+           state.contextCreated = true
+          } else {
+            analyser = state.analyser
+            audioContext = state.audioContext
+            sourseNode = state.sourseNode
+          }
+          requestAnimationFrame(() => visualize(playerId));
+          sourseNode.connect(analyser);
+          analyser.connect(audioContext.destination);
+        const bufferLength = analyser.frequencyBinCount;
+        state.analyser = analyser;
+        state.bufferLength = bufferLength;
       const dataArray = new Uint8Array(bufferLength);
-      const { player } = action.payload;
-      state.analyser = analyser;
-      state.bufferLength = bufferLength;
       state.dataArray = dataArray
-      analyser.fftSize = 512;
-      state.audioContext = audioContext;
-      player.play(0)
-      player.childNodes[0].onplay = (e) => {
-        state.audioContext.resume();
-      };
 
-      player.childNodes[0].addEventListener('play', () =>
-        state.audioContext.resume()
-      );
-
-      var sourceNode = state.audioContext.createMediaElementSource(player);
-
-      sourceNode.connect(analyser);
-      state.analyser.connect(audioContext.destination);
-      requestAnimationFrame(visualize);
-
-      function visualize() {
+      function visualize(playerId) {
+        let isStop = onStop.getStop()
         // очистить canvas
-        canvasContext.clearRect(0, 0, width, height);
+        audioControls[playerId].context.clearRect(0, 0, width, height);
         
         // Или используйте заливку RGBA, чтобы получить небольшой эффект размытия
         //canvasContext.fillStyle = 'rgba (0, 0, 0, 0.5)';
@@ -88,20 +150,23 @@ const playAudioSlice = createSlice({
               barHeight = dataArray[i];
       
       
-              canvasContext.fillStyle = 'rgb(' + (barHeight+0) + ',4,160)';
+              audioControls[playerId].context.fillStyle = 'rgb(' + (barHeight+0) + ',4,160)';
               barHeight *= heightScale;
-              canvasContext.fillRect(x, height-barHeight/2, barWidth, barHeight/2);
+              audioControls[playerId].context.fillRect(x, height-barHeight/2, barWidth, barHeight/2);
       
               // 2 - количество пикселей между столбцами
               x += barWidth + 2;
             }
         
         // вызовите снова функцию визуализации со скоростью 60 кадров / с
-        requestAnimationFrame(visualize);
+        if (isStop) {
+          requestAnimationFrame(() => visualize(playerId));
+
+        }
         
       }
         // очистить canvas
-        canvasContext.clearRect(0, 0, width, height);
+        audioControls[playerId].context.clearRect(0, 0, width, height);
         
         // Или используйте заливку RGBA, чтобы получить небольшой эффект размытия
         //canvasContext.fillStyle = 'rgba (0, 0, 0, 0.5)';
@@ -122,9 +187,9 @@ const playAudioSlice = createSlice({
               barHeight = dataArray[i];
       
       
-              canvasContext.fillStyle = 'rgb(' + (barHeight+0) + ',4,160)';
+              audioControls[playerId].context.fillStyle = 'rgb(' + (barHeight+0) + ',4,160)';
               barHeight *= heightScale;
-              canvasContext.fillRect(x, height-barHeight/2, barWidth, barHeight/2);
+              audioControls[playerId].context.fillRect(x, height-barHeight/2, barWidth, barHeight/2);
       
               // 2 - количество пикселей между столбцами
               x += barWidth + 2;
