@@ -4,11 +4,9 @@ function onStopHandler() {
   let onStop = true
   return {
     changeStop: (change) => {
-      console.log(change)
       return onStop = change
     },
     getStop: () => {
-      console.log(onStop)
       return onStop
     }
   }
@@ -77,7 +75,7 @@ const playAudioSlice = createSlice({
       const height = state.height
       let audioContext
       let analyser
-      let sourseNode
+      let sourseNode = state.sourseNode
       const audioControls = current(state.audioControls)
       const currentControl = audioControls[playerId]
       state.audioControls = {
@@ -87,13 +85,7 @@ const playAudioSlice = createSlice({
           play: !currentControl.play
         }
       }
-      if (currentControl.play) {
-        onStop.changeStop(false)
-        player.pause(0)
-      } else {
-        onStop.changeStop(true)
-        player.play(0)
-      }
+     
       if (!state.contextCreated) {
         audioContext = new window.AudioContext();
          state.audioContext = audioContext
@@ -109,17 +101,37 @@ const playAudioSlice = createSlice({
            state.audioContext.resume()
            );
            
-           sourseNode = audioContext.createMediaElementSource(player);
-           state.sourseNode = sourseNode
-           state.contextCreated = true
-          } else {
-            analyser = state.analyser
-            audioContext = state.audioContext
-            sourseNode = state.sourseNode
+           try {
+            sourseNode = audioContext.createMediaElementSource(player);
+            state.sourseNode = sourseNode
+          } catch(err) {
+            console.log(err)
           }
-          requestAnimationFrame(() => visualize(playerId));
-          sourseNode.connect(analyser);
-          analyser.connect(audioContext.destination);
+          
+          state.contextCreated = true
+        } else {
+          analyser = state.analyser
+          audioContext = state.audioContext
+          sourseNode = state.sourseNode
+        }
+        if (currentControl.play) {
+          onStop.changeStop(false)
+          // const audioContext = state.audioContext
+          //  sourseNode.disconnect(analyser)
+          // analyser.disconnect(audioContext.destination)
+          // state.analyser = null
+          // state.sourseNode = null
+          // state.audioContext = null
+          // state.contextCreated = false
+          player.pause(0)
+          return
+        } else {
+          onStop.changeStop(true)
+          player.play(0)
+        }
+        sourseNode.connect(analyser);
+        analyser.connect(audioContext.destination);
+        requestAnimationFrame(() => visualize(playerId));
         const bufferLength = analyser.frequencyBinCount;
         state.analyser = analyser;
         state.bufferLength = bufferLength;
@@ -128,22 +140,15 @@ const playAudioSlice = createSlice({
 
       function visualize(playerId) {
         let isStop = onStop.getStop()
-        // очистить canvas
+
         audioControls[playerId].context.clearRect(0, 0, width, height);
-        
-        // Или используйте заливку RGBA, чтобы получить небольшой эффект размытия
-        //canvasContext.fillStyle = 'rgba (0, 0, 0, 0.5)';
-        //canvasContext.fillRect(0, 0, width, height);
-        
-        // Получить данные анализатора
+ 
         analyser.getByteFrequencyData(dataArray);
       
          var barWidth = width / bufferLength;
             var barHeight;
             var x = 0;
          
-            // значения изменяются от 0 до 256, а высота холста равна 100. Давайте изменим масштаб
-            // перед отрисовкой. Это масштабный коэффициент
             heightScale = height/128;
         
             for(var i = 0; i < bufferLength; i++) {
@@ -154,18 +159,18 @@ const playAudioSlice = createSlice({
               barHeight *= heightScale;
               audioControls[playerId].context.fillRect(x, height-barHeight/2, barWidth, barHeight/2);
       
-              // 2 - количество пикселей между столбцами
               x += barWidth + 2;
             }
         
-        // вызовите снова функцию визуализации со скоростью 60 кадров / с
         if (isStop) {
           requestAnimationFrame(() => visualize(playerId));
 
+        } else {
+              audioControls[playerId].context.clearRect(0, 0, width, height);
         }
         
       }
-        // очистить canvas
+    
         audioControls[playerId].context.clearRect(0, 0, width, height);
         
         // Или используйте заливку RGBA, чтобы получить небольшой эффект размытия
