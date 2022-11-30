@@ -4,8 +4,12 @@ const styleComponent = function (theme) {
   return reactCSS({
     default: {
         layout: {
-            overflow: 'auto',
-            height: "67%"
+            overflowX: 'hidden',
+            overflowY: 'auto',
+            height: "67%",
+            display: "flex",
+            flexDirection: 'column-reverse'
+
         },
         messageBox: {
             overflowY: 'auto',

@@ -27,6 +27,7 @@ const initialState: {
   sourseNode: AudioBufferSourceNode
   bufferLength: any | null
   width: number | null
+  sourseNodeById: any
   height: number | null
 } = {
   contextCreated: false,
@@ -35,6 +36,7 @@ const initialState: {
   audioContext: null,
   sourseNode: null,
   analyser: null,
+  sourseNodeById: {},
   dataArray: null,
   bufferLength: null,
   width: null,
@@ -74,8 +76,12 @@ const playAudioSlice = createSlice({
       const width = state.width
       const height = state.height
       let audioContext
-      let analyser
-      let sourseNode = state.sourseNode
+      let analyser = state.analyser
+      let sourseNode
+      if (state.sourseNodeById) {
+        const courceNodeIds = current(state.sourseNodeById)
+        sourseNode = courceNodeIds[playerId]
+      }
       const audioControls = current(state.audioControls)
       const currentControl = audioControls[playerId]
       state.audioControls = {
@@ -88,8 +94,9 @@ const playAudioSlice = createSlice({
      
       if (!state.contextCreated) {
         audioContext = new window.AudioContext();
-         state.audioContext = audioContext
         analyser = audioContext.createAnalyser();
+        state.analyser = analyser
+         state.audioContext = audioContext
         analyser.fftSize = 512;
         state.audioContext = audioContext;
         state.play = !state.play
@@ -101,27 +108,36 @@ const playAudioSlice = createSlice({
            state.audioContext.resume()
            );
            
-           try {
-            sourseNode = audioContext.createMediaElementSource(player);
-            state.sourseNode = sourseNode
-          } catch(err) {
-            console.log(err)
-          }
-          
-          state.contextCreated = true
-        } else {
-          analyser = state.analyser
+           // state.sourseNode = sourseNode
+           let sourseNodeById
+           if (state.sourseNodeById) {
+             sourseNodeById = current(state.sourseNodeById)
+            } else {
+              sourseNodeById = {}
+            }
+            if (!sourseNodeById[playerId]) {
+              sourseNode = audioContext.createMediaElementSource(player);
+              sourseNode.connect(analyser);
+              state.sourseNodeById = {
+                ...sourseNodeById,
+                [playerId]: sourseNode
+              }
+            }
+          } else {
+            analyser = state.analyser
           audioContext = state.audioContext
           sourseNode = state.sourseNode
         }
         if (currentControl.play) {
           onStop.changeStop(false)
-          // const audioContext = state.audioContext
-          //  sourseNode.disconnect(analyser)
+          const audioContext = state.audioContext
+          //  if (sourseNode) sourseNode.disconnect(analyser)
           // analyser.disconnect(audioContext.destination)
           // state.analyser = null
-          // state.sourseNode = null
-          // state.audioContext = null
+          state.sourseNode = null
+          state.audioContext = null
+          // audioContext.close()
+          state.audioContext = null
           // state.contextCreated = false
           player.pause(0)
           return
@@ -129,18 +145,17 @@ const playAudioSlice = createSlice({
           onStop.changeStop(true)
           player.play(0)
         }
-        sourseNode.connect(analyser);
-        analyser.connect(audioContext.destination);
+       if (!state.contextCreated) analyser.connect(audioContext.destination);
         requestAnimationFrame(() => visualize(playerId));
         const bufferLength = analyser.frequencyBinCount;
-        state.analyser = analyser;
         state.bufferLength = bufferLength;
       const dataArray = new Uint8Array(bufferLength);
       state.dataArray = dataArray
-
+      state.contextCreated = true
+      
       function visualize(playerId) {
         let isStop = onStop.getStop()
-
+        
         audioControls[playerId].context.clearRect(0, 0, width, height);
  
         analyser.getByteFrequencyData(dataArray);

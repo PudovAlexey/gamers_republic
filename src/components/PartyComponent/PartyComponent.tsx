@@ -18,7 +18,12 @@ function PartyComponent() {
 
 
     async function onInit(roomId) {
-        const getMessagesByRoomId = await api.getMessagesByRoomId(roomId)
+        const getMessagesByRoomId = await api.getMessagesByRoomId({
+            roomId,
+            messageStart: 'end',
+            offset: 20,
+            where: 'up'
+        })
         dispatch(init({
             messages: getMessagesByRoomId
         }))

@@ -7,6 +7,40 @@ import { Users } from './data/Users/UserList';
 import {messages} from './data/Chat/messages'
 import { rooms } from './data/Chat/rooms';
 
+function filterMessagesTop({messagesFromChat, offset, startForm}) {
+  console.log('MESSAGESTOP')
+  let filterMessages = []
+  const endCount = startForm - offset
+for(let i = startForm; i > endCount; i--) {
+  if (!messagesFromChat[i]) break;
+  filterMessages.push(messagesFromChat[i])
+}
+  return filterMessages
+}
+
+function filterMessagesMiddle({messagesFromChat, offset, startForm}) {
+  let filterMessages = []
+  for(let i = startForm; i > offset / 2; i--) {
+    if (!messagesFromChat[i]) break;
+    filterMessages.push(messagesFromChat[i])
+  }
+  for(let i = 0; i < offset; i++) {
+    if (!messagesFromChat[i]) break;
+    filterMessages.push(messagesFromChat[i])
+  }
+    return filterMessages
+}
+
+function filterMessagesBottom({messagesFromChat, offset, startForm}) {
+  let filterMessages = []
+  const messageEnd = startForm + offset
+  for(let i = startForm; i < messageEnd; i++) {
+    if (!messagesFromChat[i]) break;
+    filterMessages.push(messagesFromChat[i])
+  }
+    return filterMessages
+}
+
 class FakeApi {
   async getAuthUser(token) {
     let isAuth = AuthUser.token === token;
@@ -17,10 +51,32 @@ class FakeApi {
     return req;
   }
 
-  async getMessagesByRoomId(roomId) {
+  async getMessagesByRoomId({
+    roomId,
+    messageStart,
+    offset,
+    where
+  }) {
     const messagesFromChat = messages.filter(message => message.chatId === roomId)
     .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
-    let req = await this.fakeDelay(messagesFromChat);
+    let startForm
+    if (messageStart === 'start') {
+      startForm = 0
+    } else if (messageStart === 'end') {
+      startForm = messagesFromChat.length - 1
+    } else if (typeof messageStart === 'number') {
+      startForm = messagesFromChat.findIndex(message => message.messageId === messageStart)
+    }
+    let messagesByOffset
+    switch(where) {
+      case 'up': messagesByOffset = filterMessagesTop({messagesFromChat, offset, startForm})
+        break;
+      case 'down': messagesByOffset = filterMessagesBottom({messagesFromChat, offset, startForm})
+        break;
+      case 'center': messagesByOffset = filterMessagesMiddle({messagesFromChat, offset, startForm})
+    }
+
+    let req = await this.fakeDelay(messagesByOffset);
     if (req) {
       return req
     } else {
