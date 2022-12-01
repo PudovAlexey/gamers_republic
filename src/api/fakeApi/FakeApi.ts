@@ -58,7 +58,7 @@ class FakeApi {
     where
   }) {
     const messagesFromChat = messages.filter(message => message.chatId === roomId)
-    .sort((a, b) => new Date(b.createdAt).valueOf() - new Date(a.createdAt).valueOf())
+    .sort((a, b) => new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf())
     let startForm
     if (messageStart === 'start') {
       startForm = 0

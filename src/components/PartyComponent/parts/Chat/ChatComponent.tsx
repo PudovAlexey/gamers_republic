@@ -29,7 +29,7 @@ import { Message } from './components/Message/Message';
 
 function ChatComponent() {
   const [AuthUser] = useContext(AuthContext);
-  const { messages } = useAppSelector((store) => store.partySlice);
+  const { messages, messagesData } = useAppSelector((store) => store.partySlice);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const styles = styleComponent(theme);
@@ -45,13 +45,17 @@ function ChatComponent() {
   function onSendMessageButtonPress() {}
 
   function onScrollMessages(e) {
-    const topParrentContainer = e.target.getBoundingClientRect().top;
-    const lastMessageOnScreen = Array.from(e.target.children).find(
-      (child) =>
-        child.getBoundingClientRect().top <=
-        e.target.getBoundingClientRect().top
-    );
-    console.log(messages, e);
+    const {
+      scrollDirection,
+      messagesOnScreen,
+      } = messagesData.update(e.target)
+    // const topParrentContainer = e.target.getBoundingClientRect().top;
+    // const lastMessageOnScreen = Array.from(e.target.children).find(
+    //   (child) =>
+    //     child.getBoundingClientRect().top <=
+    //     e.target.getBoundingClientRect().top
+    // );
+    // console.log(messages, e);
   }
 
   return (

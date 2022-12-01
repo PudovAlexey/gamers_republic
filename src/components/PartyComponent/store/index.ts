@@ -1,8 +1,10 @@
 import { createSlice, current } from "@reduxjs/toolkit"
+import { getMessagesData } from "../parts/Chat/services/scrollService"
 
 const initialState = {
     activeContainer: null,
     messages: [],
+    messagesData: null,
     replyMessage: null
 }
 
@@ -14,8 +16,10 @@ const partySlice = createSlice({
             store.activeContainer = action.payload
         },
         init: (store, action) => {
+            const messagesData = getMessagesData()
             const {messages} = action.payload
             store.messages = messages
+            store.messagesData = messagesData
         },
         setReplyMessage: (store, action) => {
             const messages = current(store.messages)
