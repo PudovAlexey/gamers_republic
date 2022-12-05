@@ -42,7 +42,6 @@ function DateViewer({
             </Typography>
         </Box>
     )
-    console.log(dateDiff)
     return !dateDiff ? null : dateView
 
 }

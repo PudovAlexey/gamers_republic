@@ -5,7 +5,7 @@ import { onMovePartyContainer } from "./animation/main"
 import { partyParts } from "./config"
 import { dinamicStyles, styleComponent } from "./styles"
 import { useAppDispatch, useAppSelector } from '../../hooks/typedReduxHooks'
-import { init } from './store'
+import { fetchMessages, init } from './store'
 import { AuthContext } from '../AuthContext/AuthContext'
 import api from '../../api/api'
 
@@ -18,20 +18,17 @@ function PartyComponent() {
 
 
     async function onInit(roomId) {
-        const getMessagesByRoomId = await api.getMessagesByRoomId({
-            roomId,
-            messageStart: 'end',
-            offset: 20,
-            where: 'up'
-        })
-        dispatch(init({
-            messages: getMessagesByRoomId
+        dispatch(fetchMessages({
+            roomId
         }))
         
     }
     
     useEffect(() => {
         if (AuthUser && AuthUser?.roomId) {
+            dispatch(init({
+                roomId: AuthUser.roomId
+            }))
             onInit(AuthUser.roomId)
         }
     }, [AuthUser])

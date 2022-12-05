@@ -23,13 +23,13 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { parseTimeByString } from '../../../../utils/timer/timer';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { ReplyMessage } from './components/ReplyMessage';
-import { setReplyMessage } from '../../store';
+import { fetchMessages, onUpdateMessages, setReplyMessage } from '../../store';
 import { AddsViewer } from './components/addsViewer/AddsViewer';
 import { Message } from './components/Message/Message';
 
 function ChatComponent() {
   const [AuthUser] = useContext(AuthContext);
-  const { messages, messagesData } = useAppSelector((store) => store.partySlice);
+  const { messages, messagesData, roomData } = useAppSelector((store) => store.partySlice);
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const styles = styleComponent(theme);
@@ -43,19 +43,27 @@ function ChatComponent() {
   function onAddAddsButtonPress() {}
 
   function onSendMessageButtonPress() {}
-
+  let i = 0
   function onScrollMessages(e) {
     const {
       scrollDirection,
       messagesOnScreen,
+      lastMessage,
+      firstMessage
       } = messagesData.update(e.target)
-    // const topParrentContainer = e.target.getBoundingClientRect().top;
-    // const lastMessageOnScreen = Array.from(e.target.children).find(
-    //   (child) =>
-    //     child.getBoundingClientRect().top <=
-    //     e.target.getBoundingClientRect().top
-    // );
-    // console.log(messages, e);
+      if (87 === messagesOnScreen[messagesOnScreen.length - 1] && i === 0) {
+        i = 1
+        dispatch(fetchMessages({
+          roomId: roomData.roomId,
+          messageStart: messagesOnScreen[messagesOnScreen.length - 1],
+          offset: 20,
+          where: scrollDirection
+      }))
+      }
+      // dispatch(onUpdateMessages({
+      //   scrollDirection,
+      //   messagesOnScreen
+      // }))
   }
 
   return (
@@ -63,7 +71,7 @@ function ChatComponent() {
       {messages.map(
         ({ message, userId, createdAt, messageId, adds }, idx, messages) => {
           return (
-            <Box data-messageId={messageId}>
+            <Box key={idx} data-messageId={messageId}>
               <DateViewer
                 prevMessageDate={messages[idx - 1]?.createdAt}
                 messageDate={createdAt}

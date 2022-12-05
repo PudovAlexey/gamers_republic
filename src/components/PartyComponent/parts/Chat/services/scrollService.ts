@@ -19,11 +19,11 @@ function getMessagesData() {
         scrollDirection = 'draw';
       }
       prevScrollTop = target.scrollTop;
-
-      console.log(messagesOnScreen.map(m => m.dataset.messageid))
       return {
+        lastMessage: +target.lastChild.previousElementSibling.dataset.messageid + 10,
         scrollDirection,
-        messagesOnScreen,
+        messagesOnScreen: messagesOnScreen.map(m => +m.dataset.messageid),
+        firstMessage: +target.firstChild.dataset.messageid
       };
     },
   };
