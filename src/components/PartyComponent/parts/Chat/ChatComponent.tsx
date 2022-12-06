@@ -1,3 +1,4 @@
+import React from 'react';
 import { useTheme } from '@emotion/react';
 import {
   FormControl,
@@ -29,7 +30,9 @@ import { Message } from './components/Message/Message';
 
 function ChatComponent() {
   const [AuthUser] = useContext(AuthContext);
-  const { messages, messagesData, roomData } = useAppSelector((store) => store.partySlice);
+  const { messages, messagesData, roomData } = useAppSelector(
+    (store) => store.partySlice
+  );
   const dispatch = useAppDispatch();
   const theme = useTheme();
   const styles = styleComponent(theme);
@@ -43,75 +46,56 @@ function ChatComponent() {
   function onAddAddsButtonPress() {}
 
   function onSendMessageButtonPress() {}
-  let i = 0
+  let i = 0;
   function onScrollMessages(e) {
-    const {
-      scrollDirection,
-      messagesOnScreen,
-      lastMessage,
-      firstMessage
-      } = messagesData.update(e.target)
-      if (87 === messagesOnScreen[messagesOnScreen.length - 1] && i === 0) {
-        i = 1
-        dispatch(fetchMessages({
+    const {scrollTop, scrollHeight} = e.target
+    const { scrollDirection, messagesOnScreen, queryMessage} =
+      messagesData.update(e.target);
+    if ((scrollTop >= 600 && scrollDirection === 'down') || ((scrollHeight - Math.abs(scrollTop)) <= 750 && scrollDirection === 'up')) {
+      i = 1;
+      dispatch(
+        fetchMessages({
           roomId: roomData.roomId,
-          messageStart: messagesOnScreen[messagesOnScreen.length - 1],
+          messageStart: queryMessage,
           offset: 20,
-          where: scrollDirection
-      }))
-      }
-      // dispatch(onUpdateMessages({
-      //   scrollDirection,
-      //   messagesOnScreen
-      // }))
+          where: scrollDirection,
+        })
+      );
+    }
+    // dispatch(onUpdateMessages({
+    //   scrollDirection,
+    //   messagesOnScreen
+    // }))
   }
+  function MesssageComponent({messageId, messageIds}) {
+    return (
+      <Box key={messageId}>
+        <Message
+          // prevMessageId={messageIds[idx - 1]}
+          messageId={messageId}
+          // nextMessageId={messageIds[idx + 1]}
+        />
+      </Box>
+    );
+  }
+ 
+ const memoMessages = messages.map((messageId, messageIds) => {
+  const MemoComponent = React.memo(MesssageComponent)
+  return <MemoComponent messageId={messageId} messageIds={messageIds}  key={messageId} index={messageId} />
+    // return (
+    //   <Box key={messageId}>
+    //     <Message
+    //       prevMessageId={messageIds[idx - 1]}
+    //       messageId={messageId}
+    //       nextMessageId={messageIds[idx + 1]}
+    //     />
+    //   </Box>
+    // );
+  })
 
   return (
     <Box onScroll={onScrollMessages} sx={styles.layout}>
-      {messages.map(
-        ({ message, userId, createdAt, messageId, adds }, idx, messages) => {
-          return (
-            <Box key={idx} data-messageId={messageId}>
-              <DateViewer
-                prevMessageDate={messages[idx - 1]?.createdAt}
-                messageDate={createdAt}
-                nextMessageDate={messages[idx + 1]?.createdAt}
-              />
-              <Box
-                sx={{
-                  ...styles.message,
-                  ...dinamicStyles.chatByUser(userId, AuthUser),
-                }}
-              >
-                <Box sx={styles.messageItem}>
-                  <Box
-                    sx={{
-                      ...styles.messageInfo,
-                      ...dinamicStyles.avatarByUser(userId, AuthUser),
-                    }}
-                  >
-                    <AvatarComponent sx={styles.messageAvatar} {...AuthUser} />
-                    <IconButton onClick={() => onReplyMessagePress(messageId)}>
-                      <ReplyIcon />
-                    </IconButton>
-                    <IconButton
-                      onClick={onShowMenuButtonPress}
-                      aria-label="menu"
-                    >
-                      <MoreVertIcon />
-                    </IconButton>
-                  </Box>
-                  <Message
-                    message={message}
-                    adds={adds}
-                    createdAt={createdAt}
-                  />
-                </Box>
-              </Box>
-            </Box>
-          );
-        }
-      )}
+      {memoMessages}
       <FormControl sx={styles.input}>
         <ReplyMessage />
         <TextField
@@ -133,4 +117,6 @@ function ChatComponent() {
   );
 }
 
-export { ChatComponent };
+export {
+  ChatComponent
+}

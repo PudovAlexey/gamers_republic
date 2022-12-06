@@ -19,11 +19,14 @@ function getMessagesData() {
         scrollDirection = 'draw';
       }
       prevScrollTop = target.scrollTop;
+      const messageIds = messagesOnScreen.map((m) => +m?.children?.[0]?.dataset?.messageid)
       return {
-        lastMessage: +target.lastChild.previousElementSibling.dataset.messageid + 10,
+        lastMessage:
+          +target.lastChild.previousElementSibling.dataset.messageid + 10,
         scrollDirection,
-        messagesOnScreen: messagesOnScreen.map(m => +m.dataset.messageid),
-        firstMessage: +target.firstChild.dataset.messageid
+        messagesOnScreen: messageIds,
+        queryMessage: scrollDirection === 'up' ? messageIds[messageIds.length - 1] : messageIds[0],
+        firstMessage: +target.firstChild.dataset.messageid,
       };
     },
   };
@@ -41,17 +44,17 @@ function onMoveTop(target, currentStateMessages): Element[] {
     if (targetMessage) newMessagesOnScreen.push(targetMessage);
     targetCoods = targetMessage ? $.rect(targetMessage).top : null;
   } while (targetCoods && targetCoods > targetTop);
-  const mergeMessages = currentStateMessages.concat(newMessagesOnScreen)
+  const mergeMessages = currentStateMessages.concat(newMessagesOnScreen);
   const messages = mergeMessages.filter(
     (message) =>
       $.rect(message).top > targetTop && $.rect(message).top < targetBottom
   );
-  return [...new Set(messages)]
+  return [...new Set(messages)];
 }
 
 function onMoveBottom(target, currentStateMessages): Element[] {
   const targetBottom = $.rect(target).bottom;
-  const targetTop = $.rect(target).top
+  const targetTop = $.rect(target).top;
   let newMessagesOnScreen = [];
   let targetMessage = currentStateMessages[currentStateMessages.length - 1];
   let targetCoods = $.rect(targetMessage).bottom;
@@ -60,14 +63,12 @@ function onMoveBottom(target, currentStateMessages): Element[] {
     if (targetMessage) newMessagesOnScreen.push(targetMessage);
     targetCoods = targetMessage ? $.rect(targetMessage).bottom : null;
   } while (targetCoods && targetCoods > targetBottom);
-  const mergeMessages = currentStateMessages.concat(newMessagesOnScreen)
+  const mergeMessages = currentStateMessages.concat(newMessagesOnScreen);
   const messages = mergeMessages.filter(
     (message) =>
       $.rect(message).top > targetTop && $.rect(message).top < targetBottom
   );
-  return [...new Set(messages)]
-
-
+  return [...new Set(messages)];
 }
 
 export { onMoveTop, onMoveBottom, getMessagesData };

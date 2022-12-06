@@ -6,6 +6,7 @@ const initialState = {
     activeContainer: null,
     roomData: null,
     messages: [],
+    messageById: {},
     messagesData: null,
     replyMessage: null
 }
@@ -79,13 +80,13 @@ const partySlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(fetchMessages.fulfilled, (state, action) => {
-            // Add user to the state array
-            // const messages = 
-            //     messages.push(action.payload)
-            // state.messages = messages
-            console.log(action.payload, 'scroll')
+       
             if (Array.isArray(action.payload)) action.payload.forEach(message => {
-                state.messages.push(message)
+                const {messageId} = message
+                if (!state.messageById[messageId]) {
+                    state.messages.push(messageId)
+                state.messageById[messageId] = message
+                }
             })
           })
     }
