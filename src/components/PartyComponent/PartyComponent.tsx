@@ -13,7 +13,7 @@ function PartyComponent() {
     const theme = useTheme()
     const styles = styleComponent(theme)
     const [AuthUser] = useContext(AuthContext);
-    const {activeContainer} = useAppSelector(actions => actions.partySlice)
+    const activeContainer = useAppSelector(actions => actions.partySlice.activeContainer)
     const dispatch = useAppDispatch()
 
 

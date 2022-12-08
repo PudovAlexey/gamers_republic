@@ -71,9 +71,7 @@ function ChatComponent() {
     return (
       <Box key={messageId}>
         <Message
-          // prevMessageId={messageIds[idx - 1]}
           messageId={messageId}
-          // nextMessageId={messageIds[idx + 1]}
         />
       </Box>
     );
@@ -82,15 +80,6 @@ function ChatComponent() {
  const memoMessages = messages.map((messageId, messageIds) => {
   const MemoComponent = React.memo(MesssageComponent)
   return <MemoComponent messageId={messageId} messageIds={messageIds}  key={messageId} index={messageId} />
-    // return (
-    //   <Box key={messageId}>
-    //     <Message
-    //       prevMessageId={messageIds[idx - 1]}
-    //       messageId={messageId}
-    //       nextMessageId={messageIds[idx + 1]}
-    //     />
-    //   </Box>
-    // );
   })
 
   return (

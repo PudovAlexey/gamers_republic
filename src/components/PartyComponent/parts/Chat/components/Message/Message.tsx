@@ -10,8 +10,9 @@ import AvatarComponent from "../../../../../reusable/AvatarComponent/AvatarCompo
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ReplyIcon from '@mui/icons-material/Reply';
 import { AuthContext } from "../../../../../AuthContext/AuthContext"
+import MessageText  from "./components/MessageText"
 
-function Message({prevMessageId, messageId, nextMessageId}) {
+function Message({messageId}) {
   const [AuthUser] = useContext(AuthContext);
     const theme = useTheme()
     const styles = styleComponent(theme)
@@ -32,6 +33,15 @@ function Message({prevMessageId, messageId, nextMessageId}) {
     }
 
     function onShowMenuButtonPress() {}
+    return (
+      <Paper data-messageId={messageId} sx={{
+        mb: '15px',
+        height: '50px'
+      }}>
+          <MessageText messageId={messageId}/>
+        {/* <Typography>{message.message}</Typography> */}
+      </Paper>
+    )
     return (
       <Box key={messageId} data-messageId={messageId}>
       {/* <DateViewer
