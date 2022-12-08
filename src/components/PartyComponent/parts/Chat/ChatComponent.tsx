@@ -62,10 +62,6 @@ function ChatComponent() {
         })
       );
     }
-    // dispatch(onUpdateMessages({
-    //   scrollDirection,
-    //   messagesOnScreen
-    // }))
   }
   function MesssageComponent({messageId, messageIds}) {
     return (

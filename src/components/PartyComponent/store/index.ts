@@ -1,7 +1,5 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
 import api from "../../../api/api"
-import { getMessagesData } from "../parts/Chat/services/scrollService"
-
 const initialState = {
     activeContainer: null,
     roomData: null,
@@ -44,19 +42,19 @@ const partySlice = createSlice({
             store.activeContainer = action.payload
         },
         init: (store, action) => {
-            const messagesData = getMessagesData()
-            const {roomId} = action.payload
-            // const messages = await api.getMessagesByRoomId({
-            //         roomId,
-            //         messageStart: 'end',
-            //         offset: 20,
-            //         where: 'up'
-            //     })
-            store.roomData = {
-                roomId
-            }
-            // store.messages = messages
-            store.messagesData = messagesData
+          
+            // const {roomId} = action.payload
+            // // const messages = await api.getMessagesByRoomId({
+            // //         roomId,
+            // //         messageStart: 'end',
+            // //         offset: 20,
+            // //         where: 'up'
+            // //     })
+            // store.roomData = {
+            //     roomId
+            // }
+            // // store.messages = messages
+            // store.messagesData = messagesData
         },
         setReplyMessage: (store, action) => {
             // const messages = current(store.messages)

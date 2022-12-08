@@ -1,11 +1,12 @@
 import { $ } from '../../../../../utils/DOM/DOM';
 
-function getMessagesData() {
+function scrollService() {
   let prevScrollTop;
   let scrollDirection;
   let messagesOnScreen = [];
   return {
     update: (target) => {
+        target = target.children[0]
       if (!messagesOnScreen.length) {
         messagesOnScreen.push(target.firstChild);
       }
@@ -71,4 +72,4 @@ function onMoveBottom(target, currentStateMessages): Element[] {
   return [...new Set(messages)];
 }
 
-export { onMoveTop, onMoveBottom, getMessagesData };
+export { onMoveTop, onMoveBottom, scrollService };
