@@ -34,7 +34,7 @@ function Message({messageId}) {
 
     function onShowMenuButtonPress() {}
     return (
-      <Paper data-messageId={messageId} sx={{
+      <Paper data-messageid={messageId} sx={{
         mb: '15px',
         height: '50px'
       }}>
@@ -43,7 +43,7 @@ function Message({messageId}) {
       </Paper>
     )
     return (
-      <Box key={messageId} data-messageId={messageId}>
+      <Box key={messageId} data-messageid={messageId}>
       {/* <DateViewer
         prevMessageDate={prevMessage?.createdAt}
         messageDate={message.createdAt}

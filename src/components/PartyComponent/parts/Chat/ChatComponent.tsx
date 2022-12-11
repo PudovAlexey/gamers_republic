@@ -57,7 +57,7 @@ function ChatComponent() {
         fetchMessages({
           roomId: roomData.roomId,
           messageStart: queryMessage,
-          offset: 20,
+          offset: 50,
           where: scrollDirection,
         })
       );

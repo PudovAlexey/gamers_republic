@@ -8,7 +8,6 @@ import {messages} from './data/Chat/messages'
 import { rooms } from './data/Chat/rooms';
 
 function filterMessagesTop({messagesFromChat, offset, startForm}) {
-  console.log('MESSAGESTOP')
   let filterMessages = []
   const endCount = startForm - offset
 for(let i = startForm; i > endCount; i--) {
@@ -78,6 +77,10 @@ class FakeApi {
 
     let req = await this.fakeDelay(messagesByOffset);
     if (req) {
+      // const messagesWitchUserData = req.map(message => ({
+      //   ...message,
+      //   user: Users.find(user => message.userId === user.id)
+      // }))
       return req
     } else {
       return {message: `Can't find messages in room ${roomId}`}
@@ -157,7 +160,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 0;
+    let delay = 0 ;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

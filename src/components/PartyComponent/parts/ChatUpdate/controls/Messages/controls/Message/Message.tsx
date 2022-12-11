@@ -1,3 +1,4 @@
+import React from "react";
 import { IconButton, Paper, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -9,27 +10,25 @@ import { useContext } from "react";
 import { parseTimeByString } from "../../../../../../../../utils/timer/timer";
 import { AddsViewer } from "../../../../../Chat/components/addsViewer/AddsViewer";
 import { AuthContext } from "../../../../../../../AuthContext/AuthContext";
+import { selectItemById } from "../../../../store/messageInfoSlice";
+import MK from "./messageParts/MK";
 
 function Message({messageId}) {
+
     const [AuthUser] = useContext(AuthContext)
-    const messageData = useAppSelector((aciton) => aciton.messagesInfoSlice[messageId])
+    const messageData = useAppSelector(state => selectItemById(state.messagesInfoSlice, messageId))
     if (!messageData) return null
     function onReplyMessagePress() {}
     function onShowMenuButtonPress() {}
-
     return (
-        <Box key={messageId} data-messageId={messageId}>
-        {/* <DateViewer
-          prevMessageDate={prevMessage?.createdAt}
-          messageDate={message.createdAt}
-          nextMessageDate={nextMessage?.createdAt}
-        /> */}
+        <Box key={messageId} data-messageid={messageId}>
+     
         <Box
         >
           <Box>
             <Box>
               <AvatarComponent {...AuthUser} />
-              <IconButton onClick={() => onReplyMessagePress(messageId)}>
+              <IconButton onClick={() => onReplyMessagePress(id)}>
                 <ReplyIcon />
               </IconButton>
               <IconButton
@@ -65,6 +64,4 @@ function Message({messageId}) {
       )
 } 
 
-export {
-    Message
-}
+export default React.memo(Message)

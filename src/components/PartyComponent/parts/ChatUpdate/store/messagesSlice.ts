@@ -31,10 +31,8 @@ export const messagesSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        console.log(builder)
         builder.addCase(fetchMessages.fulfilled, (state, action) => {
             const currentMessages = current(state)
-            console.log(state)
             if (Array.isArray(action.payload)) action.payload.forEach(({messageId}) => {
                 const isSameMessage = currentMessages.indexOf(messageId)
                    if (isSameMessage < 0) state.push(messageId)

@@ -41,7 +41,7 @@ function PartyComponent() {
         <Box id="partyRoot" sx={styles.layout}>
             {
                 Object.keys(partyParts).map((part, idx) => (
-                    <Box data-partid={part} sx={{
+                    <Box key={part} data-partid={part} sx={{
                         ...styles.partyContainerItem,
                         transform: part === 'chat' ? "translate(-35rem)" : "translate(0rem)"
                     }}>

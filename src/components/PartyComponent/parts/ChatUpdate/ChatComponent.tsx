@@ -1,14 +1,15 @@
-import { Stack } from "@mui/material"
+import { Box, Stack } from "@mui/material"
 import React, { useContext } from "react"
-import { useAppDispatch } from "../../../../hooks/typedReduxHooks"
+import { useAppDispatch, useAppSelector } from "../../../../hooks/typedReduxHooks"
 import { AuthContext } from "../../../AuthContext/AuthContext"
 import { onExit } from "../Chat/components/AudioViewer/store/playAudioSlice"
-import { MessagesList } from "./controls/Messages/MessagesList"
+import MessagesList from "./controls/Messages/MessagesList"
 import { ChatHeader } from "./controls/ChatHeader"
 import { ChatInput } from "./controls/ChatInput/ChatInput"
 import { fetchMessages } from "./store/messagesSlice"
 import { onInit } from "./store/chatSlice"
 import { scrollService } from "../Chat/services/scrollService"
+import { Message } from "./controls/Messages/controls/Message/Message"
 
 function ChatComponent() {
     const [AuthUser] = useContext(AuthContext)
@@ -26,10 +27,15 @@ function ChatComponent() {
             dispatch(onExit())
         }
     })
+    console.log('chatComponent')
     return (
         <Stack>
             <ChatHeader/>
-            <MessagesList/>
+            <MessagesList message={(messageId) => (
+                <Box data-messageid={messageId}>
+                    <Message/>
+                </Box>
+            )}/>
             <ChatInput/>
         </Stack>
     )

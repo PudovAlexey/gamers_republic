@@ -5,29 +5,43 @@ function scrollService() {
   let scrollDirection;
   let messagesOnScreen = [];
   return {
-    update: (target) => {
-        target = target.children[0]
+    update: (scrollContainer) => {
+      const target = scrollContainer.children[0];
       if (!messagesOnScreen.length) {
         messagesOnScreen.push(target.firstChild);
       }
-      if (target.scrollTop > prevScrollTop) {
+      if (scrollContainer.scrollTop > prevScrollTop) {
         scrollDirection = 'down';
-        messagesOnScreen = onMoveBottom(target, messagesOnScreen);
-      } else if (target.scrollTop < prevScrollTop) {
+        messagesOnScreen = onMoveBottom(scrollContainer, messagesOnScreen);
+      } else if (scrollContainer.scrollTop < prevScrollTop) {
         scrollDirection = 'up';
-        messagesOnScreen = onMoveTop(target, messagesOnScreen);
+        messagesOnScreen = onMoveTop(scrollContainer, messagesOnScreen);
       } else {
         scrollDirection = 'draw';
       }
-      prevScrollTop = target.scrollTop;
-      const messageIds = messagesOnScreen.map((m) => +m?.children?.[0]?.dataset?.messageid)
+      prevScrollTop = scrollContainer.scrollTop;
+      const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
+      let onFetch = false;
+      let queryMessage = messageIds[0];
+      if (
+        scrollContainer.scrollTop > -200 &&
+        scrollContainer.scrollTop >= -300
+      ) {
+        onFetch = true;
+        queryMessage = messageIds[messageIds.length - 1];
+      } else if (
+        scrollContainer.scrollHeight <
+          Math.abs(scrollContainer.scrollTop) + 700 &&
+        scrollContainer.scrollHeight < Math.abs(scrollContainer.scrollTop) + 700
+      ) {
+        onFetch = true;
+        queryMessage = messageIds[0];
+      }
+
       return {
-        lastMessage:
-          +target.lastChild.previousElementSibling.dataset.messageid + 10,
         scrollDirection,
-        messagesOnScreen: messageIds,
-        queryMessage: scrollDirection === 'up' ? messageIds[messageIds.length - 1] : messageIds[0],
-        firstMessage: +target.firstChild.dataset.messageid,
+        queryMessage,
+        onFetch,
       };
     },
   };

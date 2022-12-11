@@ -1,10 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchMessages } from "./messagesSlice";
-import store from "../../../../../store/store";
 
 const initialState = {
     scrollService: null,
-    roomId: null
+    roomId: null,
+    loadingBottom: false,
+    loadingTop: false,
+    messagesData: {},
+    newMessages: []
 }
 
 const chatSlice = createSlice({
@@ -17,33 +20,32 @@ const chatSlice = createSlice({
             state.scrollService = init
             state.roomId = roomId
         },
-        onChatScroll: (state, action) => {
-            const messagesData = state.scrollService
-            const {scrollTop, scrollHeight} = action.payload.target
-            const { scrollDirection, queryMessage} =
-              messagesData.update(action.payload.target);
-              console.log(scrollTop)
-            if (scrollTop < -3666) {
-              store.dispatch(
-                fetchMessages({
-                  roomId: state.roomId,
-                  messageStart: queryMessage,
-                  offset: 20,
-                  where: scrollDirection,
-                })
-              );
-            }
-            const e = action.payload
-        },
         onExit: (state) => {
 
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(fetchMessages.pending, (state, action) => {
+            const {where} = action.meta.arg
+            if (where === 'up') {
+                state.loadingTop = true
+            } else if (where === 'down') {
+                state.loadingBottom = true
+            }
+            
+        })
+        builder.addCase(fetchMessages.fulfilled, (state, action) => {
+            if (Array.isArray(action.payload)) {
+                state.loadingBottom = false
+                state.loadingTop = false
+                state.newMessages = action.payload.map(({messageId}) => messageId)
+            }
+        })
     }
 })
 
 export const {
     onInit,
-    onChatScroll,
     onExit
 } = chatSlice.actions
 

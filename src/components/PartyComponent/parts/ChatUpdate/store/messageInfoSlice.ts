@@ -1,7 +1,15 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice } from "@reduxjs/toolkit"
 import { fetchMessages } from "./messagesSlice"
 
 const initialState = {}
+
+const selectItems = state => state
+const selectItemId = (state, itemId) => itemId
+
+export const selectItemById = createSelector(
+    [selectItems, selectItemId],
+    (items, itemId) => items?.[itemId]
+  )
 
 export const messagesInfoSlice = createSlice({
     name: 'messagesInfo',

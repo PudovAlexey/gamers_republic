@@ -104,7 +104,7 @@ function makeMessages(match) {
 
 }
 
-const messages = makeMessages(100)
+const messages = makeMessages(1000)
 
 export {
     messages
