@@ -81,11 +81,19 @@ class FakeApi {
         ...message,
         user: Users.find(user => message.userId === user.id)
       }))
-      return req
+      return messagesWitchUserData
     } else {
       return {message: `Can't find messages in room ${roomId}`}
     }
-
+  }
+  async getUserByUserId(userId) {
+    const userData = Users.find(user => userId === user.id)
+    let req = await this.fakeDelay(userData);
+    if (req) {
+      return req
+    } else {
+      return {message: 'cant find user'}
+    } 
   }
 
   async getRoomById(roomId) {
@@ -160,7 +168,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 2000;
+    let delay = 200;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

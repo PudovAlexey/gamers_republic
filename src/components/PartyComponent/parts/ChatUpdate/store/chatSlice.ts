@@ -1,14 +1,22 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import api from '../../../../../api/api';
 import { fetchMessages } from './messagesSlice';
 
 const initialState = {
   scrollService: null,
   roomId: null,
+  users: {},
+  chatInfo: {},
   loadingBottom: false,
   loadingTop: false,
   messagesData: {},
   newMessages: [],
 };
+
+export const fetchChat = createAsyncThunk('fetchChat', async(roomId: number, _) => {
+  return await api.getRoomById(roomId)
+})
+
 
 const chatSlice = createSlice({
   name: 'chatSlice',
@@ -33,11 +41,13 @@ const chatSlice = createSlice({
     });
     builder.addCase(fetchMessages.fulfilled, (state, action) => {
       if (Array.isArray(action.payload)) {
-        state.loadingBottom = false;
-        state.loadingTop = false;
-        state.newMessages = action.payload.map(({ messageId }) => messageId);
+        
       }
     });
+
+    builder.addCase(fetchChat.fulfilled, (state, action) => {
+      state.chatInfo = action.payload
+    })
   },
 });
 

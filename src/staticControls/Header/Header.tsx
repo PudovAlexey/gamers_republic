@@ -78,7 +78,7 @@ const Header = () => {
             }}
           >
             {menuItems.map((page) => (
-              <MenuItem>
+              <MenuItem key={page.route}>
                 <Link to={page.route}>{page.text}</Link>
               </MenuItem>
             ))}

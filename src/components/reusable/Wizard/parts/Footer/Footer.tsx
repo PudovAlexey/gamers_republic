@@ -73,6 +73,7 @@ function Footer() {
               : actions[action]?.type || 'default';
           return (
             <BottomNavigationAction
+              key={action}
               sx={{
                 ...styles.footerButton,
                 ...dynamicStyles.stepButtonType(buttonType),

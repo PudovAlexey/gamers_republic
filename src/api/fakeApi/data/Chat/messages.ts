@@ -84,7 +84,7 @@ const firstMessage = (date) => ({
   message:
     `These is Message ${date}`,
     createdAt: 	`20${date}.01.30 15:00`,
-    userId: 1,
+    userId: date % 2 === 0 ? 1 : 2,
     chatId: 10,
     // adds: {
     //   img: [batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg],
@@ -92,7 +92,7 @@ const firstMessage = (date) => ({
     // },
     replyFrom: {
       messageId: 35,
-      userId: 1
+      userId: date % 2 === 0 ? 1 : 2
     },
     messageId: date
 })
@@ -100,7 +100,7 @@ const firstMessage = (date) => ({
 function makeMessages(match) {
   return new Array(match)
   .fill('')
-  .map((_, idx) => firstMessage(idx + 1))
+  .map((_, idx) => firstMessage(idx))
 
 }
 

@@ -11,6 +11,11 @@ export const selectItemById = createSelector(
     (items, itemId) => items?.[itemId]
   )
 
+  export const selectUserByMessageId = createSelector(
+    [selectItems, selectItemId],
+    (items, itemId) => items?.[itemId].user
+  )
+
 export const messagesInfoSlice = createSlice({
     name: 'messagesInfo',
     initialState,
@@ -25,7 +30,9 @@ export const messagesInfoSlice = createSlice({
         builder.addCase(fetchMessages.fulfilled, (state, action) => {
             if (Array.isArray(action.payload)) action.payload.forEach((message) => {
                 const {messageId} = message
-                state[messageId] = message
+                if (!state[messageId]) {
+                    state[messageId] = message
+                }
                  
             })
         })
