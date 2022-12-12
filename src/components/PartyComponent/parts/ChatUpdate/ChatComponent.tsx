@@ -1,4 +1,4 @@
-import { Box, Stack } from "@mui/material"
+import { Box, Stack, styled } from "@mui/material"
 import React, { useContext } from "react"
 import { useAppDispatch, useAppSelector } from "../../../../hooks/typedReduxHooks"
 import { AuthContext } from "../../../AuthContext/AuthContext"
@@ -27,9 +27,8 @@ function ChatComponent() {
             dispatch(onExit())
         }
     })
-    console.log('chatComponent')
     return (
-        <Stack>
+        <ChatContainer>
             <ChatHeader/>
             <MessagesList message={(messageId) => (
                 <Box data-messageid={messageId}>
@@ -37,9 +36,13 @@ function ChatComponent() {
                 </Box>
             )}/>
             <ChatInput/>
-        </Stack>
+        </ChatContainer>
     )
 }
+
+const ChatContainer = styled(Stack)({
+    // position: 'relative'
+})
 
 export {
     ChatComponent

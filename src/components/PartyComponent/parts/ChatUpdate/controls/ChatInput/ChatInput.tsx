@@ -1,6 +1,6 @@
 import { Box } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
-import { FormControl, InputAdornment, TextField } from '@mui/material';
+import { FormControl, InputAdornment, styled, TextField } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { ReplyMessage } from './components/ReplyMessage';
 
@@ -8,7 +8,7 @@ function ChatInput() {
   function onAddAddsButtonPress() {}
   function onSendMessageButtonPress() {}
   return (
-    <FormControl>
+    <ChatFormContainer>
       <ReplyMessage />
       <TextField
         InputProps={{
@@ -22,8 +22,15 @@ function ChatInput() {
           ),
         }}
       />
-    </FormControl>
+    </ChatFormContainer>
   );
 }
+
+const ChatFormContainer = styled(FormControl)({
+  position: 'absolute',
+  left: '-1%',
+  width: '102%',
+  bottom: '-5px'
+})
 
 export { ChatInput };

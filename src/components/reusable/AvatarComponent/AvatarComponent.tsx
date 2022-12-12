@@ -9,10 +9,11 @@ type TControlProps = {
   avatar?: string,
   name?: string,
   surname?: string
-  sx?: Record<string, string | number>
+  sx?: Record<string, string | number>,
+  showUserName?: boolean
 }
 
-function AvatarComponent({ username, avatar, name, surname, sx={} }: TControlProps) {
+function AvatarComponent({ username, avatar, name, surname, sx={}, showUserName = false }: TControlProps) {
   const theme = useTheme()
   const styles = styleComponent(theme)
   return username ? (
@@ -23,7 +24,7 @@ function AvatarComponent({ username, avatar, name, surname, sx={} }: TControlPro
       <Avatar src={avatar}>
         {name?.length && surname?.length ? `${name[0]}${surname[0]}` : username[0]}
       </Avatar>
-      <Typography>{username}</Typography>
+      {showUserName && <Typography>{username}</Typography>}
     </Box>
   ) : (
     <Avatar><PersonIcon/></Avatar>
