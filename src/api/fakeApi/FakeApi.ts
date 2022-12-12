@@ -77,10 +77,10 @@ class FakeApi {
 
     let req = await this.fakeDelay(messagesByOffset);
     if (req) {
-      // const messagesWitchUserData = req.map(message => ({
-      //   ...message,
-      //   user: Users.find(user => message.userId === user.id)
-      // }))
+      const messagesWitchUserData = req.map(message => ({
+        ...message,
+        user: Users.find(user => message.userId === user.id)
+      }))
       return req
     } else {
       return {message: `Can't find messages in room ${roomId}`}
@@ -160,7 +160,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 0 ;
+    let delay = 2000;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

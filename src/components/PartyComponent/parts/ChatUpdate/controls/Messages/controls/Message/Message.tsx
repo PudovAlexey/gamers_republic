@@ -28,7 +28,7 @@ function Message({messageId}) {
           <Box>
             <Box>
               <AvatarComponent {...AuthUser} />
-              <IconButton onClick={() => onReplyMessagePress(id)}>
+              <IconButton onClick={onReplyMessagePress}>
                 <ReplyIcon />
               </IconButton>
               <IconButton

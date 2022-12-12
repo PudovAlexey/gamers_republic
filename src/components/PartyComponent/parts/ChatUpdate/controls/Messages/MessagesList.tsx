@@ -5,6 +5,8 @@ import { onChatScroll } from '../../store/chatSlice';
 import { fetchMessages } from '../../store/messagesSlice';
 import { ChatContainer, ScrollContainer } from './containers/baseContainers';
 import Message  from './controls/Message/Message';
+import { TopProgress } from './containers/TopProgress';
+import { BottomProgress } from './containers/BottomProgress';
 
 function MessagesList() {
     const dispatch = useAppDispatch()
@@ -26,20 +28,22 @@ const scroll = useCallback((e) => {
     }
 }, [dispatch, scrollService, roomId])
   return (
-    <ScrollContainer onScroll={(e) => scroll(e)}>
+    <Box>
+        <TopProgress/>
+        <ScrollContainer onScroll={(e) => scroll(e)}>
       <ChatContainer>
       <Messages/>
       </ChatContainer>
     </ScrollContainer>
+    <BottomProgress/>
+    </Box>
   );
 }
 
 function Messages() {
     const messageIds = useAppSelector((action) => action.messagesSlice);
-    const newMessageIds = useAppSelector((action) => action.chatSlice.newMessages)
     const memoizedItems = useMemo(() => {
-        const mergeMessages = [...new Set([...messageIds, ...newMessageIds])]
-      return mergeMessages.map(messageId => {
+      return messageIds.map(messageId => {
         const messageByMessageId = () => messageId
         return React.memo(messageByMessageId)
       });
