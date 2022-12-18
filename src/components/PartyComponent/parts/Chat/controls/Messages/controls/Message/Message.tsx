@@ -4,7 +4,7 @@ import { useAppSelector } from '../../../../../../../../hooks/typedReduxHooks';
 import { MarkdownEditor } from '../../../../../../../reusable/MkEditor/MkEditorComponent';
 import { useContext } from 'react';
 import { parseTimeByString } from '../../../../../../../../utils/timer/timer';
-import { AddsViewer } from '../../../../../Chat/components/addsViewer/AddsViewer';
+import { AddsViewer } from '../../../addsViewer/AddsViewer';
 import { AuthContext } from '../../../../../../../AuthContext/AuthContext';
 import { selectItemById } from '../../../../store/messageInfoSlice';
 import { UserSend } from './MessageParts/MessageLayout/UserSend';

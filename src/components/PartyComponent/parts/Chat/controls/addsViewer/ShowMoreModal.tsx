@@ -2,13 +2,10 @@ import { IconButton, useTheme } from "@mui/material"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box } from "@mui/system"
 import { useMemo, useState } from "react"
-import { styleComponent } from "../../styles"
 import { Modal } from "./Modal/Modal";
 
 function ShowMoreModal({maxShow, items, renderItems}) {
     const [show, setShow] = useState<boolean>(false)
-    const theme = useTheme()
-    const styles = styleComponent(theme)
     const showPart = useMemo(() => {
         return items.reverse().slice(items.length - maxShow).reverse()
     }, [items])
@@ -20,7 +17,7 @@ function ShowMoreModal({maxShow, items, renderItems}) {
         <Box>
             {renderItems(showPart)}
             {items.length > maxShow ? (
-                <Box sx={styles.showAdd}>
+                <Box>
                     <IconButton onClick={onOpenModal}>
                         <MoreHorizIcon/>
                     </IconButton>

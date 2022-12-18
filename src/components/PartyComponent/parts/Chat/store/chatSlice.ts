@@ -11,6 +11,10 @@ const initialState = {
   loadingTop: false,
   messagesData: {},
   newMessages: [],
+  messageInput: "",
+  adds: {},
+  replyMessage: "",
+  replyAdds: {}
 };
 
 export const fetchChat = createAsyncThunk('fetchChat', async(roomId: number, _) => {
@@ -27,6 +31,10 @@ const chatSlice = createSlice({
       const init = scrollService();
       state.scrollService = init;
       state.roomId = roomId;
+    },
+    inputMessage: (state, action) => {
+      const {target} = action.payload
+      state.messageInput = target.value
     },
     onExit: (state) => {},
   },
@@ -51,6 +59,10 @@ const chatSlice = createSlice({
   },
 });
 
-export const { onInit, onExit } = chatSlice.actions;
+export const { 
+  onInit, 
+  onExit,
+  inputMessage
+ } = chatSlice.actions;
 
 export default chatSlice.reducer;

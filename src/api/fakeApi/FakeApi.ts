@@ -4,40 +4,40 @@ import { GameCategories } from './data/Games/GameCategories';
 import { gamesList } from './data/Games/GamesList';
 import { AuthUser } from './data/Users/AuthUser';
 import { Users } from './data/Users/UserList';
-import {messages} from './data/Chat/messages'
+import { messages } from './data/Chat/messages';
 import { rooms } from './data/Chat/rooms';
 
-function filterMessagesTop({messagesFromChat, offset, startForm}) {
-  let filterMessages = []
-  const endCount = startForm - offset
-for(let i = startForm; i > endCount; i--) {
-  if (!messagesFromChat[i]) break;
-  filterMessages.push(messagesFromChat[i])
-}
-  return filterMessages
-}
-
-function filterMessagesMiddle({messagesFromChat, offset, startForm}) {
-  let filterMessages = []
-  for(let i = startForm; i > offset / 2; i--) {
+function filterMessagesTop({ messagesFromChat, offset, startForm }) {
+  let filterMessages = [];
+  const endCount = startForm - offset;
+  for (let i = startForm; i > endCount; i--) {
     if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i])
+    filterMessages.push(messagesFromChat[i]);
   }
-  for(let i = 0; i < offset; i++) {
-    if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i])
-  }
-    return filterMessages
+  return filterMessages;
 }
 
-function filterMessagesBottom({messagesFromChat, offset, startForm}) {
-  let filterMessages = []
-  const messageEnd = startForm + offset
-  for(let i = startForm; i < messageEnd; i++) {
+function filterMessagesMiddle({ messagesFromChat, offset, startForm }) {
+  let filterMessages = [];
+  for (let i = startForm; i > offset / 2; i--) {
     if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i])
+    filterMessages.push(messagesFromChat[i]);
   }
-    return filterMessages
+  for (let i = 0; i < offset; i++) {
+    if (!messagesFromChat[i]) break;
+    filterMessages.push(messagesFromChat[i]);
+  }
+  return filterMessages;
+}
+
+function filterMessagesBottom({ messagesFromChat, offset, startForm }) {
+  let filterMessages = [];
+  const messageEnd = startForm + offset;
+  for (let i = startForm; i < messageEnd; i++) {
+    if (!messagesFromChat[i]) break;
+    filterMessages.push(messagesFromChat[i]);
+  }
+  return filterMessages;
 }
 
 class FakeApi {
@@ -50,69 +50,132 @@ class FakeApi {
     return req;
   }
 
-  async getMessagesByRoomId({
-    roomId,
-    messageStart,
-    offset,
-    where
-  }) {
-    const messagesFromChat = messages.filter(message => message.chatId === roomId)
-    .sort((a, b) => new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf())
-    let startForm
-    if (messageStart === 'start') {
-      startForm = 0
-    } else if (messageStart === 'end') {
-      startForm = messagesFromChat.length - 1
-    } else if (typeof messageStart === 'number') {
-      startForm = messagesFromChat.findIndex(message => message.messageId === messageStart)
+  async sendMessage({ message, adds, userId, replyMessageId, roomId }) {
+    try {
+      const createdAt = Intl.DateTimeFormat('ru', {
+        year: 'numeric',
+        month: 'numeric',
+         day: 'numeric',
+        hour: 'numeric',
+        minute: 'numeric',
+      })
+        .format(new Date())
+        .split(' ')
+        .map((date, idx) => {
+            if (idx === 0) {
+               return date.split('.')
+                .reverse()
+                .join('.')
+                .replaceAll(',', '')
+            } else {
+                return date.replaceAll(',', '')
+            }
+        })
+        .join(' ');
+
+      let replyFrom = {};
+      if (replyMessageId) {
+        replyFrom = {};
+      }
+      const messageId = messages[messages.length - 1].messageId + 1
+      const newMessage = {
+        message,
+        createdAt,
+        adds,
+        replyFrom,
+        userId,
+        roomId,
+        messageId
+      };
+      messages.push(newMessage);
+      let req = await this.fakeDelay(newMessage);
+      return req;
+    } catch (err) {
+      return { message: JSON.stringify(err) };
     }
-    let messagesByOffset
-    switch(where) {
-      case 'up': messagesByOffset = filterMessagesTop({messagesFromChat, offset, startForm})
+  }
+
+  async getMessagesByRoomId({ roomId, messageStart, offset, where }) {
+    const messagesFromChat = messages
+      .filter((message) => message.chatId === roomId)
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
+      );
+    let startForm;
+    if (messageStart === 'start') {
+      startForm = 0;
+    } else if (messageStart === 'end') {
+      startForm = messagesFromChat.length - 1;
+    } else if (typeof messageStart === 'number') {
+      startForm = messagesFromChat.findIndex(
+        (message) => message.messageId === messageStart
+      );
+    }
+    let messagesByOffset;
+    switch (where) {
+      case 'up':
+        messagesByOffset = filterMessagesTop({
+          messagesFromChat,
+          offset,
+          startForm,
+        });
         break;
-      case 'down': messagesByOffset = filterMessagesBottom({messagesFromChat, offset, startForm})
+      case 'down':
+        messagesByOffset = filterMessagesBottom({
+          messagesFromChat,
+          offset,
+          startForm,
+        });
         break;
-      case 'center': messagesByOffset = filterMessagesMiddle({messagesFromChat, offset, startForm})
+      case 'center':
+        messagesByOffset = filterMessagesMiddle({
+          messagesFromChat,
+          offset,
+          startForm,
+        });
     }
 
     let req = await this.fakeDelay(messagesByOffset);
     if (req) {
-      const messagesWitchUserData = req.map(message => ({
+      const messagesWitchUserData = req.map((message) => ({
         ...message,
-        user: Users.find(user => message.userId === user.id)
-      }))
-      return messagesWitchUserData
+        user: Users.find((user) => message.userId === user.id),
+      }));
+      return messagesWitchUserData;
     } else {
-      return {message: `Can't find messages in room ${roomId}`}
+      return { message: `Can't find messages in room ${roomId}` };
     }
   }
   async getUserByUserId(userId) {
-    const userData = Users.find(user => userId === user.id)
+    const userData = Users.find((user) => userId === user.id);
     let req = await this.fakeDelay(userData);
     if (req) {
-      return req
+      return req;
     } else {
-      return {message: 'cant find user'}
-    } 
+      return { message: 'cant find user' };
+    }
   }
 
   async getRoomById(roomId) {
-    const room = rooms.find(room => room.roomId === roomId)
+    const room = rooms.find((room) => room.roomId === roomId);
     let req = await this.fakeDelay(room);
     if (req) {
-      return req
+      return req;
     } else {
-      return {message: `Can't room by roomId ${roomId}`}
+      return { message: `Can't room by roomId ${roomId}` };
     }
   }
 
   async login(data) {
-    let AuthUser = Users.find(user => user.email === data.email && user.password === data.password)
+    let AuthUser = Users.find(
+      (user) => user.email === data.email && user.password === data.password
+    );
     let req = await this.fakeDelay(AuthUser);
     if (req) {
-      return req
+      return req;
     } else {
-      return {message: 'incorrect email or password'}
+      return { message: 'incorrect email or password' };
     }
   }
 

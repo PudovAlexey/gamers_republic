@@ -1,4 +1,5 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit"
+import { ADD_MESSAGE, SENDMESSAGE } from "./actionCreators"
 import { fetchMessages } from "./messagesSlice"
 
 const initialState = {}
@@ -35,6 +36,11 @@ export const messagesInfoSlice = createSlice({
                 }
                  
             })
+        })
+        builder.addCase(ADD_MESSAGE, (state, action) => {
+            console.log(action, 'test')
+            const {messageId} = action.payload
+            state[messageId] = action.payload
         })
     }
 })

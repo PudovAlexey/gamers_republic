@@ -81,6 +81,7 @@ import ramstainAudio from './assets/rammstein.mp3'
 // ];
 
 const firstMessage = (date) => ({
+  messageId: date,
   message:
     `These is Message ${date}`,
     createdAt: 	`20${date}.01.30 15:00`,
@@ -94,7 +95,6 @@ const firstMessage = (date) => ({
       messageId: 35,
       userId: date % 2 === 0 ? 1 : 2
     },
-    messageId: date
 })
 
 function makeMessages(match) {
