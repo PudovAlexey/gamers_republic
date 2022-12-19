@@ -14,21 +14,12 @@ import { Paper, Typography } from '@mui/material';
 function Message({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
-    selectItemById(state.messagesInfoSlice, messageId)
+    selectItemById(state.chatRedusers.messages, messageId)
   );
   if (!messageData) return null;
   const {userId, message, adds, createdAt} = messageData
   const Message = (
     <Box>
-          {/* <Box>
-            <AvatarComponent {...AuthUser} />
-            <IconButton onClick={onReplyMessagePress}>
-              <ReplyIcon />
-            </IconButton>
-            <IconButton onClick={onShowMenuButtonPress} aria-label="menu">
-              <MoreVertIcon />
-            </IconButton>
-          </Box> */}
           <Paper>
             <MarkdownEditor
               value={message || ''}

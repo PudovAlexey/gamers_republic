@@ -231,7 +231,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 200;
+    let delay = 2000;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

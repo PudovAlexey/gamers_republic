@@ -1,4 +1,4 @@
-import { IconButton, Stack, Typography } from "@mui/material"
+import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
 import { Box, styled } from "@mui/system"
 import { MessageContent } from "./MessageContent"
 import ReplyIcon from '@mui/icons-material/Reply';
@@ -8,8 +8,11 @@ import AvatarComponent from "../../../../../../../../../reusable/AvatarComponent
 import { useContext } from "react";
 import { useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
 import { selectItemById } from "../../../../../../store/messageInfoSlice";
+import { SendProgress } from "../../../../containers/SendProgress";
+import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
 
 function UserSend({children, messageId}) {
+  const loadMessage = useAppSelector((action) => loadMessageById(action, messageId))
     const [AuthUser] = useContext(AuthContext);
     const messageData = useAppSelector((state) =>
     selectItemById(state.messagesInfoSlice, messageId)
@@ -20,6 +23,9 @@ function UserSend({children, messageId}) {
         <MessageContent>
         <Stack spacing={1}>
         <RightToolBar>
+        <RightProgress>
+          {loadMessage && <SendProgress/>}
+        </RightProgress>
             <IconButton onClick={() => {}} aria-label="menu">
               <MoreVertIcon />
             </IconButton>
@@ -37,6 +43,7 @@ function UserSend({children, messageId}) {
     </RightPartComponent>
 }
 const RightPartComponent = styled(Box)({
+    position: 'relative',
     display: 'flex',
     justifyContent: 'end',
 })
@@ -47,6 +54,13 @@ const RightToolBar = styled(Box)({
     alignItems: 'center',
     flexDirection: 'row-reverse'
 })
+
+const RightProgress = styled(Box)({
+  zIndex: 1,
+  position: 'absolute',
+  bottom: '5px',
+  right: '40%'
+ })
 
 export {
     UserSend

@@ -6,5 +6,5 @@ const ADD_MESSAGE = "chat/addMessage"
 
 export {
     SENDMESSAGE,
-    ADD_MESSAGE
+    ADD_MESSAGE,
 }

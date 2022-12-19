@@ -1,4 +1,5 @@
-import { createSelector, createSlice } from "@reduxjs/toolkit"
+import { createSelector, createSlice, current } from "@reduxjs/toolkit"
+import { makeTimeString } from "../../../../../utils/timer/timer"
 import { ADD_MESSAGE, SENDMESSAGE } from "./actionCreators"
 import { fetchMessages } from "./messagesSlice"
 
@@ -37,8 +38,21 @@ export const messagesInfoSlice = createSlice({
                  
             })
         })
+        builder.addCase(SENDMESSAGE, (state, action) => {
+            const {message, adds, userData} = action.payload
+            const messages = current(state)
+            const maxMessage = Math.max(...Object.keys(messages))
+            state[maxMessage] = {
+                message: message,
+                createdAt: makeTimeString(),
+                adds: adds,
+                replyFrom: {},
+                userId: userData.id,
+                roomId: userData.roomId,
+                messageId: maxMessage
+            }
+        })
         builder.addCase(ADD_MESSAGE, (state, action) => {
-            console.log(action, 'test')
             const {messageId} = action.payload
             state[messageId] = action.payload
         })

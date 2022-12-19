@@ -5,15 +5,13 @@ import { ADD_MESSAGE, getMessagesByOffset, SENDMESSAGE } from '../actionCreators
 function* fetchMessageSend (messageData) {
     const state = yield select(state => state.chatSlice);
     const authUser = yield select(state => state.authSlice.user)
-    // const messages = await api.sendMessage(messageOffset)
     try {
-        console.log(state, authUser)
        const newMessage = yield apply(api, api.sendMessage, [{
         message: state.messageInput,
         adds: state.adds,
         userId: authUser.id,
         roomId: authUser.roomId,
-        replyMessageId: state.replyMessageId
+        replyMessageId: state.replyMessageId,
     }])
         yield put({
             type: ADD_MESSAGE,

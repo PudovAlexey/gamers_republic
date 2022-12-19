@@ -46,10 +46,9 @@ const MarkdownEditor = ({
     hideMenu: false,
   }
   const defaultView = view || { menu: true, md: true, html: true }
-
   return (
     <FormControl fullWidth error={error}>
-      <InputLabel style={{ position: 'unset', transform: 'unset' }}>{`${title}${
+      <InputLabel style={{ position: 'unset', transform: 'unset' }}>{`${title || ""}${
         Boolean(validationRules?.required) ? ' *' : ''
       }`}</InputLabel>
       <MdEditor

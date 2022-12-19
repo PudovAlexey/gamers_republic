@@ -7,6 +7,7 @@ import chatSlice from '../components/PartyComponent/parts/Chat/store/chatSlice'
 import createSagaMiddleware from "redux-saga";
 import { rootSaga } from './sagas'
 import authSlice from './authSlice/authSlice'
+import { chatRedusers } from '../components/PartyComponent/parts/Chat/store/chatRedusers'
 
 let sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
@@ -16,14 +17,11 @@ const store = configureStore({
         partySlice: partySlice,
         messagesInfoSlice: messagesInfoSlice,
         messagesSlice: messagesSlice,
-        chatSlice: chatSlice
+        chatSlice: chatSlice,
+        chatRedusers: chatRedusers
     },
-    // middleware: (getDefaultMiddleware) => getDefaultMiddleware({
-    //     serializableCheck: false
-    //   }),
     middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(
       {
-        //  thunk: false,
          serializableCheck: false
       }), sagaMiddleware]
   })

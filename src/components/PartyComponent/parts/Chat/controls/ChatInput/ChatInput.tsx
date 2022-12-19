@@ -10,6 +10,8 @@ import { inputMessage } from '../../store/chatSlice';
 
 function ChatInput() {
   const input = useAppSelector(actions => actions.chatSlice.messageInput)
+  const adds = useAppSelector(actions => actions.chatSlice.adds)
+  const userData = useAppSelector(actions => actions.authSlice.user)
   const dispatch = useAppDispatch()
   function onAddAddsButtonPress() {}
   function onSendMessageButtonPress() {}
@@ -26,7 +28,12 @@ function ChatInput() {
                 <CameraAltIcon onClick={onAddAddsButtonPress} />
                 <SendIcon onClick={() => {
                   dispatch({
-                    type: SENDMESSAGE
+                    type: SENDMESSAGE,
+                    payload: {
+                      message: input,
+                      adds: adds,
+                      userData: userData
+                    }
                   })
                 }} />
               </Box>

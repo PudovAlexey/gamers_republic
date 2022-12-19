@@ -1,5 +1,6 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
+import { ADD_MESSAGE, SENDMESSAGE } from './actionCreators';
 import { fetchMessages } from './messagesSlice';
 
 const initialState = {
@@ -14,7 +15,9 @@ const initialState = {
   messageInput: "",
   adds: {},
   replyMessage: "",
-  replyAdds: {}
+  replyAdds: {},
+  lastMessageId: null,
+  loadMessageIds: []
 };
 
 export const fetchChat = createAsyncThunk('fetchChat', async(roomId: number, _) => {
@@ -47,14 +50,19 @@ const chatSlice = createSlice({
         state.loadingBottom = true;
       }
     });
-    builder.addCase(fetchMessages.fulfilled, (state, action) => {
-      if (Array.isArray(action.payload)) {
-        
-      }
-    });
-
     builder.addCase(fetchChat.fulfilled, (state, action) => {
       state.chatInfo = action.payload
+    })
+    builder.addCase(fetchMessages.fulfilled, (store, action) => {
+      if (action.payload && action.payload.length) {
+        store.lastMessageId = Math.max(...action.payload.map(({messageId}) => messageId))
+      }
+    })
+    builder.addCase(SENDMESSAGE, (state, action) => {
+      state.loadMessageIds.push(state.lastMessageId + 1)
+    })
+    builder.addCase(ADD_MESSAGE, (state, action) => {
+      const sendedMessage = action.payload
     })
   },
 });

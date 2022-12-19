@@ -1,4 +1,4 @@
-import { IconButton, Stack, Typography } from "@mui/material"
+import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
 import { Box, styled } from "@mui/system"
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks"
@@ -6,13 +6,19 @@ import AvatarComponent from "../../../../../../../../../reusable/AvatarComponent
 import { selectUserByMessageId } from "../../../../../../store/messageInfoSlice"
 import { MessageContent } from "./MessageContent"
 import ReplyIcon from '@mui/icons-material/Reply';
+import { SendProgress } from "../../../../containers/SendProgress";
+import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
 function CompanionSend({children, messageId}) {
+    const loadMessage = useAppSelector((action) => loadMessageById(action, messageId))
     const user = useAppSelector((action) => selectUserByMessageId(action.messagesInfoSlice, messageId))
 
     if (!user) return null
     return <LeftPartComponent>
         <MessageContent>
         <LeftToolBar>
+        <LeftProgress>
+           {loadMessage && <SendProgress/>}
+        </LeftProgress>
             <IconButton onClick={() => {}} aria-label="menu">
               <MoreVertIcon />
             </IconButton>
@@ -30,8 +36,9 @@ function CompanionSend({children, messageId}) {
 }
 
 const LeftPartComponent = styled(Box)({
-    display: 'flex',
-    justifyContent: 'start',
+  display: 'flex',
+  justifyContent: 'start',
+  position: 'relative',
 })
 
 const LeftToolBar = styled(Box)({
@@ -39,6 +46,13 @@ const LeftToolBar = styled(Box)({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row'
+})
+
+const LeftProgress = styled(Box)({
+zIndex: 1,
+ position: 'absolute',
+ bottom: '5px',
+ left: '40%'
 })
 
 export {
