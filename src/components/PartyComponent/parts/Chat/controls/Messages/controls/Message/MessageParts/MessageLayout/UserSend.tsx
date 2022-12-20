@@ -6,12 +6,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { AuthContext } from "../../../../../../../../../AuthContext/AuthContext";
 import AvatarComponent from "../../../../../../../../../reusable/AvatarComponent/AvatarComponent";
 import { useContext } from "react";
-import { useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
 import { selectItemById } from "../../../../../../store/messageInfoSlice";
 import { SendProgress } from "../../../../containers/SendProgress";
 import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
+import { onShowReply } from "../../../../../../store/chatSlice";
 
 function UserSend({children, messageId}) {
+  const dispatch = useAppDispatch()
   const loadMessage = useAppSelector((action) => loadMessageById(action, messageId))
     const [AuthUser] = useContext(AuthContext);
     const messageData = useAppSelector((state) =>
@@ -33,7 +35,7 @@ function UserSend({children, messageId}) {
             <Typography>{AuthUser.username}</Typography>
             <AvatarComponent {...AuthUser} />
             </Stack>
-            <IconButton onClick={() => {}}>
+            <IconButton onClick={() => dispatch(onShowReply(messageData))}>
               <ReplyIcon />
             </IconButton>
           </RightToolBar>

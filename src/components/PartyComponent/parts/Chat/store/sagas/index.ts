@@ -4,7 +4,9 @@ import { ADD_MESSAGE, getMessagesByOffset, SENDMESSAGE } from '../actionCreators
 
 function* fetchMessageSend (messageData) {
     const state = yield select(state => state.chatSlice);
+    const ids = yield select(state => state.chatRedusers.messagesIds)
     const authUser = yield select(state => state.authSlice.user)
+    const maxId = (ids.length ? Math.max(...ids) : 0)
     try {
        const newMessage = yield apply(api, api.sendMessage, [{
         message: state.messageInput,
@@ -12,6 +14,7 @@ function* fetchMessageSend (messageData) {
         userId: authUser.id,
         roomId: authUser.roomId,
         replyMessageId: state.replyMessageId,
+        frontId: maxId
     }])
         yield put({
             type: ADD_MESSAGE,
@@ -23,7 +26,7 @@ function* fetchMessageSend (messageData) {
 }
 
 function* sendMessage() {
-    yield takeLatest(SENDMESSAGE, fetchMessageSend)
+    yield takeEvery(SENDMESSAGE, fetchMessageSend)
 
 }
 

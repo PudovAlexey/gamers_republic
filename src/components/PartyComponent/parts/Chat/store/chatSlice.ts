@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
 import { ADD_MESSAGE, SENDMESSAGE } from './actionCreators';
 import { fetchMessages } from './messagesSlice';
@@ -13,10 +13,9 @@ const initialState = {
   messagesData: {},
   newMessages: [],
   messageInput: "",
-  adds: {},
-  replyMessage: "",
+  showReply: false,
+  replyMessage: {},
   replyAdds: {},
-  lastMessageId: null,
   loadMessageIds: []
 };
 
@@ -39,6 +38,20 @@ const chatSlice = createSlice({
       const {target} = action.payload
       state.messageInput = target.value
     },
+    onShowReply: (state, action) => {
+      state.showReply = true
+      const {adds} = action.payload
+      state.replyMessage = action.payload
+      if (adds) {
+        state.replyAdds = adds
+      }
+
+    },
+    onCloseReply: (state) => {
+      state.showReply = false
+      state.replyMessage = {}
+      state.replyAdds = {}
+    },
     onExit: (state) => {},
   },
   extraReducers: (builder) => {
@@ -53,16 +66,22 @@ const chatSlice = createSlice({
     builder.addCase(fetchChat.fulfilled, (state, action) => {
       state.chatInfo = action.payload
     })
-    builder.addCase(fetchMessages.fulfilled, (store, action) => {
-      if (action.payload && action.payload.length) {
-        store.lastMessageId = Math.max(...action.payload.map(({messageId}) => messageId))
-      }
-    })
     builder.addCase(SENDMESSAGE, (state, action) => {
-      state.loadMessageIds.push(state.lastMessageId + 1)
+      const {lastMessageId} = action.payload
+      const countNextMessage = lastMessageId + 1 
+      console.log(countNextMessage, 'inLoader')
+      state.loadMessageIds.push(countNextMessage)
     })
     builder.addCase(ADD_MESSAGE, (state, action) => {
-      const sendedMessage = action.payload
+      let loaderIds = current(state.loadMessageIds)
+      loaderIds = [...loaderIds]
+      const {frontId} = action.payload
+      const loaderIndex =  loaderIds.indexOf(frontId)
+      console.log(frontId, 'after send')
+      if (loaderIndex >= 0) {
+        loaderIds.splice(loaderIndex, 1)
+        state.loadMessageIds = [...loaderIds]
+      }
     })
   },
 });
@@ -70,6 +89,7 @@ const chatSlice = createSlice({
 export const { 
   onInit, 
   onExit,
+  onShowReply,
   inputMessage
  } = chatSlice.actions;
 

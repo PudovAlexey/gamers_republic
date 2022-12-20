@@ -1,17 +1,21 @@
 import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
 import { Box, styled } from "@mui/system"
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks"
+import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks"
 import AvatarComponent from "../../../../../../../../../reusable/AvatarComponent/AvatarComponent"
-import { selectUserByMessageId } from "../../../../../../store/messageInfoSlice"
+import { selectItemById, selectUserByMessageId } from "../../../../../../store/messageInfoSlice"
 import { MessageContent } from "./MessageContent"
 import ReplyIcon from '@mui/icons-material/Reply';
 import { SendProgress } from "../../../../containers/SendProgress";
 import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
+import { onShowReply } from "../../../../../../store/chatSlice";
 function CompanionSend({children, messageId}) {
+  const messageData = useAppSelector((state) =>
+  selectItemById(state.chatRedusers.messages, messageId)
+  );
     const loadMessage = useAppSelector((action) => loadMessageById(action, messageId))
     const user = useAppSelector((action) => selectUserByMessageId(action.messagesInfoSlice, messageId))
-
+    const dispatch = useAppDispatch()
     if (!user) return null
     return <LeftPartComponent>
         <MessageContent>
@@ -19,7 +23,7 @@ function CompanionSend({children, messageId}) {
         <LeftProgress>
            {loadMessage && <SendProgress/>}
         </LeftProgress>
-            <IconButton onClick={() => {}} aria-label="menu">
+            <IconButton onClick={() => dispatch(onShowReply(messageData))} aria-label="menu">
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>

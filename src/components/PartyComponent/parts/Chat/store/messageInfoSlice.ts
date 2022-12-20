@@ -39,22 +39,27 @@ export const messagesInfoSlice = createSlice({
             })
         })
         builder.addCase(SENDMESSAGE, (state, action) => {
-            const {message, adds, userData} = action.payload
-            const messages = current(state)
-            const maxMessage = Math.max(...Object.keys(messages))
-            state[maxMessage] = {
+            const {message, adds, userData, lastMessageId} = action.payload
+            const countNextMessage = lastMessageId + 1 
+            console.log(countNextMessage, 'inMessageInfo')
+            state[countNextMessage] = {
                 message: message,
                 createdAt: makeTimeString(),
                 adds: adds,
                 replyFrom: {},
                 userId: userData.id,
                 roomId: userData.roomId,
-                messageId: maxMessage
+                messageId: countNextMessage,
+                frontId: countNextMessage
             }
         })
         builder.addCase(ADD_MESSAGE, (state, action) => {
-            const {messageId} = action.payload
-            state[messageId] = action.payload
+            const {messageId, frontId} = action.payload
+            if (state[frontId]) {
+                delete state[frontId]
+                state[messageId] = action.payload
+            }
+            // state[messageId] = action.payload
         })
     }
 })

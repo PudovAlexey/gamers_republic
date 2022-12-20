@@ -40,14 +40,18 @@ export const messagesSlice = createSlice({
             })
           })
           builder.addCase(SENDMESSAGE, (store, action) => {
-            const messageIds = current(store)
-            const maxMessageId = Math.max(...messageIds)
-            store.unshift(maxMessageId + 1)
+            const {lastMessageId} = action.payload
+            store.unshift(lastMessageId + 1)
           })
           builder.addCase(ADD_MESSAGE, (state, action) => {
-            const {messageId} = action.payload
-            console.log('in Messages')
-            state.unshift(messageId)
+            const {messageId, frontId} = action.payload
+            // console.log('in Messages')
+            // state.unshift(messageId)
+            const messageIds = current(state)
+            const findFrontId = messageIds.indexOf(frontId)
+            if (frontId >= 0) {
+                state.splice(findFrontId, 1, messageId)
+            }            
           })
     }
 })

@@ -50,7 +50,14 @@ class FakeApi {
     return req;
   }
 
-  async sendMessage({ message, adds, userId, replyMessageId, roomId }) {
+  async sendMessage({ 
+    message, 
+    adds, 
+    userId, 
+    replyMessageId, 
+    roomId,
+    frontId
+   }) {
     try {
       const createdAt = Intl.DateTimeFormat('ru', {
         year: 'numeric',
@@ -85,11 +92,14 @@ class FakeApi {
         replyFrom,
         userId,
         roomId,
-        messageId
+        messageId,
       };
       messages.push(newMessage);
       let req = await this.fakeDelay(newMessage);
-      return req;
+      return {
+        ...req,
+        frontId
+      };
     } catch (err) {
       return { message: JSON.stringify(err) };
     }

@@ -87,10 +87,10 @@ const firstMessage = (date) => ({
     createdAt: 	`20${date}.01.30 15:00`,
     userId: date % 2 === 0 ? 1 : 2,
     chatId: 10,
-    // adds: {
-    //   img: [batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg],
-    //   audio: [ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio]
-    // },
+    adds: {
+      img: [batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg],
+      // audio: [ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio]
+    },
     replyFrom: {
       messageId: 35,
       userId: date % 2 === 0 ? 1 : 2
