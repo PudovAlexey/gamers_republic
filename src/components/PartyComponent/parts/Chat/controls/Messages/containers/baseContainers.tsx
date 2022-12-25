@@ -6,7 +6,8 @@ const ScrollContainer = styled(Box)({
     overflowY: "auto",
     display: 'flex',
     flexDirection: 'column-reverse',
-    maxHeight: "500px"
+    maxHeight: "500px",
+    minHeight: '500px'
 })
 
 const ChatContainer = styled(Box)({

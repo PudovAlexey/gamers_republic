@@ -1,58 +1,84 @@
 import { Box } from '@mui/system';
 import SendIcon from '@mui/icons-material/Send';
-import { FormControl, InputAdornment, styled, TextField } from '@mui/material';
+import {
+  FormControl,
+  IconButton,
+  InputAdornment,
+  Paper,
+  Stack,
+  styled,
+  TextField,
+} from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
-import { useDispatch } from 'react-redux';
-import { useAppDispatch, useAppSelector } from '../../../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../../../hooks/typedReduxHooks';
 import { SENDMESSAGE } from '../../store/actionCreators';
 import { inputMessage } from '../../store/chatSlice';
+import {
+  addsSelector,
+  maxMessagesIdsSelector,
+  messageInputSelector,
+} from '../../store/selectors/chatSelector';
 
 function ChatInput() {
-  const input = useAppSelector(actions => actions.chatSlice.messageInput)
-  const adds = useAppSelector(actions => actions.chatSlice.adds)
-  const messageIds = useAppSelector(actions => actions.chatRedusers.messagesIds)
-  const userData = useAppSelector(actions => actions.authSlice.user)
-  const maxMessageId = (messageIds.length > 0 ? Math.max(...messageIds) : 0)
-  const dispatch = useAppDispatch()
-  function onAddAddsButtonPress() {}
-  function onSendMessageButtonPress() {}
+  const input = useAppSelector(messageInputSelector);
+  const adds = useAppSelector(addsSelector);
+  const userData = useAppSelector((actions) => actions.authSlice.user);
+  const maxMessageId = useAppSelector(maxMessagesIdsSelector);
+  const dispatch = useAppDispatch();
   return (
-    <ChatFormContainer>
-      <ReplyMessage />
-      <TextField
-      value={input}
-        onChange={(e) => dispatch(inputMessage(e))}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <Box>
-                <CameraAltIcon onClick={onAddAddsButtonPress} />
-                <SendIcon onClick={() => {
-                  dispatch({
-                    type: SENDMESSAGE,
-                    payload: {
-                      message: input,
-                      adds: adds,
-                      userData: userData,
-                      lastMessageId: maxMessageId
-                    }
-                  })
-                }} />
-              </Box>
-            </InputAdornment>
-          ),
-        }}
-      />
-    </ChatFormContainer>
+    <InputPaper>
+      <FormControl fullWidth>
+        <ReplyWrapContainer>
+          <ReplyMessage />
+        </ReplyWrapContainer>
+        <TextField
+          value={input}
+          onChange={(e) => dispatch(inputMessage(e))}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                <Stack direction={'row'} justifyContent={'center'} spacing={1}>
+                  <IconButton onClick={onAddAddsButtonPress}>
+                  <CameraAltIcon />
+                  </IconButton>
+                  <IconButton onClick={() => {
+                      dispatch({
+                        type: SENDMESSAGE,
+                        payload: {
+                          message: input,
+                          adds: adds,
+                          userData: userData,
+                          lastMessageId: maxMessageId,
+                        },
+                      });
+                    }}>
+                  <SendIcon
+                  />
+                  </IconButton>
+                </Stack>
+              </InputAdornment>
+            ),
+          }}
+        />
+      </FormControl>
+    </InputPaper>
   );
 }
 
-const ChatFormContainer = styled(FormControl)({
-  position: 'absolute',
-  left: '-1%',
-  width: '102%',
-  bottom: '-5px'
-})
+const InputPaper = styled(Paper)({
+  background: '#1F2326',
+});
+
+const ReplyWrapContainer = styled(Box)({
+  position: 'relative',
+  display: 'flex',
+  justifyContent: 'center',
+  padding: '0 5px',
+  top: '4px',
+});
 
 export { ChatInput };

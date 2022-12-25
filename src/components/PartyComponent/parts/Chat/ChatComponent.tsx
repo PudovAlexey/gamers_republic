@@ -29,13 +29,19 @@ function ChatComponent() {
         }
     })
     return (
-        <Stack>
+        <ChatBox spacing={1}>
+            <Stack spacing={1}>
             <ChatHeader/>
             <MessagesList/>
-            <ChatInput/>
         </Stack>
+            <ChatInput/>
+        </ChatBox>
     )
 }
+
+const ChatBox = styled(Stack)({
+    maxHeight: '700px'
+})
 
 export {
     ChatComponent

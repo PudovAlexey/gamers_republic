@@ -10,7 +10,7 @@ type TImageGalery = {
 
 function ImageGalery({ images, cols = 2 }: TImageGalery) {
   return (
-    <ImageList cols={cols}>
+    <ImageList cols={images.length === 1 ? 1 : cols}>
       {images.map(({src, alt}) => (
         <ImageListItem key={src}>
           <img

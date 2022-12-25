@@ -9,14 +9,21 @@ import { ChatContainer, ScrollContainer } from './containers/baseContainers';
 import Message from './controls/Message/Message';
 import { TopProgress } from './containers/TopProgress';
 import { BottomProgress } from './containers/BottomProgress';
+import {
+  chatHeightSelector,
+  replyHeightSelector,
+  roomIdSelector,
+  scrollServiceSelector,
+  showReplySelector,
+} from '../../store/selectors/chatSelector';
 
 function MessagesList() {
   const dispatch = useAppDispatch();
-  const scrollService = useAppSelector(
-    (actions) => actions.chatSlice.scrollService
-  );
-  const roomId = useAppSelector((actions) => actions.chatSlice.roomId);
-
+  const showReply = useAppSelector(showReplySelector);
+  const replyHeight = useAppSelector(replyHeightSelector);
+  const chatHeight = useAppSelector(chatHeightSelector);
+  const scrollService = useAppSelector(scrollServiceSelector);
+  const roomId = useAppSelector(roomIdSelector);
   const scroll = useCallback(
     (e) => {
       const messagesData = scrollService;
@@ -38,7 +45,15 @@ function MessagesList() {
   return (
     <Box>
       <TopProgress />
-      <ScrollContainer onScroll={(e) => scroll(e)}>
+      <ScrollContainer
+        sx={
+          showReply && {
+            height: `${chatHeight - replyHeight}` + 'px',
+            minHeight: `${chatHeight - replyHeight}` + 'px',
+          }
+        }
+        onScroll={(e) => scroll(e)}
+      >
         <ChatContainer>
           <Messages />
         </ChatContainer>
@@ -61,7 +76,6 @@ function Messages() {
   for (const MemoizedItem of memoizedItems) {
     const memoId = MemoizedItem.type();
     itemarray.push(<Message key={memoId} messageId={memoId} />);
-
   }
   return <React.Fragment>{itemarray}</React.Fragment>;
 }
