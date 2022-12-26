@@ -1,6 +1,7 @@
-import {takeLatest, call, take, takeEvery, select, put, apply} from 'redux-saga/effects'
+import {takeLatest, call, take, takeEvery, select, put, apply, all} from 'redux-saga/effects'
 import api from '../../../../../../api/api'
-import { ADD_MESSAGE, getMessagesByOffset, SENDMESSAGE } from '../actionCreators'
+import { parseToBase64 } from '../../../../../../utils/encoders';
+import { ADD_MESSAGE, getMessagesByOffset, SENDMESSAGE, SET_IMAGES, UPLOAD_FILES, UPLOAD_IMAGE } from '../actionCreators'
 
 function* fetchMessageSend (messageData) {
     const state = yield select(state => state.chatSlice);
@@ -25,12 +26,31 @@ function* fetchMessageSend (messageData) {
     }
 }
 
+function* parseImages(e) {
+    const files = e.payload.target.files
+   const parsed = yield all(Array.from(files).map(async file => {
+    const parsedFile = await parseToBase64(file)
+    return {
+        type: file.type,
+        base64: parsedFile
+    }
+   }))
+   yield put({
+    type: SET_IMAGES,
+    payload: parsed
+   })
+}
+
 function* sendMessage() {
     yield takeEvery(SENDMESSAGE, fetchMessageSend)
+}
 
+function* parseImage() {
+    yield takeEvery(UPLOAD_FILES, parseImages)
 }
 
 function* chatSagas() {
+    yield call(parseImage)
     yield call(sendMessage)
 }
 

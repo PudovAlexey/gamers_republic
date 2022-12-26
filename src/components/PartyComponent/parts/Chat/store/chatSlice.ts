@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
-import { ADD_MESSAGE, SENDMESSAGE } from './actionCreators';
+import { ADD_MESSAGE, SENDMESSAGE, SET_IMAGES } from './actionCreators';
 import { fetchMessages } from './messagesSlice';
 
 const initialState = {
@@ -8,6 +8,7 @@ const initialState = {
   roomId: null,
   users: {},
   chatInfo: {},
+  showCaptureModal: false,
   loadingBottom: false,
   loadingTop: false,
   messagesData: {},
@@ -18,6 +19,7 @@ const initialState = {
   showReply: false,
   replyMessage: {},
   replyAdds: {},
+  adds: {},
   loadMessageIds: [],
 };
 
@@ -55,6 +57,10 @@ const chatSlice = createSlice({
       state.replyMessage = {};
       state.replyAdds = {};
     },
+    onCliseCaptureModal: (state) => {
+      state.adds = {}
+      state.showCaptureModal = false
+    },
     onExit: (state) => {
       Object.keys(initialState).forEach((field) => {
         state[field] = initialState[field];
@@ -90,9 +96,36 @@ const chatSlice = createSlice({
         state.loadMessageIds = [...loaderIds];
       }
     });
+    builder.addCase(SET_IMAGES, (state, action) => {
+      const files = action.payload;
+      Array.from(files).forEach((file) => {
+        const { type } = file;
+        const currentAdds = JSON.parse(JSON.stringify(current(state.adds)));
+        console.log(currentAdds);
+        if (/image/.test(type)) {
+          if (!currentAdds.img) currentAdds.img = [];
+          currentAdds.img.push(file.base64);
+          state.adds = { ...currentAdds };
+        } else if (/video/.test(type)) {
+          if (!currentAdds.video) currentAdds.video = [];
+          currentAdds.video.push(file.base64);
+          state.adds = { ...currentAdds };
+        } else if (/audio/.test(type)) {
+          if (!currentAdds.audio) currentAdds.audio = [];
+          currentAdds.audio.push(file.base64);
+          state.adds = { ...currentAdds };
+        } else if (/application/.test(type)) {
+          if (!currentAdds.file) currentAdds.file = [];
+          currentAdds.file.push(file.base64);
+          state.adds = { ...currentAdds };
+        }
+        state.showCaptureModal = true
+      });
+    });
   },
 });
 
-export const { onInit, onExit, onShowReply, inputMessage, onCloseReply } = chatSlice.actions;
+export const { onInit, onExit, onShowReply, inputMessage, onCloseReply, onCliseCaptureModal } =
+  chatSlice.actions;
 
 export default chatSlice.reducer;

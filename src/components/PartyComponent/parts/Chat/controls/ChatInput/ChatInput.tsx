@@ -15,13 +15,15 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../hooks/typedReduxHooks';
-import { SENDMESSAGE } from '../../store/actionCreators';
-import { inputMessage } from '../../store/chatSlice';
+import { SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
+import { inputMessage, onAddAddsButtonPress } from '../../store/chatSlice';
 import {
   addsSelector,
   maxMessagesIdsSelector,
   messageInputSelector,
 } from '../../store/selectors/chatSelector';
+import { FileUploader } from '../../../../../reusable/FileUploader/FileUploader';
+import { CaptureModal } from './components/CaptureModal/CaptureModal';
 
 function ChatInput() {
   const input = useAppSelector(messageInputSelector);
@@ -42,10 +44,14 @@ function ChatInput() {
             endAdornment: (
               <InputAdornment position="end">
                 <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                  <IconButton onClick={onAddAddsButtonPress}>
-                  <CameraAltIcon />
-                  </IconButton>
-                  <IconButton onClick={() => {
+                  <FileUploader onChange={(e) => dispatch({
+                    type: UPLOAD_FILES,
+                    payload: e
+                  })}>
+                    <CameraAltIcon />
+                  </FileUploader>
+                  <IconButton
+                    onClick={() => {
                       dispatch({
                         type: SENDMESSAGE,
                         payload: {
@@ -55,9 +61,9 @@ function ChatInput() {
                           lastMessageId: maxMessageId,
                         },
                       });
-                    }}>
-                  <SendIcon
-                  />
+                    }}
+                  >
+                    <SendIcon />
                   </IconButton>
                 </Stack>
               </InputAdornment>
@@ -65,6 +71,7 @@ function ChatInput() {
           }}
         />
       </FormControl>
+      <CaptureModal/>
     </InputPaper>
   );
 }

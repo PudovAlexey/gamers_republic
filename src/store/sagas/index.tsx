@@ -1,9 +1,9 @@
 import {call, spawn, all} from 'redux-saga/effects'
-import { sendMessage } from '../../components/PartyComponent/parts/Chat/store/sagas';
+import { chatSagas, sendMessage } from '../../components/PartyComponent/parts/Chat/store/sagas';
 
 function* rootSaga() {
     const sagas = [
-        sendMessage
+        chatSagas
     ];
         const retrySagas = yield sagas.map(saga => {
             return spawn(function* () {

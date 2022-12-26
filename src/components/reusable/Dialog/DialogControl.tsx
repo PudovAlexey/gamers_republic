@@ -13,6 +13,7 @@ type TControlProps = {
   open: boolean;
   setOpen: (value: boolean) => void;
   children: JSX.Element
+  customFooter?: JSX.Element
   dialogActions?: {
     text: string;
     onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -25,6 +26,7 @@ function DialogControl({
   open,
   setOpen,
   dialogActions,
+  customFooter
 }: TControlProps) {
   const handleClose = () => {
     setOpen(!open);
@@ -49,6 +51,7 @@ function DialogControl({
           })}
         </DialogActions>
       ) : null}
+      {customFooter}
     </Dialog>
   );
 }

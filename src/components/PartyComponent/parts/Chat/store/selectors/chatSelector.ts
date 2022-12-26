@@ -9,6 +9,11 @@ const scrollServiceSelector = state => state.chatRedusers.chatSlice.scrollServic
 const messageInputSelector = state =>  state.chatRedusers.chatSlice.messageInput
 const replyMessageSelector = state => state.chatRedusers.chatSlice.replyMessage
 const addsSelector = state => state.chatRedusers.chatSlice.adds
+const showCaptureModalSelector = state => state.chatRedusers.chatSlice.showCaptureModal
+const countAddsSelector = state => {
+  const adds = state.chatRedusers.chatSlice.adds
+  return Object.values(adds).flat(2).length
+}
 const replyAddsSelector = state => state.chatRedusers.chatSlice.replyAdds
 const messagesIdsSelector = state => state.chatRedusers.messagesIds
 const selectItemId = (_, itemId) => itemId
@@ -37,5 +42,7 @@ export {
     messagesIdsSelector,
     maxMessagesIdsSelector,
     replyMessageSelector,
-    replyAddsSelector
+    replyAddsSelector,
+    showCaptureModalSelector,
+    countAddsSelector
 }

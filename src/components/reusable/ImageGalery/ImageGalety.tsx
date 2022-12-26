@@ -14,8 +14,7 @@ function ImageGalery({ images, cols = 2 }: TImageGalery) {
       {images.map(({src, alt}) => (
         <ImageListItem key={src}>
           <img
-            src={`${src}?w=164&h=164&fit=crop&auto=format`}
-            srcSet={`${src}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+            src={src}
             alt={alt}
             loading="lazy"
           />
