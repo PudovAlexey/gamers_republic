@@ -58,7 +58,7 @@ export function parseTimeByString({
   return timeByType;
 }
 
-export function makeTimeString(time) {
+export function makeTimeString(time?: object) {
   return Intl.DateTimeFormat('ru', {
     year: 'numeric',
     month: 'numeric',

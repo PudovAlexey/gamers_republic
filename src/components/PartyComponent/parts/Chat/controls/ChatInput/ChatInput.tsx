@@ -11,12 +11,12 @@ import {
 } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
+import { SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
+import { inputMessage } from '../../store/chatSlice';
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../hooks/typedReduxHooks';
-import { SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
-import { inputMessage, onAddAddsButtonPress } from '../../store/chatSlice';
 import {
   addsSelector,
   maxMessagesIdsSelector,
@@ -24,6 +24,7 @@ import {
 } from '../../store/selectors/chatSelector';
 import { FileUploader } from '../../../../../reusable/FileUploader/FileUploader';
 import { CaptureModal } from './components/CaptureModal/CaptureModal';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 function ChatInput() {
   const input = useAppSelector(messageInputSelector);
@@ -44,6 +45,9 @@ function ChatInput() {
             endAdornment: (
               <InputAdornment position="end">
                 <Stack direction={'row'} justifyContent={'center'} spacing={1}>
+                  <IconButton >
+                      <KeyboardVoiceIcon/>
+                  </IconButton>
                   <FileUploader onChange={(e) => dispatch({
                     type: UPLOAD_FILES,
                     payload: e
