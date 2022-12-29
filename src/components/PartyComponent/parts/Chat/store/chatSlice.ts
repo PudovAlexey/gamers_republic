@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
 import { generateAddsId } from '../services/helpers';
-import { ADD_MESSAGE, SENDMESSAGE, SET_IMAGES } from './actionCreators';
+import { ADD_MESSAGE, CHANGE_FILES, SENDMESSAGE, SET_IMAGES } from './actionCreators';
 import { fetchMessages } from './messagesSlice';
 
 const initialState = {
@@ -63,6 +63,9 @@ const chatSlice = createSlice({
       currentAdds[type] = updateAddsByType
       state.adds = currentAdds
     },
+    openAddByType: (state, action) => {
+
+    },
     onCloseReply: (state) => {
       state.showReply = false;
       state.replyMessage = {};
@@ -93,25 +96,27 @@ const chatSlice = createSlice({
     builder.addCase(SENDMESSAGE, (state, action) => {
       const { lastMessageId } = action.payload;
       const countNextMessage = lastMessageId + 1;
-      state.messageInput = '';
       state.showCaptureModal = false;
       state.loadMessageIds.push(countNextMessage);
     });
     builder.addCase(ADD_MESSAGE, (state, action) => {
+      console.log('after send')
       let loaderIds = current(state.loadMessageIds);
       loaderIds = [...loaderIds];
       const { frontId } = action.payload;
       const loaderIndex = loaderIds.indexOf(frontId);
+      state.messageInput = '';
+      state.adds = {}
       if (loaderIndex >= 0) {
         loaderIds.splice(loaderIndex, 1);
         state.loadMessageIds = [...loaderIds];
       }
     });
     builder.addCase(SET_IMAGES, (state, action) => {
-      const files = action.payload;
+      const {files} = action.payload;
       Array.from(files).forEach((file) => {
         const { type } = file;
-        const currentAdds = JSON.parse(JSON.stringify(current(state.adds)));
+        const currentAdds = state.adds
         if (/image/.test(type)) {
           if (!currentAdds.img) currentAdds.img = [];
           const nextId = generateAddsId(currentAdds.img);
@@ -148,6 +153,11 @@ const chatSlice = createSlice({
         state.showCaptureModal = true;
       });
     });
+    builder.addCase(CHANGE_FILES, (state, action) => {
+      const {files, id, type} = action.payload
+      const fileIndex = state.adds[type].findIndex((file) => file.id === id)
+      if (fileIndex >= 0) state.adds[type].splice(fileIndex, 1, files[0])
+    })
   },
 });
 
@@ -157,6 +167,9 @@ export const {
   onShowReply,
   inputMessage,
   onCloseReply,
+  removeAddByTypeAndId,
+  updateAddByTypeAndId,
+  openAddByType,
   onCliseCaptureModal,
 } = chatSlice.actions;
 

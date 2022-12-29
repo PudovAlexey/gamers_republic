@@ -89,7 +89,7 @@ class FakeApi {
         message,
         createdAt,
         adds,
-        replyFrom,
+        reply,
         userId,
         roomId,
         messageId,
@@ -101,6 +101,7 @@ class FakeApi {
         frontId
       };
     } catch (err) {
+      console.log(err)
       return { message: JSON.stringify(err) };
     }
   }
@@ -150,8 +151,16 @@ class FakeApi {
     if (req) {
       const messagesWitchUserData = req.map((message) => ({
         ...message,
+        replyMessages: message.replyIds && message.replyIds.map((replyId) => {
+          const messageData = messages.find(({messageId}) => messageId === replyId)
+          return {
+            ...messageData,
+            user: Users.find((user) => messageData.userId === user.id),
+          }
+        }),
         user: Users.find((user) => message.userId === user.id),
       }));
+      console.log(messagesWitchUserData, 'messageByData')
       return messagesWitchUserData;
     } else {
       return { message: `Can't find messages in room ${roomId}` };

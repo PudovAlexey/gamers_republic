@@ -8,7 +8,7 @@ import store from '../../../../../../store';
 import { onCloseReply } from '../../../../store/chatSlice';
 import { replyAddsSelector, replyHeightSelector, replyMessageSelector, showReplySelector } from '../../../../store/selectors/chatSelector';
 import { AddsViewer } from '../../../addsViewer/AddsViewer';
-function ReplyMessage() {
+function ReplyMessage({messageId}) {
   const dispatch = useAppDispatch()
   const showReply = useAppSelector(showReplySelector)
   const replyHeight = useAppSelector(replyHeightSelector)

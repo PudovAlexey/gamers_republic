@@ -4,6 +4,7 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import { Stack } from "@mui/system";
 import { DarkButton } from "../layout";
+import { FileUpload } from "@mui/icons-material";
 
 type TFyle = {
     name: string
@@ -11,30 +12,33 @@ type TFyle = {
 }
 
 type TControlProps = {
-    onRemove: (id: number) => void
-    onUpdate: (id: number) => void
-    onOpen: (id: number) => void
+    onRemove: (id: number, type: 'file') => void
+    onUpdate: (id: number, type: 'file') => void
+    onOpen: (id: number, type: 'file') => void
     files: TFyle[]
+    edit?: boolean
 }
 
-function FileGalery({files, onRemove, onUpdate, onOpen}: TControlProps) {
+function FileGalery({files, onRemove, onUpdate, onOpen, edit = false}: TControlProps) {
     return (
         <List>
             {
                 files.map(({name, file, id}, idx) => (
-                    <ListItem key={`${name}_${idx}`}>
+                    <ListItem key={id} key={`${name}_${idx}`}>
                         <Stack width={'100%'} direction={'row'} justifyContent={'space-between'}>
-                        <DarkButton onClick={() => onOpen(id)} startIcon={<DescriptionIcon color="primary"/>}>
+                        <DarkButton onClick={() => onOpen(id, 'file')} startIcon={<DescriptionIcon color="primary"/>}>
                             {name}
                         </DarkButton>
-                        <Stack direction={'row'} spacing={1}>
-                            <IconButton onClick={() => onUpdate(id)}>
+                        {
+                            edit && (<Stack direction={'row'} spacing={1}>
+                            <FileUpload onClick={(e) => onUpdate(e, id, 'file')}>
                                 <SyncAltIcon/>
-                            </IconButton>
-                            <IconButton onClick={() => onRemove(id)}>
+                            </FileUpload>
+                            <IconButton onClick={() => onRemove(id, 'file')}>
                                 <DeleteOutlineIcon/>
                             </IconButton>
-                        </Stack>
+                        </Stack>)
+                        }
                         </Stack>
                     </ListItem>
                 ))

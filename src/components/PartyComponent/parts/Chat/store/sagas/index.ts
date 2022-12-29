@@ -1,9 +1,9 @@
 import {call, takeEvery, select, put, apply, all} from 'redux-saga/effects'
 import api from '../../../../../../api/api'
 import { parseToBase64 } from '../../../../../../utils/encoders';
-import { ADD_MESSAGE, SENDMESSAGE, SET_IMAGES, UPLOAD_FILES } from '../actionCreators'
+import { ADD_MESSAGE, CHANGE_FILES, SENDMESSAGE, SET_IMAGES, UPDATE_FILES, UPLOAD_FILES } from '../actionCreators'
 
-function* fetchMessageSend (messageData) {
+function* fetchMessageSend () {
     const state = yield select(state => state.chatSlice);
     const ids = yield select(state => state.chatRedusers.messagesIds)
     const authUser = yield select(state => state.authSlice.user)
@@ -17,6 +17,7 @@ function* fetchMessageSend (messageData) {
         replyMessageId: state.replyMessageId,
         frontId: maxId
     }])
+        console.log('new me')
         yield put({
             type: ADD_MESSAGE,
             payload: newMessage
@@ -26,8 +27,9 @@ function* fetchMessageSend (messageData) {
     }
 }
 
-function* parseImages(e) {
-    const files = e.payload.target.files
+function* parseImages(action) {
+    const {event, type, id, operation} = action.payload
+    const files = event.target.files
    const parsed = yield all(Array.from(files).map(async file => {
     const parsedFile = await parseToBase64(file)
     console.log(file, 'in file')
@@ -38,8 +40,12 @@ function* parseImages(e) {
     }
    }))
    yield put({
-    type: SET_IMAGES,
-    payload: parsed
+    type: operation === 'create' ? SET_IMAGES : CHANGE_FILES,
+    payload: {
+        files: parsed, 
+        type, 
+        id
+    }
    })
 }
 
@@ -52,8 +58,10 @@ function* parseImage() {
 }
 
 function* chatSagas() {
-    yield call(parseImage)
-    yield call(sendMessage)
+    yield all([
+        call(sendMessage),
+        call(parseImage)
+    ])
 }
 
 export {

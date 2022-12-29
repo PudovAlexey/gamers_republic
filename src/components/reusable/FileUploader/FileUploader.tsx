@@ -3,7 +3,7 @@ import { IconButton, styled } from "@mui/material"
 function FileUploader({onChange, children}) {
     return (
         <RelativeIconButton>
-            <InputUpload type={'file'} onChange={onChange}/>
+            <InputUpload multiple="multiple" type={'file'} onChange={onChange}/>
             {children}
         </RelativeIconButton>
     )

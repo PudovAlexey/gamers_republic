@@ -9,8 +9,8 @@ import DialogControl from '../../../../../../../reusable/Dialog/DialogControl';
 import { FileGalery } from '../../../../../../../reusable/FileGalery/FileGalery';
 import { FileUploader } from '../../../../../../../reusable/FileUploader/FileUploader';
 import { ImageGalery } from '../../../../../../../reusable/ImageGalery/ImageGalety';
-import { SENDMESSAGE, UPLOAD_FILES } from '../../../../store/actionCreators';
-import { inputMessage, onCliseCaptureModal } from '../../../../store/chatSlice';
+import { SENDMESSAGE, UPDATE_FILES, UPLOAD_FILES } from '../../../../store/actionCreators';
+import { inputMessage, onCliseCaptureModal, openAddByType, removeAddByTypeAndId } from '../../../../store/chatSlice';
 import {
   addsSelector,
   countAddsSelector,
@@ -45,6 +45,17 @@ function CaptureModal() {
 
 function SectionsMap() {
     const dispatch = useAppDispatch()
+    const handleOpen = (id, type) => dispatch(openAddByType({id, type}))
+    const handleUpdate = (e ,id, type) => dispatch({
+      type: UPLOAD_FILES,
+      payload: {
+        event: e,
+        operation: 'update',
+        id,
+        type
+      }
+    })
+    const handleRemove = (id, type) => dispatch(removeAddByTypeAndId({id, type}))
   const adds = useAppSelector(addsSelector);
   return (
     <Stack spacing={2}>
@@ -53,13 +64,15 @@ function SectionsMap() {
           case 'img':
             return (
               <ImageGalery
+              edit={true}
+              onOpen={handleOpen} onRemove={handleRemove} onUpdate={handleUpdate}
                 images={adds[type]}
               />
             );
           case 'audio':
             return <AudioGalery audios={adds[type]} />;
             case 'file':
-            return <FileGalery files={adds[type]} />;
+            return <FileGalery edit={true} onOpen={handleOpen} onRemove={handleRemove} onUpdate={handleUpdate} files={adds[type]} />;
           default:
             return null;
         }
@@ -81,7 +94,10 @@ function ModalActions() {
           onChange={(e) =>
             dispatch({
               type: UPLOAD_FILES,
-              payload: e,
+              payload: {
+                event: e,
+                operation: 'create'
+              },
             })
           }
         >

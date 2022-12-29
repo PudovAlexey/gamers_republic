@@ -88,13 +88,40 @@ const firstMessage = (date) => ({
     userId: date % 2 === 0 ? 1 : 2,
     chatId: 10,
     adds: {
-      img: [batmanImg, batmanImg, batmanImg, batmanImg, batmanImg ,batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg, batmanImg],
+      img: [{
+        type: 'img',
+        file: batmanImg,
+        name: '1',
+        id: 1
+      },
+      {
+        type: 'img',
+        file: batmanImg,
+        name: '2',
+        id: 2
+      },
+      {
+        type: 'img',
+        name: '3',
+        file: batmanImg,
+        id: 3
+      },
+      {
+        type: 'img',
+        file: batmanImg,
+        name: '3',
+        id: 4
+      },
+      {
+        type: 'img',
+        file: batmanImg,
+        name: '3',
+        id: 5
+      }
+    ],
       // audio: [ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio]
     },
-    replyFrom: {
-      messageId: 35,
-      userId: date % 2 === 0 ? 1 : 2
-    },
+    replyIds: [date - 1, date - 2, date - 3],
 })
 
 function makeMessages(match) {

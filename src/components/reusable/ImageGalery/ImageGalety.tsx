@@ -2,11 +2,13 @@ import { IconButton, ImageList, ImageListItem, styled } from '@mui/material';
 import SyncAltIcon from '@mui/icons-material/SyncAlt';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Stack } from '@mui/system';
+import { FileUploader } from '../FileUploader/FileUploader';
 
 type TImageGalery = {
-  onRemove: (id: number) => void;
-  onUpdate: (id: number) => void;
-  onOpen: (id: number) => void;
+  edit?: boolean
+  onRemove: (id: number, type: 'img') => void;
+  onUpdate: (e: any, id: number, type: 'img') => void;
+  onOpen: (id: number, type: 'img') => void;
   images: {
     file: string;
     name: string;
@@ -20,25 +22,26 @@ function ImageGalery({
   onOpen,
   onRemove,
   onUpdate,
+  edit = false
 }: TImageGalery) {
   return (
     <ImageList cols={images.length === 1 ? 1 : cols}>
       {images.map(({ file, name, id }) => (
         <IMageGaleryItem key={name}>
           <img
-            onClick={() => onOpen(id)}
+            onClick={() => onOpen(id, 'img')}
             src={file}
             alt={name}
             loading="lazy"
           />
-          <ImageIcons direction={'row'} spacing={1}>
-            <IconButton onClick={() => onUpdate(id)}>
+          {edit && (<ImageIcons direction={'row'} spacing={1}>
+            <FileUploader onChange={(e) => onUpdate(e, id, 'img')}>
               <SyncAltIcon />
-            </IconButton>
-            <IconButton onClick={() => onRemove(id)}>
+            </FileUploader>
+            <IconButton onClick={() => onRemove(id, 'img')}>
               <DeleteOutlineIcon />
             </IconButton>
-          </ImageIcons>
+          </ImageIcons>)}
         </IMageGaleryItem>
       ))}
     </ImageList>

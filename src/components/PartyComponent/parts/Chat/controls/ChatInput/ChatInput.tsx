@@ -50,7 +50,10 @@ function ChatInput() {
                   </IconButton>
                   <FileUploader onChange={(e) => dispatch({
                     type: UPLOAD_FILES,
-                    payload: e
+                    payload: {
+                      event: e,
+                      operation: 'create'
+                    }
                   })}>
                     <CameraAltIcon />
                   </FileUploader>

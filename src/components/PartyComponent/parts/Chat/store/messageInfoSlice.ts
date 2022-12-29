@@ -41,12 +41,11 @@ export const messagesInfoSlice = createSlice({
         builder.addCase(SENDMESSAGE, (state, action) => {
             const {message, adds, userData, lastMessageId} = action.payload
             const countNextMessage = lastMessageId + 1 
-            console.log(countNextMessage, 'inMessageInfo')
             state[countNextMessage] = {
-                message: message,
+                message,
                 createdAt: makeTimeString(),
                 adds: adds,
-                replyFrom: {},
+                reply: {},
                 userId: userData.id,
                 roomId: userData.roomId,
                 messageId: countNextMessage,
@@ -55,6 +54,7 @@ export const messagesInfoSlice = createSlice({
         })
         builder.addCase(ADD_MESSAGE, (state, action) => {
             const {messageId, frontId} = action.payload
+            console.log(action.payload)
             if (state[frontId]) {
                 delete state[frontId]
                 state[messageId] = action.payload

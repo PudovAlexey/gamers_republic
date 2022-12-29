@@ -10,6 +10,8 @@ import { selectItemById } from '../../../../store/messageInfoSlice';
 import { UserSend } from './MessageParts/MessageLayout/UserSend';
 import { CompanionSend } from './MessageParts/MessageLayout/CompanionSend';
 import { Paper, Typography } from '@mui/material';
+import { ReplyMessage } from '../../../ChatInput/components/ReplyMessage/ReplyMessage';
+import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
 
 function Message({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
@@ -21,6 +23,7 @@ function Message({ messageId }) {
   const Message = (
     <Box>
           <Paper>
+            <ReplyControl messageId={messageId}/>   
             <MarkdownEditor
               value={message || ''}
               view={{
