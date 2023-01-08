@@ -12,7 +12,7 @@ function ReplyControl({messageId}) {
     if (!firstReplyMessage) return null
     const {message, adds, user} = firstReplyMessage
     const ReplyPaper = styled(Paper)({
-        height: 45 + 'px',
+        height: 70 + 'px',
         width: '100%',
         background: "#FF4656",
         position: 'relative',
@@ -37,11 +37,11 @@ function ReplyControl({messageId}) {
          </AddsWrapper>
             <Box>
               <Typography>{user.username}</Typography>
+            </Box>
+          </ReplyContainer>
               <ReplyMessageTypography>
                 {message}
               </ReplyMessageTypography>
-            </Box>
-          </ReplyContainer>
         </ReplyPaper>
       );
 }
@@ -60,7 +60,9 @@ function ReplyControl({messageId}) {
     whiteSpace: 'nowrap',
     display: 'block',
     overflow: 'hidden',
-    maxWidth: '60%'
+    maxWidth: '100%',
+    position: 'relative',
+    top: '-17px'
 
   })
 
