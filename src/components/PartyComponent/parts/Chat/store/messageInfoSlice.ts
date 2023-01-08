@@ -1,6 +1,6 @@
 import { createSelector, createSlice, current } from "@reduxjs/toolkit"
 import { makeTimeString } from "../../../../../utils/timer/timer"
-import { ADD_MESSAGE, SENDMESSAGE } from "./actionCreators"
+import { ADD_MESSAGE, ADD_MESSAGES, NAVIGATION_PROGRESS, SENDMESSAGE, START_NAVIGATION } from "./actionCreators"
 import { fetchMessages } from "./messagesSlice"
 
 const initialState = {}
@@ -29,7 +29,7 @@ export const messagesInfoSlice = createSlice({
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchMessages.fulfilled, (state, action) => {
+        builder.addCase(ADD_MESSAGES, (state, action) => {
             if (Array.isArray(action.payload)) action.payload.forEach((message) => {
                 const {messageId} = message
                 if (!state[messageId]) {
@@ -54,13 +54,21 @@ export const messagesInfoSlice = createSlice({
         })
         builder.addCase(ADD_MESSAGE, (state, action) => {
             const {messageId, frontId} = action.payload
-            console.log(action.payload)
             if (state[frontId]) {
                 delete state[frontId]
                 state[messageId] = action.payload
             }
-            // state[messageId] = action.payload
         })
+
+        builder.addCase(NAVIGATION_PROGRESS, (store, action) => {
+            const {fetchedMessages} = action.payload
+            if (Array.isArray(fetchedMessages) && fetchedMessages.length) {
+                fetchedMessages.forEach((message) => {
+                    const {messageId} = message
+                   store[messageId] = message
+                })
+            } 
+          })
     }
 })
 

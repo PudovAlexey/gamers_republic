@@ -1,4 +1,5 @@
-import { Box, Stack, styled } from "@mui/material"
+import { Stack, styled } from "@mui/material"
+import {useRef} from 'react'
 import React, { useContext } from "react"
 import { useAppDispatch } from "../../../../hooks/typedReduxHooks"
 import { AuthContext } from "../../../AuthContext/AuthContext"
@@ -6,24 +7,29 @@ import { onExit } from "./controls/AudioViewer/store/playAudioSlice"
 import MessagesList from "./controls/Messages/MessagesList"
 import { ChatHeader } from "./controls/ChatHeader"
 import { ChatInput } from "./controls/ChatInput/ChatInput"
-import { fetchMessages } from "./store/messagesSlice"
 import { fetchChat, onInit } from "./store/chatSlice"
 import { scrollService } from "./services/scrollService"
-import Message from "./controls/Messages/controls/Message/Message"
+import { UPLOAD_MESSAGES } from "./store/actionCreators"
 
 function ChatComponent() {
+    const messageContainer = useRef()
     const [AuthUser] = useContext(AuthContext)
     const dispatch = useAppDispatch()
     React.useEffect(() => {
-        if (AuthUser?.roomId) 
-        dispatch(onInit({
-            scrollService,
-            roomId: AuthUser?.roomId
-        }))
-        dispatch(fetchChat(AuthUser?.roomId))
-        dispatch(fetchMessages({
-            roomId: AuthUser?.roomId
-        }))
+        if (AuthUser?.roomId) {
+            dispatch(fetchChat(AuthUser?.roomId))
+            dispatch(onInit({
+                scrollService,
+                roomId: AuthUser?.roomId,
+                messageContainer: messageContainer.current
+            }))
+            dispatch({
+                type: UPLOAD_MESSAGES,
+                payload: {
+                    roomId: AuthUser?.roomId
+                }
+            })
+        }
         return () => {
             dispatch(onExit())
         }
@@ -32,7 +38,7 @@ function ChatComponent() {
         <ChatBox spacing={1}>
             <Stack spacing={1}>
             <ChatHeader/>
-            <MessagesList/>
+            <MessagesList messageContainer={messageContainer}/>
         </Stack>
             <ChatInput/>
         </ChatBox>

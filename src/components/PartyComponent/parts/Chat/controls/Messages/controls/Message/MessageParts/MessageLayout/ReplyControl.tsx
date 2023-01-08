@@ -1,36 +1,45 @@
-import { Box, IconButton, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import ReplyIcon from '@mui/icons-material/Reply';
 import { AddsViewer } from "../../../../../addsViewer/AddsViewer";
 import { replyFirstMessageById } from "../../../../../../store/selectors/chatSelector";
-import { useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
+import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
+import { REPLY_NAVIGATE } from "../../../../../../store/actionCreators";
 
 function ReplyControl({messageId}) {
+    const dispatch = useAppDispatch()
     const firstReplyMessage = useAppSelector((action) => replyFirstMessageById(action,messageId))
-    console.log(firstReplyMessage, 'replyData')
     if (!firstReplyMessage) return null
     const {message, adds, user} = firstReplyMessage
     const ReplyPaper = styled(Paper)({
-        height: 30 + 'px',
+        height: 45 + 'px',
         width: '100%',
         background: "#FF4656",
-        position: 'relative'
+        position: 'relative',
+        cursor: 'pointer',
+        overflow: 'hidden',
       })
     return (
-        <ReplyPaper>
+        <ReplyPaper onClick={() => dispatch({
+          type: REPLY_NAVIGATE,
+          payload: {
+            messageId: firstReplyMessage.messageId
+          }
+        })}>
           <ReplyContainer alignItems={'center'} direction={'row'} spacing={2}>
           <ReplyIcon fontSize='large' />
          <AddsWrapper>
          <AddsViewer showMoreButton={false} showCount={{
             img: 1,
-            audio: 0
+            audio: 1,
+            file: 1
           }} adds={adds}/>
          </AddsWrapper>
             <Box>
               <Typography>{user.username}</Typography>
-              <Typography>
+              <ReplyMessageTypography>
                 {message}
-              </Typography>
+              </ReplyMessageTypography>
             </Box>
           </ReplyContainer>
         </ReplyPaper>
@@ -44,6 +53,15 @@ function ReplyControl({messageId}) {
   
   const ReplyContainer = styled(Stack)({
     maxHeight: '100%'
+  })
+
+  const ReplyMessageTypography = styled(Typography)({
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+    display: 'block',
+    overflow: 'hidden',
+    maxWidth: '60%'
+
   })
 
 export {

@@ -4,55 +4,41 @@ import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../hooks/typedReduxHooks';
-import { fetchMessages } from '../../store/messagesSlice';
 import { ChatContainer, ScrollContainer } from './containers/baseContainers';
-import Message from './controls/Message/Message';
+import MessageControl from './controls/Message/Message';
 import { TopProgress } from './containers/TopProgress';
 import { BottomProgress } from './containers/BottomProgress';
 import {
   chatHeightSelector,
+  messagesIdsSelector,
   replyHeightSelector,
-  roomIdSelector,
-  scrollServiceSelector,
   showReplySelector,
 } from '../../store/selectors/chatSelector';
+import { UPLOAD_MESSAGES_BY_OFFSET } from '../../store/actionCreators';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
-function MessagesList() {
+function MessagesList({ messageContainer }) {
   const dispatch = useAppDispatch();
   const showReply = useAppSelector(showReplySelector);
   const replyHeight = useAppSelector(replyHeightSelector);
   const chatHeight = useAppSelector(chatHeightSelector);
-  const scrollService = useAppSelector(scrollServiceSelector);
-  const roomId = useAppSelector(roomIdSelector);
-  const scroll = useCallback(
-    (e) => {
-      const messagesData = scrollService;
-      const { scrollTop, scrollHeight } = e.target;
-      const { scrollDirection, queryMessage } = messagesData.update(e.target);
-      if (scrollTop < -1100) {
-        dispatch(
-          fetchMessages({
-            roomId,
-            messageStart: queryMessage,
-            offset: 20,
-            where: scrollDirection,
-          })
-        );
-      }
-    },
-    [dispatch, scrollService, roomId]
-  );
   return (
     <Box>
       <TopProgress />
       <ScrollContainer
+        ref={messageContainer}
         sx={
           showReply && {
             height: `${chatHeight - replyHeight}` + 'px',
             minHeight: `${chatHeight - replyHeight}` + 'px',
           }
         }
-        onScroll={(e) => scroll(e)}
+        onScroll={() =>
+          dispatch({
+            type: UPLOAD_MESSAGES_BY_OFFSET,
+          })
+        }
       >
         <ChatContainer>
           <Messages />
@@ -64,20 +50,45 @@ function MessagesList() {
 }
 
 function Messages() {
-  const messageIds = useAppSelector((action) => action.messagesSlice);
-  const memoizedItems = useMemo(() => {
-    return messageIds.map((messageId) => {
-      const messageByMessageId = () => messageId;
-      return React.memo(messageByMessageId);
-    });
-  }, [messageIds]);
+  const messageIds = useAppSelector(messagesIdsSelector);
+  const [state, setState] = useState([]);
+  let index = 0;
+  useEffect(() => {
+    const interval = setInterval(() => {
+      if (!state.length && messageIds[0]) {
+        setState(messageIds);
+      } else {
+        requestAnimationFrame(() => {
+          return setState((pr) => {
+            const lastMessage = pr[pr.length - 1];
+            const nextMessage = messageIds.findIndex((m) => lastMessage > m);
+            const selectMessages = messageIds.slice(
+              nextMessage,
+              nextMessage + 1
+            );
+            return nextMessage >= 0 ? [...pr, ...selectMessages] : pr;
+          });
+        });
+      }
+      index++;
+      if (index >= messageIds.length) {
+        clearInterval(interval);
+      }
+    }, 0);
 
-  let itemarray = [];
-  for (const MemoizedItem of memoizedItems) {
-    const memoId = MemoizedItem.type();
-    itemarray.push(<Message key={memoId} messageId={memoId} />);
-  }
-  return <React.Fragment>{itemarray}</React.Fragment>;
+    return () => {
+      clearInterval(interval);
+    };
+  }, [messageIds, index, state.length]);
+  return (
+    <React.Fragment>
+      {
+        state.map((id, idx) => (
+          <MessageControl key={`${id}_${idx}`} messageId={id} />
+        ))
+      }
+    </React.Fragment>
+  )
 }
 
 export default MessagesList;

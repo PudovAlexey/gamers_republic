@@ -18,7 +18,7 @@ function AddsViewer({adds, showCount, showMoreButton = true}: TControlProps) {
         <Box>
             {Object.keys(adds || {}).map(add => {
                 return (
-                    <Box>
+                    <Box key={add} sx={{minWidth: '50px'}}>
                         {typeof addConfig[add] === 'function' ? 
                 addConfig[add](adds[add], showCount, showMoreButton) :
                 null

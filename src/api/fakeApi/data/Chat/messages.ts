@@ -121,7 +121,7 @@ const firstMessage = (date) => ({
     ],
       // audio: [ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio, ramstainAudio]
     },
-    replyIds: [date - 1, date - 2, date - 3],
+    replyIds: [date - 100],
 })
 
 function makeMessages(match) {

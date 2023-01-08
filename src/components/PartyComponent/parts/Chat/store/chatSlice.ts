@@ -1,14 +1,15 @@
 import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
+import store from '../../../../../store/store';
 import { generateAddsId } from '../services/helpers';
-import { ADD_MESSAGE, CHANGE_FILES, SENDMESSAGE, SET_IMAGES } from './actionCreators';
-import { fetchMessages } from './messagesSlice';
+import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION } from './actionCreators';
 
 const initialState = {
   scrollService: null,
   roomId: null,
   users: {},
   chatInfo: {},
+  messageContainer: null,
   showCaptureModal: false,
   loadingBottom: false,
   loadingTop: false,
@@ -36,10 +37,11 @@ const chatSlice = createSlice({
   initialState,
   reducers: {
     onInit: (state, action) => {
-      const { scrollService, roomId } = action.payload;
+      const { scrollService, roomId, messageContainer } = action.payload;
       const init = scrollService();
       state.scrollService = init;
       state.roomId = roomId;
+      state.messageContainer = messageContainer
     },
     inputMessage: (state, action) => {
       const { target } = action.payload;
@@ -66,6 +68,15 @@ const chatSlice = createSlice({
     openAddByType: (state, action) => {
 
     },
+    onMoveChatToBottom: (state, action) => {
+      const scrollService = current(state.scrollService)
+      scrollService.update(state.messageContainer)
+      const firstMessage = scrollService.getFirstMessage()
+      if (firstMessage) {
+        firstMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+      }
+
+    },
     onCloseReply: (state) => {
       state.showReply = false;
       state.replyMessage = {};
@@ -82,17 +93,14 @@ const chatSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchMessages.pending, (state, action) => {
-      const { where } = action.meta.arg;
-      if (where === 'up') {
-        state.loadingTop = true;
-      } else if (where === 'down') {
-        state.loadingBottom = true;
+    builder.addCase(SHOW_LOADER, (state, action) => {
+      switch(action.payload) {
+        case 'up': state.loadingTop = true
+          break;
+        case 'down': state.loadingBottom = true
+          break;
       }
-    });
-    builder.addCase(fetchChat.fulfilled, (state, action) => {
-      state.chatInfo = action.payload;
-    });
+    })
     builder.addCase(SENDMESSAGE, (state, action) => {
       const { lastMessageId } = action.payload;
       const countNextMessage = lastMessageId + 1;
@@ -158,6 +166,22 @@ const chatSlice = createSlice({
       const fileIndex = state.adds[type].findIndex((file) => file.id === id)
       if (fileIndex >= 0) state.adds[type].splice(fileIndex, 1, files[0])
     })
+    builder.addCase(START_NAVIGATION, (state, action) => {
+      const {messageId} = action.payload
+      const scrollService = current(state.scrollService)
+      scrollService.update(state.messageContainer)
+      const scrolledMessage = scrollService.findById(messageId)
+      if (scrolledMessage) {
+        scrolledMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+      } else {
+        const firstMessage = scrollService.getLastMessage()
+        firstMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+      }
+    })
+    builder.addCase(ADD_MESSAGES, (state) => {
+      state.loadingBottom = false
+      state.loadingTop = false
+    })
   },
 });
 
@@ -167,6 +191,7 @@ export const {
   onShowReply,
   inputMessage,
   onCloseReply,
+  onMoveChatToBottom,
   removeAddByTypeAndId,
   updateAddByTypeAndId,
   openAddByType,

@@ -19,15 +19,15 @@ function filterMessagesTop({ messagesFromChat, offset, startForm }) {
 
 function filterMessagesMiddle({ messagesFromChat, offset, startForm }) {
   let filterMessages = [];
-  for (let i = startForm; i > offset / 2; i--) {
+  for (let i = startForm; i < offset / 2 + startForm; i++) {
+    if (!messagesFromChat[i + 1]) break;
+    filterMessages.push(messagesFromChat[i + 1]);
+  }
+  for (let i = startForm; i > startForm - offset / 2; i--) {
     if (!messagesFromChat[i]) break;
     filterMessages.push(messagesFromChat[i]);
   }
-  for (let i = 0; i < offset; i++) {
-    if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i]);
-  }
-  return filterMessages;
+  return filterMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.messageId))
 }
 
 function filterMessagesBottom({ messagesFromChat, offset, startForm }) {
@@ -160,7 +160,6 @@ class FakeApi {
         }),
         user: Users.find((user) => message.userId === user.id),
       }));
-      console.log(messagesWitchUserData, 'messageByData')
       return messagesWitchUserData;
     } else {
       return { message: `Can't find messages in room ${roomId}` };
@@ -250,7 +249,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 2000;
+    let delay = 200;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

@@ -10,9 +10,10 @@ import {
   TextField,
 } from '@mui/material';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import SouthIcon from '@mui/icons-material/South';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
 import { SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
-import { inputMessage } from '../../store/chatSlice';
+import { inputMessage, onMoveChatToBottom } from '../../store/chatSlice';
 import {
   useAppDispatch,
   useAppSelector,
@@ -72,6 +73,9 @@ function ChatInput() {
                   >
                     <SendIcon />
                   </IconButton>
+                  <BottomNavIcon onClick={() => dispatch(onMoveChatToBottom())}>
+                    <SouthIcon/>
+                  </BottomNavIcon>
                 </Stack>
               </InputAdornment>
             ),
@@ -94,5 +98,13 @@ const ReplyWrapContainer = styled(Box)({
   padding: '0 5px',
   top: '4px',
 });
+
+const BottomNavIcon = styled(IconButton)({
+  position: 'absolute',
+  top: '-60px',
+  right: '30px',
+  background: 'red',
+
+})
 
 export { ChatInput };

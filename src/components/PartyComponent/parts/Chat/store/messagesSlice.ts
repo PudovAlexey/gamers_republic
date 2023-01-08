@@ -1,43 +1,31 @@
-import { configureStore, createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
-import store from "../../../store"
-import api from "../../../../../api/api"
-import { ADD_MESSAGE, SENDMESSAGE } from "./actionCreators"
-const initialState = []
-
-export const fetchMessages = createAsyncThunk(null, 
-    async({
-        roomId,
-        messageStart = 'end',
-        offset = 20,
-        where = 'up'
-    }, _) => {
-        const messages = await api.getMessagesByRoomId({
-            roomId,
-            messageStart,
-            offset,
-            where
-        })
-return messages
-    }
-    )
+import { createSlice, current } from "@reduxjs/toolkit"
+import { ADD_MESSAGE, ADD_MESSAGES, NAVIGATION_PROGRESS, SENDMESSAGE } from "./actionCreators"
+const initialState= {
+    messages: []
+}
 
 export const messagesSlice = createSlice({
     name: 'messages',
     initialState,
     reducers: {
-        onInit: (state, action) => {
-        },
         onExit: (store) => {
-            store = []
+            store.messages = []
         }
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchMessages.fulfilled, (state, action) => {
-            const currentMessages = current(state)
+          builder.addCase(ADD_MESSAGES, (state, action) => {
+            let currentMessages = [...current(state.messages)]
+            let changed = false
             if (Array.isArray(action.payload)) action.payload.forEach(({messageId}) => {
                 const isSameMessage = currentMessages.indexOf(messageId)
-                   if (isSameMessage < 0) state.push(messageId)
+                   if (isSameMessage < 0) {
+                    changed = true
+                    currentMessages.push(messageId)
+                   }
             })
+            currentMessages.sort((a, b) => b - a)
+            currentMessages = [...new Set(currentMessages)]
+            if (changed) state.messages = currentMessages
           })
           builder.addCase(SENDMESSAGE, (store, action) => {
             const {lastMessageId} = action.payload
@@ -52,6 +40,16 @@ export const messagesSlice = createSlice({
             if (frontId >= 0) {
                 state.splice(findFrontId, 1, messageId)
             }            
+          })
+          builder.addCase(NAVIGATION_PROGRESS, (store, action) => {
+            const {fetchedMessages} = action.payload
+            const currentMessages = current(store.messages)
+            if (Array.isArray(fetchedMessages) && fetchedMessages.length) {
+                fetchedMessages.forEach(({messageId}) => {
+                    const isSameMessage = currentMessages.indexOf(messageId)
+                    if (isSameMessage < 0) store.messages.push(messageId)
+                })
+            } 
           })
     }
 })

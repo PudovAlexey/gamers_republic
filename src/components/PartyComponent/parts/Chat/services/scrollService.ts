@@ -4,46 +4,60 @@ function scrollService() {
   let prevScrollTop;
   let scrollDirection;
   let messagesOnScreen = [];
+  let messageContainer = null
   return {
     update: (scrollContainer) => {
-      const target = scrollContainer.children[0];
+      messageContainer = scrollContainer.children[0];
+      const scrollTop = scrollContainer.scrollTop
+      const scrollHeight = scrollContainer.scrollHeight
+      const scrollOffsetHeight = Math.abs(scrollTop) - (scrollContainer.scrollHeight - scrollContainer.offsetHeight)
+      const topPercentage = ((scrollTop / scrollHeight) * 100)
+      const scrollBottomPercentage = Math.abs(scrollOffsetHeight) / scrollHeight * 100
+      const isNearBottom = topPercentage > 0 && topPercentage < 35
+      const isNearTop = scrollBottomPercentage > 0 && scrollBottomPercentage < 35
+      let queryMessage
       if (!messagesOnScreen.length) {
-        messagesOnScreen.push(target.firstChild);
+        messagesOnScreen.push(messageContainer.firstChild);
       }
       if (scrollContainer.scrollTop > prevScrollTop) {
         scrollDirection = 'down';
         messagesOnScreen = onMoveBottom(scrollContainer, messagesOnScreen);
+        const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
+        queryMessage = messageIds[messageIds.length - 1];
       } else if (scrollContainer.scrollTop < prevScrollTop) {
         scrollDirection = 'up';
         messagesOnScreen = onMoveTop(scrollContainer, messagesOnScreen);
+        const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
+        queryMessage = messageIds[0];
       } else {
         scrollDirection = 'draw';
       }
       prevScrollTop = scrollContainer.scrollTop;
-      const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
       let onFetch = false;
-      let queryMessage = messageIds[0];
-      if (
-        scrollContainer.scrollTop > -200 &&
-        scrollContainer.scrollTop >= -300
-      ) {
-        onFetch = true;
-        queryMessage = messageIds[messageIds.length - 1];
-      } else if (
-        scrollContainer.scrollHeight <
-          Math.abs(scrollContainer.scrollTop) + 700 &&
-        scrollContainer.scrollHeight < Math.abs(scrollContainer.scrollTop) + 700
-      ) {
-        onFetch = true;
-        queryMessage = messageIds[0];
+      if (!(isNearBottom || isNearTop)) {
+        queryMessage = null
       }
-
+      if (scrollTop)
       return {
         scrollDirection,
         queryMessage,
         onFetch,
+        messagesOnScreen,
+        containerChildren: messageContainer.children
       };
     },
+    findById: function(messageId) {
+      const allMessages = messageContainer.children
+      return Array.from(allMessages).find(message => +message?.dataset?.messageid === messageId)
+    },
+    getLastMessage: function() {
+      const allMessages = messageContainer.children
+      return allMessages[allMessages.length - 1]
+    },
+    getFirstMessage: function() {
+      const allMessages = messageContainer.children
+      return allMessages[0]
+    }
   };
 }
 

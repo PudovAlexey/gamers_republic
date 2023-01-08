@@ -20,12 +20,10 @@ import {
 } from '../../../../store/selectors/chatSelector';
 
 function CaptureModal() {
-  const adds = useAppSelector(addsSelector);
   const showCaptureModal = useAppSelector(showCaptureModalSelector);
   const countAdds = useAppSelector(countAddsSelector);
   const chatValue = useAppSelector(messageInputSelector);
   const dispatch = useAppDispatch();
-  console.log(adds);
   return (
     <DialogControl
       customFooter={<ModalActions />}

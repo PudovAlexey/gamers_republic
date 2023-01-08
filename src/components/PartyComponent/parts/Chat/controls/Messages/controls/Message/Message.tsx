@@ -1,4 +1,5 @@
 import React from 'react';
+import {useEffect} from 'react'
 import { Box } from '@mui/system';
 import { useAppSelector } from '../../../../../../../../hooks/typedReduxHooks';
 import { MarkdownEditor } from '../../../../../../../reusable/MkEditor/MkEditorComponent';
@@ -13,14 +14,34 @@ import { Paper, Typography } from '@mui/material';
 import { ReplyMessage } from '../../../ChatInput/components/ReplyMessage/ReplyMessage';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
 
-function Message({ messageId }) {
+function MessageControl({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
-    selectItemById(state.chatRedusers.messages, messageId)
+  selectItemById(state.chatRedusers.messages, messageId)
+);
+if (!messageData) return null;
+const {userId} = messageData
+  return (
+    <Box sx={{
+      mb: "16px"
+    }} key={messageId} data-messageid={messageId}>
+      {
+        AuthUser?.id === userId ? 
+        <UserSend messageId={messageId}>{<Message messageId={messageId}/>}</UserSend> : 
+        <CompanionSend messageId={messageId}>{<Message messageId={messageId}/>}</CompanionSend>
+      }
+    </Box>
   );
-  if (!messageData) return null;
-  const {userId, message, adds, createdAt} = messageData
-  const Message = (
+}
+
+function Message({messageId}) {
+  const messageData = useAppSelector((state) =>
+  selectItemById(state.chatRedusers.messages, messageId)
+);
+if (!messageData) return null;
+const {message, adds, createdAt} = messageData
+  return (
+    
     <Box>
           <Paper>
             <ReplyControl messageId={messageId}/>   
@@ -42,17 +63,6 @@ function Message({ messageId }) {
           </Paper>
         </Box>
   )
-  return (
-    <Box sx={{
-      mb: "16px"
-    }} key={messageId} data-messageid={messageId}>
-      {
-        AuthUser?.id === userId ? 
-        <UserSend messageId={messageId}>{Message}</UserSend> : 
-        <CompanionSend messageId={messageId}>{Message}</CompanionSend>
-      }
-    </Box>
-  );
 }
 
-export default React.memo(Message);
+export default React.memo(MessageControl);

@@ -7,6 +7,7 @@ const showReplySelector = state => state.chatRedusers.chatSlice.showReply
 const roomIdSelector = state => state.chatRedusers.chatSlice.roomId
 const messages = state => state.chatRedusers.messages
 const scrollServiceSelector = state => state.chatRedusers.chatSlice.scrollService
+const messageScrollContainerSelector = state => state.chatRedusers.chatSlice.messageContainer
 const messageInputSelector = state =>  state.chatRedusers.chatSlice.messageInput
 const replyMessageSelector = state => state.chatRedusers.chatSlice.replyMessage
 const addsSelector = state => state.chatRedusers.chatSlice.adds
@@ -16,7 +17,7 @@ const countAddsSelector = state => {
   return Object.values(adds).flat(2).length
 }
 const replyAddsSelector = state => state.chatRedusers.chatSlice.replyAdds
-const messagesIdsSelector = state => state.chatRedusers.messagesIds
+const messagesIdsSelector = state => state.chatRedusers.messagesIds.messages
 const selectItemId = (_, itemId) => itemId
 
 const maxMessagesIdsSelector = state => {
@@ -32,7 +33,6 @@ const loadMessageById =  createSelector(
   const replyFirstMessageById =  createSelector(
     [messages, selectItemId],
     (items, itemId) => {
-      console.log(items, itemId, 'item in selector')
       return items?.[itemId]?.replyMessages[0]
     }
   )
@@ -54,5 +54,6 @@ export {
     replyAddsSelector,
     showCaptureModalSelector,
     countAddsSelector,
-    replyFirstMessageById
+    replyFirstMessageById,
+    messageScrollContainerSelector
 }
