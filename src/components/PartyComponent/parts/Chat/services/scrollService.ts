@@ -37,7 +37,6 @@ function scrollService() {
       if (!(isNearBottom || isNearTop)) {
         queryMessage = null
       }
-      if (scrollTop)
       return {
         scrollDirection,
         queryMessage,

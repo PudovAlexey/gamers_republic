@@ -21,7 +21,7 @@ const messagesIdsSelector = state => state.chatRedusers.messagesIds.messages
 const selectItemId = (_, itemId) => itemId
 
 const maxMessagesIdsSelector = state => {
-  const messagesIds = state.chatRedusers.messagesIds
+  const messagesIds = state.chatRedusers.messagesIds.messages
   return (messagesIds.length > 0 ? Math.max(...messagesIds) : 0)
 }
 
@@ -33,7 +33,7 @@ const loadMessageById =  createSelector(
   const replyFirstMessageById =  createSelector(
     [messages, selectItemId],
     (items, itemId) => {
-      return items?.[itemId]?.replyMessages[0]
+      return items?.[itemId]?.replyMessages?.[0]
     }
   )
 

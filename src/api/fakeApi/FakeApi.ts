@@ -54,7 +54,7 @@ class FakeApi {
     message, 
     adds, 
     userId, 
-    replyMessageId, 
+    replyIds, 
     roomId,
     frontId
    }) {
@@ -80,21 +80,24 @@ class FakeApi {
         })
         .join(' ');
 
-      let replyFrom = {};
-      if (replyMessageId) {
-        replyFrom = {};
-      }
       const messageId = messages[messages.length - 1].messageId + 1
       const newMessage = {
         message,
         createdAt,
         adds,
-        reply,
+        replyIds,
         userId,
         roomId,
         messageId,
       };
       messages.push(newMessage);
+      newMessage.replyMessages = newMessage.replyIds && newMessage.replyIds.map((replyId) => {
+        const messageData = messages.find(({messageId}) => messageId === replyId)
+        return {
+          ...messageData,
+          user: Users.find((user) => messageData.userId === user.id),
+        }
+      })
       let req = await this.fakeDelay(newMessage);
       return {
         ...req,
@@ -249,7 +252,7 @@ class FakeApi {
   }
 
   async fakeDelay(data) {
-    let delay = 200;
+    let delay = 5000;
     var promise = await new Promise(function (resolve, reject) {
       setTimeout(() => {
         try {

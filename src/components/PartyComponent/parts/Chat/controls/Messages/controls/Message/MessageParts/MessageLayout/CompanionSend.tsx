@@ -23,14 +23,14 @@ function CompanionSend({children, messageId}) {
         <LeftProgress>
            {loadMessage && <SendProgress/>}
         </LeftProgress>
-            <IconButton onClick={() => dispatch(onShowReply(messageData))} aria-label="menu">
+            <IconButton aria-label="menu">
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>
             <Typography>{user.username}</Typography>
             <AvatarComponent {...user} />
             </Stack>
-            <IconButton onClick={() => {}}>
+            <IconButton onClick={() => dispatch(onShowReply(messageData))}>
               <ReplyIcon />
             </IconButton>
           </LeftToolBar>

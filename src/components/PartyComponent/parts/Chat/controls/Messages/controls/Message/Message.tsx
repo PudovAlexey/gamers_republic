@@ -1,7 +1,6 @@
 import React from 'react';
-import {useEffect} from 'react'
 import { Box } from '@mui/system';
-import { useAppSelector } from '../../../../../../../../hooks/typedReduxHooks';
+import { useAppDispatch, useAppSelector } from '../../../../../../../../hooks/typedReduxHooks';
 import { MarkdownEditor } from '../../../../../../../reusable/MkEditor/MkEditorComponent';
 import { useContext } from 'react';
 import { parseTimeByString } from '../../../../../../../../utils/timer/timer';
@@ -11,8 +10,9 @@ import { selectItemById } from '../../../../store/messageInfoSlice';
 import { UserSend } from './MessageParts/MessageLayout/UserSend';
 import { CompanionSend } from './MessageParts/MessageLayout/CompanionSend';
 import { Paper, Typography } from '@mui/material';
-import { ReplyMessage } from '../../../ChatInput/components/ReplyMessage/ReplyMessage';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
+import { useEffect } from 'react';
+import { onAddReplyId } from '../../../../store/chatSlice';
 
 function MessageControl({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
@@ -35,14 +35,14 @@ const {userId} = messageData
 }
 
 function Message({messageId}) {
+  const dispatch = useAppDispatch()
   const messageData = useAppSelector((state) =>
   selectItemById(state.chatRedusers.messages, messageId)
 );
 if (!messageData) return null;
 const {message, adds, createdAt} = messageData
   return (
-    
-    <Box>
+    <Box onDoubleClick={() => dispatch(onAddReplyId(messageId))}>
           <Paper>
             <ReplyControl messageId={messageId}/>   
             <MarkdownEditor

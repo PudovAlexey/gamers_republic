@@ -27,7 +27,7 @@ function ImageGalery({
   return (
     <ImageList cols={images.length === 1 ? 1 : cols}>
       {images.map(({ file, name, id }) => (
-        <IMageGaleryItem key={name}>
+        <IMageGaleryItem key={id}>
           <img
             onClick={() => onOpen(id, 'img')}
             src={file}

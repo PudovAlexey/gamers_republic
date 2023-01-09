@@ -29,16 +29,15 @@ export const messagesSlice = createSlice({
           })
           builder.addCase(SENDMESSAGE, (store, action) => {
             const {lastMessageId} = action.payload
-            store.unshift(lastMessageId + 1)
+            console.log(lastMessageId)
+            store.messages.unshift(lastMessageId + 1)
           })
           builder.addCase(ADD_MESSAGE, (state, action) => {
             const {messageId, frontId} = action.payload
-            // console.log('in Messages')
-            // state.unshift(messageId)
-            const messageIds = current(state)
+            const messageIds = current(state.messages)
             const findFrontId = messageIds.indexOf(frontId)
             if (frontId >= 0) {
-                state.splice(findFrontId, 1, messageId)
+                state.messages.splice(findFrontId, 1, messageId)
             }            
           })
           builder.addCase(NAVIGATION_PROGRESS, (store, action) => {

@@ -51,9 +51,18 @@ function MessagesList({ messageContainer }) {
 
 function Messages() {
   const messageIds = useAppSelector(messagesIdsSelector);
+  const loadMessages = useAppSelector(state => state.chatSlice.loadMessageIds)
   const [state, setState] = useState([]);
   let index = 0;
   useEffect(() => {
+    if (loadMessages.length) {
+      setState((pr) => {
+        const clone = [...pr]
+        const filterMessages = loadMessages.filter(m => !pr.includes(m))
+        clone.unshift(...filterMessages)
+        return clone
+      })
+    }
     const interval = setInterval(() => {
       if (!state.length && messageIds[0]) {
         setState(messageIds);
@@ -83,8 +92,8 @@ function Messages() {
   return (
     <React.Fragment>
       {
-        state.map((id, idx) => (
-          <MessageControl key={`${id}_${idx}`} messageId={id} />
+        state.map((id) => (
+          <MessageControl key={id} messageId={id} />
         ))
       }
     </React.Fragment>

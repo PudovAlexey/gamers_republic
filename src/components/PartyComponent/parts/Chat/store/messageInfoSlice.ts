@@ -41,6 +41,7 @@ export const messagesInfoSlice = createSlice({
         builder.addCase(SENDMESSAGE, (state, action) => {
             const {message, adds, userData, lastMessageId} = action.payload
             const countNextMessage = lastMessageId + 1 
+            console.log(countNextMessage, 'in messages')
             state[countNextMessage] = {
                 message,
                 createdAt: makeTimeString(),

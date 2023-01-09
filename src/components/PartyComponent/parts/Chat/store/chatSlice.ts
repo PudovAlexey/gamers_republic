@@ -23,6 +23,7 @@ const initialState = {
   replyAdds: {},
   adds: {},
   loadMessageIds: [],
+  replyIds: []
 };
 
 export const fetchChat = createAsyncThunk(
@@ -51,6 +52,7 @@ const chatSlice = createSlice({
       state.showReply = true;
       const { adds } = action.payload;
       state.replyMessage = action.payload;
+      state.replyIds = [action.payload.messageId]
       if (adds) {
         state.replyAdds = adds;
       }
@@ -65,8 +67,8 @@ const chatSlice = createSlice({
       currentAdds[type] = updateAddsByType
       state.adds = currentAdds
     },
-    openAddByType: (state, action) => {
-
+    onAddReplyId: (state, action) => {
+      state.replyIds.push(action.payload)
     },
     onMoveChatToBottom: (state, action) => {
       const scrollService = current(state.scrollService)
@@ -105,6 +107,7 @@ const chatSlice = createSlice({
       const { lastMessageId } = action.payload;
       const countNextMessage = lastMessageId + 1;
       state.showCaptureModal = false;
+      state.showReply = false
       state.loadMessageIds.push(countNextMessage);
     });
     builder.addCase(ADD_MESSAGE, (state, action) => {
@@ -115,6 +118,8 @@ const chatSlice = createSlice({
       const loaderIndex = loaderIds.indexOf(frontId);
       state.messageInput = '';
       state.adds = {}
+      state.replyIds = []
+      state.replyMessage = {}
       if (loaderIndex >= 0) {
         loaderIds.splice(loaderIndex, 1);
         state.loadMessageIds = [...loaderIds];
@@ -194,7 +199,7 @@ export const {
   onMoveChatToBottom,
   removeAddByTypeAndId,
   updateAddByTypeAndId,
-  openAddByType,
+  onAddReplyId,
   onCliseCaptureModal,
 } = chatSlice.actions;
 

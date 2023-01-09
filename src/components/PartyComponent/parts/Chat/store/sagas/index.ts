@@ -6,7 +6,8 @@ import { messageScrollContainerSelector, messagesIdsSelector, roomIdSelector, sc
 
 function* fetchMessageSend () {
     const state = yield select(state => state.chatSlice);
-    const ids = yield select(state => state.chatRedusers.messagesIds)
+    console.log(state)
+    const ids = yield select(messagesIdsSelector)
     const authUser = yield select(state => state.authSlice.user)
     const maxId = (ids.length ? Math.max(...ids) : 0)
     try {
@@ -15,7 +16,7 @@ function* fetchMessageSend () {
         adds: state.adds,
         userId: authUser.id,
         roomId: authUser.roomId,
-        replyMessageId: state.replyMessageId,
+        replyIds: state.replyIds,
         frontId: maxId
     }])
         yield put({
