@@ -8,6 +8,7 @@ const roomIdSelector = state => state.chatRedusers.chatSlice.roomId
 const messages = state => state.chatRedusers.messages
 const scrollServiceSelector = state => state.chatRedusers.chatSlice.scrollService
 const messageScrollContainerSelector = state => state.chatRedusers.chatSlice.messageContainer
+const replyIdsSelector = state => state.chatRedusers.chatSlice.replyIds
 const messageInputSelector = state =>  state.chatRedusers.chatSlice.messageInput
 const replyMessageSelector = state => state.chatRedusers.chatSlice.replyMessage
 const addsSelector = state => state.chatRedusers.chatSlice.adds
@@ -28,6 +29,11 @@ const maxMessagesIdsSelector = state => {
 const loadMessageById =  createSelector(
     [loadMessages, selectItemId],
     (items, itemId) => items.find(item => item === itemId)
+  )
+
+  const isSelectedMessagesSelector = createSelector(
+    [replyIdsSelector, selectItemId],
+    (items, itemId) => items.some(i => i === itemId)
   )
 
   const replyFirstMessageById =  createSelector(
@@ -55,5 +61,7 @@ export {
     showCaptureModalSelector,
     countAddsSelector,
     replyFirstMessageById,
-    messageScrollContainerSelector
+    messageScrollContainerSelector,
+    isSelectedMessagesSelector,
+    replyIdsSelector
 }

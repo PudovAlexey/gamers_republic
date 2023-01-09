@@ -13,6 +13,7 @@ import { Paper, Typography } from '@mui/material';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
 import { useEffect } from 'react';
 import { onAddReplyId } from '../../../../store/chatSlice';
+import { isSelectedMessagesSelector } from '../../../../store/selectors/chatSelector';
 
 function MessageControl({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
@@ -35,15 +36,20 @@ const {userId} = messageData
 }
 
 function Message({messageId}) {
+
   const dispatch = useAppDispatch()
   const messageData = useAppSelector((state) =>
   selectItemById(state.chatRedusers.messages, messageId)
 );
+const isSelectedMessage = useAppSelector((state) => isSelectedMessagesSelector(state, messageId));
 if (!messageData) return null;
 const {message, adds, createdAt} = messageData
   return (
-    <Box onDoubleClick={() => dispatch(onAddReplyId(messageId))}>
-          <Paper>
+    <Box onClick={(e) => {
+      console.log(messageId)
+      dispatch(onAddReplyId(messageId))
+    }}>
+          <Paper sx={isSelectedMessage && {background: 'red'}}>
             <ReplyControl messageId={messageId}/>   
             <MarkdownEditor
               value={message || ''}
