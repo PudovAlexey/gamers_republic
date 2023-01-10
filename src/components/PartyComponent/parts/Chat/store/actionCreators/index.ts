@@ -1,3 +1,5 @@
+import { createAction } from "@reduxjs/toolkit"
+
 const SENDMESSAGE = "chat/sendMessage"
 
 const ADD_MESSAGE = "chat/addMessage"
@@ -24,6 +26,34 @@ const RESTORE_MESSAGES = 'chat/restoreMessages';
 
 const SHOW_LOADER = 'chat/showLoader';
 
+
+
+const SELECT_MESSAGES = createAction('todos/add', function prepare(e) {
+    e.preventDefault()
+    const {currentTarget} = e
+    const selectionIds = []
+    const messageContainer = currentTarget.children[0]
+    function onReplyBySelection({target}) {
+        const allMessages = Array.from(messageContainer.children)
+      const findTargetMessage = allMessages.find(message => target.closest(`[data-messageid="${message.dataset.messageid}"]`))
+      const replyIndex = selectionIds.indexOf(+findTargetMessage?.dataset?.messageid)
+      if (replyIndex < 0) {
+          selectionIds.push(+findTargetMessage?.dataset?.messageid)
+      }
+    }
+
+    function onMouseUp() {
+      messageContainer.removeEventListener('mousemove', onReplyBySelection)
+      messageContainer.removeEventListener('mouseup', onMouseUp)
+    }
+
+    messageContainer.addEventListener('mousemove', onReplyBySelection)
+    messageContainer.addEventListener('mouseup', onMouseUp)
+    return {
+        payload: selectionIds
+    }
+  })
+
 export {
     SENDMESSAGE,
     ADD_MESSAGE,
@@ -37,5 +67,6 @@ export {
     ADD_MESSAGES,
     UPLOAD_MESSAGES,
     UPLOAD_MESSAGES_BY_OFFSET,
-    SHOW_LOADER
+    SHOW_LOADER,
+    SELECT_MESSAGES
 }

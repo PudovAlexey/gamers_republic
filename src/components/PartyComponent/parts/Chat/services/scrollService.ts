@@ -56,6 +56,10 @@ function scrollService() {
     getFirstMessage: function() {
       const allMessages = messageContainer.children
       return allMessages[0]
+    },
+    getAllMessages: function() {
+      const allMessages = messageContainer.children
+      return Array.from(allMessages)
     }
   };
 }

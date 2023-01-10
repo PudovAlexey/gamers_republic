@@ -14,9 +14,10 @@ import {
   replyHeightSelector,
   showReplySelector,
 } from '../../store/selectors/chatSelector';
-import { UPLOAD_MESSAGES_BY_OFFSET } from '../../store/actionCreators';
+import { SELECT_MESSAGES, UPLOAD_MESSAGES_BY_OFFSET } from '../../store/actionCreators';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import { onReplyBySelection } from '../../store/chatSlice';
 
 function MessagesList({ messageContainer }) {
   const dispatch = useAppDispatch();
@@ -39,6 +40,10 @@ function MessagesList({ messageContainer }) {
             type: UPLOAD_MESSAGES_BY_OFFSET,
           })
         }
+        onMouseDown={(e) => {
+          const SelectMessages = SELECT_MESSAGES(e)
+          dispatch(SelectMessages)
+        }}
       >
         <ChatContainer>
           <Messages />
