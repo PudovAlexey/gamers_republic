@@ -1,5 +1,6 @@
 import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
 import { Box, styled } from "@mui/system"
+import  '../../../../../../../../../../../styles.css'
 import { MessageContent } from "./MessageContent"
 import ReplyIcon from '@mui/icons-material/Reply';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -32,7 +33,7 @@ function UserSend({children, messageId}) {
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>
-            <Typography>{AuthUser.username}</Typography>
+            <Typography className='select'>{AuthUser.username}</Typography>
             <AvatarComponent {...AuthUser} />
             </Stack>
             <IconButton onClick={() => dispatch(onShowReply(messageData))}>

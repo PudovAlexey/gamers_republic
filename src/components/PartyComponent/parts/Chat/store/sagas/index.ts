@@ -1,7 +1,8 @@
+import { eventChannel } from 'redux-saga';
 import {call, takeEvery, select, put, apply, all, delay} from 'redux-saga/effects'
 import api from '../../../../../../api/api'
 import { parseToBase64 } from '../../../../../../utils/encoders';
-import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, NAVIGATION_PROGRESS, REPLY_NAVIGATE, RESTORE_MESSAGES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION, UPDATE_FILES, UPLOAD_FILES, UPLOAD_MESSAGES, UPLOAD_MESSAGES_BY_OFFSET } from '../actionCreators'
+import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, NAVIGATION_PROGRESS, REPLY_NAVIGATE, RESTORE_MESSAGES, SELECTION_ENDING, SELECT_MESSAGES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION, UPDATE_FILES, UPLOAD_FILES, UPLOAD_MESSAGES, UPLOAD_MESSAGES_BY_OFFSET } from '../actionCreators'
 import { messageScrollContainerSelector, messagesIdsSelector, roomIdSelector, scrollServiceSelector } from '../selectors/chatSelector';
 
 function* fetchMessageSend () {
@@ -171,6 +172,42 @@ function* fetchMessagesByOffset() {
 
 }
 
+function* someFunc({target}) {
+    const scrollService = yield select(scrollServiceSelector)
+    const scrollContainer = yield select(messageScrollContainerSelector)
+    scrollService.update(scrollContainer)
+    const allMessages = scrollService.getAllMessages()
+    const selectionIds = []
+    const findTargetMessage = allMessages.find(message => target.closest(`[data-messageid="${message.dataset.messageid}"]`))
+    const replyIndex = selectionIds.indexOf(+findTargetMessage?.dataset?.messageid)
+    if (replyIndex < 0) {
+        selectionIds.push(+findTargetMessage?.dataset?.messageid)
+    }
+    yield put({
+      type: SELECTION_ENDING,
+      payload: selectionIds
+  })
+}
+
+function* messagesSelection(action) {
+    const e = action.payload
+    const scrollContainer = yield select(messageScrollContainerSelector)    
+    const clickChannel = eventChannel((emitter) => {
+        function onMouseUp() {
+            scrollContainer.removeEventListener('mousemove', emitter)
+            scrollContainer.removeEventListener('mouseup', onMouseUp)
+        }
+        scrollContainer.addEventListener('mouseup', onMouseUp)
+        scrollContainer.addEventListener('mousemove', emitter);
+        return () => {
+            console.log('calling')
+            scrollContainer.removeEventListener('mousemove', emitter);
+            scrollContainer.removeEventListener('mousemove', onMouseUp);
+        }
+    });
+    yield takeEvery(clickChannel, someFunc);
+}
+
 function* sendMessage() {
     yield takeEvery(SENDMESSAGE, fetchMessageSend)
 }
@@ -189,12 +226,17 @@ function* chatUpload() {
     yield takeEvery(UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset)
 }
 
+function* chatSelect() {
+    yield takeEvery(SELECT_MESSAGES, messagesSelection)
+}
+
 function* chatSagas() {
     yield all([
         call(sendMessage),
         call(parseImage),
         call(replyNavigate),
-        call(chatUpload)
+        call(chatUpload),
+        call(chatSelect)
     ])
 }
 

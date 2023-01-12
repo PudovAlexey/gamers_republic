@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react';
+import  '../../../../../../../src/styles.css'
 import { Box } from '@mui/system';
 import {
   useAppDispatch,
@@ -17,7 +18,6 @@ import {
 import { SELECT_MESSAGES, UPLOAD_MESSAGES_BY_OFFSET } from '../../store/actionCreators';
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { onReplyBySelection } from '../../store/chatSlice';
 
 function MessagesList({ messageContainer }) {
   const dispatch = useAppDispatch();
@@ -28,6 +28,7 @@ function MessagesList({ messageContainer }) {
     <Box>
       <TopProgress />
       <ScrollContainer
+        className={'noselect'}
         ref={messageContainer}
         sx={
           showReply && {
@@ -41,8 +42,10 @@ function MessagesList({ messageContainer }) {
           })
         }
         onMouseDown={(e) => {
-          const SelectMessages = SELECT_MESSAGES(e)
-          dispatch(SelectMessages)
+          dispatch({
+            type: SELECT_MESSAGES,
+            payload: e
+          })
         }}
       >
         <ChatContainer>

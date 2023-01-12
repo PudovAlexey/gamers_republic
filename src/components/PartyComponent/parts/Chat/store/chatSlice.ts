@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
 import api from '../../../../../api/api';
 import store from '../../../../../store/store';
 import { generateAddsId } from '../services/helpers';
-import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, SELECT_MESSAGES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION } from './actionCreators';
+import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, SELECTION_ENDING, SELECT_MESSAGES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION } from './actionCreators';
 
 const initialState = {
   scrollService: null,
@@ -192,7 +192,7 @@ const chatSlice = createSlice({
       state.loadingBottom = false
       state.loadingTop = false
     })
-    builder.addCase(SELECT_MESSAGES, (state, action) => {
+    builder.addCase(SELECTION_ENDING, (state, action) => {
       const array: number[] = action.payload
       console.log(array)
       array.forEach(id => {

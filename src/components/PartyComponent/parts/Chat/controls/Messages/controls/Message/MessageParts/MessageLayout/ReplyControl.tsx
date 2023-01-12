@@ -1,6 +1,7 @@
 import { Box, Paper, Stack, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 import ReplyIcon from '@mui/icons-material/Reply';
+import  '../../../../../../../../../../../styles.css'
 import { AddsViewer } from "../../../../../addsViewer/AddsViewer";
 import { replyFirstMessageById } from "../../../../../../store/selectors/chatSelector";
 import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
@@ -35,11 +36,11 @@ function ReplyControl({messageId}) {
             file: 1
           }} adds={adds}/>
          </AddsWrapper>
-            <Box>
+            <Box  className='select'>
               <Typography>{user.username}</Typography>
             </Box>
           </ReplyContainer>
-              <ReplyMessageTypography>
+              <ReplyMessageTypography  className='select'>
                 {message}
               </ReplyMessageTypography>
         </ReplyPaper>

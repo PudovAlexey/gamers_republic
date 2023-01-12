@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
+import  '../../../../../../../../styles.css'
 import {
   useAppDispatch,
   useAppSelector,
@@ -66,6 +67,7 @@ function Message({ messageId }) {
     >
       <Paper sx={isSelectedMessage && { background: palette.grey[300] }}>
         <ReplyControl messageId={messageId} />
+        <Box  className='select'>
         <MarkdownEditor
         sx={isSelectedMessage && { background: palette.grey[300] }}
           value={message || ''}
@@ -75,6 +77,7 @@ function Message({ messageId }) {
             html: true,
           }}
         />
+        </Box>
         {adds && <AddsViewer adds={adds} />}
         <Typography>
           {parseTimeByString({

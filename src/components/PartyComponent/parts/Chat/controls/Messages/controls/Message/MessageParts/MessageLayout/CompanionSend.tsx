@@ -9,6 +9,7 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import { SendProgress } from "../../../../containers/SendProgress";
 import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
 import { onShowReply } from "../../../../../../store/chatSlice";
+import  '../../../../../../../../../../../styles.css'
 function CompanionSend({children, messageId}) {
   const messageData = useAppSelector((state) =>
   selectItemById(state.chatRedusers.messages, messageId)
@@ -27,7 +28,7 @@ function CompanionSend({children, messageId}) {
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>
-            <Typography>{user.username}</Typography>
+            <Typography className="select">{user.username}</Typography>
             <AvatarComponent {...user} />
             </Stack>
             <IconButton onClick={() => dispatch(onShowReply(messageData))}>
