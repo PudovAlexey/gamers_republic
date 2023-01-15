@@ -27,7 +27,9 @@ function filterMessagesMiddle({ messagesFromChat, offset, startForm }) {
     if (!messagesFromChat[i]) break;
     filterMessages.push(messagesFromChat[i]);
   }
-  return filterMessages.sort((a, b) => new Date(b.createdAt) - new Date(a.messageId))
+  return filterMessages.sort(
+    (a, b) => new Date(b.createdAt) - new Date(a.messageId)
+  );
 }
 
 function filterMessagesBottom({ messagesFromChat, offset, startForm }) {
@@ -50,37 +52,27 @@ class FakeApi {
     return req;
   }
 
-  async sendMessage({ 
-    message, 
-    adds, 
-    userId, 
-    replyIds, 
-    roomId,
-    frontId
-   }) {
+  async sendMessage({ message, adds, userId, replyIds, roomId, frontId }) {
     try {
       const createdAt = Intl.DateTimeFormat('ru', {
         year: 'numeric',
         month: 'numeric',
-         day: 'numeric',
+        day: 'numeric',
         hour: 'numeric',
         minute: 'numeric',
       })
         .format(new Date())
         .split(' ')
         .map((date, idx) => {
-            if (idx === 0) {
-               return date.split('.')
-                .reverse()
-                .join('.')
-                .replaceAll(',', '')
-            } else {
-                return date.replaceAll(',', '')
-            }
+          if (idx === 0) {
+            return date.split('.').reverse().join('.').replaceAll(',', '');
+          } else {
+            return date.replaceAll(',', '');
+          }
         })
         .join(' ');
 
-      const messageId = messages[messages.length - 1].messageId + 1
+      const messageId = messages[messages.length - 1].messageId + 1;
       const newMessage = {
         message,
         createdAt,
@@ -91,20 +83,24 @@ class FakeApi {
         messageId,
       };
       messages.push(newMessage);
-      newMessage.replyMessages = newMessage.replyIds && newMessage.replyIds.map((replyId) => {
-        const messageData = messages.find(({messageId}) => messageId === replyId)
-        return {
-          ...messageData,
-          user: Users.find((user) => messageData.userId === user.id),
-        }
-      })
+      newMessage.replyMessages =
+        newMessage.replyIds &&
+        newMessage.replyIds.map((replyId) => {
+          const messageData = messages.find(
+            ({ messageId }) => messageId === replyId
+          );
+          return {
+            ...messageData,
+            user: Users.find((user) => messageData.userId === user.id),
+          };
+        });
       let req = await this.fakeDelay(newMessage);
       return {
         ...req,
-        frontId
+        frontId,
       };
     } catch (err) {
-      console.log(err)
+      console.log(err);
       return { message: JSON.stringify(err) };
     }
   }
@@ -154,13 +150,17 @@ class FakeApi {
     if (req) {
       const messagesWitchUserData = req.map((message) => ({
         ...message,
-        replyMessages: message.replyIds && message.replyIds.map((replyId) => {
-          const messageData = messages.find(({messageId}) => messageId === replyId)
-          return {
-            ...messageData,
-            user: Users.find((user) => messageData.userId === user.id),
-          }
-        }),
+        replyMessages:
+          message.replyIds &&
+          message.replyIds.map((replyId) => {
+            const messageData = messages.find(
+              ({ messageId }) => messageId === replyId
+            );
+            return {
+              ...messageData,
+              user: Users.find((user) => messageData.userId === user.id),
+            };
+          }),
         user: Users.find((user) => message.userId === user.id),
       }));
       return messagesWitchUserData;

@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
+import { CircularProgress, IconButton, Stack, Typography, useTheme } from "@mui/material"
 import { Box, styled } from "@mui/system"
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks"
@@ -9,8 +9,10 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import { SendProgress } from "../../../../containers/SendProgress";
 import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
 import { onShowReply } from "../../../../../../store/chatSlice";
-import  '../../../../../../../../../../../styles.css'
+import { mainStyles } from 'src/styles';
 function CompanionSend({children, messageId}) {
+  const { palette } = useTheme();
+  const styles = mainStyles(palette);
   const messageData = useAppSelector((state) =>
   selectItemById(state.chatRedusers.messages, messageId)
   );
@@ -28,7 +30,9 @@ function CompanionSend({children, messageId}) {
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>
-            <Typography className="select">{user.username}</Typography>
+            <Typography sx={{
+              ...styles.select
+            }}>{user.username}</Typography>
             <AvatarComponent {...user} />
             </Stack>
             <IconButton onClick={() => dispatch(onShowReply(messageData))}>

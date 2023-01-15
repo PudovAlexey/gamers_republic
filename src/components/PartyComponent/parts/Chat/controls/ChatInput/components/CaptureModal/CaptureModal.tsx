@@ -1,4 +1,4 @@
-import { Button, Modal, TextField } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
 import {
   useAppDispatch,
@@ -9,8 +9,8 @@ import DialogControl from '../../../../../../../reusable/Dialog/DialogControl';
 import { FileGalery } from '../../../../../../../reusable/FileGalery/FileGalery';
 import { FileUploader } from '../../../../../../../reusable/FileUploader/FileUploader';
 import { ImageGalery } from '../../../../../../../reusable/ImageGalery/ImageGalety';
-import { SENDMESSAGE, UPDATE_FILES, UPLOAD_FILES } from '../../../../store/actionCreators';
-import { inputMessage, onCliseCaptureModal, openAddByType, removeAddByTypeAndId } from '../../../../store/chatSlice';
+import { SENDMESSAGE } from '../../../../store/actionCreators';
+import { inputMessage, onCliseCaptureModal, removeAddByTypeAndId } from '../../../../store/chatSlice';
 import {
   addsSelector,
   countAddsSelector,

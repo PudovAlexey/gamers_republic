@@ -1,8 +1,15 @@
-import { createAsyncThunk, createSlice, current } from '@reduxjs/toolkit';
-import api from '../../../../../api/api';
-import store from '../../../../../store/store';
+import { createSlice, current } from '@reduxjs/toolkit';
 import { generateAddsId } from '../services/helpers';
-import { ADD_MESSAGE, ADD_MESSAGES, CHANGE_FILES, SELECTION_ENDING, SELECT_MESSAGES, SENDMESSAGE, SET_IMAGES, SHOW_LOADER, START_NAVIGATION } from './actionCreators';
+import {
+  ADD_MESSAGE,
+  ADD_MESSAGES,
+  CHANGE_FILES,
+  SELECTION_ENDING,
+  SENDMESSAGE,
+  SET_IMAGES,
+  SHOW_LOADER,
+  START_NAVIGATION,
+} from './actionCreators';
 
 const initialState = {
   scrollService: null,
@@ -23,15 +30,8 @@ const initialState = {
   replyAdds: {},
   adds: {},
   loadMessageIds: [],
-  replyIds: []
+  replyIds: [],
 };
-
-export const fetchChat = createAsyncThunk(
-  'fetchChat',
-  async (roomId: number, _) => {
-    return await api.getRoomById(roomId);
-  }
-);
 
 const chatSlice = createSlice({
   name: 'chatSlice',
@@ -42,7 +42,7 @@ const chatSlice = createSlice({
       const init = scrollService();
       state.scrollService = init;
       state.roomId = roomId;
-      state.messageContainer = messageContainer
+      state.messageContainer = messageContainer;
     },
     inputMessage: (state, action) => {
       const { target } = action.payload;
@@ -52,7 +52,7 @@ const chatSlice = createSlice({
       state.showReply = true;
       const { adds } = action.payload;
       state.replyMessage = action.payload;
-      state.replyIds = [action.payload.messageId]
+      state.replyIds = [action.payload.messageId];
       if (adds) {
         state.replyAdds = adds;
       }
@@ -61,28 +61,33 @@ const chatSlice = createSlice({
       // state.adds
     },
     removeAddByTypeAndId: (state, action) => {
-      const {type, id} = action.payload
-      const currentAdds = {...current(state.adds)}
-      const updateAddsByType = currentAdds[type].filter((file) => file.id !== id)
-      currentAdds[type] = updateAddsByType
-      state.adds = currentAdds
+      const { type, id } = action.payload;
+      const currentAdds = { ...current(state.adds) };
+      const updateAddsByType = currentAdds[type].filter(
+        (file) => file.id !== id
+      );
+      currentAdds[type] = updateAddsByType;
+      state.adds = currentAdds;
     },
     onAddReplyId: (state, action) => {
-      const replyIndex = state.replyIds.indexOf(action.payload)
+      const replyIndex = state.replyIds.indexOf(action.payload);
       if (replyIndex < 0) {
-        state.replyIds.push(action.payload)
+        state.replyIds.push(action.payload);
       } else {
-        state.replyIds.splice(replyIndex, 1)
+        state.replyIds.splice(replyIndex, 1);
       }
     },
     onMoveChatToBottom: (state, action) => {
-      const scrollService = current(state.scrollService)
-      scrollService.update(state.messageContainer)
-      const firstMessage = scrollService.getFirstMessage()
+      const scrollService = current(state.scrollService);
+      scrollService.update(state.messageContainer);
+      const firstMessage = scrollService.getFirstMessage();
       if (firstMessage) {
-        firstMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+        firstMessage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'nearest',
+        });
       }
-
     },
     onCloseReply: (state) => {
       state.showReply = false;
@@ -101,40 +106,42 @@ const chatSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(SHOW_LOADER, (state, action) => {
-      switch(action.payload) {
-        case 'up': state.loadingTop = true
+      switch (action.payload) {
+        case 'up':
+          state.loadingTop = true;
           break;
-        case 'down': state.loadingBottom = true
+        case 'down':
+          state.loadingBottom = true;
           break;
       }
-    })
+    });
     builder.addCase(SENDMESSAGE, (state, action) => {
       const { lastMessageId } = action.payload;
       const countNextMessage = lastMessageId + 1;
       state.showCaptureModal = false;
-      state.showReply = false
+      state.showReply = false;
       state.loadMessageIds.push(countNextMessage);
     });
     builder.addCase(ADD_MESSAGE, (state, action) => {
-      console.log('after send')
+      console.log('after send');
       let loaderIds = current(state.loadMessageIds);
       loaderIds = [...loaderIds];
       const { frontId } = action.payload;
       const loaderIndex = loaderIds.indexOf(frontId);
       state.messageInput = '';
-      state.adds = {}
-      state.replyIds = []
-      state.replyMessage = {}
+      state.adds = {};
+      state.replyIds = [];
+      state.replyMessage = {};
       if (loaderIndex >= 0) {
         loaderIds.splice(loaderIndex, 1);
         state.loadMessageIds = [...loaderIds];
       }
     });
     builder.addCase(SET_IMAGES, (state, action) => {
-      const {files} = action.payload;
+      const { files } = action.payload;
       Array.from(files).forEach((file) => {
         const { type } = file;
-        const currentAdds = state.adds
+        const currentAdds = state.adds;
         if (/image/.test(type)) {
           if (!currentAdds.img) currentAdds.img = [];
           const nextId = generateAddsId(currentAdds.img);
@@ -172,36 +179,44 @@ const chatSlice = createSlice({
       });
     });
     builder.addCase(CHANGE_FILES, (state, action) => {
-      const {files, id, type} = action.payload
-      const fileIndex = state.adds[type].findIndex((file) => file.id === id)
-      if (fileIndex >= 0) state.adds[type].splice(fileIndex, 1, files[0])
-    })
+      const { files, id, type } = action.payload;
+      const fileIndex = state.adds[type].findIndex((file) => file.id === id);
+      if (fileIndex >= 0) state.adds[type].splice(fileIndex, 1, files[0]);
+    });
     builder.addCase(START_NAVIGATION, (state, action) => {
-      const {messageId} = action.payload
-      const scrollService = current(state.scrollService)
-      scrollService.update(state.messageContainer)
-      const scrolledMessage = scrollService.findById(messageId)
+      const { messageId } = action.payload;
+      const scrollService = current(state.scrollService);
+      scrollService.update(state.messageContainer);
+      const scrolledMessage = scrollService.findById(messageId);
       if (scrolledMessage) {
-        scrolledMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+        scrolledMessage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'nearest',
+        });
       } else {
-        const firstMessage = scrollService.getLastMessage()
-        firstMessage.scrollIntoView({behavior: "smooth", block: "end", inline: "nearest"});
+        const firstMessage = scrollService.getLastMessage();
+        firstMessage.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end',
+          inline: 'nearest',
+        });
       }
-    })
+    });
     builder.addCase(ADD_MESSAGES, (state) => {
-      state.loadingBottom = false
-      state.loadingTop = false
-    })
+      state.loadingBottom = false;
+      state.loadingTop = false;
+    });
     builder.addCase(SELECTION_ENDING, (state, action) => {
-      const array: number[] = action.payload
-      console.log(array)
-      array.forEach(id => {
-        const replyIndex = state.replyIds.indexOf(id)
+      const array: number[] = action.payload;
+      console.log(array);
+      array.forEach((id) => {
+        const replyIndex = state.replyIds.indexOf(id);
         if (replyIndex < 0) {
-          state.replyIds.push(id)
+          state.replyIds.push(id);
         }
-      })
-    })
+      });
+    });
   },
 });
 
@@ -211,7 +226,6 @@ export const {
   onShowReply,
   inputMessage,
   onCloseReply,
-  onReplyBySelection,
   onMoveChatToBottom,
   removeAddByTypeAndId,
   updateAddByTypeAndId,

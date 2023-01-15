@@ -1,6 +1,6 @@
-import { CircularProgress, IconButton, Stack, Typography } from "@mui/material"
+import { IconButton, Stack, Typography, useTheme } from "@mui/material"
 import { Box, styled } from "@mui/system"
-import  '../../../../../../../../../../../styles.css'
+import { mainStyles } from 'src/styles';
 import { MessageContent } from "./MessageContent"
 import ReplyIcon from '@mui/icons-material/Reply';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -14,6 +14,8 @@ import { loadMessageById } from "../../../../../../store/selectors/chatSelector"
 import { onShowReply } from "../../../../../../store/chatSlice";
 
 function UserSend({children, messageId}) {
+  const { palette } = useTheme();
+  const styles = mainStyles(palette);
   const dispatch = useAppDispatch()
   const loadMessage = useAppSelector((action) => loadMessageById(action, messageId))
     const [AuthUser] = useContext(AuthContext);
@@ -33,7 +35,9 @@ function UserSend({children, messageId}) {
               <MoreVertIcon />
             </IconButton>
             <Stack direction={"row"} spacing={1}>
-            <Typography className='select'>{AuthUser.username}</Typography>
+            <Typography sx={{
+              ...styles.select
+            }}>{AuthUser.username}</Typography>
             <AvatarComponent {...AuthUser} />
             </Stack>
             <IconButton onClick={() => dispatch(onShowReply(messageData))}>

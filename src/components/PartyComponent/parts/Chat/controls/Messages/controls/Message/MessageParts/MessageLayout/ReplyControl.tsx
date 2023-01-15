@@ -1,13 +1,15 @@
-import { Box, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
 import ReplyIcon from '@mui/icons-material/Reply';
-import  '../../../../../../../../../../../styles.css'
+import { mainStyles } from 'src/styles';
 import { AddsViewer } from "../../../../../addsViewer/AddsViewer";
 import { replyFirstMessageById } from "../../../../../../store/selectors/chatSelector";
 import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
 import { REPLY_NAVIGATE } from "../../../../../../store/actionCreators";
 
 function ReplyControl({messageId}) {
+  const { palette } = useTheme();
+  const styles = mainStyles(palette);
     const dispatch = useAppDispatch()
     const firstReplyMessage = useAppSelector((action) => replyFirstMessageById(action,messageId))
     if (!firstReplyMessage) return null
@@ -36,7 +38,9 @@ function ReplyControl({messageId}) {
             file: 1
           }} adds={adds}/>
          </AddsWrapper>
-            <Box  className='select'>
+            <Box  sx={{
+              ...styles.select
+            }}>
               <Typography>{user.username}</Typography>
             </Box>
           </ReplyContainer>

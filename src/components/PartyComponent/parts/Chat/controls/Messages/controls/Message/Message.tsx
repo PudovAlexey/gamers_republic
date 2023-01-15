@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import  '../../../../../../../../styles.css'
+import { mainStyles } from 'src/styles';
 import {
   useAppDispatch,
   useAppSelector,
@@ -15,7 +15,6 @@ import { UserSend } from './MessageParts/MessageLayout/UserSend';
 import { CompanionSend } from './MessageParts/MessageLayout/CompanionSend';
 import { Paper, Typography, useTheme } from '@mui/material';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
-import { useEffect } from 'react';
 import { onAddReplyId } from '../../../../store/chatSlice';
 import { isSelectedMessagesSelector } from '../../../../store/selectors/chatSelector';
 
@@ -50,6 +49,7 @@ function MessageControl({ messageId }) {
 function Message({ messageId }) {
   const {palette} = useTheme()
   const dispatch = useAppDispatch();
+  const styles = mainStyles(palette);
   const messageData = useAppSelector((state) =>
     selectItemById(state.chatRedusers.messages, messageId)
   );
@@ -67,7 +67,9 @@ function Message({ messageId }) {
     >
       <Paper sx={isSelectedMessage && { background: palette.grey[300] }}>
         <ReplyControl messageId={messageId} />
-        <Box  className='select'>
+        <Box  sx={{
+          ...styles.select
+        }}>
         <MarkdownEditor
         sx={isSelectedMessage && { background: palette.grey[300] }}
           value={message || ''}

@@ -1,14 +1,13 @@
+import React from 'react';
 import { Box } from '@mui/system';
 import ReplyIcon from '@mui/icons-material/Reply';
-import React from 'react';
 import { IconButton, Paper, Stack, styled, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { useAppDispatch, useAppSelector } from '../../../../../../../../hooks/typedReduxHooks';
-import store from '../../../../../../store';
 import { onCloseReply } from '../../../../store/chatSlice';
 import { replyAddsSelector, replyHeightSelector, replyMessageSelector, showReplySelector } from '../../../../store/selectors/chatSelector';
 import { AddsViewer } from '../../../addsViewer/AddsViewer';
-function ReplyMessage({messageId}) {
+function ReplyMessage() {
   const dispatch = useAppDispatch()
   const showReply = useAppSelector(showReplySelector)
   const replyHeight = useAppSelector(replyHeightSelector)

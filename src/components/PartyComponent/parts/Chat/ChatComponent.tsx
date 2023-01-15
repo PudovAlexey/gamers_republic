@@ -7,8 +7,8 @@ import { onExit } from "./controls/AudioViewer/store/playAudioSlice"
 import MessagesList from "./controls/Messages/MessagesList"
 import { ChatHeader } from "./controls/ChatHeader"
 import { ChatInput } from "./controls/ChatInput/ChatInput"
-import { fetchChat, onInit } from "./store/chatSlice"
-import { scrollService } from "./services/scrollService"
+import { onInit } from "./store/chatSlice"
+import { scrollService } from "./services/scrollService/scrollService"
 import { UPLOAD_MESSAGES } from "./store/actionCreators"
 
 function ChatComponent() {
@@ -17,7 +17,6 @@ function ChatComponent() {
     const dispatch = useAppDispatch()
     React.useEffect(() => {
         if (AuthUser?.roomId) {
-            dispatch(fetchChat(AuthUser?.roomId))
             dispatch(onInit({
                 scrollService,
                 roomId: AuthUser?.roomId,

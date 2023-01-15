@@ -1,66 +1,73 @@
-import { $ } from '../../../../../utils/DOM/DOM';
+import { $ } from '../../../../../../utils/DOM/DOM';
+import { EScrollDirection } from './types';
 
 function scrollService() {
   let prevScrollTop;
-  let scrollDirection;
+  let scrollDirection: null | EScrollDirection = null;
   let messagesOnScreen = [];
-  let messageContainer = null
+  let messageContainer: null | HTMLElement = null;
   return {
     update: (scrollContainer) => {
       messageContainer = scrollContainer.children[0];
-      const scrollTop = scrollContainer.scrollTop
-      const scrollHeight = scrollContainer.scrollHeight
-      const scrollOffsetHeight = Math.abs(scrollTop) - (scrollContainer.scrollHeight - scrollContainer.offsetHeight)
-      const topPercentage = ((scrollTop / scrollHeight) * 100)
-      const scrollBottomPercentage = Math.abs(scrollOffsetHeight) / scrollHeight * 100
-      const isNearBottom = topPercentage > 0 && topPercentage < 35
-      const isNearTop = scrollBottomPercentage > 0 && scrollBottomPercentage < 35
-      let queryMessage
+      const scrollTop = scrollContainer.scrollTop;
+      const scrollHeight = scrollContainer.scrollHeight;
+      const scrollOffsetHeight =
+        Math.abs(scrollTop) -
+        (scrollContainer.scrollHeight - scrollContainer.offsetHeight);
+      const topPercentage = (scrollTop / scrollHeight) * 100;
+      const scrollBottomPercentage =
+        (Math.abs(scrollOffsetHeight) / scrollHeight) * 100;
+      const isNearBottom = topPercentage > 0 && topPercentage < 35;
+      const isNearTop =
+        scrollBottomPercentage > 0 && scrollBottomPercentage < 35;
+      let queryMessage;
       if (!messagesOnScreen.length) {
         messagesOnScreen.push(messageContainer.firstChild);
       }
       if (scrollContainer.scrollTop > prevScrollTop) {
-        scrollDirection = 'down';
+        scrollDirection = EScrollDirection.Down;
         messagesOnScreen = onMoveBottom(scrollContainer, messagesOnScreen);
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[messageIds.length - 1];
       } else if (scrollContainer.scrollTop < prevScrollTop) {
-        scrollDirection = 'up';
+        scrollDirection = EScrollDirection.Down;
         messagesOnScreen = onMoveTop(scrollContainer, messagesOnScreen);
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[0];
       } else {
-        scrollDirection = 'draw';
+        scrollDirection = EScrollDirection.Draw;
       }
       prevScrollTop = scrollContainer.scrollTop;
       let onFetch = false;
       if (!(isNearBottom || isNearTop)) {
-        queryMessage = null
+        queryMessage = null;
       }
       return {
         scrollDirection,
         queryMessage,
         onFetch,
         messagesOnScreen,
-        containerChildren: messageContainer.children
+        containerChildren: messageContainer.children,
       };
     },
-    findById: function(messageId) {
-      const allMessages = messageContainer.children
-      return Array.from(allMessages).find(message => +message?.dataset?.messageid === messageId)
+    findById: function (messageId: number) {
+      const allMessages = messageContainer.children;
+      return Array.from(allMessages).find(
+        (message) => +message?.dataset?.messageid === messageId
+      );
     },
-    getLastMessage: function() {
-      const allMessages = messageContainer.children
-      return allMessages[allMessages.length - 1]
+    getLastMessage: function () {
+      const allMessages = messageContainer.children;
+      return allMessages[allMessages.length - 1];
     },
-    getFirstMessage: function() {
-      const allMessages = messageContainer.children
-      return allMessages[0]
+    getFirstMessage: function () {
+      const allMessages = messageContainer.children;
+      return allMessages[0];
     },
-    getAllMessages: function() {
-      const allMessages = messageContainer.children
-      return Array.from(allMessages)
-    }
+    getAllMessages: function () {
+      const allMessages = messageContainer.children;
+      return Array.from(allMessages);
+    },
   };
 }
 

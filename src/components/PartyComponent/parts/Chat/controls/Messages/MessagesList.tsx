@@ -1,5 +1,3 @@
-import React, { useCallback, useMemo } from 'react';
-import  '../../../../../../../src/styles.css'
 import { Box } from '@mui/system';
 import {
   useAppDispatch,
@@ -15,11 +13,18 @@ import {
   replyHeightSelector,
   showReplySelector,
 } from '../../store/selectors/chatSelector';
-import { SELECT_MESSAGES, UPLOAD_MESSAGES_BY_OFFSET } from '../../store/actionCreators';
-import { useState } from 'react';
+import {
+  SELECT_MESSAGES,
+  UPLOAD_MESSAGES_BY_OFFSET,
+} from '../../store/actionCreators';
+import React, { useState } from 'react';
 import { useEffect } from 'react';
+import { mainStyles } from 'src/styles';
+import { useTheme } from '@mui/material';
 
 function MessagesList({ messageContainer }) {
+  const { palette } = useTheme();
+  const styles = mainStyles(palette);
   const dispatch = useAppDispatch();
   const showReply = useAppSelector(showReplySelector);
   const replyHeight = useAppSelector(replyHeightSelector);
@@ -28,14 +33,14 @@ function MessagesList({ messageContainer }) {
     <Box>
       <TopProgress />
       <ScrollContainer
-        className={'noselect'}
         ref={messageContainer}
-        sx={
-          showReply && {
+        sx={{
+          ...styles.noSelect,
+          ...(showReply && {
             height: `${chatHeight - replyHeight}` + 'px',
             minHeight: `${chatHeight - replyHeight}` + 'px',
-          }
-        }
+          }),
+        }}
         onScroll={() =>
           dispatch({
             type: UPLOAD_MESSAGES_BY_OFFSET,
@@ -44,8 +49,8 @@ function MessagesList({ messageContainer }) {
         onMouseDown={(e) => {
           dispatch({
             type: SELECT_MESSAGES,
-            payload: e
-          })
+            payload: e,
+          });
         }}
       >
         <ChatContainer>
@@ -59,17 +64,19 @@ function MessagesList({ messageContainer }) {
 
 function Messages() {
   const messageIds = useAppSelector(messagesIdsSelector);
-  const loadMessages = useAppSelector(state => state.chatSlice.loadMessageIds)
+  const loadMessages = useAppSelector(
+    (state) => state.chatSlice.loadMessageIds
+  );
   const [state, setState] = useState([]);
   let index = 0;
   useEffect(() => {
     if (loadMessages.length) {
       setState((pr) => {
-        const clone = [...pr]
-        const filterMessages = loadMessages.filter(m => !pr.includes(m))
-        clone.unshift(...filterMessages)
-        return clone
-      })
+        const clone = [...pr];
+        const filterMessages = loadMessages.filter((m) => !pr.includes(m));
+        clone.unshift(...filterMessages);
+        return clone;
+      });
     }
     const interval = setInterval(() => {
       if (!state.length && messageIds[0]) {
@@ -99,13 +106,11 @@ function Messages() {
   }, [messageIds, index, state.length]);
   return (
     <React.Fragment>
-      {
-        state.map((id) => (
-          <MessageControl key={id} messageId={id} />
-        ))
-      }
+      {state.map((id) => (
+        <MessageControl key={id} messageId={id} />
+      ))}
     </React.Fragment>
-  )
+  );
 }
 
 export default MessagesList;
