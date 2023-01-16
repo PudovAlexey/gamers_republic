@@ -1,4 +1,4 @@
-async function parseToBase64(file) {
+async function parseToBase64(file: File) {
     return await new Promise(resolve => {
         var reader = new FileReader();
     reader.readAsDataURL(file);

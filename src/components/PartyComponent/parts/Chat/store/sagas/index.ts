@@ -27,7 +27,7 @@ function* fetchMessageSend () {
 
 function* parseImages(action) {
     const {event, type, id, operation} = action.payload
-    const files = event.target.files
+    const files: File[] = event.target.files
    const parsed = yield all(Array.from(files).map(async file => {
     const parsedFile = await parseToBase64(file)
     return {
@@ -36,14 +36,20 @@ function* parseImages(action) {
         file: parsedFile
     }
    }))
-   yield put({
-    type: operation === 'create' ? SET_IMAGES().type : CHANGE_FILES().type,
-    payload: {
+switch(operation) {
+    case 'create': SET_IMAGES({
+                files: parsed, 
+                type, 
+                id
+            })
+        break;
+    case 'update': CHANGE_FILES({
         files: parsed, 
         type, 
         id
-    }
-   })
+    })
+    break;
+}
 }
 
 function* replyNavigation(action) {
@@ -51,45 +57,30 @@ function* replyNavigation(action) {
     const messagesIds = yield select(messagesIdsSelector)
     const roomId = yield select(roomIdSelector)
     if (messagesIds.indexOf(messageId) >= 0) {
-        yield put({
-          type: START_NAVIGATION().type,
-          payload: {
+        yield put(START_NAVIGATION({
             messageId
-          }  
-        })
+          }))
     } else {
-        yield put({
-            type: START_NAVIGATION().type,
-            payload: {
-              messageId
-            }  
-          })
+        yield put(START_NAVIGATION({
+            messageId
+          }))
         const fetchedMessages = yield apply(api, api.getMessagesByRoomId, [{
             messageStart: messageId,
             where: 'center',
             offset: 50,
             roomId
         }])
-        yield put({
-            type: NAVIGATION_PROGRESS().type,
-            payload: {
-                messageId,
-                fetchedMessages
-            }
-        })
+        yield put(NAVIGATION_PROGRESS({
+            messageId,
+            fetchedMessages
+        }))
         yield delay(0)
-        yield put({
-            type: START_NAVIGATION().type,
-            payload: {
-              messageId
-            }  
-          })
-        yield put({
-            type: RESTORE_MESSAGES().type,
-            payload: {
-                messageId
-            }
-        })
+        yield put(START_NAVIGATION({
+            messageId
+          }))
+        yield put(RESTORE_MESSAGES({
+            messageId
+        }))
     }
 }
 
@@ -98,10 +89,7 @@ function* restoreMessages(action) {
     const roomId = yield select(roomIdSelector)
     const messagesIds = yield select(messagesIdsSelector)
     const firstMessage = messagesIds[0]
-    yield put({
-        type: SHOW_LOADER().type,
-        payload: 'down'
-    })
+    yield put(SHOW_LOADER('down'))
     const fetchedMessages = yield apply(api, api.getMessagesByRoomId, [{
         messageStart: messageId,
         where: 'down',
@@ -112,12 +100,9 @@ function* restoreMessages(action) {
         return;
     }
     yield put(ADD_MESSAGES(fetchedMessages))
-   yield put({
-        type: RESTORE_MESSAGES().type,
-        payload: {
-            messageId: fetchedMessages[fetchedMessages.length - 1].messageId
-        }
-    })
+   yield put(RESTORE_MESSAGES({
+    messageId: fetchedMessages[fetchedMessages.length - 1].messageId
+}))
 
 }
 
@@ -128,17 +113,13 @@ function* fetchMessages(action) {
         offset = 50,
         where = 'up'
     } = action.payload
-    // yield put({
-    //     type: SHOW_LOADER,
-    //     payload: where
-    // })
+    yield put(SHOW_LOADER(where))
     const messages = yield apply(api, api.getMessagesByRoomId, [{
         roomId,
         messageStart,
         offset,
         where
     }])
-
     yield put(ADD_MESSAGES(messages))
 }
 
@@ -158,7 +139,7 @@ function* fetchMessagesByOffset() {
 
 }
 
-function* someFunc({target}) {
+function* handleSelect({target}) {
     const scrollService = yield select(scrollServiceSelector)
     const scrollContainer = yield select(messageScrollContainerSelector)
     scrollService.update(scrollContainer)
@@ -169,10 +150,7 @@ function* someFunc({target}) {
     if (replyIndex < 0) {
         selectionIds.push(+findTargetMessage?.dataset?.messageid)
     }
-    yield put({
-      type: SELECTION_ENDING().type,
-      payload: selectionIds
-  })
+    yield put(SELECTION_ENDING(selectionIds))
 }
 
 function* messagesSelection(action) {
@@ -189,29 +167,29 @@ function* messagesSelection(action) {
             scrollContainer.removeEventListener('mousemove', onMouseUp);
         }
     });
-    yield takeEvery(clickChannel, someFunc);
+    yield takeEvery(clickChannel, handleSelect);
 }
 
 function* sendMessage() {
-    yield takeEvery(SENDMESSAGE().type, fetchMessageSend)
+    yield takeEvery(SENDMESSAGE, fetchMessageSend)
 }
 
 function* parseImage() {
-    yield takeEvery(UPLOAD_FILES().type, parseImages)
+    yield takeEvery(UPLOAD_FILES, parseImages)
 }
 
 function* replyNavigate() {
-    yield takeEvery(REPLY_NAVIGATE().type, replyNavigation)
-    yield takeEvery(RESTORE_MESSAGES().type, restoreMessages)
+    yield takeEvery(REPLY_NAVIGATE, replyNavigation)
+    yield takeEvery(RESTORE_MESSAGES, restoreMessages)
 }
 
 function* chatUpload() {
-    yield takeEvery(UPLOAD_MESSAGES().type, fetchMessages)
-    yield takeEvery(UPLOAD_MESSAGES_BY_OFFSET().type, fetchMessagesByOffset)
+    yield takeEvery(UPLOAD_MESSAGES, fetchMessages)
+    yield takeEvery(UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset)
 }
 
 function* chatSelect() {
-    yield takeEvery(SELECT_MESSAGES().type, messagesSelection)
+    yield takeEvery(SELECT_MESSAGES, messagesSelection)
 }
 
 function* chatSagas() {

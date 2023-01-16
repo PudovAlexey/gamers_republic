@@ -2,15 +2,16 @@ enum EMessageAdd {
   Img = 'img',
   File = 'file',
   Audio = 'audio',
+  Video = 'video',
 }
 
-enum EScrollDirection  {
-    Down = "down",
-    Up = 'up',
-    Draw = 'draw'
+enum EScrollDirection {
+  Down = 'down',
+  Up = 'up',
+  Draw = 'draw',
 }
 
-type TScrollStart = 'start' | number | 'end'
+type TScrollStart = 'start' | number | 'end';
 
 type TMessageAdd<T> = {
   type: T;
@@ -19,18 +20,20 @@ type TMessageAdd<T> = {
   id: number;
 };
 
-type TMessageAdds = Record<EMessageAdd, TMessageAdd<EMessageAdd>>
+type TMessageAdds = Record<EMessageAdd, TMessageAdd<EMessageAdd>[]>;
 
 type TMessage = {
   messageId: number;
   message: string;
   createdAt: string;
-  roomId: number
+  roomId: number;
   userId: number;
+  frontId?: number;
   adds?: {
     img?: TMessageAdd<EMessageAdd.Img>[];
     audio?: TMessageAdd<EMessageAdd.Audio>[];
     file?: TMessageAdd<EMessageAdd.File>[];
+    video?: TMessageAdd<EMessageAdd.Video>[];
   };
   replyFrom?: {
     messageId: number;
@@ -38,32 +41,38 @@ type TMessage = {
   };
   replyIds?: number[];
   edited?: string;
-  replyMessages?: TMessage[]
+  replyMessages?: TMessage[];
 };
 
 type TUser = {
-    id: number;
-    username: string;
-    email: string;
-    password?: string;
-    confirmPassword?: string
-    name: string;
-    roomId?: number;
-    surname: string;
-    token: string;
-    favoriteCategories: number[];
-    likeGamesIds?: number[];
-    avatar: string;
-  };
+  id: number;
+  username: string;
+  email: string;
+  password?: string;
+  confirmPassword?: string;
+  name: string;
+  roomId?: number;
+  surname: string;
+  token: string;
+  favoriteCategories: number[];
+  likeGamesIds?: number[];
+  avatar: string;
+};
 
-  type TQueryMessage = {
-    roomId: number
-    messageStart?: TScrollStart,
-    offset?: number,
-    where?: EScrollDirection
-  }
-
+type TQueryMessage = {
+  roomId: number;
+  messageStart?: TScrollStart;
+  offset?: number;
+  where?: EScrollDirection;
+};
 
 export { EMessageAdd, EScrollDirection };
 
-export type { TMessage, TMessageAdd, TScrollStart, TMessageAdds, TUser, TQueryMessage };
+export type {
+  TMessage,
+  TMessageAdd,
+  TScrollStart,
+  TMessageAdds,
+  TUser,
+  TQueryMessage,
+};

@@ -1,5 +1,7 @@
 import { createSlice, current } from '@reduxjs/toolkit';
+import { EMessageAdd, TMessageAdds, TMessage } from '../../../../../api/types';
 import { generateAddsId } from '../services/helpers';
+import { TScrollService } from '../services/scrollService/types';
 import {
   ADD_MESSAGE,
   ADD_MESSAGES,
@@ -11,26 +13,38 @@ import {
   START_NAVIGATION,
 } from './actionCreators';
 
-const initialState = {
-  scrollService: null,
+const initialState: {
+  roomId: null | number
+  adds: null | TMessageAdds
+  replyAdds: null | TMessageAdds
+  messageContainer: null | HTMLElement
+  replyMessage: null | TMessage 
+  showReply: boolean
+  chatHeight: number
+  showCaptureModal: boolean
+  loadingTop: boolean
+  loadingBottom: boolean 
+  messageInput: string
+  replyHeight: number
+  loadMessageIds: number[],
+  replyIds: number[]
+  scrollService: null | TScrollService
+} = {
   roomId: null,
-  users: {},
-  chatInfo: {},
   messageContainer: null,
   showCaptureModal: false,
   loadingBottom: false,
   loadingTop: false,
-  messagesData: {},
-  newMessages: [],
   messageInput: '',
   replyHeight: 70,
   chatHeight: 500,
   showReply: false,
-  replyMessage: {},
-  replyAdds: {},
-  adds: {},
+  replyMessage: null,
+  replyAdds: null,
+  adds: null,
   loadMessageIds: [],
   replyIds: [],
+  scrollService: null,
 };
 
 const chatSlice = createSlice({
@@ -40,6 +54,7 @@ const chatSlice = createSlice({
     onInit: (state, action) => {
       const { scrollService, roomId, messageContainer } = action.payload;
       const init = scrollService();
+      init.update(messageContainer)
       state.scrollService = init;
       state.roomId = roomId;
       state.messageContainer = messageContainer;
@@ -79,7 +94,6 @@ const chatSlice = createSlice({
     },
     onMoveChatToBottom: (state) => {
       const scrollService = current(state.scrollService);
-      scrollService.update(state.messageContainer);
       const firstMessage = scrollService.getFirstMessage();
       if (firstMessage) {
         firstMessage.scrollIntoView({
@@ -91,11 +105,11 @@ const chatSlice = createSlice({
     },
     onCloseReply: (state) => {
       state.showReply = false;
-      state.replyMessage = {};
-      state.replyAdds = {};
+      state.replyMessage = null;
+      state.replyAdds = null;
     },
     onCliseCaptureModal: (state) => {
-      state.adds = {};
+      state.adds = null;
       state.showCaptureModal = false;
     },
     onExit: (state) => {
@@ -128,9 +142,9 @@ const chatSlice = createSlice({
       const { frontId } = action.payload;
       const loaderIndex = loaderIds.indexOf(frontId);
       state.messageInput = '';
-      state.adds = {};
+      state.adds = null;
       state.replyIds = [];
-      state.replyMessage = {};
+      state.replyMessage = null;
       if (loaderIndex >= 0) {
         loaderIds.splice(loaderIndex, 1);
         state.loadMessageIds = [...loaderIds];
@@ -140,17 +154,17 @@ const chatSlice = createSlice({
       const { files } = action.payload;
       Array.from(files).forEach((file) => {
         const { type } = file;
-        const currentAdds = state.adds;
+        const currentAdds = (state.adds || {});
         if (/image/.test(type)) {
-          if (!currentAdds.img) currentAdds.img = [];
-          const nextId = generateAddsId(currentAdds.img);
-          currentAdds.img.push({
+          if (!currentAdds[EMessageAdd.Img]) currentAdds[EMessageAdd.Img]= [];
+          const nextId = generateAddsId(currentAdds[EMessageAdd.Img]);
+          currentAdds[EMessageAdd.Img].push({
             ...file,
             id: nextId,
           });
           state.adds = { ...currentAdds };
         } else if (/video/.test(type)) {
-          if (!currentAdds.video) currentAdds.video = [];
+          if (!currentAdds[EMessageAdd.Video]) currentAdds[EMessageAdd.Video] = [];
           const nextId = generateAddsId(currentAdds.video);
           currentAdds.video.push({
             ...file,
@@ -185,7 +199,6 @@ const chatSlice = createSlice({
     builder.addCase(START_NAVIGATION, (state, action) => {
       const { messageId } = action.payload;
       const scrollService = current(state.scrollService);
-      scrollService.update(state.messageContainer);
       const scrolledMessage = scrollService.findById(messageId);
       if (scrolledMessage) {
         scrolledMessage.scrollIntoView({
@@ -212,6 +225,8 @@ const chatSlice = createSlice({
         const replyIndex = state.replyIds.indexOf(id);
         if (replyIndex < 0) {
           state.replyIds.push(id);
+        } else {
+          state.replyIds.splice(replyIndex, 1)
         }
       });
     });

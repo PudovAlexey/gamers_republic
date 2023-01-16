@@ -9,7 +9,7 @@ function ChatHeader() {
     <Box>
       <ChatLayout>
         <Typography sx={{ color: 'white' }} variant="h4">
-          {chatInfo.roomName}
+          {chatInfo && chatInfo.roomName}
         </Typography>
       </ChatLayout>
       <Divider />

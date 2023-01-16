@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TMessage, TMessageAdds, TQueryMessage, TUser } from '../../../../../../api/types';
+import { EMessageAdd, TMessage, TMessageAdds, TQueryMessage, TUser } from '../../../../../../api/types';
 
 const SENDMESSAGE = createAction(
   'chat/sendMessage',
@@ -36,23 +36,54 @@ const UPLOAD_FILES = createAction('chat/upload_image', (data: {
     payload: data
 }));
 
-const SET_IMAGES = createAction('chat/upload_files');
+const SET_IMAGES = createAction('chat/upload_files', (data: {
+  files: File[],
+  type: EMessageAdd,
+  id: number
+}) => ({
+  payload: data
+}));
 
-const CHANGE_FILES = createAction('chat/change_files');
+const CHANGE_FILES = createAction('chat/change_files', (data: {
+  files: File[],
+  type: EMessageAdd,
+  id: number
+}) => ({
+  payload: data
+}));
 
 const REPLY_NAVIGATE = createAction('chat/replyNavigate');
 
-const START_NAVIGATION = createAction('chat/startNavigate');
+const START_NAVIGATION = createAction('chat/startNavigate', (data: {
+  messageId: number
+}) => ({
+  payload: data
+}));
 
-const NAVIGATION_PROGRESS = createAction('chat/navigationProgress');
+const NAVIGATION_PROGRESS = createAction('chat/navigationProgress', (data: {
+  messageId: number,
+  fetchedMessages: TMessage[]
+}) => ({
+  payload: data
+}));
 
-const RESTORE_MESSAGES = createAction('chat/restoreMessages');
+const RESTORE_MESSAGES = createAction('chat/restoreMessages', (data: {
+  messageId: number
+}) => ({
+  payload: data
+}));
 
-const SHOW_LOADER = createAction('chat/showLoader');
+const SHOW_LOADER = createAction('chat/showLoader', (data: 'up' | 'down') => ({
+  payload: data
+}));
 
-const SELECT_MESSAGES = createAction('chat/selectMessages');
+const SELECT_MESSAGES = createAction('chat/selectMessages', (data: React.MouseEvent<HTMLElement>) => ({
+  payload: data
+}));
 
-const SELECTION_ENDING = createAction('chat/selectionEnding');
+const SELECTION_ENDING = createAction('chat/selectionEnding', (data: number[]) => ({
+  payload: data
+}));
 
 export {
   SENDMESSAGE,

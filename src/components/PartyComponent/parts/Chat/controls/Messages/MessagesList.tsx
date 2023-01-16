@@ -47,10 +47,7 @@ function MessagesList({ messageContainer }) {
           })
         }
         onMouseDown={(e) => {
-          dispatch({
-            type: SELECT_MESSAGES().type,
-            payload: e,
-          });
+          dispatch(SELECT_MESSAGES(e));
         }}
       >
         <ChatContainer>

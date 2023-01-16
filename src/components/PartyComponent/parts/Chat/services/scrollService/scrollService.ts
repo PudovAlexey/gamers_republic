@@ -1,20 +1,25 @@
 import { EScrollDirection } from '../../../../../../api/types';
 import { $ } from '../../../../../../utils/DOM/DOM';
+import { TScrollService } from './types';
 
-function scrollService() {
+function scrollService(): TScrollService {
   let prevScrollTop: number;
   let scrollDirection: null | EScrollDirection = null;
   let messagesOnScreen: HTMLElement[] = [];
   let messageContainer: null | HTMLElement = null;
+  let scrollContainerState: null | HTMLElement = null;
   return {
     update: (scrollContainer) => {
+      if (scrollContainer) {
+        messageContainer = scrollContainer.children[0] as HTMLElement;
+        scrollContainerState = scrollContainer
+      }
       let queryMessage;
-      const scrollTop = scrollContainer.scrollTop;
-      const scrollHeight = scrollContainer.scrollHeight;
-      messageContainer = scrollContainer.children[0];
+      const scrollTop = scrollContainerState.scrollTop;
+      const scrollHeight = scrollContainerState.scrollHeight;
       const scrollOffsetHeight =
         Math.abs(scrollTop) -
-        (scrollContainer.scrollHeight - scrollContainer.offsetHeight);
+        (scrollContainerState.scrollHeight - scrollContainerState.offsetHeight);
 
       const topPercentage = (scrollTop / scrollHeight) * 100;
       const scrollBottomPercentage =
@@ -22,52 +27,54 @@ function scrollService() {
       const isNearBottom = topPercentage > 0 && topPercentage < 35;
       const isNearTop =
         scrollBottomPercentage > 0 && scrollBottomPercentage < 35;
-      if (!messagesOnScreen.length) {
+      if (!messagesOnScreen.length && messageContainer.firstChild) {
         const firstChild: HTMLElement =
           messageContainer.firstChild as HTMLElement;
         messagesOnScreen.push(firstChild);
       }
-      if (scrollContainer.scrollTop > prevScrollTop) {
+      if (scrollContainerState.scrollTop > prevScrollTop) {
         scrollDirection = EScrollDirection.Down;
-        messagesOnScreen = onMoveBottom(scrollContainer, messagesOnScreen);
+        messagesOnScreen = onMoveBottom(scrollContainerState, messagesOnScreen);
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[messageIds.length - 1];
-      } else if (scrollContainer.scrollTop < prevScrollTop) {
+      } else if (scrollContainerState.scrollTop < prevScrollTop) {
         scrollDirection = EScrollDirection.Down;
-        messagesOnScreen = onMoveTop(scrollContainer, messagesOnScreen);
+        messagesOnScreen = onMoveTop(scrollContainerState, messagesOnScreen);
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[0];
       } else {
         scrollDirection = EScrollDirection.Draw;
       }
-      prevScrollTop = scrollContainer.scrollTop;
-      let onFetch = false;
+      prevScrollTop = scrollContainerState.scrollTop;
       if (!(isNearBottom || isNearTop)) {
         queryMessage = null;
       }
       return {
         scrollDirection,
         queryMessage,
-        onFetch,
         messagesOnScreen,
         containerChildren: messageContainer.children,
       };
     },
-    findById: function (messageId: number) {
+    findById: function (messageId) {
+      this.update()
       const allMessages: HTMLElement[] = Array.from(messageContainer.children) as HTMLElement[];
       return allMessages.find(
         (message) => +message?.dataset?.messageid === messageId
       );
     },
-    getLastMessage: function (): HTMLElement {
+    getLastMessage: function () {
+      this.update()
       const allMessages = messageContainer.children;
       return allMessages[allMessages.length - 1] as HTMLElement;
     },
-    getFirstMessage: function (): HTMLElement {
+    getFirstMessage: function () {
+      this.update()
       const allMessages = messageContainer.children;
       return allMessages[0] as HTMLElement;
     },
     getAllMessages: function (): HTMLElement[] {
+      this.update()
       const allMessages = messageContainer.children;
       return Array.from(allMessages) as HTMLElement[];
     },
