@@ -7,7 +7,6 @@ import { dinamicStyles, styleComponent } from "./styles"
 import { useAppDispatch, useAppSelector } from '../../hooks/typedReduxHooks'
 import { fetchMessages, init } from './store'
 import { AuthContext } from '../AuthContext/AuthContext'
-import api from '../../api/api'
 
 function PartyComponent() { 
     const theme = useTheme()

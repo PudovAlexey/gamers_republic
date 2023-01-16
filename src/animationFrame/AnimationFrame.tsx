@@ -22,11 +22,6 @@ export type Render = ({
 
 export type PositionValue = 'init' | 'left' | 'center' | 'right' | number;
 
-type Position = {
-  X: PositionValue;
-  Y: PositionValue;
-};
-
 export type TBorders = Record<Borders, number>;
 
 class AnimationFrame {

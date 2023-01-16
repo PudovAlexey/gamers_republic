@@ -1,4 +1,3 @@
-import { ReactJSXElement } from "@emotion/react/types/jsx-namespace"
 import { FileGalery } from "../../../../../reusable/FileGalery/FileGalery"
 import { ImageGalery } from "../../../../../reusable/ImageGalery/ImageGalety"
 import { ShowMoreModal } from "./ShowMoreModal"

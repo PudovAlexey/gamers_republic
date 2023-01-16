@@ -1,5 +1,6 @@
 import { Button, TextField } from '@mui/material';
 import { Stack } from '@mui/system';
+import React from 'react';
 import {
   useAppDispatch,
   useAppSelector,
@@ -9,8 +10,12 @@ import DialogControl from '../../../../../../../reusable/Dialog/DialogControl';
 import { FileGalery } from '../../../../../../../reusable/FileGalery/FileGalery';
 import { FileUploader } from '../../../../../../../reusable/FileUploader/FileUploader';
 import { ImageGalery } from '../../../../../../../reusable/ImageGalery/ImageGalety';
-import { SENDMESSAGE } from '../../../../store/actionCreators';
-import { inputMessage, onCliseCaptureModal, removeAddByTypeAndId } from '../../../../store/chatSlice';
+import { SENDMESSAGE, UPLOAD_FILES } from '../../../../store/actionCreators';
+import {
+  inputMessage,
+  onCliseCaptureModal,
+  removeAddByTypeAndId,
+} from '../../../../store/chatSlice';
 import {
   addsSelector,
   countAddsSelector,
@@ -31,29 +36,30 @@ function CaptureModal() {
       setOpen={() => dispatch(onCliseCaptureModal())}
       open={showCaptureModal}
     >
-      <SectionsMap />
-      <TextField
-        label={'comment'}
-        onChange={(e) => dispatch(inputMessage(e))}
-        value={chatValue}
-      />
+      <React.Fragment>
+        <SectionsMap />
+        <TextField
+          label={'comment'}
+          onChange={(e) => dispatch(inputMessage(e))}
+          value={chatValue}
+        />
+      </React.Fragment>
     </DialogControl>
   );
 }
 
 function SectionsMap() {
-    const dispatch = useAppDispatch()
-    const handleOpen = (id, type) => dispatch(openAddByType({id, type}))
-    const handleUpdate = (e ,id, type) => dispatch({
-      type: UPLOAD_FILES,
-      payload: {
-        event: e,
-        operation: 'update',
-        id,
-        type
-      }
-    })
-    const handleRemove = (id, type) => dispatch(removeAddByTypeAndId({id, type}))
+  const dispatch = useAppDispatch();
+  const handleOpen = (id, type) => {};
+  const handleUpdate = (e, id, type) =>
+    dispatch(UPLOAD_FILES({
+      event: e,
+      operation: 'update',
+      id,
+      type,
+    }));
+  const handleRemove = (id, type) =>
+    dispatch(removeAddByTypeAndId({ id, type }));
   const adds = useAppSelector(addsSelector);
   return (
     <Stack spacing={2}>
@@ -62,15 +68,25 @@ function SectionsMap() {
           case 'img':
             return (
               <ImageGalery
-              edit={true}
-              onOpen={handleOpen} onRemove={handleRemove} onUpdate={handleUpdate}
+                edit={true}
+                onOpen={handleOpen}
+                onRemove={handleRemove}
+                onUpdate={handleUpdate}
                 images={adds[type]}
               />
             );
           case 'audio':
             return <AudioGalery audios={adds[type]} />;
-            case 'file':
-            return <FileGalery edit={true} onOpen={handleOpen} onRemove={handleRemove} onUpdate={handleUpdate} files={adds[type]} />;
+          case 'file':
+            return (
+              <FileGalery
+                edit={true}
+                onOpen={handleOpen}
+                onRemove={handleRemove}
+                onUpdate={handleUpdate}
+                files={adds[type]}
+              />
+            );
           default:
             return null;
         }
@@ -85,18 +101,21 @@ function ModalActions() {
   const adds = useAppSelector(addsSelector);
   const userData = useAppSelector((actions) => actions.authSlice.user);
   const maxMessageId = useAppSelector(maxMessagesIdsSelector);
+  const sendMessageAction = SENDMESSAGE({
+    message: input,
+    adds: adds,
+    userData: userData,
+    lastMessageId: maxMessageId,
+  });
   return (
     <Stack width={'100%'} justifyContent={'space-between'} direction={'row'}>
       <Stack>
         <FileUploader
           onChange={(e) =>
-            dispatch({
-              type: UPLOAD_FILES,
-              payload: {
-                event: e,
-                operation: 'create'
-              },
-            })
+            dispatch(UPLOAD_FILES({
+              event: e,
+              operation: 'create',
+            }))
           }
         >
           Add
@@ -104,15 +123,9 @@ function ModalActions() {
       </Stack>
       <Stack justifyContent={'flex-end'} spacing={1} direction={'row'}>
         <Button onClick={() => dispatch(onCliseCaptureModal())}>Cancel</Button>
-        <Button onClick={() => dispatch({
-            type: SENDMESSAGE,
-            payload: {
-                message: input,
-                adds: adds,
-                userData: userData,
-                lastMessageId: maxMessageId,
-              },
-        })}  variant="contained">Send</Button>
+        <Button onClick={() => dispatch(sendMessageAction)} variant="contained">
+          Send
+        </Button>
       </Stack>
     </Stack>
   );

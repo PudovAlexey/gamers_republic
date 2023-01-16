@@ -6,41 +6,12 @@ import { AuthUser } from './data/Users/AuthUser';
 import { Users } from './data/Users/UserList';
 import { messages } from './data/Chat/messages';
 import { rooms } from './data/Chat/rooms';
-
-function filterMessagesTop({ messagesFromChat, offset, startForm }) {
-  let filterMessages = [];
-  const endCount = startForm - offset;
-  for (let i = startForm; i > endCount; i--) {
-    if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i]);
-  }
-  return filterMessages;
-}
-
-function filterMessagesMiddle({ messagesFromChat, offset, startForm }) {
-  let filterMessages = [];
-  for (let i = startForm; i < offset / 2 + startForm; i++) {
-    if (!messagesFromChat[i + 1]) break;
-    filterMessages.push(messagesFromChat[i + 1]);
-  }
-  for (let i = startForm; i > startForm - offset / 2; i--) {
-    if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i]);
-  }
-  return filterMessages.sort(
-    (a, b) => new Date(b.createdAt) - new Date(a.messageId)
-  );
-}
-
-function filterMessagesBottom({ messagesFromChat, offset, startForm }) {
-  let filterMessages = [];
-  const messageEnd = startForm + offset;
-  for (let i = startForm; i < messageEnd; i++) {
-    if (!messagesFromChat[i]) break;
-    filterMessages.push(messagesFromChat[i]);
-  }
-  return filterMessages;
-}
+import { EScrollDirection, TMessage } from '../types';
+import {
+  filterMessagesBottom,
+  filterMessagesMiddle,
+  filterMessagesTop,
+} from './helpers/chat';
 
 class FakeApi {
   async getAuthUser(token) {
@@ -73,7 +44,7 @@ class FakeApi {
         .join(' ');
 
       const messageId = messages[messages.length - 1].messageId + 1;
-      const newMessage = {
+      const newMessage: TMessage = {
         message,
         createdAt,
         adds,
@@ -94,7 +65,7 @@ class FakeApi {
             user: Users.find((user) => messageData.userId === user.id),
           };
         });
-      let req = await this.fakeDelay(newMessage);
+      let req = (await this.fakeDelay(newMessage)) as TMessage;
       return {
         ...req,
         frontId,
@@ -107,7 +78,7 @@ class FakeApi {
 
   async getMessagesByRoomId({ roomId, messageStart, offset, where }) {
     const messagesFromChat = messages
-      .filter((message) => message.chatId === roomId)
+      .filter((message) => message.roomId === roomId)
       .sort(
         (a, b) =>
           new Date(a.createdAt).valueOf() - new Date(b.createdAt).valueOf()
@@ -124,21 +95,21 @@ class FakeApi {
     }
     let messagesByOffset;
     switch (where) {
-      case 'up':
+      case EScrollDirection.Up:
         messagesByOffset = filterMessagesTop({
           messagesFromChat,
           offset,
           startForm,
         });
         break;
-      case 'down':
+      case EScrollDirection.Down:
         messagesByOffset = filterMessagesBottom({
           messagesFromChat,
           offset,
           startForm,
         });
         break;
-      case 'center':
+      case EScrollDirection.Draw:
         messagesByOffset = filterMessagesMiddle({
           messagesFromChat,
           offset,
@@ -146,7 +117,7 @@ class FakeApi {
         });
     }
 
-    let req = await this.fakeDelay(messagesByOffset);
+    let req = (await this.fakeDelay(messagesByOffset)) as TMessage[];
     if (req) {
       const messagesWitchUserData = req.map((message) => ({
         ...message,

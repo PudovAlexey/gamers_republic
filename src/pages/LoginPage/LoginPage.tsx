@@ -4,7 +4,7 @@ import useFieldControl from '../../hooks/useFieldControl';
 import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
 import { MessageToast } from '../../components/reusable/MessageToast/MessageToast';
-import api from '../../api/api';
+import api from '../../api/api/api';
 import { checkAll } from '../../utils/validators/validators';
 import { AuthContext } from '../../components/AuthContext/AuthContext';
 import useLocalStorage from '../../hooks/useLocalStorage';

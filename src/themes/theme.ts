@@ -1,6 +1,4 @@
-import Checkbox from '@mui/material/Checkbox';
-import withStyles from '@mui/material/styles';
-import { createTheme, styled } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { orange } from '@mui/material/colors';
 
 declare module '@mui/material/styles' {

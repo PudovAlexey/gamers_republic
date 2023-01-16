@@ -22,12 +22,10 @@ function ChatComponent() {
                 roomId: AuthUser?.roomId,
                 messageContainer: messageContainer.current
             }))
-            dispatch({
-                type: UPLOAD_MESSAGES,
-                payload: {
-                    roomId: AuthUser?.roomId
-                }
-            })
+            
+            dispatch(UPLOAD_MESSAGES({
+                roomId: AuthUser?.roomId
+            }))
         }
         return () => {
             dispatch(onExit())

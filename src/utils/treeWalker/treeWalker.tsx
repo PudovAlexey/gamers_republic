@@ -1,4 +1,3 @@
-import { JsxElement } from 'typescript';
 import { getNodeByPath } from '../utils';
 import { TBuildTreeProps, TmakeNodesTreeType } from './types';
 

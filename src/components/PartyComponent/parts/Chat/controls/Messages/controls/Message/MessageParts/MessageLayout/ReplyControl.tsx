@@ -1,11 +1,12 @@
 import { Box, Paper, Stack, Typography, useTheme } from "@mui/material";
 import { styled } from "@mui/system";
 import ReplyIcon from '@mui/icons-material/Reply';
-import { mainStyles } from 'src/styles';
+// import { mainStyles } from 'src/styles';
 import { AddsViewer } from "../../../../../addsViewer/AddsViewer";
 import { replyFirstMessageById } from "../../../../../../store/selectors/chatSelector";
 import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks";
 import { REPLY_NAVIGATE } from "../../../../../../store/actionCreators";
+import {mainStyles} from '../../../../../../../../../../styles'
 
 function ReplyControl({messageId}) {
   const { palette } = useTheme();
@@ -24,7 +25,7 @@ function ReplyControl({messageId}) {
       })
     return (
         <ReplyPaper onClick={() => dispatch({
-          type: REPLY_NAVIGATE,
+          type: REPLY_NAVIGATE().type,
           payload: {
             messageId: firstReplyMessage.messageId
           }

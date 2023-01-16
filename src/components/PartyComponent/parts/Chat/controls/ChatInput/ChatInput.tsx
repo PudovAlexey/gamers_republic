@@ -33,6 +33,12 @@ function ChatInput() {
   const userData = useAppSelector((actions) => actions.authSlice.user);
   const maxMessageId = useAppSelector(maxMessagesIdsSelector);
   const dispatch = useAppDispatch();
+  const sendMessageAction = SENDMESSAGE({
+    message: input,
+    adds: adds,
+    userData: userData,
+    lastMessageId: maxMessageId,
+  })
   return (
     <InputPaper>
       <FormControl fullWidth>
@@ -46,35 +52,28 @@ function ChatInput() {
             endAdornment: (
               <InputAdornment position="end">
                 <Stack direction={'row'} justifyContent={'center'} spacing={1}>
-                  <IconButton >
-                      <KeyboardVoiceIcon/>
+                  <IconButton>
+                    <KeyboardVoiceIcon />
                   </IconButton>
-                  <FileUploader onChange={(e) => dispatch({
-                    type: UPLOAD_FILES,
-                    payload: {
-                      event: e,
-                      operation: 'create'
+                  <FileUploader
+                    onChange={(e) =>
+                      dispatch(UPLOAD_FILES({
+                        event: e,
+                        operation: 'create',
+                      }))
                     }
-                  })}>
+                  >
                     <CameraAltIcon />
                   </FileUploader>
                   <IconButton
                     onClick={() => {
-                      dispatch({
-                        type: SENDMESSAGE,
-                        payload: {
-                          message: input,
-                          adds: adds,
-                          userData: userData,
-                          lastMessageId: maxMessageId,
-                        },
-                      });
+                      dispatch(sendMessageAction);
                     }}
                   >
                     <SendIcon />
                   </IconButton>
                   <BottomNavIcon onClick={() => dispatch(onMoveChatToBottom())}>
-                    <SouthIcon/>
+                    <SouthIcon />
                   </BottomNavIcon>
                 </Stack>
               </InputAdornment>
@@ -82,7 +81,7 @@ function ChatInput() {
           }}
         />
       </FormControl>
-      <CaptureModal/>
+      <CaptureModal />
     </InputPaper>
   );
 }
@@ -104,7 +103,6 @@ const BottomNavIcon = styled(IconButton)({
   top: '-60px',
   right: '30px',
   background: 'red',
-
-})
+});
 
 export { ChatInput };

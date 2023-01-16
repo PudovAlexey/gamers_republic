@@ -6,9 +6,9 @@ import { FileUploader } from '../FileUploader/FileUploader';
 
 type TImageGalery = {
   edit?: boolean
-  onRemove: (id: number, type: 'img') => void;
-  onUpdate: (e: any, id: number, type: 'img') => void;
-  onOpen: (id: number, type: 'img') => void;
+  onRemove?: (id: number, type: 'img') => void;
+  onUpdate?: (e: any, id: number, type: 'img') => void;
+  onOpen?: (id: number, type: 'img') => void;
   images: {
     file: string;
     name: string;

@@ -19,7 +19,7 @@ import {
 } from '../../store/actionCreators';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { mainStyles } from 'src/styles';
+import { mainStyles } from '../../../../../../styles';
 import { useTheme } from '@mui/material';
 
 function MessagesList({ messageContainer }) {
@@ -43,12 +43,12 @@ function MessagesList({ messageContainer }) {
         }}
         onScroll={() =>
           dispatch({
-            type: UPLOAD_MESSAGES_BY_OFFSET,
+            type: UPLOAD_MESSAGES_BY_OFFSET().type,
           })
         }
         onMouseDown={(e) => {
           dispatch({
-            type: SELECT_MESSAGES,
+            type: SELECT_MESSAGES().type,
             payload: e,
           });
         }}

@@ -1,19 +1,25 @@
 import { $, setStylesByObject } from '../../../utils/DOM/DOM';
 import { setContainer } from '../store';
-import store from '../../../store/store'
+import store from '../../../store/store';
 
 const styleParams = {
-  enabled: { container: { transform: 'translate(-28em)' }, btn: {transform: 'translate(-32em)'} },
-  disabled: { container: { transform: 'translate(0em)' }, btn: {transform: 'translate(-0em)'}},
+  enabled: {
+    container: { transform: 'translate(-28em)' },
+    btn: { transform: 'translate(-32em)' },
+  },
+  disabled: {
+    container: { transform: 'translate(0em)' },
+    btn: { transform: 'translate(-0em)' },
+  },
 };
 
 function onMovePartyContainerClick(
-  partyContainer: HTMLElement, 
+  partyContainer: HTMLElement,
   activeContainer: HTMLElement
-  ) {
+) {
   Array.from(partyContainer.children).forEach((parrent: HTMLElement) => {
     const [btn] = Array.from(parrent.children);
-    setStylesByObject(btn, {transform: 'translate(0em)'})
+    setStylesByObject(btn, { transform: 'translate(0em)' });
     let params = {};
     if (activeContainer === parrent) {
       params = styleParams['enabled'];
@@ -22,11 +28,10 @@ function onMovePartyContainerClick(
     }
     setStylesByObject(parrent, params['container']);
     if (activeContainer && activeContainer !== parrent) {
-        setStylesByObject(btn, {transform: 'translate(-32em)'})
-    } else  {
-        setStylesByObject(btn, {transform: 'translate(0em)'})
+      setStylesByObject(btn, { transform: 'translate(-32em)' });
+    } else {
+      setStylesByObject(btn, { transform: 'translate(0em)' });
     }
-    
   });
 }
 
@@ -52,11 +57,11 @@ function onDrugPartyContainer(partyContainer, activeContainer) {
       const coords = bodyRight - pageX;
       activeContainer.style.transform = `translate(${-coords + 'px'})`;
       Array.from(partyContainer.children).forEach((parrent: HTMLElement) => {
-        const [btn] = Array.from(parrent.children)
+        const [btn] = Array.from(parrent.children);
         if (!(activeContainer && activeContainer !== parrent)) {
-            setStylesByObject(btn, {transform: 'translate(0em)'})
+          setStylesByObject(btn, { transform: 'translate(0em)' });
         }
-      })
+      });
     }
 
     init = false;
@@ -71,12 +76,14 @@ function onDrugPartyContainer(partyContainer, activeContainer) {
         1) *
         100;
     const completeClose = moveTo === 'left' ? 10 : 90;
-    const isActivate = calculatePercantageToClose >= completeClose || !activeContainer.style.transform ||  /0/.test(activeContainer.style.transform) ? activeContainer : null 
-    store.dispatch(setContainer(isActivate?.dataset?.partid || isActivate))
-    onMovePartyContainerClick(
-      partyContainer,
-      isActivate
-    );
+    const isActivate =
+      calculatePercantageToClose >= completeClose ||
+      !activeContainer.style.transform ||
+      /0/.test(activeContainer.style.transform)
+        ? activeContainer
+        : null;
+    store.dispatch(setContainer(isActivate?.dataset?.partid || isActivate));
+    onMovePartyContainerClick(partyContainer, isActivate);
     document.removeEventListener('mousemove', onStartMoveContainer);
     document.removeEventListener('mouseup', onEndMoveContainer);
   }

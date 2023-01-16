@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import api from '../../api/api';
+import api from '../../api/api/api';
 import { useAppDispatch } from '../../hooks/typedReduxHooks';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { onInit } from '../../store/authSlice/authSlice';

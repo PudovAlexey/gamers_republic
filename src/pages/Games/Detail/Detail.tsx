@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Typography, Toolbar, Box } from '@mui/material';
+import { Toolbar, Box } from '@mui/material';
 import GameCard from './fragments/GameCard';
-import api from '../../../api/api';
+import api from '../../../api/api/api';
 import { Game } from '../../../games/GamesList/types/Games/types';
 
 function Detail({ filters }) {

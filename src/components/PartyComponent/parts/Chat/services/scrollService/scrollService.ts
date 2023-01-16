@@ -1,28 +1,31 @@
+import { EScrollDirection } from '../../../../../../api/types';
 import { $ } from '../../../../../../utils/DOM/DOM';
-import { EScrollDirection } from './types';
 
 function scrollService() {
-  let prevScrollTop;
+  let prevScrollTop: number;
   let scrollDirection: null | EScrollDirection = null;
-  let messagesOnScreen = [];
+  let messagesOnScreen: HTMLElement[] = [];
   let messageContainer: null | HTMLElement = null;
   return {
     update: (scrollContainer) => {
-      messageContainer = scrollContainer.children[0];
+      let queryMessage;
       const scrollTop = scrollContainer.scrollTop;
       const scrollHeight = scrollContainer.scrollHeight;
+      messageContainer = scrollContainer.children[0];
       const scrollOffsetHeight =
         Math.abs(scrollTop) -
         (scrollContainer.scrollHeight - scrollContainer.offsetHeight);
+
       const topPercentage = (scrollTop / scrollHeight) * 100;
       const scrollBottomPercentage =
         (Math.abs(scrollOffsetHeight) / scrollHeight) * 100;
       const isNearBottom = topPercentage > 0 && topPercentage < 35;
       const isNearTop =
         scrollBottomPercentage > 0 && scrollBottomPercentage < 35;
-      let queryMessage;
       if (!messagesOnScreen.length) {
-        messagesOnScreen.push(messageContainer.firstChild);
+        const firstChild: HTMLElement =
+          messageContainer.firstChild as HTMLElement;
+        messagesOnScreen.push(firstChild);
       }
       if (scrollContainer.scrollTop > prevScrollTop) {
         scrollDirection = EScrollDirection.Down;
@@ -51,35 +54,35 @@ function scrollService() {
       };
     },
     findById: function (messageId: number) {
-      const allMessages = messageContainer.children;
-      return Array.from(allMessages).find(
+      const allMessages: HTMLElement[] = Array.from(messageContainer.children) as HTMLElement[];
+      return allMessages.find(
         (message) => +message?.dataset?.messageid === messageId
       );
     },
-    getLastMessage: function () {
+    getLastMessage: function (): HTMLElement {
       const allMessages = messageContainer.children;
-      return allMessages[allMessages.length - 1];
+      return allMessages[allMessages.length - 1] as HTMLElement;
     },
-    getFirstMessage: function () {
+    getFirstMessage: function (): HTMLElement {
       const allMessages = messageContainer.children;
-      return allMessages[0];
+      return allMessages[0] as HTMLElement;
     },
-    getAllMessages: function () {
+    getAllMessages: function (): HTMLElement[] {
       const allMessages = messageContainer.children;
-      return Array.from(allMessages);
+      return Array.from(allMessages) as HTMLElement[];
     },
   };
 }
 
-function onMoveTop(target, currentStateMessages): Element[] {
+function onMoveTop(target, currentStateMessages: HTMLElement[]): HTMLElement[] {
   const targetTop = $.rect(target).top;
   const targetBottom = $.rect(target).bottom;
   const lastMessage = currentStateMessages[0];
-  let newMessagesOnScreen = [];
+  let newMessagesOnScreen: HTMLElement[] = [];
   let targetMessage = lastMessage;
   let targetCoods = $.rect(targetMessage).top;
   do {
-    targetMessage = targetMessage.nextElementSibling;
+    targetMessage = targetMessage.nextElementSibling as HTMLElement;
     if (targetMessage) newMessagesOnScreen.push(targetMessage);
     targetCoods = targetMessage ? $.rect(targetMessage).top : null;
   } while (targetCoods && targetCoods > targetTop);
@@ -91,14 +94,17 @@ function onMoveTop(target, currentStateMessages): Element[] {
   return [...new Set(messages)];
 }
 
-function onMoveBottom(target, currentStateMessages): Element[] {
+function onMoveBottom(
+  target: HTMLElement,
+  currentStateMessages: HTMLElement[]
+): HTMLElement[] {
   const targetBottom = $.rect(target).bottom;
   const targetTop = $.rect(target).top;
   let newMessagesOnScreen = [];
   let targetMessage = currentStateMessages[currentStateMessages.length - 1];
   let targetCoods = $.rect(targetMessage).bottom;
   do {
-    targetMessage = targetMessage.previousElementSibling;
+    targetMessage = targetMessage.previousElementSibling as HTMLElement;
     if (targetMessage) newMessagesOnScreen.push(targetMessage);
     targetCoods = targetMessage ? $.rect(targetMessage).bottom : null;
   } while (targetCoods && targetCoods > targetBottom);

@@ -11,7 +11,6 @@ import {
   IconButton,
   Typography,
   IconButtonProps,
-  Box,
 } from '@mui/material';
 import { pink } from '@mui/material/colors';
 
@@ -19,10 +18,9 @@ import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import ShareIcon from '@mui/icons-material/Share';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { AuthContext } from '../../../../components/AuthContext/AuthContext';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
-import api from '../../../../api/api';
+import api from '../../../../api/api/api';
 import { Link } from 'react-router-dom';
 
 interface ExpandMoreProps extends IconButtonProps {

@@ -1,4 +1,4 @@
-import { CircularProgress, IconButton, Stack, Typography, useTheme } from "@mui/material"
+import { IconButton, Stack, Typography, useTheme } from "@mui/material"
 import { Box, styled } from "@mui/system"
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { useAppDispatch, useAppSelector } from "../../../../../../../../../../hooks/typedReduxHooks"
@@ -9,7 +9,7 @@ import ReplyIcon from '@mui/icons-material/Reply';
 import { SendProgress } from "../../../../containers/SendProgress";
 import { loadMessageById } from "../../../../../../store/selectors/chatSelector";
 import { onShowReply } from "../../../../../../store/chatSlice";
-import { mainStyles } from 'src/styles';
+import {mainStyles} from "../../../../../../../../../../styles"
 function CompanionSend({children, messageId}) {
   const { palette } = useTheme();
   const styles = mainStyles(palette);

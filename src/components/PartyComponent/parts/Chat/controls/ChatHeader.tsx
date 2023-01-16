@@ -1,10 +1,11 @@
 import { Divider, styled, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import { useAppSelector } from '../../../../../hooks/typedReduxHooks';
+import { chatInfoSelector } from '../store/selectors/chatSelector';
 
 function ChatHeader() {
-  const chatInfo = useAppSelector((action) => action.chatSlice.chatInfo)
-return (
+  const chatInfo = useAppSelector(chatInfoSelector);
+  return (
     <Box>
       <ChatLayout>
         <Typography sx={{ color: 'white' }} variant="h4">

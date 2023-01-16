@@ -1,5 +1,5 @@
-import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit"
-import api from "../../../api/api"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import api from "../../../api/api/api"
 const initialState = {
     activeContainer: null,
     roomData: null,
@@ -9,14 +9,6 @@ const initialState = {
     replyMessage: null
 }
 
-// function fetchMessages() {
-//     const messages = await api.getMessagesByRoomId({
-//         roomId,
-//         messageStart: 'end',
-//         offset: 20,
-//         where: 'up'
-//     })
-// }
 export const fetchMessages = createAsyncThunk(null, 
     async({
         roomId,

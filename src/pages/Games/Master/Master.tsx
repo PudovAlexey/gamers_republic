@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import gamesTree from '../../../games/GamesList/GamesTree';
 import SearchField from '../../../components/reusable/SearchField/SearchField';
 import RangeSlider from '../../../components/reusable/RangeSlider/RangeSlider';
-import api from '../../../api/api';
+import api from '../../../api/api/api';
 import { Node } from '../../../utils/treeWalker/types';
 import ToolbarComponent from '../../../components/reusable/ToolbarComponent/ToolbarComponent';
 

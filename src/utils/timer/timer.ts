@@ -58,25 +58,22 @@ export function parseTimeByString({
   return timeByType;
 }
 
-export function makeTimeString(time?: object) {
+export function makeTimeString(time?: Date) {
   return Intl.DateTimeFormat('ru', {
     year: 'numeric',
     month: 'numeric',
-     day: 'numeric',
+    day: 'numeric',
     hour: 'numeric',
     minute: 'numeric',
   })
     .format(time ? new Date(time) : new Date())
     .split(' ')
     .map((date, idx) => {
-        if (idx === 0) {
-           return date.split('.')
-            .reverse()
-            .join('.')
-            .replaceAll(',', '')
-        } else {
-            return date.replaceAll(',', '')
-        }
+      if (idx === 0) {
+        return date.split('.').reverse().join('.').replaceAll(',', '');
+      } else {
+        return date.replaceAll(',', '');
+      }
     })
     .join(' ');
 }

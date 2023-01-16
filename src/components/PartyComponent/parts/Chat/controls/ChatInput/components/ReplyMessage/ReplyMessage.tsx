@@ -34,7 +34,8 @@ function ReplyMessage() {
      <AddsWrapper>
      <AddsViewer showMoreButton={false} showCount={{
         img: 1,
-        audio: 0
+        audio: 0,
+        file: 0
       }} adds={adds}/>
      </AddsWrapper>
         <Box>

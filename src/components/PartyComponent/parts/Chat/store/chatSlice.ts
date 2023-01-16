@@ -77,7 +77,7 @@ const chatSlice = createSlice({
         state.replyIds.splice(replyIndex, 1);
       }
     },
-    onMoveChatToBottom: (state, action) => {
+    onMoveChatToBottom: (state) => {
       const scrollService = current(state.scrollService);
       scrollService.update(state.messageContainer);
       const firstMessage = scrollService.getFirstMessage();
@@ -123,7 +123,6 @@ const chatSlice = createSlice({
       state.loadMessageIds.push(countNextMessage);
     });
     builder.addCase(ADD_MESSAGE, (state, action) => {
-      console.log('after send');
       let loaderIds = current(state.loadMessageIds);
       loaderIds = [...loaderIds];
       const { frontId } = action.payload;
@@ -209,7 +208,6 @@ const chatSlice = createSlice({
     });
     builder.addCase(SELECTION_ENDING, (state, action) => {
       const array: number[] = action.payload;
-      console.log(array);
       array.forEach((id) => {
         const replyIndex = state.replyIds.indexOf(id);
         if (replyIndex < 0) {

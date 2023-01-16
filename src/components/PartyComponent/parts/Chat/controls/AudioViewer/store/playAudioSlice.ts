@@ -72,7 +72,7 @@ const playAudioSlice = createSlice({
     onStartPlayMusic: (state, action) => {
     
       const { player, playerId } = action.payload;
-      state.play = !state.play
+      // state.play = !state.play
       const width = state.width
       const height = state.height
       let audioContext
@@ -99,7 +99,7 @@ const playAudioSlice = createSlice({
          state.audioContext = audioContext
         analyser.fftSize = 512;
         state.audioContext = audioContext;
-        state.play = !state.play
+        // state.play = !state.play
          player.childNodes[0].onplay = (e) => {
            state.audioContext.resume();
          };

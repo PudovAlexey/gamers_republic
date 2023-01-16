@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/system';
-import { mainStyles } from 'src/styles';
+// import { mainStyles } from 'src/styles';
 import {
   useAppDispatch,
   useAppSelector,
@@ -17,6 +17,7 @@ import { Paper, Typography, useTheme } from '@mui/material';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
 import { onAddReplyId } from '../../../../store/chatSlice';
 import { isSelectedMessagesSelector } from '../../../../store/selectors/chatSelector';
+import {mainStyles} from '../../../../../../../../styles'
 
 function MessageControl({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
