@@ -3,7 +3,7 @@ import { Box } from "@mui/system"
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../../../hooks/typedReduxHooks";
+import { useAppDispatch } from "../../../../../../hooks/typedReduxHooks";
 import { onExit, onInit, onStartPlayMusic } from "./store/playAudioSlice";
 import { stylesComponent } from "./styles";
 
@@ -12,7 +12,8 @@ function AudioViewer({audio, id, items}) {
     const styles = stylesComponent(theme)
     const dispatch = useAppDispatch()
     const container = items.current?.[id]
-    const {audioControls} = useAppSelector((actions) => actions.playAudioSlice)
+   // const {audioControls} = useAppSelector((actions) => actions.playAudioSlice)
+    const audioControls = null
     useEffect(() => {
         if (container) {
             const canvas = container.querySelector('.viewer')

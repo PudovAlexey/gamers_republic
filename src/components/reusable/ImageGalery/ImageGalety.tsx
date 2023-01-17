@@ -12,6 +12,7 @@ type TImageGalery = {
   images: {
     file: string;
     name: string;
+    id: number
   }[];
   cols?: number;
 };

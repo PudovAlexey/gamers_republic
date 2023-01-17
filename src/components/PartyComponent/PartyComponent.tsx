@@ -5,7 +5,7 @@ import { onMovePartyContainer } from "./animation/main"
 import { partyParts } from "./config"
 import { dinamicStyles, styleComponent } from "./styles"
 import { useAppDispatch, useAppSelector } from '../../hooks/typedReduxHooks'
-import { fetchMessages, init } from './store'
+import { init } from './store'
 import { AuthContext } from '../AuthContext/AuthContext'
 
 function PartyComponent() { 
@@ -14,21 +14,12 @@ function PartyComponent() {
     const [AuthUser] = useContext(AuthContext);
     const activeContainer = useAppSelector(actions => actions.partySlice.activeContainer)
     const dispatch = useAppDispatch()
-
-
-    async function onInit(roomId) {
-        dispatch(fetchMessages({
-            roomId
-        }))
-        
-    }
     
     useEffect(() => {
         if (AuthUser && AuthUser?.roomId) {
             dispatch(init({
                 roomId: AuthUser.roomId
             }))
-            onInit(AuthUser.roomId)
         }
     }, [AuthUser])
     function onMoveStartMovePartyContainer(e, part) {

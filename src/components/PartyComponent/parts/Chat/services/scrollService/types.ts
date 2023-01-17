@@ -1,10 +1,10 @@
 import { EScrollDirection } from "../../../../../../api/types"
 
 type TUpdate = (scrollContainer?: HTMLElement) => {
+    scrollDirection: EScrollDirection
     queryMessage: number | null
     messagesOnScreen: HTMLElement[]
     containerChildren: HTMLElement[]
-    scrollDirection: EScrollDirection
 
 }
 

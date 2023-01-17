@@ -1,5 +1,6 @@
 import { createSlice, current } from '@reduxjs/toolkit';
-import { EMessageAdd, TMessageAdds, TMessage } from '../../../../../api/types';
+import { TMessageAdds, TMessage } from '../../../../../api/types';
+import { parseFileByType } from '../../../../../utils/formatters/formatters';
 import { generateAddsId } from '../services/helpers';
 import { TScrollService } from '../services/scrollService/types';
 import {
@@ -51,6 +52,7 @@ const chatSlice = createSlice({
   name: 'chatSlice',
   initialState,
   reducers: {
+
     onInit: (state, action) => {
       const { scrollService, roomId, messageContainer } = action.payload;
       const init = scrollService();
@@ -59,10 +61,12 @@ const chatSlice = createSlice({
       state.roomId = roomId;
       state.messageContainer = messageContainer;
     },
+
     inputMessage: (state, action) => {
       const { target } = action.payload;
       state.messageInput = target.value;
     },
+
     onShowReply: (state, action) => {
       state.showReply = true;
       const { adds } = action.payload;
@@ -72,9 +76,7 @@ const chatSlice = createSlice({
         state.replyAdds = adds;
       }
     },
-    updateAddByTypeAndId: (state, action) => {
-      // state.adds
-    },
+
     removeAddByTypeAndId: (state, action) => {
       const { type, id } = action.payload;
       const currentAdds = { ...current(state.adds) };
@@ -84,6 +86,7 @@ const chatSlice = createSlice({
       currentAdds[type] = updateAddsByType;
       state.adds = currentAdds;
     },
+
     onAddReplyId: (state, action) => {
       const replyIndex = state.replyIds.indexOf(action.payload);
       if (replyIndex < 0) {
@@ -92,6 +95,7 @@ const chatSlice = createSlice({
         state.replyIds.splice(replyIndex, 1);
       }
     },
+
     onMoveChatToBottom: (state) => {
       const scrollService = current(state.scrollService);
       const firstMessage = scrollService.getFirstMessage();
@@ -103,22 +107,28 @@ const chatSlice = createSlice({
         });
       }
     },
+
     onCloseReply: (state) => {
       state.showReply = false;
       state.replyMessage = null;
       state.replyAdds = null;
     },
+
     onCliseCaptureModal: (state) => {
       state.adds = null;
       state.showCaptureModal = false;
     },
+
     onExit: (state) => {
       Object.keys(initialState).forEach((field) => {
         state[field] = initialState[field];
       });
     },
   },
+
+
   extraReducers: (builder) => {
+
     builder.addCase(SHOW_LOADER, (state, action) => {
       switch (action.payload) {
         case 'up':
@@ -129,6 +139,7 @@ const chatSlice = createSlice({
           break;
       }
     });
+
     builder.addCase(SENDMESSAGE, (state, action) => {
       const { lastMessageId } = action.payload;
       const countNextMessage = lastMessageId + 1;
@@ -136,6 +147,7 @@ const chatSlice = createSlice({
       state.showReply = false;
       state.loadMessageIds.push(countNextMessage);
     });
+
     builder.addCase(ADD_MESSAGE, (state, action) => {
       let loaderIds = current(state.loadMessageIds);
       loaderIds = [...loaderIds];
@@ -150,52 +162,37 @@ const chatSlice = createSlice({
         state.loadMessageIds = [...loaderIds];
       }
     });
+
     builder.addCase(SET_IMAGES, (state, action) => {
       const { files } = action.payload;
+      const currentAdds = (state.adds || {});
       Array.from(files).forEach((file) => {
-        const { type } = file;
-        const currentAdds = (state.adds || {});
-        if (/image/.test(type)) {
-          if (!currentAdds[EMessageAdd.Img]) currentAdds[EMessageAdd.Img]= [];
-          const nextId = generateAddsId(currentAdds[EMessageAdd.Img]);
-          currentAdds[EMessageAdd.Img].push({
-            ...file,
-            id: nextId,
-          });
-          state.adds = { ...currentAdds };
-        } else if (/video/.test(type)) {
-          if (!currentAdds[EMessageAdd.Video]) currentAdds[EMessageAdd.Video] = [];
-          const nextId = generateAddsId(currentAdds.video);
-          currentAdds.video.push({
-            ...file,
-            id: nextId,
-          });
-          state.adds = { ...currentAdds };
-        } else if (/audio/.test(type)) {
-          if (!currentAdds.audio) currentAdds.audio = [];
-          const nextId = generateAddsId(currentAdds.audio);
-          currentAdds.audio.push({
-            ...file,
-            id: nextId,
-          });
-          state.adds = { ...currentAdds };
-        } else if (/application/.test(type)) {
-          if (!currentAdds.file) currentAdds.file = [];
-          const nextId = generateAddsId(currentAdds.file);
-          currentAdds.file.push({
-            ...file,
-            id: nextId,
-          });
-          state.adds = { ...currentAdds };
+        const parseType = parseFileByType(file)
+        if (parseType) {
+          if (!currentAdds[parseType]) currentAdds[parseType]= [];
+        const nextId = generateAddsId(currentAdds[parseType]);
+        currentAdds[parseType].push({
+          ...file,
+          id: nextId,
+        });
         }
-        state.showCaptureModal = true;
+      });
+      state.adds = { ...currentAdds } as TMessageAdds;
+      state.showCaptureModal = true;
+    });
+
+    builder.addCase(CHANGE_FILES, (state, action) => {
+      const { files, id } = action.payload;
+      const parseType = parseFileByType(files[0])
+      const fileIndex = state.adds[parseType].findIndex((file) => file.id === id);
+      if (fileIndex >= 0) state.adds[parseType].splice(fileIndex, 1, {
+        id,
+        type: parseType,
+        file: files[0],
+        name: files[0].name
       });
     });
-    builder.addCase(CHANGE_FILES, (state, action) => {
-      const { files, id, type } = action.payload;
-      const fileIndex = state.adds[type].findIndex((file) => file.id === id);
-      if (fileIndex >= 0) state.adds[type].splice(fileIndex, 1, files[0]);
-    });
+
     builder.addCase(START_NAVIGATION, (state, action) => {
       const { messageId } = action.payload;
       const scrollService = current(state.scrollService);
@@ -215,10 +212,12 @@ const chatSlice = createSlice({
         });
       }
     });
+
     builder.addCase(ADD_MESSAGES, (state) => {
       state.loadingBottom = false;
       state.loadingTop = false;
     });
+
     builder.addCase(SELECTION_ENDING, (state, action) => {
       const array: number[] = action.payload;
       array.forEach((id) => {
@@ -241,7 +240,6 @@ export const {
   onCloseReply,
   onMoveChatToBottom,
   removeAddByTypeAndId,
-  updateAddByTypeAndId,
   onAddReplyId,
   onCliseCaptureModal,
 } = chatSlice.actions;

@@ -38,7 +38,6 @@ const UPLOAD_FILES = createAction('chat/upload_image', (data: {
 
 const SET_IMAGES = createAction('chat/upload_files', (data: {
   files: File[],
-  type: EMessageAdd,
   id: number
 }) => ({
   payload: data
@@ -46,7 +45,6 @@ const SET_IMAGES = createAction('chat/upload_files', (data: {
 
 const CHANGE_FILES = createAction('chat/change_files', (data: {
   files: File[],
-  type: EMessageAdd,
   id: number
 }) => ({
   payload: data

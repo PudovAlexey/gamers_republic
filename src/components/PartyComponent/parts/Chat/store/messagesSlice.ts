@@ -54,7 +54,6 @@ export const messagesSlice = createSlice({
 })
 
 export const {
-    onInit,
     onExit,
 } = messagesSlice.actions
 

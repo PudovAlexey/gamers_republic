@@ -9,12 +9,12 @@ function scrollService(): TScrollService {
   let messageContainer: null | HTMLElement = null;
   let scrollContainerState: null | HTMLElement = null;
   return {
-    update: (scrollContainer) => {
+    update: function (scrollContainer) {
       if (scrollContainer) {
         messageContainer = scrollContainer.children[0] as HTMLElement;
         scrollContainerState = scrollContainer
       }
-      let queryMessage;
+      let queryMessage: number | null;
       const scrollTop = scrollContainerState.scrollTop;
       const scrollHeight = scrollContainerState.scrollHeight;
       const scrollOffsetHeight =
@@ -53,7 +53,7 @@ function scrollService(): TScrollService {
         scrollDirection,
         queryMessage,
         messagesOnScreen,
-        containerChildren: messageContainer.children,
+        containerChildren: Array.from(messageContainer.children) as HTMLElement[],
       };
     },
     findById: function (messageId) {
