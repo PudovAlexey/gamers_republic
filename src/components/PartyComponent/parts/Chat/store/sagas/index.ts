@@ -14,6 +14,7 @@ import {
   ADD_MESSAGE,
   ADD_MESSAGES,
   CHANGE_FILES,
+  INPUT_PRESS,
   NAVIGATION_PROGRESS,
   REPLY_NAVIGATE,
   RESTORE_MESSAGES,
@@ -52,6 +53,14 @@ function* fetchMessageSend() {
     ]);
     yield put(ADD_MESSAGE(newMessage));
   } catch (err) {}
+}
+
+function* inputPress(action) {
+  const event = action.payload
+  const {key} = event
+  switch (key) {
+    
+  }
 }
 
 function* parseImages(action) {
@@ -230,6 +239,7 @@ function* messagesSelection(action) {
 
 function* sendMessage() {
   yield takeEvery(SENDMESSAGE, fetchMessageSend);
+  yield takeEvery(INPUT_PRESS, inputPress)
 }
 
 function* parseImage() {

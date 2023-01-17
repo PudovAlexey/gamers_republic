@@ -7,6 +7,8 @@ import {
   ADD_MESSAGE,
   ADD_MESSAGES,
   CHANGE_FILES,
+  INPUT_PRESS,
+  INPUT_UNPRESS,
   SELECTION_ENDING,
   SENDMESSAGE,
   SET_IMAGES,
@@ -30,6 +32,7 @@ const initialState: {
   loadMessageIds: number[],
   replyIds: number[]
   scrollService: null | TScrollService
+  pressButtons: string[]
 } = {
   roomId: null,
   messageContainer: null,
@@ -46,6 +49,7 @@ const initialState: {
   loadMessageIds: [],
   replyIds: [],
   scrollService: null,
+  pressButtons: []
 };
 
 const chatSlice = createSlice({
@@ -229,6 +233,21 @@ const chatSlice = createSlice({
         }
       });
     });
+
+    builder.addCase(INPUT_PRESS, (state, action) => {
+      const event = action.payload
+      if (!state.pressButtons.includes(event.key)) {
+        state.pressButtons.push(event.key)
+      }      
+    })
+
+    builder.addCase(INPUT_UNPRESS, (state, action) => {
+      const event = action.payload
+      const keyIndex = state.pressButtons.indexOf(event.key)
+      if (keyIndex >= 0) {
+        state.pressButtons.splice(keyIndex, 1)
+      }
+    })
   },
 });
 

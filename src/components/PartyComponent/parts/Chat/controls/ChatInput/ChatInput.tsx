@@ -12,7 +12,7 @@ import {
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SouthIcon from '@mui/icons-material/South';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
-import { SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
+import { INPUT_PRESS, INPUT_PRESS_BY_ACTION, INPUT_UNPRESS, SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
 import { inputMessage, onMoveChatToBottom } from '../../store/chatSlice';
 import {
   useAppDispatch,
@@ -46,6 +46,10 @@ function ChatInput() {
           <ReplyMessage />
         </ReplyWrapContainer>
         <TextField
+
+          multiline
+          onKeyDown={(e) => dispatch(INPUT_PRESS_BY_ACTION(e))}
+          onKeyUp={(e) => dispatch(INPUT_UNPRESS(e))}
           value={input}
           onChange={(e) => dispatch(inputMessage(e))}
           InputProps={{

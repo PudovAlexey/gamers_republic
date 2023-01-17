@@ -83,6 +83,18 @@ const SELECTION_ENDING = createAction('chat/selectionEnding', (data: number[]) =
   payload: data
 }));
 
+const INPUT_PRESS = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+  payload: data
+}))
+
+const INPUT_PRESS_BY_ACTION = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+  payload: data
+}))
+
+const INPUT_UNPRESS = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+  payload: data
+}))
+
 export {
   SENDMESSAGE,
   ADD_MESSAGE,
@@ -99,4 +111,7 @@ export {
   SHOW_LOADER,
   SELECT_MESSAGES,
   SELECTION_ENDING,
+  INPUT_PRESS,
+  INPUT_UNPRESS,
+  INPUT_PRESS_BY_ACTION
 };
