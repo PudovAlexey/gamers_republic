@@ -12,7 +12,7 @@ import {
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SouthIcon from '@mui/icons-material/South';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
-import { INPUT_PRESS, INPUT_PRESS_BY_ACTION, INPUT_UNPRESS, SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
+import { INPUT_PRESS_BY_ACTION, INPUT_UNPRESS, SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
 import { inputMessage, onMoveChatToBottom } from '../../store/chatSlice';
 import {
   useAppDispatch,
@@ -20,25 +20,22 @@ import {
 } from '../../../../../../hooks/typedReduxHooks';
 import {
   addsSelector,
+  inputRowsSelector,
   maxMessagesIdsSelector,
   messageInputSelector,
 } from '../../store/selectors/chatSelector';
 import { FileUploader } from '../../../../../reusable/FileUploader/FileUploader';
 import { CaptureModal } from './components/CaptureModal/CaptureModal';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import { userSelector } from '../../../../../../store/authSlice/selectors';
 
 function ChatInput() {
+  const inputRows = useAppSelector(inputRowsSelector)
   const input = useAppSelector(messageInputSelector);
   const adds = useAppSelector(addsSelector);
-  const userData = useAppSelector((actions) => actions.authSlice.user);
+  const userData = useAppSelector(userSelector);
   const maxMessageId = useAppSelector(maxMessagesIdsSelector);
   const dispatch = useAppDispatch();
-  const sendMessageAction = SENDMESSAGE({
-    message: input,
-    adds: adds,
-    userData: userData,
-    lastMessageId: maxMessageId,
-  })
   return (
     <InputPaper>
       <FormControl fullWidth>
@@ -46,7 +43,8 @@ function ChatInput() {
           <ReplyMessage />
         </ReplyWrapContainer>
         <TextField
-
+        
+          rows={inputRows}
           multiline
           onKeyDown={(e) => dispatch(INPUT_PRESS_BY_ACTION(e))}
           onKeyUp={(e) => dispatch(INPUT_UNPRESS(e))}
@@ -71,7 +69,12 @@ function ChatInput() {
                   </FileUploader>
                   <IconButton
                     onClick={() => {
-                      dispatch(sendMessageAction);
+                      dispatch(SENDMESSAGE({
+                        message: input,
+                        adds: adds,
+                        userData: userData,
+                        lastMessageId: maxMessageId,
+                      }));
                     }}
                   >
                     <SendIcon />

@@ -12,28 +12,32 @@ import {
   SELECTION_ENDING,
   SENDMESSAGE,
   SET_IMAGES,
+  SET_INPUT_ROW,
   SHOW_LOADER,
   START_NAVIGATION,
 } from './actionCreators';
+import { maxInputRows } from './constants';
 
 const initialState: {
-  roomId: null | number
-  adds: null | TMessageAdds
-  replyAdds: null | TMessageAdds
-  messageContainer: null | HTMLElement
-  replyMessage: null | TMessage 
-  showReply: boolean
-  chatHeight: number
-  showCaptureModal: boolean
-  loadingTop: boolean
-  loadingBottom: boolean 
-  messageInput: string
-  replyHeight: number
-  loadMessageIds: number[],
-  replyIds: number[]
-  scrollService: null | TScrollService
-  pressButtons: string[]
+  roomId: null | number;
+  adds: null | TMessageAdds;
+  replyAdds: null | TMessageAdds;
+  messageContainer: null | HTMLElement;
+  replyMessage: null | TMessage;
+  showReply: boolean;
+  chatHeight: number;
+  showCaptureModal: boolean;
+  loadingTop: boolean;
+  loadingBottom: boolean;
+  messageInput: string;
+  replyHeight: number;
+  loadMessageIds: number[];
+  replyIds: number[];
+  scrollService: null | TScrollService;
+  pressButtons: string[];
+  inputRows: number;
 } = {
+  inputRows: 1,
   roomId: null,
   messageContainer: null,
   showCaptureModal: false,
@@ -49,25 +53,31 @@ const initialState: {
   loadMessageIds: [],
   replyIds: [],
   scrollService: null,
-  pressButtons: []
+  pressButtons: [],
 };
 
 const chatSlice = createSlice({
   name: 'chatSlice',
   initialState,
   reducers: {
-
     onInit: (state, action) => {
       const { scrollService, roomId, messageContainer } = action.payload;
       const init = scrollService();
-      init.update(messageContainer)
+      init.update(messageContainer);
       state.scrollService = init;
       state.roomId = roomId;
       state.messageContainer = messageContainer;
     },
 
     inputMessage: (state, action) => {
-      const { target } = action.payload;
+      const { target, nativeEvent } = action.payload;
+      if (nativeEvent.inputType === 'insertLineBreak') return;
+      const separation = target.value.match(/\n/g)
+      if (separation && separation.length < maxInputRows) {
+        state.inputRows = separation.length
+      } else if (!separation) {
+        state.inputRows = 1
+      }
       state.messageInput = target.value;
     },
 
@@ -130,9 +140,7 @@ const chatSlice = createSlice({
     },
   },
 
-
   extraReducers: (builder) => {
-
     builder.addCase(SHOW_LOADER, (state, action) => {
       switch (action.payload) {
         case 'up':
@@ -169,16 +177,16 @@ const chatSlice = createSlice({
 
     builder.addCase(SET_IMAGES, (state, action) => {
       const { files } = action.payload;
-      const currentAdds = (state.adds || {});
+      const currentAdds = state.adds || {};
       Array.from(files).forEach((file) => {
-        const parseType = parseFileByType(file)
+        const parseType = parseFileByType(file);
         if (parseType) {
-          if (!currentAdds[parseType]) currentAdds[parseType]= [];
-        const nextId = generateAddsId(currentAdds[parseType]);
-        currentAdds[parseType].push({
-          ...file,
-          id: nextId,
-        });
+          if (!currentAdds[parseType]) currentAdds[parseType] = [];
+          const nextId = generateAddsId(currentAdds[parseType]);
+          currentAdds[parseType].push({
+            ...file,
+            id: nextId,
+          });
         }
       });
       state.adds = { ...currentAdds } as TMessageAdds;
@@ -187,14 +195,17 @@ const chatSlice = createSlice({
 
     builder.addCase(CHANGE_FILES, (state, action) => {
       const { files, id } = action.payload;
-      const parseType = parseFileByType(files[0])
-      const fileIndex = state.adds[parseType].findIndex((file) => file.id === id);
-      if (fileIndex >= 0) state.adds[parseType].splice(fileIndex, 1, {
-        id,
-        type: parseType,
-        file: files[0],
-        name: files[0].name
-      });
+      const parseType = parseFileByType(files[0]);
+      const fileIndex = state.adds[parseType].findIndex(
+        (file) => file.id === id
+      );
+      if (fileIndex >= 0)
+        state.adds[parseType].splice(fileIndex, 1, {
+          id,
+          type: parseType,
+          file: files[0],
+          name: files[0].name,
+        });
     });
 
     builder.addCase(START_NAVIGATION, (state, action) => {
@@ -229,25 +240,47 @@ const chatSlice = createSlice({
         if (replyIndex < 0) {
           state.replyIds.push(id);
         } else {
-          state.replyIds.splice(replyIndex, 1)
+          state.replyIds.splice(replyIndex, 1);
         }
       });
     });
 
     builder.addCase(INPUT_PRESS, (state, action) => {
-      const event = action.payload
+      const event = action.payload;
       if (!state.pressButtons.includes(event.key)) {
-        state.pressButtons.push(event.key)
-      }      
-    })
+        state.pressButtons.push(event.key);
+      }
+    });
 
     builder.addCase(INPUT_UNPRESS, (state, action) => {
-      const event = action.payload
-      const keyIndex = state.pressButtons.indexOf(event.key)
+      const event = action.payload;
+      const keyIndex = state.pressButtons.indexOf(event.key);
       if (keyIndex >= 0) {
-        state.pressButtons.splice(keyIndex, 1)
+        state.pressButtons.splice(keyIndex, 1);
       }
-    })
+    });
+
+    builder.addCase(SET_INPUT_ROW, (state, action) => {
+      const input = state.messageInput;
+      const { count, event } = action.payload;
+      const { target } = event;
+      const { selectionStart, selectionEnd } = target;
+      if (typeof count === 'number') {
+        if (count < maxInputRows) {
+          state.inputRows = count;
+        } else {
+          console.warn(
+            `max input rows count is set to ${maxInputRows}.` + 
+          'please change config to make more'
+          )
+        }
+      } else
+        state.messageInput =
+        input.slice(0, selectionStart) +
+        `\n` +
+        input.slice(selectionEnd, input.length - 1);
+          if (state.inputRows < maxInputRows) ++state.inputRows;
+    });
   },
 });
 

@@ -87,11 +87,18 @@ const INPUT_PRESS = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<H
   payload: data
 }))
 
-const INPUT_PRESS_BY_ACTION = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+const SET_INPUT_ROW = createAction('chat/SET_INPUT_ROW', (data: {
+  event: React.MouseEvent<HTMLInputElement>
+  count?: number 
+}) => ({
   payload: data
 }))
 
-const INPUT_UNPRESS = createAction('chat/INPUTPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+const INPUT_PRESS_BY_ACTION = createAction('chat/INPUT_PRESS_BY_ACTION', (data: React.KeyboardEvent<HTMLDivElement>) => ({
+  payload: data
+}))
+
+const INPUT_UNPRESS = createAction('chat/INPUT_UNPRESS', (data: React.KeyboardEvent<HTMLDivElement>) => ({
   payload: data
 }))
 
@@ -113,5 +120,6 @@ export {
   SELECTION_ENDING,
   INPUT_PRESS,
   INPUT_UNPRESS,
-  INPUT_PRESS_BY_ACTION
+  INPUT_PRESS_BY_ACTION,
+  SET_INPUT_ROW
 };

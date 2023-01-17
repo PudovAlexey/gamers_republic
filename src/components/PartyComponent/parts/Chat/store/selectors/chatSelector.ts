@@ -2,9 +2,13 @@ import { createSelector } from '@reduxjs/toolkit';
 
 const chatInfoSelector = (store) => store.chatSlice.chatInfo
 
+const inputRowsSelector = (store) => store.chatRedusers.chatSlice.inputRows
+
 const loadMessages = (store) => store.chatRedusers.chatSlice.loadMessageIds;
 
 const replyHeightSelector = (state) => state.chatRedusers.chatSlice.replyHeight;
+
+const pressedButtonsSelector = (state) => state.chatRedusers.chatSlice.pressButtons;
 
 const chatHeightSelector = (state) => state.chatRedusers.chatSlice.chatHeight;
 
@@ -87,5 +91,7 @@ export {
   messageScrollContainerSelector,
   isSelectedMessagesSelector,
   replyIdsSelector,
-  chatInfoSelector
+  chatInfoSelector,
+  pressedButtonsSelector,
+  inputRowsSelector
 };

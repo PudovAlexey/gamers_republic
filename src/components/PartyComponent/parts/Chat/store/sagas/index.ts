@@ -9,12 +9,14 @@ import {
   delay,
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
+import { userSelector } from '../../../../../../store/authSlice/selectors';
 import { parseToBase64 } from '../../../../../../utils/encoders';
 import {
   ADD_MESSAGE,
   ADD_MESSAGES,
   CHANGE_FILES,
   INPUT_PRESS,
+  INPUT_PRESS_BY_ACTION,
   NAVIGATION_PROGRESS,
   REPLY_NAVIGATE,
   RESTORE_MESSAGES,
@@ -22,6 +24,7 @@ import {
   SELECT_MESSAGES,
   SENDMESSAGE,
   SET_IMAGES,
+  SET_INPUT_ROW,
   SHOW_LOADER,
   START_NAVIGATION,
   UPLOAD_FILES,
@@ -29,8 +32,12 @@ import {
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../actionCreators';
 import {
+  addsSelector,
+  maxMessagesIdsSelector,
+  messageInputSelector,
   messageScrollContainerSelector,
   messagesIdsSelector,
+  pressedButtonsSelector,
   roomIdSelector,
   scrollServiceSelector,
 } from '../selectors/chatSelector';
@@ -56,10 +63,30 @@ function* fetchMessageSend() {
 }
 
 function* inputPress(action) {
-  const event = action.payload
-  const {key} = event
-  switch (key) {
-    
+  const event = action.payload;
+  const pressedButtons = yield select(pressedButtonsSelector);
+  const input = yield select(messageInputSelector);
+  const adds = yield select(addsSelector);
+  const userData = yield select(userSelector);
+  const maxMessageId = yield select(maxMessagesIdsSelector);
+  console.log('messagePress', pressedButtons);
+  yield put(INPUT_PRESS(event));
+  if (
+      (pressedButtons.includes('Control') || pressedButtons.includes('Shift')) &&
+      event.key === 'Enter'
+      ) {
+      yield put(SET_INPUT_ROW({
+        event
+      }));
+  } else if (!pressedButtons.length && event.key === 'Enter') {
+    yield put(
+        SENDMESSAGE({
+          message: input,
+          adds: adds,
+          userData: userData,
+          lastMessageId: maxMessageId,
+        })
+      );
   }
 }
 
@@ -239,7 +266,7 @@ function* messagesSelection(action) {
 
 function* sendMessage() {
   yield takeEvery(SENDMESSAGE, fetchMessageSend);
-  yield takeEvery(INPUT_PRESS, inputPress)
+  yield takeEvery(INPUT_PRESS_BY_ACTION, inputPress);
 }
 
 function* parseImage() {
