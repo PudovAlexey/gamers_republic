@@ -256,6 +256,7 @@ const chatSlice = createSlice({
       const event = action.payload;
       const keyIndex = state.pressButtons.indexOf(event.key);
       if (keyIndex >= 0) {
+        console.log(state.pressButtons[keyIndex], 'unpress')
         state.pressButtons.splice(keyIndex, 1);
       }
     });

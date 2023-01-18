@@ -63,30 +63,32 @@ function* fetchMessageSend() {
 }
 
 function* inputPress(action) {
+  console.log('messagePress');
   const event = action.payload;
   const pressedButtons = yield select(pressedButtonsSelector);
   const input = yield select(messageInputSelector);
   const adds = yield select(addsSelector);
   const userData = yield select(userSelector);
   const maxMessageId = yield select(maxMessagesIdsSelector);
-  console.log('messagePress', pressedButtons);
   yield put(INPUT_PRESS(event));
-  if (
-      (pressedButtons.includes('Control') || pressedButtons.includes('Shift')) &&
-      event.key === 'Enter'
-      ) {
-      yield put(SET_INPUT_ROW({
-        event
-      }));
-  } else if (!pressedButtons.length && event.key === 'Enter') {
+  const splitCombination =
+    (pressedButtons.includes('Control') || pressedButtons.includes('Shift')) &&
+    event.key === 'Enter';
+  if (splitCombination) {
     yield put(
-        SENDMESSAGE({
-          message: input,
-          adds: adds,
-          userData: userData,
-          lastMessageId: maxMessageId,
-        })
-      );
+      SET_INPUT_ROW({
+        event,
+      })
+    );
+  } else if (event.key === 'Enter') {
+    yield put(
+      SENDMESSAGE({
+        message: input,
+        adds: adds,
+        userData: userData,
+        lastMessageId: maxMessageId,
+      })
+    );
   }
 }
 
