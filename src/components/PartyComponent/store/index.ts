@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit"
-import api from "../../../api/api/api"
 const initialState = {
     activeContainer: null,
     roomData: null,

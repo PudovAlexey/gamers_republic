@@ -22,7 +22,7 @@ import {mainStyles} from '../../../../../../../../styles'
 function MessageControl({ messageId }) {
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
-    selectItemById(state.chatRedusers.messages, messageId)
+  selectItemById(state.chatRedusers.messages, messageId)
   );
   if (!messageData) return null;
   const { userId } = messageData;
@@ -52,7 +52,7 @@ function Message({ messageId }) {
   const dispatch = useAppDispatch();
   const styles = mainStyles(palette);
   const messageData = useAppSelector((state) =>
-    selectItemById(state.chatRedusers.messages, messageId)
+  selectItemById(state.chatRedusers.messages, messageId)
   );
   const isSelectedMessage = useAppSelector((state) =>
     isSelectedMessagesSelector(state, messageId)
@@ -62,17 +62,16 @@ function Message({ messageId }) {
   return (
     <Box
     onDoubleClick={(e) => {
-        console.log(isSelectedMessage)
         dispatch(onAddReplyId(messageId));
       }}
     >
-      <Paper sx={isSelectedMessage && { background: palette.grey[300] }}>
+      <Paper sx={isSelectedMessage && { background: palette.grey[400] }}>
         <ReplyControl messageId={messageId} />
         <Box  sx={{
           ...styles.select
         }}>
         <MarkdownEditor
-        sx={isSelectedMessage && { background: palette.grey[300] }}
+        sx={isSelectedMessage && { background: palette.grey[400] }}
           value={message || ''}
           view={{
             menu: false,

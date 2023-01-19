@@ -7,6 +7,8 @@ import { dinamicStyles, styleComponent } from "./styles"
 import { useAppDispatch, useAppSelector } from '../../hooks/typedReduxHooks'
 import { init } from './store'
 import { AuthContext } from '../AuthContext/AuthContext'
+import {onInit, onExit} from '../../utils/enviroment/debugPanel/store'
+import { DebugMenu } from './debug/DebugMenu'
 
 function PartyComponent() { 
     const theme = useTheme()
@@ -20,8 +22,12 @@ function PartyComponent() {
             dispatch(init({
                 roomId: AuthUser.roomId
             }))
+            dispatch(onInit(<DebugMenu/>))
         }
-    }, [AuthUser])
+        return () => {
+            dispatch(onExit())
+        }
+    }, [AuthUser, dispatch])
     function onMoveStartMovePartyContainer(e, part) {
         const partyRootContainer = e.currentTarget.closest('#partyRoot')
         onMovePartyContainer(partyRootContainer, part)

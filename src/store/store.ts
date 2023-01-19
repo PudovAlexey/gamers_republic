@@ -7,11 +7,13 @@ import chatSlice from '../components/PartyComponent/parts/Chat/store/chatSlice'
 import createSagaMiddleware from "redux-saga";
 import { rootSaga } from './sagas'
 import authSlice from './authSlice/authSlice'
+import debugSlice from '../utils/enviroment/debugPanel/store'
 import { chatRedusers } from '../components/PartyComponent/parts/Chat/store/chatRedusers'
 
 let sagaMiddleware = createSagaMiddleware();
 const store = configureStore({
     reducer: {
+        debug: debugSlice,
         authSlice: authSlice,
         wizardStep: stepSlice,
         partySlice: partySlice,

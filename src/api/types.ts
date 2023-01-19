@@ -29,6 +29,8 @@ type TMessage = {
   roomId: number;
   userId: number;
   frontId?: number;
+  read?: boolean;
+  user?: TUser
   adds?: {
     img?: TMessageAdd<EMessageAdd.Img>[];
     audio?: TMessageAdd<EMessageAdd.Audio>[];
@@ -57,6 +59,11 @@ type TUser = {
   favoriteCategories: number[];
   likeGamesIds?: number[];
   avatar: string;
+  friendsIds?: number[]
+  unreadMessages: {
+    roomId: number,
+    messageId: number
+  }[]
 };
 
 type TQueryMessage = {

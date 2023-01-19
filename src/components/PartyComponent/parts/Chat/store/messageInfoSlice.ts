@@ -60,8 +60,8 @@ export const messagesInfoSlice = createSlice({
       const { messageId, frontId } = action.payload;
       if (state[frontId]) {
         delete state[frontId];
-        state[messageId] = action.payload;
       }
+      state[messageId] = action.payload;
     });
 
     builder.addCase(NAVIGATION_PROGRESS, (store, action) => {

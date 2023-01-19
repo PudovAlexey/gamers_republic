@@ -38,7 +38,7 @@ function scrollService(): TScrollService {
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[messageIds.length - 1];
       } else if (scrollContainerState.scrollTop < prevScrollTop) {
-        scrollDirection = EScrollDirection.Down;
+        scrollDirection = EScrollDirection.Up;
         messagesOnScreen = onMoveTop(scrollContainerState, messagesOnScreen);
         const messageIds = messagesOnScreen.map((m) => +m?.dataset?.messageid);
         queryMessage = messageIds[0];

@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box';
 import { CssBaseline } from '@mui/material';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { display } from '@mui/system';
 import { useRef } from 'react';
 import { stylesComponent } from './styles';
 import { useTheme } from '@emotion/react';

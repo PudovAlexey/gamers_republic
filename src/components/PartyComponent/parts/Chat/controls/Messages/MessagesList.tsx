@@ -21,6 +21,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { mainStyles } from '../../../../../../styles';
 import { useTheme } from '@mui/material';
+import { messages } from '../../../../../../api/fakeApi/data/Chat/messages';
 
 function MessagesList({ messageContainer }) {
   const { palette } = useTheme();
@@ -61,19 +62,15 @@ function MessagesList({ messageContainer }) {
 
 function Messages() {
   const messageIds = useAppSelector(messagesIdsSelector);
-  const loadMessages = useAppSelector(
-    (state) => state.chatSlice.loadMessageIds
-  );
   const [state, setState] = useState([]);
   let index = 0;
   useEffect(() => {
-    if (loadMessages.length) {
-      setState((pr) => {
-        const clone = [...pr];
-        const filterMessages = loadMessages.filter((m) => !pr.includes(m));
-        clone.unshift(...filterMessages);
-        return clone;
-      });
+    const additionMessages = messageIds.filter(m => !state.includes(m))
+    console.log(additionMessages, 'addition')
+    if (additionMessages.length === 1) {
+      const clone = [...state];
+      clone.unshift(...additionMessages);
+      setState(clone)
     }
     const interval = setInterval(() => {
       if (!state.length && messageIds[0]) {

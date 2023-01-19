@@ -10,6 +10,7 @@ import { mainStyles } from './styles';
  import "./fonts.css"
  import './types.d.ts'
 import PartyComponent from './components/PartyComponent/PartyComponent';
+import { DebugPanel } from './utils/enviroment/debugPanel/components/DebugPanel';
 
 function App({ children }) {
   const theme = useTheme();
@@ -27,6 +28,7 @@ function App({ children }) {
           {children}
         </Box>
         <Footer />
+        <DebugPanel/>
       </Box>
       </Box>
     </Auth>

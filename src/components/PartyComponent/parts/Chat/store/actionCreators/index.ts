@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { EMessageAdd, TMessage, TMessageAdds, TQueryMessage, TUser } from '../../../../../../api/types';
+import { TMessage, TMessageAdds, TQueryMessage, TUser } from '../../../../../../api/types';
 
 const SENDMESSAGE = createAction(
   'chat/sendMessage',
@@ -53,7 +53,7 @@ const CHANGE_FILES = createAction('chat/change_files', (data: {
 const REPLY_NAVIGATE = createAction('chat/replyNavigate');
 
 const START_NAVIGATION = createAction('chat/startNavigate', (data: {
-  messageId: number
+  messageId: number,
 }) => ({
   payload: data
 }));
@@ -102,6 +102,17 @@ const INPUT_UNPRESS = createAction('chat/INPUT_UNPRESS', (data: React.KeyboardEv
   payload: data
 }))
 
+const SEARCH_MESSAGE = createAction('chat/SEARCH_MESSAGE', (data: string) => ({
+  payload: data
+}))
+
+const MARKDOWN_MESSAGES = createAction('chat/SEARCH_MESSAGE', (data: {
+  messageId: number,
+  searchText,
+}[]) => ({
+  payload: data
+}))
+
 export {
   SENDMESSAGE,
   ADD_MESSAGE,
@@ -121,5 +132,7 @@ export {
   INPUT_PRESS,
   INPUT_UNPRESS,
   INPUT_PRESS_BY_ACTION,
-  SET_INPUT_ROW
+  SET_INPUT_ROW,
+  SEARCH_MESSAGE,
+  MARKDOWN_MESSAGES
 };

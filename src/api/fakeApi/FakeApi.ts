@@ -68,10 +68,28 @@ class FakeApi {
       let req = (await this.fakeDelay(newMessage)) as TMessage;
       return {
         ...req,
+        user: Users.find((user) => req.userId === user.id),
         frontId,
       };
     } catch (err) {
       console.log(err);
+      return { message: JSON.stringify(err) };
+    }
+  }
+
+  async findMessageBySearch({ roomId, search }) {
+    const filterMessageIds = messages
+      .filter((message) => {
+        return (
+          roomId === message.roomId &&
+          JSON.stringify(Object.values(message)).includes(search)
+        );
+      })
+      .map(({ messageId }) => messageId);
+    try {
+      const res = await this.fakeDelay(filterMessageIds);
+      return res;
+    } catch (err) {
       return { message: JSON.stringify(err) };
     }
   }

@@ -9,6 +9,7 @@ import {
   CHANGE_FILES,
   INPUT_PRESS,
   INPUT_UNPRESS,
+  MARKDOWN_MESSAGES,
   SELECTION_ENDING,
   SENDMESSAGE,
   SET_IMAGES,
@@ -282,6 +283,11 @@ const chatSlice = createSlice({
         input.slice(selectionEnd, input.length - 1);
           if (state.inputRows < maxInputRows) ++state.inputRows;
     });
+
+    builder.addCase(MARKDOWN_MESSAGES, (state, action) => {
+      const markupMessages = action.payload
+      console.log(state.messageContainer, markupMessages, 'in message')
+    })
   },
 });
 

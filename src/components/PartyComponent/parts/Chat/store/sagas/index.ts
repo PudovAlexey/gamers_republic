@@ -7,6 +7,7 @@ import {
   apply,
   all,
   delay,
+  takeLatest,
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
@@ -17,9 +18,11 @@ import {
   CHANGE_FILES,
   INPUT_PRESS,
   INPUT_PRESS_BY_ACTION,
+  MARKDOWN_MESSAGES,
   NAVIGATION_PROGRESS,
   REPLY_NAVIGATE,
   RESTORE_MESSAGES,
+  SEARCH_MESSAGE,
   SELECTION_ENDING,
   SELECT_MESSAGES,
   SENDMESSAGE,
@@ -210,6 +213,7 @@ function* fetchMessages(action) {
       where,
     },
   ]);
+  console.log(messages, messageStart, 'message fetched')
   yield put(ADD_MESSAGES(messages));
 }
 
@@ -266,6 +270,25 @@ function* messagesSelection(action) {
   yield takeEvery(clickChannel, handleSelect);
 }
 
+function* searchMessage(action) {
+  const searchValue = action.payload
+  const roomId = yield select(roomIdSelector)
+  const findMessages = yield apply(api, api.findMessageBySearch, [{
+    roomId,
+    search: searchValue
+  }])
+  console.log(findMessages, 'message find')
+  if (findMessages.length) {
+    yield put(START_NAVIGATION({
+      messageId: findMessages[findMessages.length - 1]
+    }))
+    yield put(MARKDOWN_MESSAGES(findMessages.map(messageId => ({
+      messageId,
+      searchText: searchValue
+    }))))
+  }
+}
+
 function* sendMessage() {
   yield takeEvery(SENDMESSAGE, fetchMessageSend);
   yield takeEvery(INPUT_PRESS_BY_ACTION, inputPress);
@@ -278,6 +301,7 @@ function* parseImage() {
 function* replyNavigate() {
   yield takeEvery(REPLY_NAVIGATE, replyNavigation);
   yield takeEvery(RESTORE_MESSAGES, restoreMessages);
+  yield takeLatest(SEARCH_MESSAGE, searchMessage)
 }
 
 function* chatUpload() {

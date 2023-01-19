@@ -38,7 +38,9 @@ export const messagesSlice = createSlice({
             const findFrontId = messageIds.indexOf(frontId)
             if (frontId >= 0) {
                 state.messages.splice(findFrontId, 1, messageId)
-            }            
+            } else if (!frontId && !state.messages.includes(messageId)) {
+                state.messages.unshift(messageId)
+            }
           })
           builder.addCase(NAVIGATION_PROGRESS, (store, action) => {
             const {fetchedMessages} = action.payload

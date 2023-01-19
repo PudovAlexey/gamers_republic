@@ -43,7 +43,7 @@ function ChatInput() {
           <ReplyMessage />
         </ReplyWrapContainer>
         <TextField
-        
+          size='small'
           rows={inputRows}
           multiline
           onKeyDown={(e) => dispatch(INPUT_PRESS_BY_ACTION(e))}
