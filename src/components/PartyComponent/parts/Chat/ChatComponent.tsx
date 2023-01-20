@@ -12,30 +12,11 @@ import { scrollService } from "./services/scrollService/scrollService"
 import { UPLOAD_MESSAGES } from "./store/actionCreators"
 
 function ChatComponent() {
-    const messageContainer = useRef()
-    const [AuthUser] = useContext(AuthContext)
-    const dispatch = useAppDispatch()
-    React.useEffect(() => {
-        if (AuthUser?.roomId) {
-            dispatch(onInit({
-                scrollService,
-                roomId: AuthUser?.roomId,
-                messageContainer: messageContainer.current
-            }))
-            
-            dispatch(UPLOAD_MESSAGES({
-                roomId: AuthUser?.roomId
-            }))
-        }
-        return () => {
-            dispatch(onExit())
-        }
-    })
     return (
         <ChatBox spacing={1}>
             <Stack spacing={1}>
             <ChatHeader/>
-            <MessagesList messageContainer={messageContainer}/>
+            <MessagesList/>
         </Stack>
             <ChatInput/>
         </ChatBox>

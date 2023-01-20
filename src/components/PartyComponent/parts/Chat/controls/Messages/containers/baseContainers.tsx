@@ -2,12 +2,24 @@ import { styled } from "@mui/material";
 import { Box } from "@mui/system";
 
 const ScrollContainer = styled(Box)({
+    position: 'relative',
     overflowX: "hidden",
     overflowY: "auto",
     display: 'flex',
     flexDirection: 'column-reverse',
     maxHeight: "500px",
-    minHeight: '500px'
+    minHeight: '500px',
+    "&::before": {
+        content: "''",
+        backgroundSize: "cover",
+        height: "100%",
+        left: 0,
+        position: "fixed",
+        top: 0,
+        width: "100%",
+        willChange: "transform",
+        zIndex: -1
+    }
 })
 
 const ChatContainer = styled(Box)({

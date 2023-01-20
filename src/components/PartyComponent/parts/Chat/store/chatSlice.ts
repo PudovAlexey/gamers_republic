@@ -1,3 +1,4 @@
+import { selectionColor } from './../controls/Messages/controls/Message/Message';
 import { createSlice, current } from '@reduxjs/toolkit';
 import { TMessageAdds, TMessage } from '../../../../../api/types';
 import { parseFileByType } from '../../../../../utils/formatters/formatters';
@@ -37,7 +38,7 @@ const initialState: {
   scrollService: null | TScrollService;
   pressButtons: string[];
   inputRows: number;
-  previousSelectionId: number | null
+  previousSelectionId: number | null;
 } = {
   previousSelectionId: null,
   inputRows: 1,
@@ -75,11 +76,11 @@ const chatSlice = createSlice({
     inputMessage: (state, action) => {
       const { target, nativeEvent } = action.payload;
       if (nativeEvent.inputType === 'insertLineBreak') return;
-      const separation = target.value.match(/\n/g)
+      const separation = target.value.match(/\n/g);
       if (separation && separation.length < maxInputRows) {
-        state.inputRows = separation.length
+        state.inputRows = separation.length;
       } else if (!separation) {
-        state.inputRows = 1
+        state.inputRows = 1;
       }
       state.messageInput = target.value;
     },
@@ -161,6 +162,7 @@ const chatSlice = createSlice({
       state.showCaptureModal = false;
       state.showReply = false;
       state.loadMessageIds.push(countNextMessage);
+      state.inputRows = 1
     });
 
     builder.addCase(ADD_MESSAGE, (state, action) => {
@@ -218,14 +220,21 @@ const chatSlice = createSlice({
       if (scrolledMessage) {
         scrolledMessage.scrollIntoView({
           behavior: 'smooth',
-          block: 'end',
+          block: 'start',
           inline: 'nearest',
         });
+        setTimeout(() => {
+          console.log('bg')
+          scrolledMessage.style.background = selectionColor
+          setTimeout(() => {
+            scrolledMessage.style.background = null
+          }, 1000)
+        }, 700)
       } else {
         const firstMessage = scrollService.getLastMessage();
         firstMessage.scrollIntoView({
           behavior: 'smooth',
-          block: 'end',
+          block: 'start',
           inline: 'nearest',
         });
       }
@@ -238,11 +247,13 @@ const chatSlice = createSlice({
 
     builder.addCase(SELECTION_ENDING, (state, action) => {
       const array: number[] = action.payload;
-      array.forEach((id) => {
+      array.forEach((id, idx, all) => {
+        const firstSelection = all[0];
         const replyIndex = state.replyIds.indexOf(id);
-        if (replyIndex < 0) {
+        const firstSelectionIdx = state.replyIds.indexOf(firstSelection);
+        if (replyIndex < 0 && firstSelectionIdx < 0) {
           state.replyIds.push(id);
-        } else {
+        } else if (firstSelectionIdx >= 0) {
           state.replyIds.splice(replyIndex, 1);
         }
       });
@@ -259,7 +270,7 @@ const chatSlice = createSlice({
       const event = action.payload;
       const keyIndex = state.pressButtons.indexOf(event.key);
       if (keyIndex >= 0) {
-        console.log(state.pressButtons[keyIndex], 'unpress')
+        console.log(state.pressButtons[keyIndex], 'unpress');
         state.pressButtons.splice(keyIndex, 1);
       }
     });
@@ -268,28 +279,27 @@ const chatSlice = createSlice({
       const input = state.messageInput;
       const { count, event } = action.payload;
       const { target } = event;
-      const { selectionStart, selectionEnd } = target;
+      const { selectionStart, selectionEnd } = target as HTMLInputElement;
       if (typeof count === 'number') {
         if (count < maxInputRows) {
           state.inputRows = count;
         } else {
           console.warn(
-            `max input rows count is set to ${maxInputRows}.` + 
-          'please change config to make more'
-          )
+            `max input rows count is set to ${maxInputRows}.` +
+              'please change config to make more'
+          );
         }
       } else
         state.messageInput =
-        input.slice(0, selectionStart) +
-        `\n` +
-        input.slice(selectionEnd, input.length - 1);
-          if (state.inputRows < maxInputRows) ++state.inputRows;
+          input.slice(0, selectionStart) +
+          `\n` +
+          input.slice(selectionEnd, input.length - 1);
+      if (state.inputRows < maxInputRows) ++state.inputRows;
     });
 
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {
-      const markupMessages = action.payload
-      console.log(state.messageContainer, markupMessages, 'in message')
-    })
+      console.log('markdown')
+    });
   },
 });
 

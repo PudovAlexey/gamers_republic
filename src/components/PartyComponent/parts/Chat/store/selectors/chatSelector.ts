@@ -60,6 +60,29 @@ const loadMessageById = createSelector(
   (items, itemId) => items.find((item) => item === itemId)
 );
 
+const messageByIdSelector = createSelector(
+  [messages, selectItemId],
+  (items, itemId) => items[itemId]
+);
+
+const previousMessageSelector = createSelector(
+  [messages, selectItemId, messagesIdsSelector],
+  (items, itemId, allMessages) => {
+    const messageIndex = allMessages.indexOf(itemId)
+    const nextMessage = messageIndex > 0 && allMessages[messageIndex - 1]
+    return items[nextMessage] || {}
+  }
+);
+
+const nextMessageSelector = createSelector(
+  [messages, selectItemId, messagesIdsSelector],
+  (items, itemId, allMessages) => {
+    const messageIndex = allMessages.indexOf(itemId)
+    const nextMessage = messageIndex > 0 && allMessages[messageIndex + 1]
+    return items[nextMessage] || {}
+  }
+);
+
 const isSelectedMessagesSelector = createSelector(
   [replyIdsSelector, selectItemId],
   (items, itemId) => items.some((i) => i === itemId)
@@ -93,5 +116,8 @@ export {
   replyIdsSelector,
   chatInfoSelector,
   pressedButtonsSelector,
-  inputRowsSelector
+  inputRowsSelector,
+  previousMessageSelector,
+  nextMessageSelector,
+  messageByIdSelector
 };

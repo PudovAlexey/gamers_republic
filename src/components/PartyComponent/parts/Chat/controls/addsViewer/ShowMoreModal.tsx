@@ -1,4 +1,4 @@
-import { IconButton, styled, useTheme } from "@mui/material"
+import { IconButton, styled } from "@mui/material"
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import { Box } from "@mui/system"
 import { useMemo, useState } from "react"
@@ -8,12 +8,12 @@ function ShowMoreModal({maxShow, items, renderItems, showMoreButton}) {
     const [show, setShow] = useState<boolean>(false)
     const showPart = useMemo(() => {
         return items.reverse().slice(items.length - maxShow).reverse()
-    }, [items])
+    }, [items, maxShow])
     function onOpenModal() {
         setShow(prev => !prev)
     }
     return (
-        <Box onClick={onOpenModal}>
+        <Box onClick={showMoreButton ? null : onOpenModal}>
             {renderItems(showPart)}
             {items.length > maxShow && showMoreButton ? (
                 <ShowMoreBlock>
@@ -22,12 +22,12 @@ function ShowMoreModal({maxShow, items, renderItems, showMoreButton}) {
                     </IconButton>
                 </ShowMoreBlock>
             ): null}
-            <Modal
+            {show && <Modal
                 items={items}
-                show={show}
+                show={true}
                 setShowModal={setShow}
                 renderItems={renderItems}
-            />
+            />}
         </Box>
     )
 }

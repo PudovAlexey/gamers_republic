@@ -15,24 +15,45 @@ import {
 } from '../../store/selectors/chatSelector';
 import {
   SELECT_MESSAGES,
+  UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../../store/actionCreators';
-import React, { useState } from 'react';
-import { useEffect } from 'react';
+import React, { useContext, useEffect, useRef, useState } from 'react';
 import { mainStyles } from '../../../../../../styles';
 import { useTheme } from '@mui/material';
-import { messages } from '../../../../../../api/fakeApi/data/Chat/messages';
+import { AuthContext } from '../../../../../AuthContext/AuthContext';
+import { onInit } from '../../store/chatSlice';
+import { scrollService } from "../../services/scrollService/scrollService"
 
-function MessagesList({ messageContainer }) {
+function MessagesList() {
+  const [AuthUser] = useContext(AuthContext)
   const { palette } = useTheme();
   const styles = mainStyles(palette);
-  const dispatch = useAppDispatch();
   const showReply = useAppSelector(showReplySelector);
   const replyHeight = useAppSelector(replyHeightSelector);
   const chatHeight = useAppSelector(chatHeightSelector);
+  const messageContainer = useRef()
+  const dispatch = useAppDispatch()
+  React.useEffect(() => {
+      if (AuthUser?.roomId) {
+          dispatch(onInit({
+            scrollService,
+              roomId: AuthUser?.roomId,
+              messageContainer: messageContainer.current
+          }))
+          
+          dispatch(UPLOAD_MESSAGES({
+              roomId: AuthUser?.roomId
+          }))
+      }
+      return () => {
+          // dispatch(onExit())
+      }
+  })
   return (
     <Box>
       <TopProgress />
+      <Box>
       <ScrollContainer
         ref={messageContainer}
         sx={{
@@ -55,56 +76,21 @@ function MessagesList({ messageContainer }) {
           <Messages />
         </ChatContainer>
       </ScrollContainer>
+      </Box>
       <BottomProgress />
     </Box>
   );
 }
 
-function Messages() {
+ const Messages = React.memo(function Messages() {
   const messageIds = useAppSelector(messagesIdsSelector);
-  const [state, setState] = useState([]);
-  let index = 0;
-  useEffect(() => {
-    const additionMessages = messageIds.filter(m => !state.includes(m))
-    console.log(additionMessages, 'addition')
-    if (additionMessages.length === 1) {
-      const clone = [...state];
-      clone.unshift(...additionMessages);
-      setState(clone)
-    }
-    const interval = setInterval(() => {
-      if (!state.length && messageIds[0]) {
-        setState(messageIds);
-      } else {
-        requestAnimationFrame(() => {
-          return setState((pr) => {
-            const lastMessage = pr[pr.length - 1];
-            const nextMessage = messageIds.findIndex((m) => lastMessage > m);
-            const selectMessages = messageIds.slice(
-              nextMessage,
-              nextMessage + 1
-            );
-            return nextMessage >= 0 ? [...pr, ...selectMessages] : pr;
-          });
-        });
-      }
-      index++;
-      if (index >= messageIds.length) {
-        clearInterval(interval);
-      }
-    }, 0);
-
-    return () => {
-      clearInterval(interval);
-    };
-  }, [messageIds, index, state.length]);
   return (
     <React.Fragment>
-      {state.map((id) => (
+      {messageIds.map((id) => (
         <MessageControl key={id} messageId={id} />
       ))}
     </React.Fragment>
   );
-}
+})
 
-export default MessagesList;
+export default MessagesList
