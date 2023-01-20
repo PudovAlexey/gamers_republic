@@ -11,6 +11,7 @@ import {
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
+import { $ } from '../../../../../../utils/DOM/DOM';
 import { parseToBase64 } from '../../../../../../utils/encoders';
 import {
   ADD_MESSAGE,
@@ -66,7 +67,6 @@ function* fetchMessageSend() {
 }
 
 function* inputPress(action) {
-  console.log('messagePress');
   const event = action.payload;
   const pressedButtons = yield select(pressedButtonsSelector);
   const input = yield select(messageInputSelector);
@@ -213,7 +213,6 @@ function* fetchMessages(action) {
       where,
     },
   ]);
-  console.log(messages, messageStart, 'message fetched')
   yield put(ADD_MESSAGES(messages));
 }
 
@@ -234,7 +233,7 @@ function* fetchMessagesByOffset() {
     );
   }
 }
-
+let previousSelectionId = null
 function* handleSelect({ target }) {
   const scrollService = yield select(scrollServiceSelector);
   const scrollContainer = yield select(messageScrollContainerSelector);
@@ -244,9 +243,14 @@ function* handleSelect({ target }) {
   const findTargetMessage = allMessages.find((message) =>
     target.closest(`[data-messageid="${message.dataset.messageid}"]`)
   );
+  
+  if (+findTargetMessage?.dataset?.messageid === previousSelectionId) {
+    return
+  }
   const replyIndex = selectionIds.indexOf(
     +findTargetMessage?.dataset?.messageid
-  );
+    );
+    previousSelectionId = +findTargetMessage?.dataset?.messageid
   if (replyIndex < 0) {
     selectionIds.push(+findTargetMessage?.dataset?.messageid);
   }
@@ -254,20 +258,58 @@ function* handleSelect({ target }) {
 }
 
 function* messagesSelection(action) {
+  let navigate = true
+  const maxSpeed = 250;
+  let speed = 50
+  function handleNavigate(e) {
+    function navigateHandler() {
+    const scrollContainerRect = $.rect(scrollContainer)
+    if (speed >= maxSpeed) speed = maxSpeed 
+     setTimeout(() => {
+      const scrollContainerTop = scrollContainerRect.top
+      const scrollContainerBottom = scrollContainerRect.bottom
+      const {clientY} = e
+      if (scrollContainerTop > clientY &&  scrollContainerTop + 60 > clientY) {
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollTop -= (50),
+          left: 0,
+          behavior: 'smooth'
+        })
+      } else if (scrollContainerBottom - 30 < clientY && scrollContainerBottom - 60 < clientY) {
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollTop += (50),
+          left: 0,
+          behavior: 'smooth'
+        })
+      } else {
+        console.log('cancel navigation')
+      }
+      speed = speed * 50
+      if (navigate) requestAnimationFrame(navigateHandler)
+    }, speed)
+      }
+    
+      requestAnimationFrame(navigateHandler)
+  }
   const scrollContainer = yield select(messageScrollContainerSelector);
   const clickChannel = eventChannel((emitter) => {
     function onMouseUp() {
+      console.log('mouse up')
+      navigate = false
+      document.removeEventListener('mouseover', handleNavigate)
       scrollContainer.removeEventListener('mousemove', emitter);
-      scrollContainer.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseup', onMouseUp);
     }
-    scrollContainer.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseover', handleNavigate)
     scrollContainer.addEventListener('mousemove', emitter);
     return () => {
       scrollContainer.removeEventListener('mousemove', emitter);
-      scrollContainer.removeEventListener('mousemove', onMouseUp);
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseover', handleNavigate)
     };
   });
-  yield takeEvery(clickChannel, handleSelect);
+  yield takeLatest(clickChannel, handleSelect);
 }
 
 function* searchMessage(action) {
@@ -277,7 +319,6 @@ function* searchMessage(action) {
     roomId,
     search: searchValue
   }])
-  console.log(findMessages, 'message find')
   if (findMessages.length) {
     yield put(START_NAVIGATION({
       messageId: findMessages[findMessages.length - 1]

@@ -48,6 +48,7 @@ function MessageControl({ messageId }) {
 }
 
 function Message({ messageId }) {
+  const selectionColor = `rgba(255, 70, 86, 0.5)`
   const {palette} = useTheme()
   const dispatch = useAppDispatch();
   const styles = mainStyles(palette);
@@ -60,18 +61,18 @@ function Message({ messageId }) {
   if (!messageData) return null;
   const { message, adds, createdAt } = messageData;
   return (
-    <Box
+    <Paper
     onDoubleClick={(e) => {
         dispatch(onAddReplyId(messageId));
       }}
     >
-      <Paper sx={isSelectedMessage && { background: palette.grey[400] }}>
+      <Paper sx={isSelectedMessage && { background: selectionColor }}>
         <ReplyControl messageId={messageId} />
         <Box  sx={{
           ...styles.select
         }}>
         <MarkdownEditor
-        sx={isSelectedMessage && { background: palette.grey[400] }}
+        sx={isSelectedMessage && { background: selectionColor }}
           value={message || ''}
           view={{
             menu: false,
@@ -88,7 +89,7 @@ function Message({ messageId }) {
           })}
         </Typography>
       </Paper>
-    </Box>
+    </Paper>
   );
 }
 

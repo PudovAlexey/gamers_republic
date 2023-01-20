@@ -37,7 +37,9 @@ const initialState: {
   scrollService: null | TScrollService;
   pressButtons: string[];
   inputRows: number;
+  previousSelectionId: number | null
 } = {
+  previousSelectionId: null,
   inputRows: 1,
   roomId: null,
   messageContainer: null,
