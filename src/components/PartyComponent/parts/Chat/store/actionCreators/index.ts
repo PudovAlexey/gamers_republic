@@ -113,6 +113,14 @@ const MARKDOWN_MESSAGES = createAction('chat/SEARCH_MESSAGE', (data: {
   payload: data
 }))
 
+const TOGGLE_NAV_ITEMS = createAction('chat/TOGGLE_NAV_ITEMS', (data: boolean) => ({
+  payload: data
+}))
+
+const UPDATE_MESSAGES_ON_SCREEN = createAction('chat/updateMessagesOnScreen', (data: HTMLElement[]) => ({
+  payload: data
+}))
+
 export {
   SENDMESSAGE,
   ADD_MESSAGE,
@@ -134,5 +142,7 @@ export {
   INPUT_PRESS_BY_ACTION,
   SET_INPUT_ROW,
   SEARCH_MESSAGE,
-  MARKDOWN_MESSAGES
+  MARKDOWN_MESSAGES,
+  TOGGLE_NAV_ITEMS,
+  UPDATE_MESSAGES_ON_SCREEN
 };

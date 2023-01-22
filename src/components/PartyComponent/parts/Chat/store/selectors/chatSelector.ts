@@ -12,6 +12,8 @@ const pressedButtonsSelector = (state) => state.chatRedusers.chatSlice.pressButt
 
 const chatHeightSelector = (state) => state.chatRedusers.chatSlice.chatHeight;
 
+const showNavItemsSelector = (state) => state.chatRedusers.chatSlice.showNavItems;
+
 const showReplySelector = (state) => state.chatRedusers.chatSlice.showReply;
 
 const roomIdSelector = (state) => state.chatRedusers.chatSlice.roomId;
@@ -47,6 +49,13 @@ const replyAddsSelector = (state) => state.chatRedusers.chatSlice.replyAdds;
 const messagesIdsSelector = (state) => state.chatRedusers.messagesIds.messages;
 
 const selectItemId = (_, itemId) => itemId;
+
+const firstMessageDateOnScreenSelector = state => {
+  const messagesOnScreen = state.chatRedusers.chatSlice.messagesOnScreen
+  const firstMessage = messagesOnScreen[0]
+  const messageId = +firstMessage?.dataset?.messageid
+  return messages(state)[messageId]
+}
 
 
 const maxMessagesIdsSelector = (state) => {
@@ -119,5 +128,7 @@ export {
   inputRowsSelector,
   previousMessageSelector,
   nextMessageSelector,
-  messageByIdSelector
+  messageByIdSelector,
+  showNavItemsSelector,
+  firstMessageDateOnScreenSelector
 };

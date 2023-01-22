@@ -44,7 +44,7 @@ export const messagesSlice = createSlice({
           })
           builder.addCase(NAVIGATION_PROGRESS, (store, action) => {
             const {fetchedMessages} = action.payload
-            const currentMessages = current(store.messages)
+            const currentMessages = store.messages
             if (Array.isArray(fetchedMessages) && fetchedMessages.length) {
                 fetchedMessages.forEach(({messageId}) => {
                     const isSameMessage = currentMessages.indexOf(messageId)

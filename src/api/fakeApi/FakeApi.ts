@@ -15,9 +15,10 @@ import {
 
 class FakeApi {
   async getAuthUser(token) {
-    let isAuth = AuthUser.token === token;
-    let req = await this.fakeDelay(AuthUser);
-    if (!isAuth) {
+    // let isAuth = AuthUser.token === token;
+    const authUser = Users.find((user) => user.token === token)
+    let req = await this.fakeDelay(authUser);
+    if (!authUser) {
       req = await this.fakeDelay('not Auth');
     }
     return req;

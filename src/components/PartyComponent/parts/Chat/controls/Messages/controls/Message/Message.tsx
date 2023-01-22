@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box } from '@mui/system';
-// import { mainStyles } from 'src/styles';
 import {
   useAppDispatch,
   useAppSelector,
@@ -9,7 +8,6 @@ import { useContext } from 'react';
 import { parseTimeByString } from '../../../../../../../../utils/timer/timer';
 import { AddsViewer } from '../../../addsViewer/AddsViewer';
 import { AuthContext } from '../../../../../../../AuthContext/AuthContext';
-import { selectItemById } from '../../../../store/messageInfoSlice';
 import { UserSend } from './MessageParts/MessageLayout/UserSend';
 import { CompanionSend } from './MessageParts/MessageLayout/CompanionSend';
 import { Paper, styled, Typography, useTheme } from '@mui/material';
@@ -26,7 +24,7 @@ function MessageControl({ messageId }) {
   );
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
-    selectItemById(state.chatRedusers.messages, messageId)
+  messageByIdSelector(state, messageId)
   );
   if (!messageData) return null;
   const { userId } = messageData;

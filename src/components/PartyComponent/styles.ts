@@ -14,7 +14,7 @@ const styleComponent = function (theme) {
             width: "30em",
             left: "50px",
             background: "#1F2326",
-            maxHeight: "700px",
+            // maxHeight: "400px",
 
         },
         partyContainerTitle: {

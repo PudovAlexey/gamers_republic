@@ -1,30 +1,23 @@
-import { Stack, styled } from "@mui/material"
-import {useRef} from 'react'
-import React, { useContext } from "react"
-import { useAppDispatch } from "../../../../hooks/typedReduxHooks"
-import { AuthContext } from "../../../AuthContext/AuthContext"
-import { onExit } from "./controls/AudioViewer/store/playAudioSlice"
+import {Stack, styled } from "@mui/material"
+import React from "react"
 import MessagesList from "./controls/Messages/MessagesList"
 import { ChatHeader } from "./controls/ChatHeader"
 import { ChatInput } from "./controls/ChatInput/ChatInput"
-import { onInit } from "./store/chatSlice"
-import { scrollService } from "./services/scrollService/scrollService"
-import { UPLOAD_MESSAGES } from "./store/actionCreators"
 
 function ChatComponent() {
     return (
-        <ChatBox spacing={1}>
+        <ChatBox>
             <Stack spacing={1}>
             <ChatHeader/>
             <MessagesList/>
-        </Stack>
+            </Stack>
             <ChatInput/>
         </ChatBox>
     )
 }
 
 const ChatBox = styled(Stack)({
-    maxHeight: '700px'
+    position: 'relative',
 })
 
 export {

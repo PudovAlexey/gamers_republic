@@ -28,6 +28,7 @@ function scrollService(): TScrollService {
       const isNearTop =
         scrollBottomPercentage > 0 && scrollBottomPercentage < 35;
       if (!messagesOnScreen.length && messageContainer.firstChild) {
+        messagesOnScreen = [...messagesOnScreen]
         const firstChild: HTMLElement =
           messageContainer.firstChild as HTMLElement;
         messagesOnScreen.push(firstChild);
@@ -73,6 +74,14 @@ function scrollService(): TScrollService {
       const allMessages = messageContainer.children;
       return allMessages[0] as HTMLElement;
     },
+    getFirstMessageOnScreen: function() {
+      const {messagesOnScreen} = this.update();
+      return messagesOnScreen[0]
+    },
+    getLastMessageOnScreen: function() {
+      const {messagesOnScreen} = this.update();
+      return messagesOnScreen[messagesOnScreen.length - 1]
+    },
     getAllMessages: function (): HTMLElement[] {
       this.update()
       const allMessages = messageContainer.children;
@@ -96,7 +105,7 @@ function onMoveTop(target, currentStateMessages: HTMLElement[]): HTMLElement[] {
   const mergeMessages = currentStateMessages.concat(newMessagesOnScreen);
   const messages = mergeMessages.filter(
     (message) =>
-      $.rect(message).top > targetTop && $.rect(message).top < targetBottom
+      $.rect(message).top > targetTop && $.rect(message).top < targetBottom && +message?.dataset?.messageid
   );
   return [...new Set(messages)];
 }
@@ -118,8 +127,8 @@ function onMoveBottom(
   const mergeMessages = currentStateMessages.concat(newMessagesOnScreen);
   const messages = mergeMessages.filter(
     (message) =>
-      $.rect(message).top > targetTop && $.rect(message).top < targetBottom
-  );
+    $.rect(message).bottom > targetBottom && $.rect(message).bottom < targetTop && +message?.dataset?.messageid
+    );
   return [...new Set(messages)];
 }
 

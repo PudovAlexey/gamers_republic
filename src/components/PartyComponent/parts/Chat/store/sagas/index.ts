@@ -8,6 +8,8 @@ import {
   all,
   delay,
   takeLatest,
+  debounce,
+  throttle,
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
@@ -32,6 +34,8 @@ import {
   SET_INPUT_ROW,
   SHOW_LOADER,
   START_NAVIGATION,
+  TOGGLE_NAV_ITEMS,
+  UPDATE_MESSAGES_ON_SCREEN,
   UPLOAD_FILES,
   UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
@@ -140,11 +144,11 @@ function* replyNavigation(action) {
       })
     );
   } else {
-    yield put(
-      START_NAVIGATION({
-        messageId,
-      })
-    );
+    // yield put(
+    //   START_NAVIGATION({
+    //     messageId,
+    //   })
+    // );
     const fetchedMessages = yield apply(api, api.getMessagesByRoomId, [
       {
         messageStart: messageId,
@@ -190,7 +194,8 @@ function* restoreMessages(action) {
   if (fetchedMessages.some(({ messageId }) => messageId === firstMessage)) {
     return;
   }
-  yield apply (lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages])
+  // yield apply (lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages])
+  yield put(ADD_MESSAGES(fetchedMessages));
   yield put(
     RESTORE_MESSAGES({
       messageId: fetchedMessages[fetchedMessages.length - 1].messageId,
@@ -214,14 +219,16 @@ function* fetchMessages(action) {
       where,
     },
   ]);
-  yield apply(lazyMessagesUpdate, lazyMessagesUpdate,  [messages])
+  // yield apply(lazyMessagesUpdate, lazyMessagesUpdate,  [messages])
+  yield put(ADD_MESSAGES(messages));
+  
 }
-let sliceCount = 5
+let sliceCount = 3
 let startSlice = 0
 let endSlice = sliceCount
 function* lazyMessagesUpdate(allMessages) {
   const messageSlice = allMessages.slice(startSlice, endSlice)
-  // yield delay(2);
+  yield delay(500);
   yield put(ADD_MESSAGES(messageSlice));
     if (messageSlice[messageSlice.length - 1] && (messageSlice[messageSlice.length - 1]?.messageId !== allMessages[allMessages.length - 1]?.messageId)) {
       startSlice = startSlice + sliceCount
@@ -325,6 +332,18 @@ function* messagesSelection(action) {
   yield takeLatest(clickChannel, handleSelect);
 }
 
+function* progressNavItems() {
+  yield put(TOGGLE_NAV_ITEMS(false))
+
+}
+
+function* startNavItems() {
+  const scrollSelector = yield select(scrollServiceSelector)
+  const {messagesOnScreen} = scrollSelector.update()
+  yield put(UPDATE_MESSAGES_ON_SCREEN(messagesOnScreen))
+  yield put(TOGGLE_NAV_ITEMS(true))
+}
+
 function* searchMessage(action) {
   const searchValue = action.payload
   const roomId = yield select(roomIdSelector)
@@ -354,13 +373,15 @@ function* parseImage() {
 
 function* replyNavigate() {
   yield takeEvery(REPLY_NAVIGATE, replyNavigation);
-  yield takeEvery(RESTORE_MESSAGES, restoreMessages);
+  yield takeLatest(RESTORE_MESSAGES, restoreMessages);
   yield takeEvery(SEARCH_MESSAGE, searchMessage)
 }
 
 function* chatUpload() {
   yield takeLatest(UPLOAD_MESSAGES, fetchMessages);
-  yield takeLatest(UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
+  yield throttle(1000, UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
+  yield takeEvery(UPLOAD_MESSAGES_BY_OFFSET, startNavItems)
+  yield debounce(2000, UPLOAD_MESSAGES_BY_OFFSET, progressNavItems)
 }
 
 function* chatSelect() {

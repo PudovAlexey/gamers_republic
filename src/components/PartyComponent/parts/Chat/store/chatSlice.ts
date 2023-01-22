@@ -17,12 +17,16 @@ import {
   SET_INPUT_ROW,
   SHOW_LOADER,
   START_NAVIGATION,
+  TOGGLE_NAV_ITEMS,
+  UPDATE_MESSAGES_ON_SCREEN,
 } from './actionCreators';
 import { maxInputRows } from './constants';
 
 const initialState: {
+  messagesOnScreen: HTMLElement[];
+  showNavItems: boolean;
   roomId: null | number;
-  adds: null | TMessageAdds;
+  adds: object | TMessageAdds;
   replyAdds: null | TMessageAdds;
   messageContainer: null | HTMLElement;
   replyMessage: null | TMessage;
@@ -40,6 +44,8 @@ const initialState: {
   inputRows: number;
   previousSelectionId: number | null;
 } = {
+  messagesOnScreen: [],
+  showNavItems: false,
   previousSelectionId: null,
   inputRows: 1,
   roomId: null,
@@ -53,7 +59,7 @@ const initialState: {
   showReply: false,
   replyMessage: null,
   replyAdds: null,
-  adds: null,
+  adds: {},
   loadMessageIds: [],
   replyIds: [],
   scrollService: null,
@@ -224,7 +230,6 @@ const chatSlice = createSlice({
           inline: 'nearest',
         });
         setTimeout(() => {
-          console.log('bg')
           scrolledMessage.style.background = selectionColor
           setTimeout(() => {
             scrolledMessage.style.background = null
@@ -270,7 +275,6 @@ const chatSlice = createSlice({
       const event = action.payload;
       const keyIndex = state.pressButtons.indexOf(event.key);
       if (keyIndex >= 0) {
-        console.log(state.pressButtons[keyIndex], 'unpress');
         state.pressButtons.splice(keyIndex, 1);
       }
     });
@@ -296,6 +300,14 @@ const chatSlice = createSlice({
           input.slice(selectionEnd, input.length - 1);
       if (state.inputRows < maxInputRows) ++state.inputRows;
     });
+
+    builder.addCase(TOGGLE_NAV_ITEMS, (state, action) => {
+      state.showNavItems = action.payload
+    })
+
+    builder.addCase(UPDATE_MESSAGES_ON_SCREEN, (state, action) => {
+      state.messagesOnScreen = action.payload
+    })
 
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {
       console.log('markdown')

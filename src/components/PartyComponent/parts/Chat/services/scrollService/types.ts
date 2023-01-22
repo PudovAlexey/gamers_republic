@@ -10,7 +10,7 @@ type TUpdate = (scrollContainer?: HTMLElement) => {
 
 type TFindById = (messageId: number) => HTMLElement
 
-type TGetSingleMessage = () => HTMLElement
+type TGetSingleMessage = () => HTMLElement | undefined
 
 type TGetAll = () => HTMLElement[]
 
@@ -19,7 +19,9 @@ type TScrollService = {
     findById: TFindById
     getLastMessage: TGetSingleMessage
     getFirstMessage: TGetSingleMessage
-    getAllMessages: TGetAll
+    getAllMessages: TGetAll,
+    getFirstMessageOnScreen: TGetSingleMessage
+    getLastMessageOnScreen: TGetSingleMessage
 }
 
 export type {

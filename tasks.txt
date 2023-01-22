@@ -1,0 +1,7 @@
+Chat/
+1. Make paddings and margins in Chat
+2. Fix Markdown in chat
+3. Add finding panel in input
+4. make down button hidden +
+5. Add hidden date panel +
+6. stop rerendering input in scroll +

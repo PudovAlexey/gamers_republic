@@ -20,7 +20,7 @@ import {
 } from '../../store/actionCreators';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { mainStyles } from '../../../../../../styles';
-import { useTheme } from '@mui/material';
+import { Typography, useTheme } from '@mui/material';
 import { AuthContext } from '../../../../../AuthContext/AuthContext';
 import { onInit } from '../../store/chatSlice';
 import { scrollService } from "../../services/scrollService/scrollService"
@@ -59,9 +59,10 @@ function MessagesList() {
         sx={{
           ...styles.noSelect,
           ...(showReply && {
-            height: `${chatHeight - replyHeight}` + 'px',
-            minHeight: `${chatHeight - replyHeight}` + 'px',
-          }),
+            maxHeight: `calc(100vh - ${380 + replyHeight}px)`,
+            minHeight: `calc(100vh - ${380 + replyHeight}px)`,
+          }
+          ),
         }}
         onScroll={() =>
           dispatch({
@@ -82,15 +83,15 @@ function MessagesList() {
   );
 }
 
- const Messages = React.memo(function Messages() {
+ const Messages = function Messages() {
   const messageIds = useAppSelector(messagesIdsSelector);
   return (
     <React.Fragment>
       {messageIds.map((id) => (
-        <MessageControl key={id} messageId={id} />
+         <MessageControl key={id} messageId={id} />
       ))}
     </React.Fragment>
   );
-})
+}
 
 export default MessagesList

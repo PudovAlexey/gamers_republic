@@ -7,8 +7,8 @@ const ScrollContainer = styled(Box)({
     overflowY: "auto",
     display: 'flex',
     flexDirection: 'column-reverse',
-    maxHeight: "500px",
-    minHeight: '500px',
+    maxHeight: "calc(100vh - 380px)",
+    minHeight: 'calc(100vh - 380px)',
     "&::before": {
         content: "''",
         backgroundSize: "cover",

@@ -60,13 +60,14 @@ function userGenerator(count): TUser[] {
     return new Array(count)
     .fill('')
     .map((_, idx) => ({
+        roomId: 10,
         email: `fakeUser${idx + 1}@mail.com`,
         id: idx + 1,
         unreadMessages: [],
         username: `Fake User ${idx + 1}`,
         name: `Name User ${idx + 1}`,
         surname: `Surname User ${idx + 1}`,
-        password: `qwerty${idx + 1}`,
+        password: `Qwerty${idx + 1}!!!`,
         token: `token${idx + 1}`,
         favoriteCategories: [],
         likeGameIds: [1, 3],
