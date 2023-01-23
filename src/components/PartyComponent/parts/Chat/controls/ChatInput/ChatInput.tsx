@@ -84,7 +84,7 @@ function ChatInput() {
                   </FileUploader>
                   <IconButton
                     onClick={() => {
-                      dispatch(
+                      input && dispatch(
                         SENDMESSAGE({
                           message: input,
                           adds: adds,

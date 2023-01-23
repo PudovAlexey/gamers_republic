@@ -33,6 +33,7 @@ function scrollService(): TScrollService {
           messageContainer.firstChild as HTMLElement;
         messagesOnScreen.push(firstChild);
       }
+      
       if (scrollContainerState.scrollTop > prevScrollTop) {
         scrollDirection = EScrollDirection.Down;
         messagesOnScreen = onMoveBottom(scrollContainerState, messagesOnScreen);
@@ -46,10 +47,10 @@ function scrollService(): TScrollService {
       } else {
         scrollDirection = EScrollDirection.Draw;
       }
-      prevScrollTop = scrollContainerState.scrollTop;
       if (!(isNearBottom || isNearTop)) {
         queryMessage = null;
       }
+      prevScrollTop = scrollContainerState.scrollTop;
       return {
         scrollDirection,
         queryMessage,

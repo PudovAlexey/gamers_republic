@@ -23,6 +23,7 @@ import { useTheme } from '@mui/material';
 import { AuthContext } from '../../../../../AuthContext/AuthContext';
 import { onInit } from '../../store/chatSlice';
 import { scrollService } from "../../services/scrollService/scrollService"
+import { MessageEmptySearch } from './controls/Message/MessageEmptySearch';
 
 function MessagesList() {
   const [AuthUser] = useContext(AuthContext)
@@ -73,6 +74,7 @@ function MessagesList() {
       >
         <ChatContainer>
           <Messages />
+          {/* <MessageEmptySearch/> */}
         </ChatContainer>
       </ScrollContainer>
       </Box>
@@ -88,6 +90,7 @@ function MessagesList() {
       {messageIds.map((id) => (
          <MessageControl key={id} messageId={id} />
       ))}
+
     </React.Fragment>
   );
 }

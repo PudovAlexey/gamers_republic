@@ -1,3 +1,4 @@
+import { selectionColor } from './../../components/PartyComponent/parts/Chat/controls/Messages/controls/Message/Message';
 function setStylesByObject(el, classes) {
   const stringClasses = Object.keys(classes).reduce(
     (str, key) => str + `${key}: ${classes[key]};`,
@@ -19,7 +20,19 @@ class Dom {
   byClass(el, className) {
     return el.querySelector(`.${className}`);
   }
-
+  selectAndLight (el) {
+    el.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+      inline: 'nearest',
+    });
+    setTimeout(() => {
+      el.style.background = selectionColor
+      setTimeout(() => {
+        el.style.background = null
+      }, 1000)
+    }, 700)
+  }
   rect(el: HTMLElement): {
     x: number;
     y: number;

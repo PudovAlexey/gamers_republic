@@ -24,6 +24,7 @@ const ScrollContainer = styled(Box)({
 
 const ChatContainer = styled(Box)({
     display: 'flex',
+    padding: '8px',
     flexDirection: 'column-reverse'
 })
 

@@ -89,7 +89,7 @@ function* inputPress(action) {
         event,
       })
     );
-  } else if (event.key === 'Enter') {
+  } else if (event.key === 'Enter' && input) {
     yield put(
       SENDMESSAGE({
         message: input,
@@ -154,7 +154,7 @@ function* replyNavigation(action) {
       {
         messageStart: messageId,
         where: 'center',
-        offset: 50,
+        offset: 15,
         roomId,
       },
     ]);
@@ -188,13 +188,14 @@ function* restoreMessages(action) {
     {
       messageStart: messageId,
       where: 'down',
-      offset: 50,
+      offset: 15,
       roomId,
     },
   ]);
   if (fetchedMessages.some(({ messageId }) => messageId === firstMessage)) {
     return;
   }
+
   // yield apply (lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages])
   yield put(ADD_MESSAGES(fetchedMessages));
   yield put(
@@ -208,7 +209,7 @@ function* fetchMessages(action) {
   const {
     roomId,
     messageStart = 'end',
-    offset = 50,
+    offset = 15,
     where = 'up',
   } = action.payload;
   yield put(SHOW_LOADER(where));
@@ -224,13 +225,14 @@ function* fetchMessages(action) {
   yield put(ADD_MESSAGES(messages));
   
 }
-let sliceCount = 3
+let sliceCount = 1
 let startSlice = 0
 let endSlice = sliceCount
 function* lazyMessagesUpdate(allMessages) {
   const messageSlice = allMessages.slice(startSlice, endSlice)
-  yield delay(500);
+  yield delay(10);
   yield put(ADD_MESSAGES(messageSlice));
+    console.log(messageSlice, 'in message')
     if (messageSlice[messageSlice.length - 1] && (messageSlice[messageSlice.length - 1]?.messageId !== allMessages[allMessages.length - 1]?.messageId)) {
       startSlice = startSlice + sliceCount
       endSlice = endSlice + sliceCount
@@ -244,15 +246,13 @@ function* lazyMessagesUpdate(allMessages) {
 function* fetchMessagesByOffset() {
   const scrollService = yield select(scrollServiceSelector);
   const roomId = yield select(roomIdSelector);
-  const messageContainer = yield select(messageScrollContainerSelector);
-  const { scrollDirection, queryMessage } =
-    scrollService.update(messageContainer);
+  const { scrollDirection, queryMessage } = scrollService.update();
   if (queryMessage !== null) {
     yield put(
       UPLOAD_MESSAGES({
         roomId,
         messageStart: queryMessage,
-        offset: 50,
+        offset: 15,
         where: scrollDirection,
       })
     );
@@ -279,7 +279,7 @@ function* handleSelect({ target }) {
 function* messagesSelection(action) {
   let navigate = true
   const maxSpeed = 300;
-  let speed = 50
+  let speed = 15
   function handleNavigate(e) {
     function navigateHandler() {
     const scrollContainerRect = $.rect(scrollContainer)
@@ -385,9 +385,9 @@ function* replyNavigate() {
 
 function* chatUpload() {
   yield takeLatest(UPLOAD_MESSAGES, fetchMessages);
-  yield throttle(1000, UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
-  yield takeEvery(UPLOAD_MESSAGES_BY_OFFSET, startNavItems)
-  yield debounce(2000, UPLOAD_MESSAGES_BY_OFFSET, progressNavItems)
+  yield throttle(500, UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
+  yield throttle(100, UPLOAD_MESSAGES_BY_OFFSET, startNavItems)
+  yield debounce(2500, UPLOAD_MESSAGES_BY_OFFSET, progressNavItems)
 }
 
 function* chatSelect() {

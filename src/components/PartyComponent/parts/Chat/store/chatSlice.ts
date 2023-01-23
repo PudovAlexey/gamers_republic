@@ -22,6 +22,7 @@ import {
   UPDATE_MESSAGES_ON_SCREEN,
 } from './actionCreators';
 import { maxInputRows } from './constants';
+import { $ } from '../../../../../utils/DOM/DOM';
 
 const initialState: {
   messagesOnScreen: HTMLElement[];
@@ -41,11 +42,13 @@ const initialState: {
   replyHeight: number;
   loadMessageIds: number[];
   replyIds: number[];
-  searchMessages: {
-    id: number,
-    searchMessage: (string | {tag: string, value: string})[],
-  } | null,
-  searchMessageId: number | null
+  searchMessages:
+    | {
+        id: number;
+        searchMessage: (string | { tag: string; value: string })[];
+      }[]
+    | null;
+  searchMessageId: number | null;
   scrollService: null | TScrollService;
   pressButtons: string[];
   inputRows: number;
@@ -74,7 +77,7 @@ const initialState: {
   scrollService: null,
   pressButtons: [],
   searchMessages: null,
-  searchMessageId: null
+  searchMessageId: null,
 };
 
 const chatSlice = createSlice({
@@ -144,17 +147,54 @@ const chatSlice = createSlice({
     },
 
     onSearchMessageDown: (state) => {
-
+      const scrollService = current(state.scrollService);
+      const allMessages = scrollService.getAllMessages();
+      const currentSelection = state.searchMessageId;
+      const selectionIds = state.searchMessages;
+      if (selectionIds && selectionIds.length) {
+        const currentIndex = selectionIds.findIndex(
+          ({ id }) => id === currentSelection
+        );
+        if (selectionIds[currentIndex + 1]?.id) {
+          state.searchMessageId = selectionIds[currentIndex + 1]?.id;
+          const currentMesage = allMessages.find(
+            (m) => +m.dataset.messageid === selectionIds[currentIndex + 1]?.id
+          );
+          if (currentMesage) {
+            $.selectAndLight(currentMesage);
+          }
+        }
+      }
     },
 
     onSearchMessageUp: (state) => {
-      
+      const scrollService = current(state.scrollService);
+      const allMessages = scrollService.getAllMessages();
+      const currentSelection = state.searchMessageId;
+      const selectionIds = state.searchMessages;
+      if (selectionIds && selectionIds.length) {
+        const currentIndex = selectionIds.findIndex(
+          ({ id }) => id === currentSelection
+        );
+        if (selectionIds[currentIndex - 1]?.id) {
+          state.searchMessageId = selectionIds[currentIndex - 1]?.id;
+          const currentMesage = allMessages.find(
+            (m) => +m.dataset.messageid === selectionIds[currentIndex - 1]?.id
+          );
+          if (currentMesage) {
+            $.selectAndLight(currentMesage);
+          }
+        }
+      }
     },
 
-    toggleSearchPanel: (state, action: {
-      payload: boolean
-    }) => {
-      state.showSearchPanel = action.payload
+    toggleSearchPanel: (
+      state,
+      action: {
+        payload: boolean;
+      }
+    ) => {
+      state.showSearchPanel = action.payload;
     },
 
     onCloseReply: (state) => {
@@ -193,7 +233,7 @@ const chatSlice = createSlice({
       state.showCaptureModal = false;
       state.showReply = false;
       state.loadMessageIds.push(countNextMessage);
-      state.inputRows = 1
+      state.inputRows = 1;
     });
 
     builder.addCase(ADD_MESSAGE, (state, action) => {
@@ -249,17 +289,7 @@ const chatSlice = createSlice({
       const scrollService = current(state.scrollService);
       const scrolledMessage = scrollService.findById(messageId);
       if (scrolledMessage) {
-        scrolledMessage.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
-        });
-        setTimeout(() => {
-          scrolledMessage.style.background = selectionColor
-          setTimeout(() => {
-            scrolledMessage.style.background = null
-          }, 1000)
-        }, 700)
+        $.selectAndLight(scrolledMessage);
       } else {
         const firstMessage = scrollService.getLastMessage();
         firstMessage.scrollIntoView({
@@ -327,36 +357,38 @@ const chatSlice = createSlice({
     });
 
     builder.addCase(TOGGLE_NAV_ITEMS, (state, action) => {
-      state.showNavItems = action.payload
-    })
+      state.showNavItems = action.payload;
+    });
 
     builder.addCase(UPDATE_MESSAGES_ON_SCREEN, (state, action) => {
-      state.messagesOnScreen = action.payload
-    })
+      state.messagesOnScreen = action.payload as any
+    });
 
     builder.addCase(SEARCH_MESSAGES_START, (state, action) => {
-      const {messages, searchValue} = action.payload
-      state.searchMessages = messages.map((mes) => {
-        const {messageId, message} = mes
-        return {
-          id: messageId,
-          searchMessage: String(message).split(new RegExp(searchValue, 'g')).reduce((words, word, idx, all) => {
-            words.push(word)
-            if (all.length -1 !== idx) words.push({
-              tag: 'strong',
-              searchValue: searchValue
-            })
-            return words
-        }, [])
-        }
-      })
-      .filter((m) => m.searchMessage.length > 1)
-      state.searchMessageId = messages[messages.length - 1].messageId
-
-    })
-
-    builder.addCase(MARKDOWN_MESSAGES, (state, action) => {
+      const { messages, searchValue } = action.payload;
+      state.searchMessages = messages
+        .map((mes) => {
+          const { messageId, message } = mes;
+          return {
+            id: messageId,
+            searchMessage: String(message)
+              .split(new RegExp(searchValue, 'g'))
+              .reduce((words, word, idx, all) => {
+                words.push(word);
+                if (all.length - 1 !== idx)
+                  words.push({
+                    tag: 'strong',
+                    searchValue: searchValue,
+                  });
+                return words;
+              }, []),
+          };
+        })
+        .filter((m) => m.searchMessage.length > 1);
+      state.searchMessageId = messages[messages.length - 1].messageId;
     });
+
+    builder.addCase(MARKDOWN_MESSAGES, (state, action) => {});
   },
 });
 
@@ -373,7 +405,6 @@ export const {
   onSearchMessageDown,
   onSearchMessageUp,
   toggleSearchPanel,
-
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

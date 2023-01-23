@@ -10,10 +10,13 @@ import { AddsViewer } from '../../../addsViewer/AddsViewer';
 import { AuthContext } from '../../../../../../../AuthContext/AuthContext';
 import { UserSend } from './MessageParts/MessageLayout/UserSend';
 import { CompanionSend } from './MessageParts/MessageLayout/CompanionSend';
-import { Paper, styled, Typography, useTheme } from '@mui/material';
+import { Paper, Stack, styled, Typography, useTheme } from '@mui/material';
 import { ReplyControl } from './MessageParts/MessageLayout/ReplyControl';
 import { onAddReplyId } from '../../../../store/chatSlice';
-import { isSelectedMessagesSelector, messageByIdSelector } from '../../../../store/selectors/chatSelector';
+import {
+  isSelectedMessagesSelector,
+  messageByIdSelector,
+} from '../../../../store/selectors/chatSelector';
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
 import { MessageText } from './MessageParts/MessageLayout/MessageText';
@@ -25,32 +28,34 @@ function MessageControl({ messageId }) {
   );
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
-  messageByIdSelector(state, messageId)
+    messageByIdSelector(state, messageId)
   );
   if (!messageData) return null;
   const { userId } = messageData;
   return (
     <React.Fragment>
-      <MessageDate messageId={messageId}/>
+      <MessageDate messageId={messageId} />
       <Box
-      sx={{
-        position: 'relative',
-        mb: '16px',
-      }}
-      key={messageId}
-      data-messageid={messageId}
-    >
-      <SelectionLayout sx={isSelectedMessage ? { background: selectionColor } : null}></SelectionLayout>
-      {AuthUser?.id === userId ? (
-        <UserSend messageId={messageId}>
-          {<Message messageId={messageId} />}
-        </UserSend>
-      ) : (
-        <CompanionSend messageId={messageId}>
-          {<Message messageId={messageId} />}
-        </CompanionSend>
-      )}
-    </Box>
+        sx={{
+          position: 'relative',
+          mb: '16px',
+        }}
+        key={messageId}
+        data-messageid={messageId}
+      >
+        <SelectionLayout
+          sx={isSelectedMessage ? { background: selectionColor } : null}
+        ></SelectionLayout>
+        {AuthUser?.id === userId ? (
+          <UserSend messageId={messageId}>
+            {<Message messageId={messageId} />}
+          </UserSend>
+        ) : (
+          <CompanionSend messageId={messageId}>
+            {<Message messageId={messageId} />}
+          </CompanionSend>
+        )}
+      </Box>
     </React.Fragment>
   );
 }
@@ -63,14 +68,15 @@ function Message({ messageId }) {
     messageByIdSelector(state, messageId)
   );
   if (!messageData) return null;
-  const {message, adds, createdAt } = messageData;
+  const { message, adds, createdAt } = messageData;
   return (
-    <Paper
+    <MessagePaper
       onDoubleClick={(e) => {
         dispatch(onAddReplyId(messageId));
       }}
     >
       <Paper>
+        <Stack spacing={1}>
         <ReplyControl messageId={messageId} />
         <Box
           sx={{
@@ -86,10 +92,16 @@ function Message({ messageId }) {
             formatter: ({ hours, minutes }) => `${hours}:${minutes}`,
           })}
         </Typography>
+        </Stack>
       </Paper>
-    </Paper>
+    </MessagePaper>
   );
 }
+
+const MessagePaper = styled(Paper)({
+  padding: '8px',
+  background: "#1F2326",
+})
 
 const SelectionLayout = styled(Box)({
   position: 'absolute',
