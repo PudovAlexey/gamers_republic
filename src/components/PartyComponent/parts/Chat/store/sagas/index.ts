@@ -13,7 +13,6 @@ import {
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
-import { takeFirst } from '../../../../../../store/sagas';
 import { $ } from '../../../../../../utils/DOM/DOM';
 import { parseToBase64 } from '../../../../../../utils/encoders';
 import {
@@ -27,6 +26,7 @@ import {
   REPLY_NAVIGATE,
   RESTORE_MESSAGES,
   SEARCH_MESSAGE,
+  SEARCH_MESSAGES_START,
   SELECTION_ENDING,
   SELECT_MESSAGES,
   SENDMESSAGE,
@@ -40,6 +40,7 @@ import {
   UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../actionCreators';
+import { toggleSearchPanel } from '../chatSlice';
 import {
   addsSelector,
   maxMessagesIdsSelector,
@@ -353,8 +354,13 @@ function* searchMessage(action) {
   }])
   if (findMessages.length) {
     yield put(START_NAVIGATION({
-      messageId: findMessages[findMessages.length - 1]
+      messageId: findMessages[findMessages.length - 1].messageId
     }))
+    yield put (SEARCH_MESSAGES_START({
+      messages: findMessages,
+      searchValue
+    }))
+    yield put(toggleSearchPanel(true))
     yield put(MARKDOWN_MESSAGES(findMessages.map(messageId => ({
       messageId,
       searchText: searchValue

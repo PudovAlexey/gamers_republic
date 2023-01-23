@@ -13,7 +13,12 @@ import {
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import SouthIcon from '@mui/icons-material/South';
 import { ReplyMessage } from './components/ReplyMessage/ReplyMessage';
-import { INPUT_PRESS_BY_ACTION, INPUT_UNPRESS, SENDMESSAGE, UPLOAD_FILES } from '../../store/actionCreators';
+import {
+  INPUT_PRESS_BY_ACTION,
+  INPUT_UNPRESS,
+  SENDMESSAGE,
+  UPLOAD_FILES,
+} from '../../store/actionCreators';
 import { inputMessage, onMoveChatToBottom } from '../../store/chatSlice';
 import {
   useAppDispatch,
@@ -32,32 +37,26 @@ import { FileUploader } from '../../../../../reusable/FileUploader/FileUploader'
 import { CaptureModal } from './components/CaptureModal/CaptureModal';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
+import React from 'react';
 
 function ChatInput() {
-  const inputRows = useAppSelector(inputRowsSelector)
-  const replyHeight = useAppSelector(replyHeightSelector)
+  const inputRows = useAppSelector(inputRowsSelector);
+  const replyHeight = useAppSelector(replyHeightSelector);
   const input = useAppSelector(messageInputSelector);
   const adds = useAppSelector(addsSelector);
   const userData = useAppSelector(userSelector);
   const maxMessageId = useAppSelector(maxMessagesIdsSelector);
-  const showReply = useAppSelector(showReplySelector)
-  const showNavItems = useAppSelector(showNavItemsSelector)
+  const showReply = useAppSelector(showReplySelector);
+  const showNavItems = useAppSelector(showNavItemsSelector);
   const dispatch = useAppDispatch();
-  const InputPaper = styled(Paper)({
-    background: '#1F2326',
-    position: showReply ? 'absolute' : 'inherit',
-    width: '100%',
-    bottom: showReply && -(50 + replyHeight)
-  });
-  console.log(adds)
   return (
-    <InputPaper>
+    <React.Fragment>
       <FormControl fullWidth>
         <ReplyWrapContainer>
           <ReplyMessage />
         </ReplyWrapContainer>
         <TextField
-          size='small'
+          size="small"
           rows={inputRows}
           multiline
           onKeyDown={(e) => dispatch(INPUT_PRESS_BY_ACTION(e))}
@@ -73,33 +72,41 @@ function ChatInput() {
                   </IconButton>
                   <FileUploader
                     onChange={(e) =>
-                      dispatch(UPLOAD_FILES({
-                        event: e,
-                        operation: 'create',
-                      }))
+                      dispatch(
+                        UPLOAD_FILES({
+                          event: e,
+                          operation: 'create',
+                        })
+                      )
                     }
                   >
                     <CameraAltIcon />
                   </FileUploader>
                   <IconButton
                     onClick={() => {
-                      dispatch(SENDMESSAGE({
-                        message: input,
-                        adds: adds,
-                        userData: userData,
-                        lastMessageId: maxMessageId,
-                      }));
+                      dispatch(
+                        SENDMESSAGE({
+                          message: input,
+                          adds: adds,
+                          userData: userData,
+                          lastMessageId: maxMessageId,
+                        })
+                      );
                     }}
                   >
                     <SendIcon />
                   </IconButton>
-                    <Zoom  in={showNavItems}>
-                    <BottomNavIcon sx={{
-                    top: `${- (60 + (showReply ? replyHeight : 0))}px`
-                  }} size='small' onClick={() => dispatch(onMoveChatToBottom())}>
-                    <SouthIcon fontSize='small' />
-                  </BottomNavIcon>
-                    </Zoom >
+                  <Zoom in={showNavItems}>
+                    <BottomNavIcon
+                      sx={{
+                        top: `${-(60 + (showReply ? replyHeight : 0))}px`,
+                      }}
+                      size="small"
+                      onClick={() => dispatch(onMoveChatToBottom())}
+                    >
+                      <SouthIcon fontSize="small" />
+                    </BottomNavIcon>
+                  </Zoom>
                 </Stack>
               </InputAdornment>
             ),
@@ -107,7 +114,7 @@ function ChatInput() {
         />
       </FormControl>
       <CaptureModal />
-    </InputPaper>
+    </React.Fragment>
   );
 }
 

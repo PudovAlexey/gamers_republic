@@ -16,6 +16,7 @@ import { onAddReplyId } from '../../../../store/chatSlice';
 import { isSelectedMessagesSelector, messageByIdSelector } from '../../../../store/selectors/chatSelector';
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
+import { MessageText } from './MessageParts/MessageLayout/MessageText';
 export const selectionColor = `rgba(255, 70, 86, 0.2)`;
 
 function MessageControl({ messageId }) {
@@ -62,7 +63,7 @@ function Message({ messageId }) {
     messageByIdSelector(state, messageId)
   );
   if (!messageData) return null;
-  const { message, adds, createdAt } = messageData;
+  const {message, adds, createdAt } = messageData;
   return (
     <Paper
       onDoubleClick={(e) => {
@@ -76,7 +77,7 @@ function Message({ messageId }) {
             ...styles.select,
           }}
         >
-          <Typography>{message}</Typography>
+          <MessageText messageId={messageId}>{message}</MessageText>
         </Box>
         {adds && <AddsViewer adds={adds} />}
         <Typography>

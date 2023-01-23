@@ -12,6 +12,8 @@ const pressedButtonsSelector = (state) => state.chatRedusers.chatSlice.pressButt
 
 const chatHeightSelector = (state) => state.chatRedusers.chatSlice.chatHeight;
 
+const showSearchPanelSelector = (state) => state.chatRedusers.chatSlice.showSearchPanel;
+
 const showNavItemsSelector = (state) => state.chatRedusers.chatSlice.showNavItems;
 
 const showReplySelector = (state) => state.chatRedusers.chatSlice.showReply;
@@ -27,6 +29,10 @@ const messageScrollContainerSelector = (state) =>
   state.chatRedusers.chatSlice.messageContainer;
 
 const replyIdsSelector = (state) => state.chatRedusers.chatSlice.replyIds;
+
+const searchMessagesIdsSelector = (state) => state.chatRedusers.chatSlice.searchMessages
+
+const searchMessageSelectionSelector = (state) => state.chatRedusers.chatSlice.searchMessageId
 
 const messageInputSelector = (state) =>
   state.chatRedusers.chatSlice.messageInput;
@@ -68,6 +74,23 @@ const loadMessageById = createSelector(
   [loadMessages, selectItemId],
   (items, itemId) => items.find((item) => item === itemId)
 );
+
+const searchMessageIndexSelector = createSelector(
+  [searchMessagesIdsSelector, searchMessageSelectionSelector],
+  (searchMessagesIds, searchId) => {
+    if (!searchMessagesIds) return null
+    return  searchMessagesIds.length - searchMessagesIds.findIndex(searchMessage => searchMessage.id === searchId)
+  }
+)
+
+const getSearchSelectedIndex = createSelector(
+  [searchMessagesIdsSelector, selectItemId],
+  (searchMessagesIds, searchId) => {
+    if (!searchMessagesIds) return null
+    const searchIndex = searchMessagesIds.findIndex(searchMessage => searchMessage.id === searchId)
+    return searchMessagesIds[searchIndex]
+  }
+)
 
 const messageByIdSelector = createSelector(
   [messages, selectItemId],
@@ -130,5 +153,10 @@ export {
   nextMessageSelector,
   messageByIdSelector,
   showNavItemsSelector,
-  firstMessageDateOnScreenSelector
+  firstMessageDateOnScreenSelector,
+  showSearchPanelSelector,
+  searchMessagesIdsSelector,
+  searchMessageSelectionSelector,
+  searchMessageIndexSelector,
+  getSearchSelectedIndex
 };

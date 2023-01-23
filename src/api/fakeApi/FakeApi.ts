@@ -78,7 +78,7 @@ class FakeApi {
     }
   }
 
-  async findMessageBySearch({ roomId, search }) {
+  async findMessageBySearch({ roomId, search }): Promise<TMessage[] | {message: string}> {
     const filterMessageIds = messages
       .filter((message) => {
         return (
@@ -86,10 +86,9 @@ class FakeApi {
           JSON.stringify(Object.values(message)).includes(search)
         );
       })
-      .map(({ messageId }) => messageId);
     try {
       const res = await this.fakeDelay(filterMessageIds);
-      return res;
+      return res as TMessage;
     } catch (err) {
       return { message: JSON.stringify(err) };
     }

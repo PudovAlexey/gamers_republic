@@ -11,6 +11,7 @@ import {
   INPUT_PRESS,
   INPUT_UNPRESS,
   MARKDOWN_MESSAGES,
+  SEARCH_MESSAGES_START,
   SELECTION_ENDING,
   SENDMESSAGE,
   SET_IMAGES,
@@ -25,6 +26,7 @@ import { maxInputRows } from './constants';
 const initialState: {
   messagesOnScreen: HTMLElement[];
   showNavItems: boolean;
+  showSearchPanel: boolean;
   roomId: null | number;
   adds: object | TMessageAdds;
   replyAdds: null | TMessageAdds;
@@ -39,6 +41,11 @@ const initialState: {
   replyHeight: number;
   loadMessageIds: number[];
   replyIds: number[];
+  searchMessages: {
+    id: number,
+    searchMessage: (string | {tag: string, value: string})[],
+  } | null,
+  searchMessageId: number | null
   scrollService: null | TScrollService;
   pressButtons: string[];
   inputRows: number;
@@ -49,8 +56,10 @@ const initialState: {
   previousSelectionId: null,
   inputRows: 1,
   roomId: null,
+
   messageContainer: null,
   showCaptureModal: false,
+  showSearchPanel: false,
   loadingBottom: false,
   loadingTop: false,
   messageInput: '',
@@ -64,6 +73,8 @@ const initialState: {
   replyIds: [],
   scrollService: null,
   pressButtons: [],
+  searchMessages: null,
+  searchMessageId: null
 };
 
 const chatSlice = createSlice({
@@ -130,6 +141,20 @@ const chatSlice = createSlice({
           inline: 'nearest',
         });
       }
+    },
+
+    onSearchMessageDown: (state) => {
+
+    },
+
+    onSearchMessageUp: (state) => {
+      
+    },
+
+    toggleSearchPanel: (state, action: {
+      payload: boolean
+    }) => {
+      state.showSearchPanel = action.payload
     },
 
     onCloseReply: (state) => {
@@ -309,8 +334,28 @@ const chatSlice = createSlice({
       state.messagesOnScreen = action.payload
     })
 
+    builder.addCase(SEARCH_MESSAGES_START, (state, action) => {
+      const {messages, searchValue} = action.payload
+      state.searchMessages = messages.map((mes) => {
+        const {messageId, message} = mes
+        return {
+          id: messageId,
+          searchMessage: String(message).split(new RegExp(searchValue, 'g')).reduce((words, word, idx, all) => {
+            words.push(word)
+            if (all.length -1 !== idx) words.push({
+              tag: 'strong',
+              searchValue: searchValue
+            })
+            return words
+        }, [])
+        }
+      })
+      .filter((m) => m.searchMessage.length > 1)
+      state.searchMessageId = messages[messages.length - 1].messageId
+
+    })
+
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {
-      console.log('markdown')
     });
   },
 });
@@ -325,6 +370,10 @@ export const {
   removeAddByTypeAndId,
   onAddReplyId,
   onCliseCaptureModal,
+  onSearchMessageDown,
+  onSearchMessageUp,
+  toggleSearchPanel,
+
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

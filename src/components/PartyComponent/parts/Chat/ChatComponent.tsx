@@ -2,7 +2,7 @@ import {Stack, styled } from "@mui/material"
 import React from "react"
 import MessagesList from "./controls/Messages/MessagesList"
 import { ChatHeader } from "./controls/ChatHeader"
-import { ChatInput } from "./controls/ChatInput/ChatInput"
+import { SwitchInputComponent } from "./controls/SwitchInputComponent"
 
 function ChatComponent() {
     return (
@@ -11,7 +11,7 @@ function ChatComponent() {
             <ChatHeader/>
             <MessagesList/>
             </Stack>
-            <ChatInput/>
+            <SwitchInputComponent/>
         </ChatBox>
     )
 }

@@ -121,6 +121,13 @@ const UPDATE_MESSAGES_ON_SCREEN = createAction('chat/updateMessagesOnScreen', (d
   payload: data
 }))
 
+const SEARCH_MESSAGES_START = createAction('chat/SEARCH_MESSAGES_START', (data: {
+  messages: TMessage[],
+  searchValue: string
+}) => ({
+  payload: data
+}))
+
 export {
   SENDMESSAGE,
   ADD_MESSAGE,
@@ -144,5 +151,6 @@ export {
   SEARCH_MESSAGE,
   MARKDOWN_MESSAGES,
   TOGGLE_NAV_ITEMS,
-  UPDATE_MESSAGES_ON_SCREEN
+  UPDATE_MESSAGES_ON_SCREEN,
+  SEARCH_MESSAGES_START
 };

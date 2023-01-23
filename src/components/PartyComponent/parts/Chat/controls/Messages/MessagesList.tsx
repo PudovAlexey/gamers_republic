@@ -8,7 +8,6 @@ import MessageControl from './controls/Message/Message';
 import { TopProgress } from './containers/TopProgress';
 import { BottomProgress } from './containers/BottomProgress';
 import {
-  chatHeightSelector,
   messagesIdsSelector,
   replyHeightSelector,
   showReplySelector,
@@ -18,9 +17,9 @@ import {
   UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../../store/actionCreators';
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useRef } from 'react';
 import { mainStyles } from '../../../../../../styles';
-import { Typography, useTheme } from '@mui/material';
+import { useTheme } from '@mui/material';
 import { AuthContext } from '../../../../../AuthContext/AuthContext';
 import { onInit } from '../../store/chatSlice';
 import { scrollService } from "../../services/scrollService/scrollService"
@@ -31,7 +30,6 @@ function MessagesList() {
   const styles = mainStyles(palette);
   const showReply = useAppSelector(showReplySelector);
   const replyHeight = useAppSelector(replyHeightSelector);
-  const chatHeight = useAppSelector(chatHeightSelector);
   const messageContainer = useRef()
   const dispatch = useAppDispatch()
   React.useEffect(() => {
