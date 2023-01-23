@@ -26,6 +26,7 @@ import { $ } from '../../../../../utils/DOM/DOM';
 
 const initialState: {
   messagesOnScreen: HTMLElement[];
+  showEmptySearch: boolean;
   showNavItems: boolean;
   showSearchPanel: boolean;
   roomId: null | number;
@@ -59,7 +60,7 @@ const initialState: {
   previousSelectionId: null,
   inputRows: 1,
   roomId: null,
-
+  showEmptySearch: false,
   messageContainer: null,
   showCaptureModal: false,
   showSearchPanel: false,
@@ -195,6 +196,7 @@ const chatSlice = createSlice({
       }
     ) => {
       state.showSearchPanel = action.payload;
+      state.showEmptySearch = action.payload
     },
 
     onCloseReply: (state) => {
@@ -366,6 +368,16 @@ const chatSlice = createSlice({
 
     builder.addCase(SEARCH_MESSAGES_START, (state, action) => {
       const { messages, searchValue } = action.payload;
+      if (searchValue && (!messages || messages.length === 0)) {
+        state.showEmptySearch = true
+        return;
+      } else if (!messages) {
+        state.searchMessages = null
+        return;
+      } else if (!searchValue) {
+        state.showSearchPanel = false
+        return;
+      }
       state.searchMessages = messages
         .map((mes) => {
           const { messageId, message } = mes;
@@ -386,6 +398,7 @@ const chatSlice = createSlice({
         })
         .filter((m) => m.searchMessage.length > 1);
       state.searchMessageId = messages[messages.length - 1].messageId;
+      state.showEmptySearch = false
     });
 
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {});

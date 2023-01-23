@@ -12,6 +12,9 @@ function MessagesFindComponent() {
     const dispatch = useAppDispatch()
     const searchMessagesSelector = useAppSelector(searchMessagesIdsSelector)
     const searchMessageNumber = useAppSelector(searchMessageIndexSelector)
+    if (!searchMessagesSelector) {
+        dispatch(toggleSearchPanel())
+    }
     return (
         <Stack alignItems={'center'}  direction={'row'} justifyContent={'space-between'}>
             <Stack alignItems={'center'} direction={'row'} spacing={1}>

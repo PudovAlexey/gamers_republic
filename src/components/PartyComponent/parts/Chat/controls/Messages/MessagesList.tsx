@@ -8,8 +8,10 @@ import MessageControl from './controls/Message/Message';
 import { TopProgress } from './containers/TopProgress';
 import { BottomProgress } from './containers/BottomProgress';
 import {
+  isSearchEmptySelector,
   messagesIdsSelector,
   replyHeightSelector,
+  searchMessageSelectionSelector,
   showReplySelector,
 } from '../../store/selectors/chatSelector';
 import {
@@ -31,6 +33,7 @@ function MessagesList() {
   const styles = mainStyles(palette);
   const showReply = useAppSelector(showReplySelector);
   const replyHeight = useAppSelector(replyHeightSelector);
+  const isSearchEmpty = useAppSelector(isSearchEmptySelector)
   const messageContainer = useRef()
   const dispatch = useAppDispatch()
   React.useEffect(() => {
@@ -73,8 +76,7 @@ function MessagesList() {
         }}
       >
         <ChatContainer>
-          <Messages />
-          {/* <MessageEmptySearch/> */}
+         {isSearchEmpty ? <MessageEmptySearch/> : <Messages />}
         </ChatContainer>
       </ScrollContainer>
       </Box>

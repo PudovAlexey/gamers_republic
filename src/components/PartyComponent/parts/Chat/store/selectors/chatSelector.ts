@@ -34,6 +34,11 @@ const searchMessagesIdsSelector = (state) => state.chatRedusers.chatSlice.search
 
 const searchMessageSelectionSelector = (state) => state.chatRedusers.chatSlice.searchMessageId
 
+const isSearchEmptySelector = (state) => {
+  console.log(state.chatRedusers.chatSlice.showEmptySearch)
+  return state.chatRedusers.chatSlice.showEmptySearch
+}
+
 const messageInputSelector = (state) =>
   state.chatRedusers.chatSlice.messageInput;
 
@@ -158,5 +163,6 @@ export {
   searchMessagesIdsSelector,
   searchMessageSelectionSelector,
   searchMessageIndexSelector,
-  getSearchSelectedIndex
+  getSearchSelectedIndex,
+  isSearchEmptySelector
 };

@@ -361,10 +361,11 @@ function* searchMessage(action) {
       searchValue
     }))
     yield put(toggleSearchPanel(true))
-    yield put(MARKDOWN_MESSAGES(findMessages.map(messageId => ({
-      messageId,
-      searchText: searchValue
-    }))))
+  } else {
+    yield put (SEARCH_MESSAGES_START({
+      messages: null,
+      searchValue
+    }))
   }
 }
 

@@ -48,11 +48,11 @@ function MessageControl({ messageId }) {
         ></SelectionLayout>
         {AuthUser?.id === userId ? (
           <UserSend messageId={messageId}>
-            {<Message messageId={messageId} />}
+            {<Message side={'left'} messageId={messageId} />}
           </UserSend>
         ) : (
           <CompanionSend messageId={messageId}>
-            {<Message messageId={messageId} />}
+            {<Message side={'right'} messageId={messageId} />}
           </CompanionSend>
         )}
       </Box>
@@ -60,7 +60,7 @@ function MessageControl({ messageId }) {
   );
 }
 
-function Message({ messageId }) {
+function Message({ messageId, side }) {
   const { palette } = useTheme();
   const dispatch = useAppDispatch();
   const styles = mainStyles(palette);
@@ -75,7 +75,7 @@ function Message({ messageId }) {
         dispatch(onAddReplyId(messageId));
       }}
     >
-      <Paper>
+      <Paper sx={{padding: '8px'}}>
         <Stack spacing={1}>
         <ReplyControl messageId={messageId} />
         <Box
@@ -86,12 +86,14 @@ function Message({ messageId }) {
           <MessageText messageId={messageId}>{message}</MessageText>
         </Box>
         {adds && <AddsViewer adds={adds} />}
-        <Typography>
+        <Stack>
+        <Typography sx={{justifyContent: side}}>
           {parseTimeByString({
             time: createdAt,
             formatter: ({ hours, minutes }) => `${hours}:${minutes}`,
           })}
         </Typography>
+        </Stack>
         </Stack>
       </Paper>
     </MessagePaper>
@@ -99,7 +101,6 @@ function Message({ messageId }) {
 }
 
 const MessagePaper = styled(Paper)({
-  padding: '8px',
   background: "#1F2326",
 })
 
