@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Box } from '@mui/system';
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../../../hooks/typedReduxHooks';
+import useDebounce from '../../../../../../../../hooks/useDebounce';
 import { useContext } from 'react';
 import { parseTimeByString } from '../../../../../../../../utils/timer/timer';
 import { AddsViewer } from '../../../addsViewer/AddsViewer';
@@ -16,6 +17,7 @@ import { onAddReplyId } from '../../../../store/chatSlice';
 import {
   isSelectedMessagesSelector,
   messageByIdSelector,
+  messagesOnScreenSelector,
 } from '../../../../store/selectors/chatSelector';
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
@@ -26,12 +28,27 @@ function MessageControl({ messageId }) {
   const isSelectedMessage = useAppSelector((state) =>
     isSelectedMessagesSelector(state, messageId)
   );
+  const messagesOnScreen = useAppSelector(messagesOnScreenSelector)
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
     messageByIdSelector(state, messageId)
   );
+  const {
+    notDebounced: [value, setValue],
+    debounced: [debounceValue, setDebounceValue],
+  } = useDebounce([],
+    20
+  );
+
+  useEffect(() => {
+    setDebounceValue(messagesOnScreen)
+  }, [messagesOnScreen])
+
   if (!messageData) return null;
   const { userId } = messageData;
+  if (!debounceValue.some(m => +m.dataset.messageid === messageId || +m.dataset.messageid === messageId + 1 || +m.dataset.messageid === messageId - 1)) {
+    return <Box data-messageid={messageId} sx={{height: '350px'}}></Box>
+  }
   return (
     <React.Fragment>
       <MessageDate messageId={messageId} />
@@ -48,7 +65,7 @@ function MessageControl({ messageId }) {
         ></SelectionLayout>
         {AuthUser?.id === userId ? (
           <UserSend messageId={messageId}>
-            {<Message side={'left'} messageId={messageId} />}
+            { <Message side={'left'} messageId={messageId} />}
           </UserSend>
         ) : (
           <CompanionSend messageId={messageId}>

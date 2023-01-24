@@ -54,6 +54,7 @@ const countAddsSelector = (state) => {
 
   return Object.values(adds || {}).flat(2).length;
 };
+const messagesOnScreenSelector = (state) => state.chatRedusers.chatSlice.messagesOnScreen
 const replyAddsSelector = (state) => state.chatRedusers.chatSlice.replyAdds;
 
 const messagesIdsSelector = (state) => state.chatRedusers.messagesIds.messages;
@@ -163,5 +164,6 @@ export {
   searchMessageSelectionSelector,
   searchMessageIndexSelector,
   getSearchSelectedIndex,
-  isSearchEmptySelector
+  isSearchEmptySelector,
+  messagesOnScreenSelector
 };
