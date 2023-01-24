@@ -10,6 +10,7 @@ import {
   takeLatest,
   debounce,
   throttle,
+  fork,
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
@@ -205,14 +206,13 @@ function* restoreMessages(action) {
   );
 }
 
-function* fetchMessages(action) {
+function* messageQuery(action) {
   const {
     roomId,
     messageStart = 'end',
     offset = 15,
     where = 'up',
   } = action.payload;
-  yield put(SHOW_LOADER(where));
   const messages = yield apply(api, api.getMessagesByRoomId, [
     {
       roomId,
@@ -221,9 +221,19 @@ function* fetchMessages(action) {
       where,
     },
   ]);
-  // yield apply(lazyMessagesUpdate, lazyMessagesUpdate,  [messages])
-  yield put(ADD_MESSAGES(messages));
-  
+  yield put(ADD_MESSAGES(messages)); 
+}
+
+function* showLoader(action) {
+  yield delay(1000)
+  yield put(SHOW_LOADER(action.payload.where));
+
+}
+
+function* fetchMessages(action) {
+  yield fork(showLoader, action)
+  yield fork(messageQuery, action)
+
 }
 let sliceCount = 1
 let startSlice = 0

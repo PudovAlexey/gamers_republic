@@ -20,13 +20,11 @@ export const messagesSlice = createSlice({
                 const isSameMessage = currentMessages.indexOf(messageId)
                    if (isSameMessage < 0) {
                     changed = true
-                    console.log(messageId, 'in message id')
-                    state.messages.push(messageId)
+                    currentMessages.push(messageId)
                    }
             })
-            // currentMessages.sort((a, b) => b - a)
-            // currentMessages = [...new Set(currentMessages)]
-            
+            currentMessages.sort((a, b) => b - a)
+            currentMessages = [...new Set(currentMessages)]
             if (changed) state.messages = currentMessages
           })
           builder.addCase(SENDMESSAGE, (store, action) => {

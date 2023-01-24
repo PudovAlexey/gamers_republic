@@ -18,6 +18,7 @@ import {
   isSelectedMessagesSelector,
   messageByIdSelector,
   messagesOnScreenSelector,
+  showNavItemsSelector,
 } from '../../../../store/selectors/chatSelector';
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
@@ -25,30 +26,35 @@ import { MessageText } from './MessageParts/MessageLayout/MessageText';
 export const selectionColor = `rgba(255, 70, 86, 0.2)`;
 
 function MessageControl({ messageId }) {
-  const isSelectedMessage = useAppSelector((state) =>
-    isSelectedMessagesSelector(state, messageId)
-  );
-  const messagesOnScreen = useAppSelector(messagesOnScreenSelector)
   const [AuthUser] = useContext(AuthContext);
   const messageData = useAppSelector((state) =>
     messageByIdSelector(state, messageId)
   );
-  const {
-    notDebounced: [value, setValue],
-    debounced: [debounceValue, setDebounceValue],
-  } = useDebounce([],
-    20
-  );
-
-  useEffect(() => {
-    setDebounceValue(messagesOnScreen)
-  }, [messagesOnScreen])
-
-  if (!messageData) return null;
   const { userId } = messageData;
-  if (!debounceValue.some(m => +m.dataset.messageid === messageId || +m.dataset.messageid === messageId + 1 || +m.dataset.messageid === messageId - 1)) {
-    return <Box data-messageid={messageId} sx={{height: '350px'}}></Box>
-  }
+  // const showNavItems = useAppSelector(showNavItemsSelector);
+  const isSelectedMessage = useAppSelector((state) =>
+    isSelectedMessagesSelector(state, messageId)
+  );
+  // const messagesOnScreen = useAppSelector(messagesOnScreenSelector)
+  // const [AuthUser] = useContext(AuthContext);
+  // const {
+  //   notDebounced: [value, setValue],
+  //   debounced: [debounceValue, setDebounceValue],
+  // } = useDebounce([],
+  //   1
+  // );
+  // const { userId } = messageData;
+
+  // useEffect(() => {
+  //   setDebounceValue(messagesOnScreen)
+  // }, [messagesOnScreen, setDebounceValue])
+
+  // if (!messageData) return null;
+  // if (showNavItems) {
+  // if (!debounceValue.some(m => +m.dataset.messageid === messageId)) {
+  //   return <Box data-messageid={messageId} sx={{height: '200px'}}></Box>
+  // }
+  // }
   return (
     <React.Fragment>
       <MessageDate messageId={messageId} />

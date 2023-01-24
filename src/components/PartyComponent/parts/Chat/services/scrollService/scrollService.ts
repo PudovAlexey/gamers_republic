@@ -61,7 +61,6 @@ function scrollService(): TScrollService {
         queryMessage = null;
       }
       prevScrollTop = scrollContainerState.scrollTop;
-      console.log(queryMessage);
       return {
         scrollDirection,
         queryMessage,
