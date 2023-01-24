@@ -5,11 +5,11 @@ import { TScrollService } from './types';
 function isInViewport(el) {
   const rect = el.getBoundingClientRect();
   return (
-      rect.top >= 0 &&
-      rect.left >= 0 &&
-      rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-      rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <=
+      (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
   );
 }
 
@@ -23,7 +23,7 @@ function scrollService(): TScrollService {
     update: function (scrollContainer) {
       if (scrollContainer) {
         messageContainer = scrollContainer.children[0] as HTMLElement;
-        scrollContainerState = scrollContainer
+        scrollContainerState = scrollContainer;
       }
       let queryMessage: number | null;
       const scrollTop = scrollContainerState.scrollTop;
@@ -39,7 +39,7 @@ function scrollService(): TScrollService {
       const isNearTop =
         scrollBottomPercentage > 0 && scrollBottomPercentage < 35;
       if (!messagesOnScreen.length && messageContainer.firstChild) {
-        messagesOnScreen = [...messagesOnScreen]
+        messagesOnScreen = [...messagesOnScreen];
         const firstChild: HTMLElement =
           messageContainer.firstChild as HTMLElement;
         messagesOnScreen.push(firstChild);
@@ -61,41 +61,45 @@ function scrollService(): TScrollService {
         queryMessage = null;
       }
       prevScrollTop = scrollContainerState.scrollTop;
-      console.log(queryMessage)
+      console.log(queryMessage);
       return {
         scrollDirection,
         queryMessage,
         messagesOnScreen,
-        containerChildren: Array.from(messageContainer.children) as HTMLElement[],
+        containerChildren: Array.from(
+          messageContainer.children
+        ) as HTMLElement[],
       };
     },
     findById: function (messageId) {
-      this.update()
-      const allMessages: HTMLElement[] = Array.from(messageContainer.children) as HTMLElement[];
+      this.update();
+      const allMessages: HTMLElement[] = Array.from(
+        messageContainer.children
+      ) as HTMLElement[];
       return allMessages.find(
         (message) => +message?.dataset?.messageid === messageId
       );
     },
     getLastMessage: function () {
-      this.update()
+      this.update();
       const allMessages = messageContainer.children;
       return allMessages[allMessages.length - 1] as HTMLElement;
     },
     getFirstMessage: function () {
-      this.update()
+      this.update();
       const allMessages = messageContainer.children;
       return allMessages[0] as HTMLElement;
     },
-    getFirstMessageOnScreen: function() {
-      const {messagesOnScreen} = this.update();
-      return messagesOnScreen[0]
+    getFirstMessageOnScreen: function () {
+      const { messagesOnScreen } = this.update();
+      return messagesOnScreen[0];
     },
-    getLastMessageOnScreen: function() {
-      const {messagesOnScreen} = this.update();
-      return messagesOnScreen[messagesOnScreen.length - 1]
+    getLastMessageOnScreen: function () {
+      const { messagesOnScreen } = this.update();
+      return messagesOnScreen[messagesOnScreen.length - 1];
     },
     getAllMessages: function (): HTMLElement[] {
-      this.update()
+      this.update();
       const allMessages = messageContainer.children;
       return Array.from(allMessages) as HTMLElement[];
     },
@@ -103,8 +107,10 @@ function scrollService(): TScrollService {
 }
 
 function onMoveTop(target, currentStateMessages: HTMLElement[]): HTMLElement[] {
-  return Array.from(target.children[0].children).filter(e => isInViewport(e) && e?.dataset?.messageid)
-  
+  return Array.from(target.children[0].children).filter(
+    (e: HTMLElement) => isInViewport(e) && e?.dataset?.messageid
+  ) as HTMLElement[]
+
   // const targetTop = $.rect(target).top;
   // const targetBottom = $.rect(target).bottom;
   // const lastMessage = currentStateMessages[0];
@@ -128,7 +134,9 @@ function onMoveBottom(
   target: HTMLElement,
   currentStateMessages: HTMLElement[]
 ): HTMLElement[] {
-  return Array.from(target.children[0].children).filter(e => isInViewport(e) && e?.dataset?.messageid)
+  return Array.from(target.children[0].children).filter(
+    (e: HTMLElement) => isInViewport(e) && e?.dataset?.messageid
+  ) as HTMLElement[]
   // const targetBottom = $.rect(target).bottom;
   // const targetTop = $.rect(target).top;
   // let newMessagesOnScreen = [];
