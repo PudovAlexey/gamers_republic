@@ -14,17 +14,19 @@ export const messagesSlice = createSlice({
     },
     extraReducers: (builder) => {
           builder.addCase(ADD_MESSAGES, (state, action) => {
-            let currentMessages = [...current(state.messages)]
+            let currentMessages = state.messages
             let changed = false
             if (Array.isArray(action.payload)) action.payload.forEach(({messageId}) => {
                 const isSameMessage = currentMessages.indexOf(messageId)
                    if (isSameMessage < 0) {
                     changed = true
-                    currentMessages.push(messageId)
+                    console.log(messageId, 'in message id')
+                    state.messages.push(messageId)
                    }
             })
-            currentMessages.sort((a, b) => b - a)
-            currentMessages = [...new Set(currentMessages)]
+            // currentMessages.sort((a, b) => b - a)
+            // currentMessages = [...new Set(currentMessages)]
+            
             if (changed) state.messages = currentMessages
           })
           builder.addCase(SENDMESSAGE, (store, action) => {
