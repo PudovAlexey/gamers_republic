@@ -1,0 +1,32 @@
+{
+  "files": {
+    "main.css": "/gamers_republic/static/css/main.bf6f5aae.css",
+    "main.js": "/gamers_republic/static/js/main.1e3a7dc9.js",
+    "static/js/599.5dd5babc.chunk.js": "/gamers_republic/static/js/599.5dd5babc.chunk.js",
+    "static/js/781.ea988d3b.chunk.js": "/gamers_republic/static/js/781.ea988d3b.chunk.js",
+    "static/js/759.c65c958c.chunk.js": "/gamers_republic/static/js/759.c65c958c.chunk.js",
+    "static/js/757.04e7fbfb.chunk.js": "/gamers_republic/static/js/757.04e7fbfb.chunk.js",
+    "static/media/background.png": "/gamers_republic/static/media/background.7ada0d00d10ee207ba23.png",
+    "static/media/Batman.jpg": "/gamers_republic/static/media/Batman.66a818fe31742ebb7dc3.jpg",
+    "static/media/red_queen.png": "/gamers_republic/static/media/red_queen.0c64fd1eedf4c9989459.png",
+    "static/media/red.png": "/gamers_republic/static/media/red.01c85ce9a31f33328470.png",
+    "static/media/black.png": "/gamers_republic/static/media/black.1682b8a2d152fd4737c9.png",
+    "static/media/black_queen.png": "/gamers_republic/static/media/black_queen.3e724f154bb78e420d7b.png",
+    "static/media/DrukWideMedium.ttf": "/gamers_republic/static/media/DrukWideMedium.fb5cedf30c5ca31043e7.ttf",
+    "static/media/user.jpg": "/gamers_republic/static/media/user.58a1c896ca86ab84622c.jpg",
+    "static/media/Tac.png": "/gamers_republic/static/media/Tac.3ed63fe138ed0dc32c42.png",
+    "static/media/Tic.png": "/gamers_republic/static/media/Tic.a0ebe1c478315a757679.png",
+    "static/media/arcanoidWall.png": "/gamers_republic/static/media/arcanoidWall.e3a57bb30b702f67d084.png",
+    "index.html": "/gamers_republic/index.html",
+    "main.bf6f5aae.css.map": "/gamers_republic/static/css/main.bf6f5aae.css.map",
+    "main.1e3a7dc9.js.map": "/gamers_republic/static/js/main.1e3a7dc9.js.map",
+    "599.5dd5babc.chunk.js.map": "/gamers_republic/static/js/599.5dd5babc.chunk.js.map",
+    "781.ea988d3b.chunk.js.map": "/gamers_republic/static/js/781.ea988d3b.chunk.js.map",
+    "759.c65c958c.chunk.js.map": "/gamers_republic/static/js/759.c65c958c.chunk.js.map",
+    "757.04e7fbfb.chunk.js.map": "/gamers_republic/static/js/757.04e7fbfb.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.bf6f5aae.css",
+    "static/js/main.1e3a7dc9.js"
+  ]
+}
