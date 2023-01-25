@@ -1,4 +1,5 @@
 import { TextField } from '@mui/material';
+import { WritableDraft } from 'immer/dist/internal';
 import { selectionColor } from './../../components/PartyComponent/parts/Chat/controls/Messages/controls/Message/Message';
 function setStylesByObject(el, classes) {
   const stringClasses = Object.keys(classes).reduce(
@@ -24,7 +25,7 @@ class Dom {
 
   getMeasureText(el, font = "16px times new roman") {
     function displayTextWidth(text, font) {
-      let canvas = displayTextWidth.canvas || (displayTextWidth.canvas = document.createElement("canvas"));
+      let canvas = document.createElement("canvas")
       let context = canvas.getContext("2d");
       context.font = font;
       let metrics = context.measureText(text);
@@ -32,10 +33,11 @@ class Dom {
     }
     return displayTextWidth(el.value, font)
   }
-  insertText(el: HTMLInputElement, inp: string) {
-    const selectionStart = el.selectionStart
-    const selectionEnd = el.selectionEnd
-    const value = el.value
+  insertText(el: HTMLInputElement | WritableDraft<HTMLInputElement>, inp: string) {
+    const element = el as HTMLInputElement
+    const selectionStart = element.selectionStart
+    const selectionEnd = element.selectionEnd
+    const value = element.value
     return value.slice(0, selectionStart) + inp + value.slice(selectionEnd, value.length - 1)
   }
   selectAndLight (el) {

@@ -12,7 +12,7 @@ function EmojiPopover() {
     if (!anchor) return null
     return (
         <Popover
-        onClose={() => dispatch(toggleEmojiAnchor())}
+        onClose={() => dispatch(toggleEmojiAnchor(null))}
         anchorEl={anchor}
         open={!!anchor}
         anchorOrigin={{

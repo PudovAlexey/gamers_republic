@@ -26,7 +26,7 @@ import { maxInputRows } from './constants';
 import { $ } from '../../../../../utils/DOM/DOM';
 
 const initialState: {
-  chatInputRef: null | HTMLElement;
+  chatInputRef: null | HTMLInputElement;
   emojiAnchor: null | HTMLElement;
   roomInfo: TRoom | null,
   messagesOnScreen: HTMLElement[];
@@ -434,7 +434,8 @@ const chatSlice = createSlice({
     })
 
     builder.addCase(INSERT_EMOJI, (state, action) => {
-      const insertEmoji = $.insertText(state.chatInputRef, action.payload.emoji)
+      const chatInput = state.chatInputRef
+      const insertEmoji = $.insertText(chatInput, action.payload.emoji)
       state.messageInput = insertEmoji
     })
 
