@@ -60,6 +60,7 @@ function userGenerator(count): TUser[] {
     return new Array(count)
     .fill('')
     .map((_, idx) => ({
+        isOnline: idx % 2 === 0 ? true : false,
         roomId: 10,
         email: `fakeUser${idx + 1}@mail.com`,
         id: idx + 1,

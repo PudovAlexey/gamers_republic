@@ -11,20 +11,17 @@ import {
   isSearchEmptySelector,
   messagesIdsSelector,
   replyHeightSelector,
-  searchMessageSelectionSelector,
   showReplySelector,
 } from '../../store/selectors/chatSelector';
 import {
+  ROOM_INIT,
   SELECT_MESSAGES,
-  UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../../store/actionCreators';
 import React, { useContext, useRef } from 'react';
 import { mainStyles } from '../../../../../../styles';
 import { useTheme } from '@mui/material';
 import { AuthContext } from '../../../../../AuthContext/AuthContext';
-import { onInit } from '../../store/chatSlice';
-import { scrollService } from "../../services/scrollService/scrollService"
 import { MessageEmptySearch } from './controls/Message/MessageEmptySearch';
 
 function MessagesList() {
@@ -38,15 +35,10 @@ function MessagesList() {
   const dispatch = useAppDispatch()
   React.useEffect(() => {
       if (AuthUser?.roomId) {
-          dispatch(onInit({
-            scrollService,
-              roomId: AuthUser?.roomId,
-              messageContainer: messageContainer.current
-          }))
-          
-          dispatch(UPLOAD_MESSAGES({
-              roomId: AuthUser?.roomId
-          }))
+        dispatch(ROOM_INIT({
+          roomId: AuthUser?.roomId,
+          messageContainer: messageContainer.current
+        }))
       }
       return () => {
           // dispatch(onExit())

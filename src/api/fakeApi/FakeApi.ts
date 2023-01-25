@@ -6,7 +6,7 @@ import { AuthUser } from './data/Users/AuthUser';
 import { Users } from './data/Users/UserList';
 import { messages } from './data/Chat/messages';
 import { rooms } from './data/Chat/rooms';
-import { EScrollDirection, TMessage } from '../types';
+import { EScrollDirection, TMessage, TRoom } from '../types';
 import {
   filterMessagesBottom,
   filterMessagesMiddle,
@@ -94,6 +94,20 @@ class FakeApi {
     }
   }
 
+  async userIsOnline(userId: number): Promise<boolean | {message: string}> {
+    const user = Users.find(user => user.id === userId)
+    let isOnline = null
+    if (user) {
+      isOnline = user.isOnline
+    }
+    const req = await this.fakeDelay(isOnline) as boolean
+    try {
+      return req
+    } catch(err) {
+      return {message: JSON.stringify(err)}
+    }
+  }
+
   async getMessagesByRoomId({ roomId, messageStart, offset, where }) {
     const messagesFromChat = messages
       .filter((message) => message.roomId === roomId)
@@ -167,9 +181,9 @@ class FakeApi {
     }
   }
 
-  async getRoomById(roomId) {
+  async getRoomById(roomId): Promise<TRoom | {message: string}> {
     const room = rooms.find((room) => room.roomId === roomId);
-    let req = await this.fakeDelay(room);
+    let req: TRoom = await this.fakeDelay(room) as TRoom;
     if (req) {
       return req;
     } else {

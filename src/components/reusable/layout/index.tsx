@@ -9,7 +9,15 @@ const IconButtonRounded = styled(IconButton)({
     borderRadius: '50% !important',
 })
 
+function Dark({children}) {
+    const Component = styled(children)({
+
+    })
+    return <Component/>
+}
+
 export {
     DarkButton,
-    IconButtonRounded
+    IconButtonRounded,
+    Dark
 }

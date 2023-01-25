@@ -13,19 +13,20 @@ import {
   fork,
 } from 'redux-saga/effects';
 import api from '../../../../../../api/api/api';
+import { EScrollDirection } from '../../../../../../api/types';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
 import { $ } from '../../../../../../utils/DOM/DOM';
 import { parseToBase64 } from '../../../../../../utils/encoders';
+import { scrollService } from '../../services/scrollService/scrollService';
 import {
   ADD_MESSAGE,
   ADD_MESSAGES,
   CHANGE_FILES,
   INPUT_PRESS,
   INPUT_PRESS_BY_ACTION,
-  MARKDOWN_MESSAGES,
-  NAVIGATION_PROGRESS,
   REPLY_NAVIGATE,
   RESTORE_MESSAGES,
+  ROOM_INIT,
   SEARCH_MESSAGE,
   SEARCH_MESSAGES_START,
   SELECTION_ENDING,
@@ -33,6 +34,7 @@ import {
   SENDMESSAGE,
   SET_IMAGES,
   SET_INPUT_ROW,
+  SET_ROOM_INFO,
   SHOW_LOADER,
   START_NAVIGATION,
   TOGGLE_NAV_ITEMS,
@@ -41,7 +43,7 @@ import {
   UPLOAD_MESSAGES,
   UPLOAD_MESSAGES_BY_OFFSET,
 } from '../actionCreators';
-import { toggleSearchPanel } from '../chatSlice';
+import { onInit, toggleSearchPanel } from '../chatSlice';
 import {
   addsSelector,
   maxMessagesIdsSelector,
@@ -146,26 +148,22 @@ function* replyNavigation(action) {
       })
     );
   } else {
-    // yield put(
-    //   START_NAVIGATION({
-    //     messageId,
-    //   })
-    // );
+     yield put(
+       START_NAVIGATION({
+         messageId,
+       })
+     );
     const fetchedMessages = yield apply(api, api.getMessagesByRoomId, [
       {
         messageStart: messageId,
-        where: 'center',
-        offset: 15,
+        where: EScrollDirection.Draw,
+        offset: 50,
         roomId,
       },
     ]);
-    yield put(
-      NAVIGATION_PROGRESS({
-        messageId,
-        fetchedMessages,
-      })
-    );
-    yield delay(0);
+    // yield put(ADD_MESSAGES(fetchedMessages));
+    yield apply(lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages]);
+    yield delay(30)
     yield put(
       START_NAVIGATION({
         messageId,
@@ -188,8 +186,8 @@ function* restoreMessages(action) {
   const fetchedMessages = yield apply(api, api.getMessagesByRoomId, [
     {
       messageStart: messageId,
-      where: 'down',
-      offset: 15,
+      where: EScrollDirection.Down,
+      offset: 50,
       roomId,
     },
   ]);
@@ -197,21 +195,20 @@ function* restoreMessages(action) {
     return;
   }
 
-  // yield apply (lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages])
-  yield put(ADD_MESSAGES(fetchedMessages));
-  yield put(
-    RESTORE_MESSAGES({
-      messageId: fetchedMessages[fetchedMessages.length - 1].messageId,
-    })
-  );
+  yield apply (lazyMessagesUpdate, lazyMessagesUpdate, [fetchedMessages])
+  // yield put(ADD_MESSAGES(fetchedMessages));
+  delay(100)
+  yield call(restoreMessages, {
+   messageId: fetchedMessages[fetchedMessages.length - 1].messageId
+  })
 }
 
 function* messageQuery(action) {
   const {
     roomId,
     messageStart = 'end',
-    offset = 15,
-    where = 'up',
+    offset = 50,
+    where = EScrollDirection.Up,
   } = action.payload;
   const messages = yield apply(api, api.getMessagesByRoomId, [
     {
@@ -221,36 +218,39 @@ function* messageQuery(action) {
       where,
     },
   ]);
-  yield put(ADD_MESSAGES(messages)); 
+  yield apply(lazyMessagesUpdate, lazyMessagesUpdate, [messages]);
+  // yield put(ADD_MESSAGES(messages));
 }
 
 function* showLoader(action) {
-  yield delay(1000)
+  yield delay(1000);
   yield put(SHOW_LOADER(action.payload.where));
-
 }
 
 function* fetchMessages(action) {
-  yield fork(showLoader, action)
-  yield fork(messageQuery, action)
-
+  yield fork(showLoader, action);
+  yield fork(messageQuery, action);
 }
-let sliceCount = 1
-let startSlice = 0
-let endSlice = sliceCount
+
+let sliceCount = 2;
+let startSlice = 0;
+let endSlice = sliceCount;
 function* lazyMessagesUpdate(allMessages) {
-  const messageSlice = allMessages.slice(startSlice, endSlice)
-  yield delay(10);
+  const messageSlice = allMessages.slice(startSlice, endSlice);
+  yield delay(0);
   yield put(ADD_MESSAGES(messageSlice));
-    console.log(messageSlice, 'in message')
-    if (messageSlice[messageSlice.length - 1] && (messageSlice[messageSlice.length - 1]?.messageId !== allMessages[allMessages.length - 1]?.messageId)) {
-      startSlice = startSlice + sliceCount
-      endSlice = endSlice + sliceCount
-      yield apply(lazyMessagesUpdate, lazyMessagesUpdate,  [allMessages])
-    } else {
-      startSlice = 0
-      endSlice = sliceCount
-    }
+  if (
+    messageSlice[messageSlice.length - 1] &&
+    messageSlice[messageSlice.length - 1]?.messageId !==
+      allMessages[allMessages.length - 1]?.messageId
+  ) {
+    startSlice = startSlice + sliceCount;
+    endSlice = endSlice + sliceCount;
+    yield apply(lazyMessagesUpdate, lazyMessagesUpdate, [allMessages]);
+  } else {
+    startSlice = 0;
+    endSlice = sliceCount;
+  }
 }
 
 function* fetchMessagesByOffset() {
@@ -262,7 +262,7 @@ function* fetchMessagesByOffset() {
       UPLOAD_MESSAGES({
         roomId,
         messageStart: queryMessage,
-        offset: 15,
+        offset: 50,
         where: scrollDirection,
       })
     );
@@ -276,10 +276,10 @@ function* handleSelect({ target }) {
   const findTargetMessage = allMessages.find((message) =>
     target.closest(`[data-messageid="${message.dataset.messageid}"]`)
   );
-  
+
   const replyIndex = selectionIds.indexOf(
     +findTargetMessage?.dataset?.messageid
-    );
+  );
   if (replyIndex < 0) {
     selectionIds.push(+findTargetMessage?.dataset?.messageid);
   }
@@ -287,96 +287,128 @@ function* handleSelect({ target }) {
 }
 
 function* messagesSelection(action) {
-  let navigate = true
+  let navigate = true;
   const maxSpeed = 300;
-  let speed = 15
+  let speed = 15;
   function handleNavigate(e) {
     function navigateHandler() {
-    const scrollContainerRect = $.rect(scrollContainer)
-     setTimeout(() => {
-      const scrollContainerTop = scrollContainerRect.top
-      const scrollContainerBottom = scrollContainerRect.bottom
-      const {clientY} = e
-      if (scrollContainerTop + 100 > clientY &&  scrollContainerTop + 100 > clientY) {
-        scrollContainer.scrollTo({
-          top: scrollContainer.scrollTop -= (speed + 70),
-          left: 0,
-          behavior: 'auto'
-        })
-      } else if (scrollContainerBottom - 100 < clientY && scrollContainerBottom - 100 < clientY) {
-        scrollContainer.scrollTo({
-          top: scrollContainer.scrollTop += (speed + 70),
-          left: 0,
-          behavior: 'auto'
-        })
-      } else {
-        navigate = false
-        speed = 70
-      }
-      speed = speed + 70
-      if (speed >= maxSpeed) speed = maxSpeed 
-      if (navigate) requestAnimationFrame(navigateHandler)
-    }, speed)
-      }
-    
-      requestAnimationFrame(navigateHandler)
+      const scrollContainerRect = $.rect(scrollContainer);
+      setTimeout(() => {
+        const scrollContainerTop = scrollContainerRect.top;
+        const scrollContainerBottom = scrollContainerRect.bottom;
+        const { clientY } = e;
+        if (
+          scrollContainerTop + 100 > clientY &&
+          scrollContainerTop + 100 > clientY
+        ) {
+          scrollContainer.scrollTo({
+            top: (scrollContainer.scrollTop -= speed + 70),
+            left: 0,
+            behavior: 'auto',
+          });
+        } else if (
+          scrollContainerBottom - 100 < clientY &&
+          scrollContainerBottom - 100 < clientY
+        ) {
+          scrollContainer.scrollTo({
+            top: (scrollContainer.scrollTop += speed + 70),
+            left: 0,
+            behavior: 'auto',
+          });
+        } else {
+          navigate = false;
+          speed = 70;
+        }
+        speed = speed + 70;
+        if (speed >= maxSpeed) speed = maxSpeed;
+        if (navigate) requestAnimationFrame(navigateHandler);
+      }, speed);
+    }
+
+    requestAnimationFrame(navigateHandler);
   }
   const scrollContainer = yield select(messageScrollContainerSelector);
   const clickChannel = eventChannel((emitter) => {
     function onMouseUp() {
-      selectionIds = []
-      speed = 70
-      navigate = false
-      document.removeEventListener('mouseover', handleNavigate)
+      selectionIds = [];
+      speed = 70;
+      navigate = false;
+      document.removeEventListener('mouseover', handleNavigate);
       scrollContainer.removeEventListener('mouseover', emitter);
       document.removeEventListener('mouseup', onMouseUp);
     }
     document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mouseover', handleNavigate)
+    document.addEventListener('mouseover', handleNavigate);
     scrollContainer.addEventListener('mouseover', emitter);
     return () => {
       scrollContainer.removeEventListener('mouseover', emitter);
       document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mouseover', handleNavigate)
+      document.removeEventListener('mouseover', handleNavigate);
     };
   });
   yield takeLatest(clickChannel, handleSelect);
 }
 
 function* progressNavItems() {
-  yield put(TOGGLE_NAV_ITEMS(false))
-
+  yield put(TOGGLE_NAV_ITEMS(false));
 }
 
 function* startNavItems() {
-  const scrollSelector = yield select(scrollServiceSelector)
-  const {messagesOnScreen} = scrollSelector.update()
-  yield put(UPDATE_MESSAGES_ON_SCREEN(messagesOnScreen))
-  yield put(TOGGLE_NAV_ITEMS(true))
+  const scrollSelector = yield select(scrollServiceSelector);
+  const { messagesOnScreen } = scrollSelector.update();
+  yield put(UPDATE_MESSAGES_ON_SCREEN(messagesOnScreen));
+  yield put(TOGGLE_NAV_ITEMS(true));
 }
 
 function* searchMessage(action) {
-  const searchValue = action.payload
-  const roomId = yield select(roomIdSelector)
-  const findMessages = yield apply(api, api.findMessageBySearch, [{
-    roomId,
-    search: searchValue
-  }])
+  const searchValue = action.payload;
+  const roomId = yield select(roomIdSelector);
+  const findMessages = yield apply(api, api.findMessageBySearch, [
+    {
+      roomId,
+      search: searchValue,
+    },
+  ]);
   if (findMessages.length) {
-    yield put(START_NAVIGATION({
-      messageId: findMessages[findMessages.length - 1].messageId
-    }))
-    yield put (SEARCH_MESSAGES_START({
-      messages: findMessages,
-      searchValue
-    }))
-    yield put(toggleSearchPanel(true))
+    yield put(
+      START_NAVIGATION({
+        messageId: findMessages[findMessages.length - 1].messageId,
+      })
+    );
+    yield put(
+      SEARCH_MESSAGES_START({
+        messages: findMessages,
+        searchValue,
+      })
+    );
+    yield put(toggleSearchPanel(true));
   } else {
-    yield put (SEARCH_MESSAGES_START({
-      messages: null,
-      searchValue
-    }))
+    yield put(
+      SEARCH_MESSAGES_START({
+        messages: null,
+        searchValue,
+      })
+    );
   }
+}
+
+function* roomInit(action) {
+  const { roomId, messageContainer } = action.payload;
+  const roomInfo = yield apply(api, api.getRoomById, [roomId]);
+
+  yield put(
+    onInit({
+      roomId,
+      messageContainer,
+      scrollService,
+    })
+  );
+  yield put(
+    UPLOAD_MESSAGES({
+      roomId,
+    })
+  );
+  yield put(SET_ROOM_INFO(roomInfo));
 }
 
 function* sendMessage() {
@@ -391,14 +423,15 @@ function* parseImage() {
 function* replyNavigate() {
   yield takeEvery(REPLY_NAVIGATE, replyNavigation);
   yield takeLatest(RESTORE_MESSAGES, restoreMessages);
-  yield takeEvery(SEARCH_MESSAGE, searchMessage)
+  yield takeEvery(SEARCH_MESSAGE, searchMessage);
 }
 
 function* chatUpload() {
+  yield takeLatest(ROOM_INIT, roomInit);
   yield takeLatest(UPLOAD_MESSAGES, fetchMessages);
-  yield throttle(500, UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
-  yield throttle(100, UPLOAD_MESSAGES_BY_OFFSET, startNavItems)
-  yield debounce(2500, UPLOAD_MESSAGES_BY_OFFSET, progressNavItems)
+  yield throttle(1000, UPLOAD_MESSAGES_BY_OFFSET, fetchMessagesByOffset);
+  yield throttle(500, UPLOAD_MESSAGES_BY_OFFSET, startNavItems);
+  yield debounce(2500, UPLOAD_MESSAGES_BY_OFFSET, progressNavItems);
 }
 
 function* chatSelect() {

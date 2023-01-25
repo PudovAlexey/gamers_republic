@@ -17,6 +17,7 @@
     "@types/node": "^16.11.49",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "emoji-picker-react": "^4.4.7",
     "i": "^0.3.7",
     "i18next": "^21.9.1",
     "markdown-it": "^13.0.1",

@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
 
-const chatInfoSelector = (store) => store.chatSlice.chatInfo
+const chatInfoSelector = (store) => store.chatRedusers.chatSlice.roomInfo
 
 const inputRowsSelector = (store) => store.chatRedusers.chatSlice.inputRows
 
@@ -17,6 +17,8 @@ const showSearchPanelSelector = (state) => state.chatRedusers.chatSlice.showSear
 const showNavItemsSelector = (state) => state.chatRedusers.chatSlice.showNavItems;
 
 const showReplySelector = (state) => state.chatRedusers.chatSlice.showReply;
+
+const emojiAnchorSelector = (state) => state.chatRedusers.chatSlice.emojiAnchor;
 
 const roomIdSelector = (state) => state.chatRedusers.chatSlice.roomId;
 
@@ -165,5 +167,6 @@ export {
   searchMessageIndexSelector,
   getSearchSelectedIndex,
   isSearchEmptySelector,
-  messagesOnScreenSelector
+  messagesOnScreenSelector,
+  emojiAnchorSelector
 };

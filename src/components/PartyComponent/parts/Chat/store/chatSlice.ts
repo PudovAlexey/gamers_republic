@@ -1,6 +1,5 @@
-import { selectionColor } from './../controls/Messages/controls/Message/Message';
 import { createSlice, current } from '@reduxjs/toolkit';
-import { TMessageAdds, TMessage } from '../../../../../api/types';
+import { TMessageAdds, TMessage, TRoom } from '../../../../../api/types';
 import { parseFileByType } from '../../../../../utils/formatters/formatters';
 import { generateAddsId } from '../services/helpers';
 import { TScrollService } from '../services/scrollService/types';
@@ -10,12 +9,14 @@ import {
   CHANGE_FILES,
   INPUT_PRESS,
   INPUT_UNPRESS,
+  INSERT_EMOJI,
   MARKDOWN_MESSAGES,
   SEARCH_MESSAGES_START,
   SELECTION_ENDING,
   SENDMESSAGE,
   SET_IMAGES,
   SET_INPUT_ROW,
+  SET_ROOM_INFO,
   SHOW_LOADER,
   START_NAVIGATION,
   TOGGLE_NAV_ITEMS,
@@ -25,6 +26,9 @@ import { maxInputRows } from './constants';
 import { $ } from '../../../../../utils/DOM/DOM';
 
 const initialState: {
+  chatInputRef: null | HTMLElement;
+  emojiAnchor: null | HTMLElement;
+  roomInfo: TRoom | null,
   messagesOnScreen: HTMLElement[];
   showEmptySearch: boolean;
   showNavItems: boolean;
@@ -55,6 +59,9 @@ const initialState: {
   inputRows: number;
   previousSelectionId: number | null;
 } = {
+  chatInputRef: null,
+  emojiAnchor: null,
+  roomInfo: null,
   messagesOnScreen: [],
   showNavItems: false,
   previousSelectionId: null,
@@ -93,6 +100,9 @@ const chatSlice = createSlice({
       state.roomId = roomId;
       state.messageContainer = messageContainer;
     },
+    setChatInputRef: (state, action) => {
+      state.chatInputRef = action.payload
+    },
 
     inputMessage: (state, action) => {
       const { target, nativeEvent } = action.payload;
@@ -101,7 +111,10 @@ const chatSlice = createSlice({
       if (separation && separation.length < maxInputRows) {
         state.inputRows = separation.length;
       } else if (!separation) {
-        state.inputRows = 1;
+        const valueWidth = $.getMeasureText(target)
+        const inputWidth = target.offsetWidth
+        const rows = Math.ceil(valueWidth / inputWidth)
+        state.inputRows = rows
       }
       state.messageInput = target.value;
     },
@@ -144,6 +157,18 @@ const chatSlice = createSlice({
           block: 'end',
           inline: 'nearest',
         });
+      }
+    },
+
+    toggleEmojiAnchor: (state, action) => {
+      if (!action.payload) {
+        state.emojiAnchor = null
+        return;
+      }
+      if (state.emojiAnchor) {
+        state.emojiAnchor = null
+      } else {
+        state.emojiAnchor = action.payload
       }
     },
 
@@ -290,6 +315,7 @@ const chatSlice = createSlice({
       const { messageId } = action.payload;
       const scrollService = current(state.scrollService);
       const scrolledMessage = scrollService.findById(messageId);
+      console.log('scrolled message')
       if (scrolledMessage) {
         $.selectAndLight(scrolledMessage);
       } else {
@@ -360,6 +386,8 @@ const chatSlice = createSlice({
 
     builder.addCase(TOGGLE_NAV_ITEMS, (state, action) => {
       state.showNavItems = action.payload;
+      state.loadingBottom = false;
+      state.loadingTop = false;
     });
 
     builder.addCase(UPDATE_MESSAGES_ON_SCREEN, (state, action) => {
@@ -401,6 +429,15 @@ const chatSlice = createSlice({
       state.showEmptySearch = false
     });
 
+    builder.addCase(SET_ROOM_INFO, (state, action) => {
+      state.roomInfo = action.payload
+    })
+
+    builder.addCase(INSERT_EMOJI, (state, action) => {
+      const insertEmoji = $.insertText(state.chatInputRef, action.payload.emoji)
+      state.messageInput = insertEmoji
+    })
+
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {});
   },
 });
@@ -418,6 +455,8 @@ export const {
   onSearchMessageDown,
   onSearchMessageUp,
   toggleSearchPanel,
+  toggleEmojiAnchor,
+  setChatInputRef
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

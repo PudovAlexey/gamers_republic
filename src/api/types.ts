@@ -50,6 +50,7 @@ type TUser = {
   id: number;
   username: string;
   email: string;
+  isOnline: boolean;
   password?: string;
   confirmPassword?: string;
   name: string;
@@ -73,6 +74,13 @@ type TQueryMessage = {
   where?: EScrollDirection;
 };
 
+type TRoom = {
+  roomId: number,
+  userIds: number[],
+  createdAt: string,
+  roomName: string
+}
+
 export { EMessageAdd, EScrollDirection };
 
 export type {
@@ -82,4 +90,5 @@ export type {
   TMessageAdds,
   TUser,
   TQueryMessage,
+  TRoom
 };

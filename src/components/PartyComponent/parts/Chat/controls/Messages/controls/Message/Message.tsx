@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Box } from '@mui/system';
 import {
   useAppDispatch,
   useAppSelector,
 } from '../../../../../../../../hooks/typedReduxHooks';
-import useDebounce from '../../../../../../../../hooks/useDebounce';
+
 import { useContext } from 'react';
 import { parseTimeByString } from '../../../../../../../../utils/timer/timer';
 import { AddsViewer } from '../../../addsViewer/AddsViewer';
@@ -17,8 +17,6 @@ import { onAddReplyId } from '../../../../store/chatSlice';
 import {
   isSelectedMessagesSelector,
   messageByIdSelector,
-  messagesOnScreenSelector,
-  showNavItemsSelector,
 } from '../../../../store/selectors/chatSelector';
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
@@ -31,30 +29,10 @@ function MessageControl({ messageId }) {
     messageByIdSelector(state, messageId)
   );
   const { userId } = messageData;
-  // const showNavItems = useAppSelector(showNavItemsSelector);
   const isSelectedMessage = useAppSelector((state) =>
     isSelectedMessagesSelector(state, messageId)
   );
-  // const messagesOnScreen = useAppSelector(messagesOnScreenSelector)
-  // const [AuthUser] = useContext(AuthContext);
-  // const {
-  //   notDebounced: [value, setValue],
-  //   debounced: [debounceValue, setDebounceValue],
-  // } = useDebounce([],
-  //   1
-  // );
-  // const { userId } = messageData;
 
-  // useEffect(() => {
-  //   setDebounceValue(messagesOnScreen)
-  // }, [messagesOnScreen, setDebounceValue])
-
-  // if (!messageData) return null;
-  // if (showNavItems) {
-  // if (!debounceValue.some(m => +m.dataset.messageid === messageId)) {
-  //   return <Box data-messageid={messageId} sx={{height: '200px'}}></Box>
-  // }
-  // }
   return (
     <React.Fragment>
       <MessageDate messageId={messageId} />

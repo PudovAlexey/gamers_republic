@@ -1,11 +1,12 @@
-import { LinearProgress } from "@mui/material"
+import { Box, LinearProgress } from "@mui/material"
 import { useAppSelector } from "../../../../../../../hooks/typedReduxHooks"
 
 function BottomProgress() {
     const isActive = useAppSelector((actions) => actions.chatSlice.loadingBottom)
-    if (!isActive) return null
     return (
-        <LinearProgress/>
+        <Box height={'5px'}>
+             {isActive && <LinearProgress/>}
+        </Box>
     )
 }
 

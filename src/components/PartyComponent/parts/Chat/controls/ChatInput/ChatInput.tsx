@@ -19,7 +19,7 @@ import {
   SENDMESSAGE,
   UPLOAD_FILES,
 } from '../../store/actionCreators';
-import { inputMessage, onMoveChatToBottom } from '../../store/chatSlice';
+import { inputMessage, onMoveChatToBottom, setChatInputRef } from '../../store/chatSlice';
 import {
   useAppDispatch,
   useAppSelector,
@@ -37,9 +37,13 @@ import { FileUploader } from '../../../../../reusable/FileUploader/FileUploader'
 import { CaptureModal } from './components/CaptureModal/CaptureModal';
 import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 import { userSelector } from '../../../../../../store/authSlice/selectors';
-import React from 'react';
+import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import { toggleEmojiAnchor } from '../../store/chatSlice';
+import React, { useEffect, useRef } from 'react';
+import { EmojiPopover } from '../EmojiPopover/EmojiPopover';
 
 function ChatInput() {
+  const inputRef = useRef()
   const inputRows = useAppSelector(inputRowsSelector);
   const replyHeight = useAppSelector(replyHeightSelector);
   const input = useAppSelector(messageInputSelector);
@@ -49,6 +53,10 @@ function ChatInput() {
   const showReply = useAppSelector(showReplySelector);
   const showNavItems = useAppSelector(showNavItemsSelector);
   const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(setChatInputRef(inputRef.current))
+  })
   return (
     <React.Fragment>
       <FormControl fullWidth>
@@ -56,6 +64,7 @@ function ChatInput() {
           <ReplyMessage />
         </ReplyWrapContainer>
         <TextField
+          inputRef={inputRef}
           size="small"
           rows={inputRows}
           multiline
@@ -65,8 +74,12 @@ function ChatInput() {
           onChange={(e) => dispatch(inputMessage(e))}
           InputProps={{
             endAdornment: (
-              <InputAdornment position="end">
-                <Stack direction={'row'} justifyContent={'center'} spacing={1}>
+              <InputAdornment position="start">
+                <InputPaper>
+                  <Stack direction={'row'} justifyContent={'center'} spacing={1}>
+                    <IconButton onClick={(e) => dispatch(toggleEmojiAnchor(e.currentTarget))}>
+                      <EmojiEmotionsIcon/>
+                    </IconButton>
                   <IconButton>
                     <KeyboardVoiceIcon />
                   </IconButton>
@@ -107,13 +120,15 @@ function ChatInput() {
                       <SouthIcon fontSize="small" />
                     </BottomNavIcon>
                   </Zoom>
-                </Stack>
+                  </Stack>
+                </InputPaper>
               </InputAdornment>
             ),
           }}
         />
       </FormControl>
       <CaptureModal />
+      <EmojiPopover/>
     </React.Fragment>
   );
 }
@@ -132,5 +147,11 @@ const BottomNavIcon = styled(IconButton)({
   right: '30px',
   background: 'red',
 });
+
+const InputPaper = styled(Paper)({
+  background: '#1F2326',
+  position: 'relative',
+  right: '-22px'
+})
 
 export { ChatInput };

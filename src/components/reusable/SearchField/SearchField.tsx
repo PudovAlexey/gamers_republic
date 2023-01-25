@@ -12,13 +12,15 @@ type TControlProps = {
 }
 
 function SearchField({ value, onChange, folding = false }: TControlProps) {
-  const [width, setWidth] = useState<string | number>(folding ? "100%" : 0)
+  const [width, setWidth] = useState<string | number>(folding ?  0 : "100%")
 
   function handleMouseOver() {
     setWidth('100%')
   }
   function handleMouseLeave() {
-    setWidth(folding ? "100%" : 0)
+   if (folding) {
+    setWidth(pr => pr === 0 ? "100%" : 0)
+   }
   }
   return (
     <SearchWrapper onMouseLeave={handleMouseLeave}  direction={'row'}>

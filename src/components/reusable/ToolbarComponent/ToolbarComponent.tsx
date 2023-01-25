@@ -17,8 +17,7 @@ function ToolbarComponent({ children, width, justifyContent }) {
         }}
       >
         {children.map((item, idx) => {
-          console.log(item)
-          if (!item) return;
+          if (!item) return null;
           return item?.props?.children ? (
             <ToolbarItem key={idx}>{item}</ToolbarItem>
           ) : (

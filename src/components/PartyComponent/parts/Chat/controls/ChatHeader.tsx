@@ -32,11 +32,13 @@ function ChatHeader() {
           {chatInfo && chatInfo.roomName}
         </Typography>
         <BottomToolbar direction={'row'} spacing={1}>
+          <SearchFieldWrapper>
           <SearchField
             onChange={setValue}
             value={value}
             folding={true}
           />
+          </SearchFieldWrapper>
         </BottomToolbar>
         <ChatDateLayout>
           <ChatDate/>
@@ -65,6 +67,13 @@ const ChatDateLayout = styled(Box)({
   position: 'absolute',
   bottom: '-50px',
   zIndex: 1
+})
+
+const SearchFieldWrapper = styled(Box)({
+  width: '250px',
+  position: 'absolute',
+  bottom: '-25px',
+  right: '-10px'
 })
 
 export { ChatHeader };

@@ -1,5 +1,5 @@
 import { createAction } from '@reduxjs/toolkit';
-import { TMessage, TMessageAdds, TQueryMessage, TUser } from '../../../../../../api/types';
+import { TMessage, TMessageAdds, TQueryMessage, TRoom, TUser } from '../../../../../../api/types';
 
 const SENDMESSAGE = createAction(
   'chat/sendMessage',
@@ -128,6 +128,21 @@ const SEARCH_MESSAGES_START = createAction('chat/SEARCH_MESSAGES_START', (data: 
   payload: data
 }))
 
+const SET_ROOM_INFO = createAction("chat/SET_ROOM_INFO", (data: TRoom) => ({
+  payload: data
+}))
+
+const ROOM_INIT = createAction('chat/ROOM_INIT', (data: {
+  roomId: number,
+  messageContainer: HTMLElement
+}) => ({
+  payload: data
+}))
+
+const INSERT_EMOJI = createAction('chat/INSERT_EMOJI', (data) => ({
+  payload: data
+}))
+
 export {
   SENDMESSAGE,
   ADD_MESSAGE,
@@ -152,5 +167,8 @@ export {
   MARKDOWN_MESSAGES,
   TOGGLE_NAV_ITEMS,
   UPDATE_MESSAGES_ON_SCREEN,
-  SEARCH_MESSAGES_START
+  SEARCH_MESSAGES_START,
+  SET_ROOM_INFO,
+  ROOM_INIT,
+  INSERT_EMOJI
 };
