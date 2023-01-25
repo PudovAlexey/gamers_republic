@@ -65,9 +65,9 @@ function Game() {
   }, [gameParams.timer.tick]);
   useEffect(() => {
     setTurn(gameParams.firstStep);
-    // let fillBoard = onFillBoard(field, gameParams);
-    let figureTests = FieldTests(field);
-    setFieldState({ ...figureTests });
+    let fillBoard = onFillBoard(field, gameParams);
+    // let figureTests = FieldTests(field);
+    setFieldState({ ...fillBoard });
   }, [gameParams.side, gameParams.firstStep]);
 
   useEffect(() => {

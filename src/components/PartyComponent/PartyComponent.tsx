@@ -39,7 +39,8 @@ function PartyComponent() {
                 Object.keys(partyParts).map((part, idx) => (
                     <Box key={part} data-partid={part} sx={{
                         ...styles.partyContainerItem,
-                        transform: part === 'chat' ? "translate(-35rem)" : "translate(0rem)"
+                        // transform: part === 'chat' ? "translate(-35rem)" : "translate(0rem)"
+                       
                     }}>
                         <Button onMouseDown={(e) => onMoveStartMovePartyContainer(e, part)} sx={{
                              ...styles.labelBtn,
