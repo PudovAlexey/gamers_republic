@@ -1,4 +1,4 @@
-import { Button, IconButton } from "@mui/material";
+import { Button, IconButton, Typography } from "@mui/material";
 import { styled } from "@mui/system";
 
 const DarkButton = styled(Button)({
@@ -16,8 +16,18 @@ function Dark({children}) {
     return <Component/>
 }
 
+const GrayTypography = styled(Typography)({
+    color: '#C4C4C4'
+})
+
+const BoldTypography = styled(Typography)({
+    fontWeight: 'bold'
+})
+
 export {
     DarkButton,
     IconButtonRounded,
-    Dark
+    Dark,
+    GrayTypography,
+    BoldTypography
 }
