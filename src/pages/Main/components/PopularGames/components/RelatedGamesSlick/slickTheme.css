@@ -1,0 +1,21 @@
+.slick-dots {
+    gap: 16px;
+    display: flex !important;
+    flex-direction: column;
+}
+
+.slick-active {
+    background: "#FF4656"; 
+    
+}
+
+.slick-dots button {
+    height: 40px;
+    width: 10px;
+    background: transparent;
+    border: 1px solid #1F2326;
+}
+
+.slick-arrow {
+
+}

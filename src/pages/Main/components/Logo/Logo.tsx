@@ -69,7 +69,7 @@ const StartJourneyButton = styled(Paper)({
 const GridComponent = styled(Grid)({
     position: 'absolute',
     left: '0',
-    bottom: '20%'
+    bottom: '15%'
 })
 
 const MainGirl = styled("img")({
