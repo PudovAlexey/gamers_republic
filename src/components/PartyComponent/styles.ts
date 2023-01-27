@@ -45,8 +45,8 @@ const styleComponent = function (theme) {
 const dinamicStyles = {
     activeLink: (isActive) => {
        
-       const backgroundColor = isActive ? '#FF4656' : "#1F2326"
-       const borderColor = !isActive ? '#FF4656' : "#1F2326"
+       const backgroundColor = isActive ? '#d93644' : "#1F2326"
+       const borderColor = !isActive ? '#d93644' : "#1F2326"
         return {
             backgroundColor,
             border: `2px solid ${borderColor}`

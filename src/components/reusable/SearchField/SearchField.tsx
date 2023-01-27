@@ -48,11 +48,11 @@ const SearchFieldInput = styled(TextField)({
 })
 
 const IconRoundedSearch = styled(IconButtonRounded)(({theme}) => ({
-  background: "#FF4656",
+  background: "#d93644",
   width: '50px !important',
   height: '50px !important',
   "&:hover": {
-    background: "#FF4656",
+    background: "#d93644",
   }
 }))
 

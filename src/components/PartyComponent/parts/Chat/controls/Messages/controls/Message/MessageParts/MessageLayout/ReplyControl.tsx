@@ -20,7 +20,7 @@ function ReplyControl({messageId}) {
         maxHeight: 84 + 'px',
         width: '100%',
         padding: '2px 0',
-        background: "#FF4656",
+        background: "#d93644",
         position: 'relative',
         cursor: 'pointer',
         overflow: 'hidden',

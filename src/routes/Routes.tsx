@@ -22,6 +22,12 @@ const routes: RouteTree = {
       node: { path: '/login', component: <LoginPage /> },
     },
     {
+      node: { path: '/records', component: <div>{"records"}</div> },
+    },
+    {
+      node: { path: '/registration', component: <div>{"records"}</div> },
+    },
+    {
       node: { path: '/games', component: <Games /> },
       children: [
         {

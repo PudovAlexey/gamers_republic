@@ -10,7 +10,7 @@ const mainStyles = function (theme) {
       },
       backgroundOverlay: {
         position: 'relative',
-        background: 'rgba(255, 70, 86, .7)',
+        background: 'rgba(242, 19, 39, .7)',
         overflow: 'hidden',
       },
       mainPage: {

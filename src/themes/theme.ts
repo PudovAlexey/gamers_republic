@@ -50,14 +50,14 @@ export const theme = createTheme({
     MuiSlider: {
       styleOverrides: {
         root: {
-          color: '#FF4656',
+          color: '#d93644',
         },
       },
     },
     MuiFormLabel: {
       styleOverrides: {
         root: {
-          color: '#FF4656',
+          color: '#d93644',
         },
       },
     },
@@ -71,7 +71,7 @@ export const theme = createTheme({
     MuiDivider: {
       styleOverrides: {
         root: {
-          background: '#FF4656',
+          background: '#d93644',
           margin: '10px 0',
         },
       },
@@ -83,7 +83,7 @@ export const theme = createTheme({
           justifyContent: 'space-between',
           paddingRight: '5px',
           paddingLeft: '5px',
-          background: '#FF4656',
+          background: '#d93644',
           color: '#1F2326',
           marginBottom: '15px',
         },
@@ -105,10 +105,10 @@ export const theme = createTheme({
           color: '#F8F8F8'
         },
         contained: {
-          background: "#FF4656"
+          background: "#d93644"
         },
         outlined: {
-          background: "#FF4656"
+          background: "#d93644"
         }
       },
     },
@@ -118,7 +118,7 @@ export const theme = createTheme({
           '&:before': {
             content: '""',
             position: 'absolute',
-            background: '#FF4656',
+            background: '#d93644',
             width: '15%',
             height: '50%',
             bottom: '0',
@@ -248,7 +248,7 @@ export const theme = createTheme({
           fontWeight: 500,
           textOverflow: "eclipsis",
           // "-webkit-text-stroke": "1px #fff",
-          color: "#FF4656",
+          color: "#d93644",
           whiteSpace: "nowrap",
      
           textTransform: "uppercase",

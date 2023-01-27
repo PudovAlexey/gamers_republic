@@ -68,9 +68,9 @@ const dynamicStyleComponent = (theme) => {
     footerButtons: (variant) => {
       const styles = {}
           switch(variant) {
-            case 'contained': styles['background'] = '#FF4656'
+            case 'contained': styles['background'] = '#d93644'
               break;
-            case 'outlined': styles['border'] = '1px solid s#FF4656'
+            case 'outlined': styles['border'] = '1px solid s#d93644'
               break;
           }
     return styles
@@ -78,7 +78,7 @@ const dynamicStyleComponent = (theme) => {
     stepButtonType: (variant) => {
       let color
       switch (variant) {
-        case 'active': color = "#FF4656"
+        case 'active': color = "#d93644"
           break;
         case 'disabled': color = "#868686"
           break 

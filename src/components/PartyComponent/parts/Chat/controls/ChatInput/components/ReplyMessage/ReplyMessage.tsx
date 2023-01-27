@@ -19,7 +19,7 @@ function ReplyMessage() {
   const ReplyPaper = styled(Paper)({
     height: replyHeight + 'px',
     width: '100%',
-    background: "#FF4656",
+    background: "#d93644",
     position: 'relative'
   })
   return (

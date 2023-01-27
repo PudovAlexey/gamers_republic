@@ -5,3 +5,15 @@ Chat/
 4. make down button hidden +
 5. Add hidden date panel +
 6. stop rerendering input in scroll +
+
+AUTH_CLIENT_ID=1
+# BACK_BRANCH=antonpolovnikov/sc-208329/delete-challengeactivitiesmodule-on-deleting-challengeactivity
+
+S3_ACCESS_KEY=AKIA2XTWVDXMXQDQ5Z7N
+S3_SECRET_KEY=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
+S3_PUBLIC_URL=https://hpf-happify-marty-dev-user-uploads.happify.com
+S3_BUCKET_NAME=happify-marty-dev-user-uploads
+S3_HOST_NAME=s3.us-east-1.amazonaws.com
+
+SMARTLING_PROJECT_CREDENTIALS='{"api_test": { "projectName": "API Test", "isDefault": true, "credentials": { "projectId": "...", "userId": "...", "userSecret": "..." } }, "non_existent_project": { "projectName": "Another project (non-existent)", "isDefault": false, "credentials": { "projectId": "...", "userId": "...", "userSecret": "..." } } }'
+
