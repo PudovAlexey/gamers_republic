@@ -4,18 +4,32 @@
     flex-direction: column;
 }
 
+.slick-slider {
+    display: flex;
+    justify-content: space-between;
+}
+
 .slick-active {
-    background: "#FF4656"; 
-    
+    background: "#FF4656";    
 }
 
 .slick-dots button {
+    flex-direction: column;
     height: 40px;
     width: 10px;
     background: transparent;
     border: 1px solid #1F2326;
+    font-size: 0;
+}
+
+.slick-dots .slick-active button {
+    background: #d93644;
+}
+
+.slick-dots li {
+    list-style-type: none;
 }
 
 .slick-arrow {
-
+    display: none !important;
 }

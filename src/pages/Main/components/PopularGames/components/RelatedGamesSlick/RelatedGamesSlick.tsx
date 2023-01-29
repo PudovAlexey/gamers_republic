@@ -2,6 +2,7 @@ import Slider from "react-slick";
 // import "~slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick.css"
 import "./slickTheme.css";
+import { GameSlide } from "./sliders/GameSlide/GameSlide";
 const settings = {
     dots: true,
     infinite: true,
@@ -13,12 +14,11 @@ const settings = {
 function RelatedGamesSlick() {
     return <Slider style={{
         height: '100%',
-        width: '300px',
-        "&:slick-dots": {
-            flexDirection: 'column'
-        }
+        width: '100%',
     }} {...settings}>
-         <div>
+        {/* <GameSlide/> */}
+        {GameSlide()}
+         {/* <div>
         <h3>1</h3>
       </div>
       <div>
@@ -35,7 +35,7 @@ function RelatedGamesSlick() {
       </div>
       <div>
         <h3>6</h3>
-      </div>
+      </div> */}
     </Slider>
 }
 
