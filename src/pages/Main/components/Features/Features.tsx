@@ -1,17 +1,9 @@
-import { Typography } from "@mui/material"
-import { Box, Stack } from "@mui/system"
+import { Box } from "@mui/system"
 
 function Features() {
     return (
         <Box>
-            <Stack spacing={2}>
-            <Typography variant="h1">
-                GAMERS REPUBLIC
-            </Typography>
-            <Typography variant="h5">
-                Let's start your adventure in the world of games and entertainment
-            </Typography>
-            </Stack>
+            Features
         </Box>
     )
 }

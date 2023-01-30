@@ -10,18 +10,12 @@ type TPopularGamesConfig = {
 }
 
 const popularGamesConfig: TPopularGamesConfig = {
-    title: 'Lore and Storyline',
+    title: 'Recently added',
     description: 
-    "In Valorant lore, Jett is an agile agent expert in the art of evasion." + 
-    "She overwhelms enemies and wounds them with a blade without them knowing her position." +
-    "Of Korean origin, Jett is an agile fighter who gives priority to movement." +
-    "Her abilities focus on stealth with jumps that allow her to reach high ledges," + 
-    "teleportation, and smoke bombs. Her ultimate ability gives her kunaïs that inflict moderate to heavy damage," +
-    "remaining very accurate even when she moves." +
-    "There are a total of six groups of weapons that players will be able to purchase at the start of each round" + 
-     "with each costing a different amount based on their power and weapon type. None of the weapons are tied exclusively " + 
-     "to a specific character, so players will be able to use any of the weapons available in the FPS, no matter the character" + 
-     "they are using for a particular match.",
+    "From start of my development career I dream to construct service from gamers to gamers" + 
+    "where you can spend your time with friends so fun\n\r" + 
+    "Forget about stress and worries. Invite a friend and play in Gamers republic together." +
+    "Don't be afraid to be alone, find a companion in the chat and continue the game",
      sliderItems: [
         {
         title: 'Arcanoid',
