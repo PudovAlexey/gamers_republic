@@ -1,0 +1,72 @@
+.slickBlock .slick-dots {
+    gap: 16px;
+    display: flex !important;
+    flex-direction: row;
+}
+
+.slickBlock.slick-slider {
+    display: flex;
+    flex-direction: column;
+}
+
+.slickBlock .slick-active {
+    background: "red";    
+}
+
+.slickBlock .slick-dots button {
+    position: relative;
+    display: block;
+    flex-direction: column;
+    height: 60px;
+    width: 60px;
+    background: transparent;
+    border: 1px solid #1F2326;
+    font-size: 0;
+}
+
+.slickBlock .slick-dots li:nth-child(1) button:after {
+    position: absolute;
+    content: url('./svg/Alarmbot.svg');
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.slickBlock .slick-dots li:nth-child(2) button:after {
+    position: absolute;
+    content: url('./svg/Lockdown.svg');
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.slickBlock .slick-dots li:nth-child(3) button:after {
+    position: absolute;
+    content: url('./svg/Nanoswarm.svg');
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.slickBlock .slick-dots li:nth-child(4) button:after {
+    position: absolute;
+    content: url('./svg/Turret.svg');
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.slickBlock .slick-dots .slick-active button {
+    background: #d93644;
+}
+
+.slickBlock .slick-dots li {
+    list-style-type: none;
+}
+
+.slickBlock .slick-arrow {
+    display: none !important;
+}

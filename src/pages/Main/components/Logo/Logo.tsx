@@ -21,16 +21,14 @@ function LogoComponent() {
                 Let's start your adventure in the world of games and entertainment
             </Typography>
             </TitleStack>
-            <GridComponent maxWidth={'50%'} gap={3} gridTemplateColumns={'1fr 1fr'} display={'grid'}>
+            </Stack>
+            <GridComponent maxWidth={'70%'} gap={3} gridTemplateColumns={'1fr 1fr'} display={'grid'}>
         {
           cardsConfig.map(card => (
             <LabelCard {...card}/>
           ))
         }
       </GridComponent>
-            </Stack>
-        </MainBox>
-        <Link to={"/register"}>
         <StartJourneyButton>
         <Stack justifyContent={'center'} alignItems={'center'}>
         <Button startIcon={<KeyboardArrowRightIcon/>}>
@@ -38,6 +36,8 @@ function LogoComponent() {
         </Button>
         </Stack>
         </StartJourneyButton>
+        </MainBox>
+        <Link to={"/register"}>
         </Link>
         </Stack>
     )
@@ -45,7 +45,7 @@ function LogoComponent() {
 
 const MainBox = styled(Box)({
     position: 'relative',
-    height: '100vh',
+    height: 'calc(100vh - 62px)',
     width: '90vw',
 })
 
@@ -64,12 +64,14 @@ const StartJourneyButton = styled(Paper)({
     left: 0,
     right: 0,
     padding: '8px',
+    background: "#1F2326",
 })
 
 const GridComponent = styled(Grid)({
     position: 'absolute',
     left: '0',
-    bottom: '15%'
+    bottom: '37%',
+    height: '30%'
 })
 
 const MainGirl = styled("img")({
