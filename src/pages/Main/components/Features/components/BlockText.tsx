@@ -10,12 +10,12 @@ function BlockText() {
             <LightTypography>//:{blockTextConfig.title.toUpperCase()}/</LightTypography>
             <DescriptionText>{blockTextConfig.description}</DescriptionText>
         </Stack>
-        <Stack direction={'row'} spacing={2}>
+        <Stack direction={'row'} spacing={4}>
         {
             blockTextConfig.featureBlock.map(({title, description}) => (
-                <Stack spacing={1}>
+                <Stack spacing={3}>
                     <TextBoldLight>{title}</TextBoldLight>
-                    <DescriptionText>{description}</DescriptionText>
+                    <DescriptionText maxWidth={'150px !important'}>{description}</DescriptionText>
                 </Stack>
             ))
         }

@@ -7,10 +7,15 @@
 .slickBlock.slick-slider {
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .slickBlock .slick-active {
     background: "red";    
+}
+
+.slickBlock .slick-dots {
+    justify-content: center;
 }
 
 .slickBlock .slick-dots button {
@@ -31,6 +36,9 @@
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .slickBlock .slick-dots li:nth-child(2) button:after {
@@ -40,6 +48,10 @@
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
 .slickBlock .slick-dots li:nth-child(3) button:after {
     position: absolute;
@@ -48,6 +60,10 @@
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
 }
 
 .slickBlock .slick-dots li:nth-child(4) button:after {
@@ -57,6 +73,9 @@
     bottom: 0;
     left: 0;
     right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .slickBlock .slick-dots .slick-active button {

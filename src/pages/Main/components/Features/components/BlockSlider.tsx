@@ -1,5 +1,8 @@
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"
+import slide1 from './sliderItems/slide1.jpg'
+import slide2 from './sliderItems/slide2.jpg'
+import slide3 from './sliderItems/slide3.jpg'
 // import "./slickTheme.css";
 import "./slickTheme.css"
 
@@ -16,24 +19,9 @@ function BlockSlider() {
         <Slider className={'slickBlock'} style={{
             height: '100%',
             width: '40%'}} {...settings}>
-        <div>
-          <h3>1</h3>
-        </div>
-        <div>
-          <h3>2</h3>
-        </div>
-        <div>
-          <h3>3</h3>
-        </div>
-        <div>
-          <h3>4</h3>
-        </div>
-        <div>
-          <h3>5</h3>
-        </div>
-        <div>
-          <h3>6</h3>
-        </div>
+        <img src={slide1} alt={"slide1"}/>
+        <img src={slide2} alt={"slide2"}/>
+        <img src={slide3} alt={"slide3"}/>
       </Slider>
     )
 }

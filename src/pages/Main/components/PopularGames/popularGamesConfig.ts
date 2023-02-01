@@ -10,7 +10,7 @@ type TPopularGamesConfig = {
 }
 
 const popularGamesConfig: TPopularGamesConfig = {
-    title: 'Recently added',
+    title: 'Games',
     description: 
     "From start of my development career I dream to construct service from gamers to gamers" + 
     "where you can spend your time with friends so fun\n\r" + 
