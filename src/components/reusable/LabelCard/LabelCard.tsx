@@ -1,4 +1,4 @@
-import { Box, Paper, Typography } from "@mui/material"
+import { Box, Paper } from "@mui/material"
 import { Stack, styled } from "@mui/system"
 import { Link } from "react-router-dom"
 import { BoldTypography, GrayTypography } from "../layout"
@@ -32,6 +32,7 @@ function LabelCard({title, link, description, icon}: TCard) {
 }
 
 const CardPaper = styled(Paper)({
+    height: '100%',
     border: '2px solid #1F2326',
     position: 'relative',
     padding: '12px 8px',
