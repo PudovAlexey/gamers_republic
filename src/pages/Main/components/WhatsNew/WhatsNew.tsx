@@ -1,43 +1,48 @@
-import Slider from "react-slick";
 import "./slickTheme.css"
 import {Shield} from '../../../../assets/main/common/Shield'
 import { styled } from "@mui/material"
 import { Box } from "@mui/system"
 import { LabelCard, TCard } from "../../../../components/reusable/LabelCard/LabelCard"
+import { FanView } from "../../../../components/reusable/FanView/FanView";
 
-const slickOptions = {
-    speed: 500,
-    infinite: false,
-    centerMode: true,
-    centerPadding: '50px',
-    slidesToShow: 3,
-    slidesToScroll: 3,
-    vertical: true,
-    verticalSwiping: true,
-    arrows: false,
-    swipeToSlide: true,
-    focusOnSelect: true,
-    responsive: [
-        {
-          breakpoint: 200,
-          settings: {
-            arrows: false,
-            centerMode: false,
-            centerPadding: '40px',
-            slidesToShow: 3
-          }
-        }
-      ]
-    
+const testIdx = new Array(100).fill('').map((_, idx) => idx + 1)
+const testData = testIdx.reduce((dict, id) => {
+  dict[id] = {
+    title: `TEST ${id}`,
+link: {
+    text: "LINK",
+    navTo: ""
+},
+description: 'TEST DESCRIPTION',
+icon: <Shield size={'100%'}/>
 }
+  return dict
+}, {})
 
 function WhatsNew() {
+//   const mockData: TCard= {
+//     title: `TEST 1`,
+// link: {
+//     text: "LINK",
+//     navTo: ""
+// },
+// description: 'TEST DESCRIPTION',
+// icon: <Shield size={'100%'}/>
+// }
     return (
         <WhatsNewBlock>
           <SlickWrapper>
-          <Slider {...slickOptions} className={'verticalSlider'}>
+            <FanView
+            fanIds={testIdx}
+            fanData={testData}
+            fanControl={(data) => {
+              console.log(data)
+              return <LabelCard {...data}/>
+            }}
+            />
+          {/* <Slider {...slickOptions} className={'verticalSlider'}>
             {LabelCards()}
-          </Slider>
+          </Slider> */}
           </SlickWrapper>
         </WhatsNewBlock>
     )

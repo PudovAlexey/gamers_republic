@@ -8,6 +8,7 @@ import createSagaMiddleware from "redux-saga";
 import { rootSaga } from './sagas'
 import authSlice from './authSlice/authSlice'
 import debugSlice from '../utils/enviroment/debugPanel/store'
+import fanSlice from '../components/reusable/FanView/redux'
 import { chatRedusers } from '../components/PartyComponent/parts/Chat/store/chatRedusers'
 
 let sagaMiddleware = createSagaMiddleware();
@@ -20,7 +21,8 @@ const store = configureStore({
         messagesInfoSlice: messagesInfoSlice,
         messagesSlice: messagesSlice,
         chatSlice: chatSlice,
-        chatRedusers: chatRedusers
+        chatRedusers: chatRedusers,
+        fanSlice: fanSlice
     },
     middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(
       {
