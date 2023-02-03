@@ -20,7 +20,7 @@ function FanView({fanIds, fanData, fanControl}: TProps) {
     const sliderRef = useRef()
     const dispatch = useAppDispatch()
     useEffect(() => {
-        dispatch(onInit({fanIds, fanData, fanControl}))
+        dispatch(onInit({fanIds, fanData, fanControl, slickRef: sliderRef.current}))
         return () => {
             dispatch(onExit())
         }
