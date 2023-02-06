@@ -1,11 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { EScrollDirection } from "../../../../api/types"
+
+let changeEvent = false;
 const initialState = {
+    currentSlide: 0,
     lastScrollTop: 0,
     scrollDirection: EScrollDirection.Draw,
     scrollContainerHeight: 0,
     scrollSpeed: 100,
     slickRef: null,
+    scrollRef: null,
     fanIds: [],
     fanData: {},
     fanControl: () => {}
@@ -16,11 +20,12 @@ const fanSlice = createSlice({
     initialState,
     reducers: {
       onInit: (state, action) => {
-        const {fanIds, fanData, fanControl, slickRef} = action.payload
+        const {fanIds, fanData, fanControl, slickRef, scrollRef} = action.payload
         state.fanIds = fanIds
         state.fanData = fanData
         state.fanControl = fanControl
         state.slickRef = slickRef
+        state.scrollRef = scrollRef
       },
       setView: (state, action) => {
         if (action.payload) {
@@ -28,6 +33,7 @@ const fanSlice = createSlice({
         }
       },
       onScroll: (state, action) => {
+        console.log(action.payload)
         function handleScrollTop() {
           const {target} = action.payload
      //   state.scrollSpeed =  (Math.abs(checkScrollSpeed())) / 1000
@@ -44,6 +50,14 @@ const fanSlice = createSlice({
         handleScrollTop()
 
       },
+
+      afterChange: (state, action) => {
+        changeEvent = true;
+        state.scrollRef.scrollTop = (state.scrollRef.scrollHeight / state.fanIds.length) * action.payload
+        state.currentSlide = action.payload
+        setTimeout(() => changeEvent = false, 200)
+      },
+
       onExit: (state) => {
         state.fanIds = []
         state.fanData = {}
@@ -56,6 +70,7 @@ export const {
     onInit,
     onExit,
     onScroll,
+    afterChange,
     setView
 
 } = fanSlice.actions
