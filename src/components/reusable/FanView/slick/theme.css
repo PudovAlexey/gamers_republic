@@ -5,6 +5,10 @@
     z-index: 1;
 }
 
+.fanView.slick-track {
+    position: relative;
+}
+
 .fanView.slick-dots {
     gap: 16px;
     display: flex !important;

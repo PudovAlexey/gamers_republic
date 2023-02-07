@@ -7,7 +7,7 @@ import { slickOptions } from "./redux/slickOptions";
 import { fanControlSelector, fanDataByIdSelector, fanIdsSelector, scrollContainerHeightSelector, slickSpeedSelector } from "./redux/selectors";
 import { styled } from "@mui/material";
 import { Box } from "@mui/system";
-import { SCROLL } from "./redux/actionCreators";
+import { AFTER_CHANGE, SCROLL } from "./redux/actionCreators";
 
 type TProps = {
     fanIds: number[],
@@ -30,7 +30,7 @@ function FanView({fanIds, fanData, fanControl}: TProps) {
 
     return (
         <ScrollView>
-            <Slider afterChange={(value) => dispatch(afterChange(value))} speed={scrollSpeed} ref={sliderRef} className={"fanView"} {...slickOptions}>
+            <Slider beforeChange={(value) => dispatch(AFTER_CHANGE(value))} speed={scrollSpeed} ref={sliderRef} className={"fanView"} {...slickOptions}>
         {fanView()}
             </Slider>
             <ScrollWrapper ref={scrollRef} onScroll={(e) => dispatch(SCROLL(e))}>

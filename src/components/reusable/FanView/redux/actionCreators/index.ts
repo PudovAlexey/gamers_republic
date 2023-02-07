@@ -4,6 +4,11 @@ const  SCROLL = createAction('fan/SCROLL', (data) => ({
     payload: data
 }))
 
+const AFTER_CHANGE = createAction('fan/AFTER_CHANGE', (data) => ({
+    payload: data
+}))
+
 export {
-    SCROLL
+    SCROLL,
+    AFTER_CHANGE
 }

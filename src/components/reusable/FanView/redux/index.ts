@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { EScrollDirection } from "../../../../api/types"
 
-let changeEvent = false;
 const initialState = {
+    fireChange: false,
+    fireScroll: false,
     currentSlide: 0,
     lastScrollTop: 0,
     scrollDirection: EScrollDirection.Draw,
@@ -29,33 +30,52 @@ const fanSlice = createSlice({
       },
       setView: (state, action) => {
         if (action.payload) {
-          state.scrollContainerHeight = (state.fanIds.length * (action.payload.clientHeight) * (16)) / 2
+          const test = (state.fanIds.length * (action.payload.clientHeight) * (16)) / 2
+          state.scrollSpeed = test / 1000
+          state.scrollContainerHeight = test
         }
       },
       onScroll: (state, action) => {
-        console.log(action.payload)
         function handleScrollTop() {
           const {target} = action.payload
      //   state.scrollSpeed =  (Math.abs(checkScrollSpeed())) / 1000
         var st = action.payload.target.scrollTop
-        
+        console.log(st, 'scroll')
+        console.log(state.lastScrollTop, 'lastScroll')
         if (st > state.lastScrollTop) {
-          state.slickRef.slickNext()
+          state.scrollDirection = EScrollDirection.Up
         } else if (st < state.lastScrollTop) {
-          state.slickRef.slickPrev()
+          state.scrollDirection = EScrollDirection.Down
           // upscroll code
         } // else was horizontal scroll
         state.lastScrollTop = st <= 0 ? 0 : st;
         }
         handleScrollTop()
+      },
 
+      onNext: (state) => {
+        if (state.fireScroll) return
+        state.slickRef.slickNext()
+      },
+
+      onFireChange: (state, action) => {
+        state.fireChange = action.payload
+      },
+
+      onFireScroll: (state, action) => {
+        state.fireScroll = action.payload
+      },
+
+      onPrev: (state) => {
+        if (state.fireScroll) return
+        state.slickRef.slickPrev()
       },
 
       afterChange: (state, action) => {
-        changeEvent = true;
+        console.log(state.fireChange)
+        if (state.fireChange) return
         state.scrollRef.scrollTop = (state.scrollRef.scrollHeight / state.fanIds.length) * action.payload
         state.currentSlide = action.payload
-        setTimeout(() => changeEvent = false, 200)
       },
 
       onExit: (state) => {
@@ -71,7 +91,11 @@ export const {
     onExit,
     onScroll,
     afterChange,
-    setView
+    setView,
+    onNext,
+    onPrev,
+    onFireScroll,
+    onFireChange
 
 } = fanSlice.actions
 

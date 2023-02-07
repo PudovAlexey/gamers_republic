@@ -2,6 +2,8 @@ import { createSelector } from 'reselect';
 
 const fanIdsSelector = (state) => state.fanSlice.fanIds;
 
+const scrollDirectionSelector = (state) => state.fanSlice.scrollDirection;
+
 const fanDataSelector = (state) => {
   return state.fanSlice.fanData
 };
@@ -26,5 +28,6 @@ export {
   fanControlSelector,
   fanDataSelector,
   slickSpeedSelector,
-  scrollContainerHeightSelector
+  scrollContainerHeightSelector,
+  scrollDirectionSelector
 };
