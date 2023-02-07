@@ -8,7 +8,7 @@ const initialState = {
     lastScrollTop: 0,
     scrollDirection: EScrollDirection.Draw,
     scrollContainerHeight: 0,
-    scrollSpeed: 100,
+    scrollSpeed: 1,
     slickRef: null,
     scrollRef: null,
     fanIds: [],
@@ -31,7 +31,6 @@ const fanSlice = createSlice({
       setView: (state, action) => {
         if (action.payload) {
           const test = (state.fanIds.length * (action.payload.clientHeight) * (16)) / 2
-          state.scrollSpeed = test / 1000
           state.scrollContainerHeight = test
         }
       },
