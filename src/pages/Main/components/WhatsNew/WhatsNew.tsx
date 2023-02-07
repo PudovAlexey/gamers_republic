@@ -1,12 +1,14 @@
 import './slickTheme.css';
 import { Shield } from '../../../../assets/main/common/Shield';
-import { styled } from '@mui/material';
+import { Stack, styled, Typography } from '@mui/material';
 import { Box } from '@mui/system';
 import {
   LabelCard,
-  TCard,
 } from '../../../../components/reusable/LabelCard/LabelCard';
 import { FanView } from '../../../../components/reusable/FanView/FanView';
+import ManImg from './img/Art.png'
+import { TitleText } from '../../../../components/reusable/layout/Typography';
+
 
 const testIdx = new Array(100).fill('').map((_, idx) => idx + 1);
 const testData = testIdx.reduce((dict, id) => {
@@ -23,17 +25,11 @@ const testData = testIdx.reduce((dict, id) => {
 }, {});
 
 function WhatsNew() {
-  //   const mockData: TCard= {
-  //     title: `TEST 1`,
-  // link: {
-  //     text: "LINK",
-  //     navTo: ""
-  // },
-  // description: 'TEST DESCRIPTION',
-  // icon: <Shield size={'100%'}/>
-  // }
   return (
     <WhatsNewBlock>
+          <RelativeTitle>Whats new</RelativeTitle>
+        <Man src={ManImg}/>
+        <Stack alignItems={'center'} spacing={1}>
       <SlickWrapper>
         <FanView
           fanIds={testIdx}
@@ -44,26 +40,35 @@ function WhatsNew() {
             );
           }}
         />
-        {/* <Slider {...slickOptions} className={'verticalSlider'}>
-            {LabelCards()}
-          </Slider> */}
       </SlickWrapper>
+        </Stack>
     </WhatsNewBlock>
   );
 }
 
+const RelativeTitle = styled(TitleText)({
+  position: 'relative',
+  color: '#0f1923',
+  left: "70px"
+})
+
 const WhatsNewBlock = styled(Box)({
-  background: '#f8f8f8',
-  height: '100vh',
   width: '100vw',
+  height: '100vh',
+  position: 'relative',
+  background: '#f8f8f8',
 });
 
+const Man = styled('img')({
+  position: 'absolute',
+  left: '0px'
+})
+
 const SlickWrapper = styled(Box)({
-  width: '80%',
-  height: '100vh',
-  margin: 'auto auto',
-  position: 'relative',
-  top: '15vh',
+  width: '60%',
+  position: 'absolute',
+  right: '50px',
+  bottom: "2%"
 });
 
 export { WhatsNew };

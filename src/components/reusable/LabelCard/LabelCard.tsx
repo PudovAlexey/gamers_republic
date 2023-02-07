@@ -21,7 +21,7 @@ function LabelCard({title, link, description, icon}: TCard) {
                 <Link to={link.navTo}>
                     <BoldTypography variant="h6">{link.text}</BoldTypography>
                 </Link>
-                <GrayTypography fontWeight={'bold'}>{description}</GrayTypography>
+                <GrayTypography>{description}</GrayTypography>
             </Stack>
             <IconWrapper>
                     {icon}
@@ -32,7 +32,6 @@ function LabelCard({title, link, description, icon}: TCard) {
 }
 
 const CardPaper = styled(Paper)({
-    height: '100%',
     border: '2px solid #1F2326',
     position: 'relative',
     padding: '12px 8px',

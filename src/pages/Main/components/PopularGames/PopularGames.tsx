@@ -4,10 +4,12 @@ import { Stack } from "@mui/system"
 import { RelatedGamesSlick } from "./components/RelatedGamesSlick/RelatedGamesSlick"
 import { popularGamesConfig } from "./popularGamesConfig"
 import girl from './assets/Girl.png'
+import { TitleText } from "../../../../components/reusable/layout/Typography"
 
 function PopularGames() {
     return (
         <DarkPaper>
+            <RelativeTitle>GAmes</RelativeTitle>
             <DecorationGirl src={girl} alt={'girl'}/>
             <PaperWindow>
                 <Stack spacing={3}>
@@ -29,6 +31,13 @@ const DarkPaper = styled(Paper)({
     height: '100vh',
     background: '#1F2326'
 })
+
+const RelativeTitle = styled(TitleText)({
+    color: '#f8f8f8',
+    position: 'absolute',
+    left: "70px",
+    top: "15px"
+  })
 
 const PaperWindow = styled(Paper)({
     padding: "16px",

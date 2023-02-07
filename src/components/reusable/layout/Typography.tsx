@@ -15,8 +15,16 @@ const TextBoldLight = styled(Typography)({
     color: '#f8f8f8'
 })
 
+const TitleText = styled(Typography)({
+    textTransform: "uppercase",
+    fontWeight: 'bold',
+    fontSize: '6rem',
+    color: '#d93644'
+})
+
 export {
     StrokeText,
     LightTypography,
-    TextBoldLight
+    TextBoldLight,
+    TitleText
 }

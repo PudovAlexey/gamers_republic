@@ -17,7 +17,7 @@ function Dark({children}) {
 }
 
 const GrayTypography = styled(Typography)({
-    color: '#C4C4C4'
+    color: '#7e7e7e'
 })
 
 const BoldTypography = styled(Typography)({
