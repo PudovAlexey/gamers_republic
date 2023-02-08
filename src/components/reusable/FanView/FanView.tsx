@@ -31,7 +31,7 @@ function FanView({fanIds, fanData, fanControl}: TProps) {
     return (
         <ScrollView>
             <Slider beforeChange={(value) => dispatch(AFTER_CHANGE(value))} speed={scrollSpeed} ref={sliderRef} className={"fanView"} {...slickOptions}>
-        {fanView()}
+        {FanViewControl()}
             </Slider>
             <ScrollWrapper ref={scrollRef} onScroll={(e) => dispatch(SCROLL(e))}>
             <ScrollContainer sx={{height: scrollContainerHeight + 'px'}}></ScrollContainer>
@@ -40,7 +40,7 @@ function FanView({fanIds, fanData, fanControl}: TProps) {
     )   
 }
 
-function fanView() {
+function FanViewControl() {
     const fanIds = useAppSelector(fanIdsSelector)
 
     return fanIds.map(id => (
