@@ -8,11 +8,20 @@ import TelegramIcon from '@mui/icons-material/Telegram';
 import { IconButton, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 const socialMediaIcons = [
-  {icon: <InstagramIcon/>, url: ""},
-  {icon: <GitHubIcon/>, url: ""},
-  {icon: <LinkedInIcon/>, url: ""},
-  {icon: <TelegramIcon/>, url: ""},
-]
+  {
+    icon: <InstagramIcon />,
+    url: 'https://instagram.com/alex_web177?igshid=Zjc2ZTc4Nzk=',
+  },
+  {
+    icon: <GitHubIcon />,
+    url: 'https://github.com/PudovAlexey/gamers_republic',
+  },
+  {
+    icon: <LinkedInIcon />,
+    url: 'https://www.linkedin.com/me?trk=p_mwlite_me_notifications-secondary_nav',
+  },
+  { icon: <TelegramIcon />, url: 'https://t.me/Alexej177' },
+];
 function Footer() {
   return (
     <Box
@@ -61,23 +70,21 @@ function Footer() {
           }}
         >
           <Stack alignItems={'center'} spacing={3}>
-          <Stack direction={'row'} spacing={1}>
-            {socialMediaIcons.map(({icon, url}) => (
-              <Link to={url}>
-                <IconButton size='small'>
-                  {icon}
-                </IconButton>
-              </Link>
-            ))}
-          </Stack>
-          <Stack alignItems={'center'}  spacing={1}>
-          <Typography sx={{color: "#7e7e7e"}}>
-          © 2022 ООО «Pudov Aleksey Aleksandrovich»
-          </Typography>
-          <Typography sx={{color: "#7e7e7e"}}>
-          All Rights Reserved.
-          </Typography>
-          </Stack>
+            <Stack direction={'row'} spacing={1}>
+              {socialMediaIcons.map(({ icon, url }) => (
+                <a target="_blank" href={url}>
+                  <IconButton size="small">{icon}</IconButton>
+                </a>
+              ))}
+            </Stack>
+            <Stack alignItems={'center'} spacing={1}>
+              <Typography sx={{ color: '#7e7e7e' }}>
+                © 2022 ООО «Pudov Aleksey Aleksandrovich»
+              </Typography>
+              <Typography sx={{ color: '#7e7e7e' }}>
+                All Rights Reserved.
+              </Typography>
+            </Stack>
           </Stack>
         </Box>
         <Box></Box>

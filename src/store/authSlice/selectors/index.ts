@@ -9,8 +9,11 @@ const userOnlineByIdSelector = createSelector(
     (users, id) => users.find(userId => userId === id)
 )
 
+const authUser = (store) => store.authSlice.user
+
 export {
     userSelector,
     usersOnlineSelector,
-    userOnlineByIdSelector
+    userOnlineByIdSelector,
+    authUser
 }

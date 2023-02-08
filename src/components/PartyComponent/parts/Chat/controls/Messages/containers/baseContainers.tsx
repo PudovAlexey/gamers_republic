@@ -27,7 +27,7 @@ const ScrollContainer = styled(Box)({
     left: 0,
     position: 'fixed',
     top: 0,
-    width: '100%',
+    // width: '100%',
     willChange: 'transform',
     zIndex: -1,
   },

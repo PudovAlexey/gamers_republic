@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, { useContext } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -13,20 +13,21 @@ import { menuItems } from './menuItems';
 import useLocalStorage from '../../hooks/useLocalStorage';
 import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
+import { useAppSelector } from '../../hooks/typedReduxHooks';
+import { authUser } from '../../store/authSlice/selectors';
 
 const Header = () => {
+  const user = useAppSelector(authUser);
   const [AuthUser, setAuthUser] = useContext(AuthContext);
-  const {removeItemByPath} = useLocalStorage()
-  const pallete = useTheme()
-  const styles = styleComponent(pallete)
+  const { removeItemByPath } = useLocalStorage();
+  const pallete = useTheme();
+  const styles = styleComponent(pallete);
 
-  function onOpenTeamMenuPopover() {
-    
-  }
+  function onOpenTeamMenuPopover() {}
 
   function onLogoutPress() {
-    setAuthUser(null)
-    removeItemByPath('authToken')
+    setAuthUser(null);
+    removeItemByPath('authToken');
   }
   return (
     <AppBar sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
@@ -77,20 +78,20 @@ const Header = () => {
         </Box>
         <Box sx={styles.header.userInfo}>
           <AvatarComponent {...AuthUser} />
-          {AuthUser ? (
+          {!user ? (
             <MenuItem>
               <Link to="/login">Login</Link>
             </MenuItem>
-          ) :
-           <Button onClick={onLogoutPress}>Logout</Button>
-          }
-          {
-            AuthUser ? (
-              <MenuItem>
-                <Button onClick={onOpenTeamMenuPopover}>Add Friends</Button>
-              </MenuItem>
-            ) : null
-          }
+          ) : (
+            <MenuItem>
+              <Link to="/login">Logout</Link>
+            </MenuItem>
+          )}
+          {AuthUser ? (
+            <MenuItem>
+              <Button onClick={onOpenTeamMenuPopover}>Add Friends</Button>
+            </MenuItem>
+          ) : null}
         </Box>
       </Box>
     </AppBar>
