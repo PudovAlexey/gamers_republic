@@ -1,3 +1,4 @@
+import { ERoutes } from "../../../routes";
 import ModeSettings from "../../reusable/settings/ModeSettings";
 import SoundSettings from "../../reusable/settings/SoundSettings";
 import TimerSettings from "../../reusable/settings/TimerSettings";
@@ -60,7 +61,7 @@ export function GameItems({
                 node: {
                   text: 'Out',
                   action: function () {
-                    navigate('/games');
+                    navigate(ERoutes.Games);
                   },
                 },
                 children: '',

@@ -7,6 +7,7 @@ import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { StrokeText } from '../../../../components/reusable/layout/Typography';
 import { Link } from 'react-router-dom';
 import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
+import { ERoutes } from '../../../../routes';
 
 function LogoComponent() {
   return (
@@ -37,7 +38,7 @@ function LogoComponent() {
         </GridComponent>
         <StartJourneyButton>
           <Stack justifyContent={'center'} alignItems={'center'}>
-            <Link to={'/register'}>
+            <Link to={ERoutes.Register}>
               <BorderedButton
                 sx={{ background: '#ece8e1', color: '#1F2326' }}
                 variant="contained"
@@ -49,7 +50,7 @@ function LogoComponent() {
           </Stack>
         </StartJourneyButton>
       </MainBox>
-      <Link to={'/register'}></Link>
+      <Link to={ERoutes.Register}></Link>
     </Stack>
   );
 }

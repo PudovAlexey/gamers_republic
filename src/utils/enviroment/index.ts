@@ -10,6 +10,15 @@ function getEnviroment(): EEnviroment {
     }
 }
 
+function envByUrl() {
+    const env = getEnviroment()
+    switch(env) {
+        case EEnviroment.Develop: return ""
+        case EEnviroment.Production: return "/gamers_republic/"
+    }
+}
+
 export {
-    getEnviroment
+    getEnviroment,
+    envByUrl
 }

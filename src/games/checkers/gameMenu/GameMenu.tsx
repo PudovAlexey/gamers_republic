@@ -10,6 +10,7 @@ import {
 import { parseTime } from '../../../utils/timer/timer';
 import Timer from '../../../components/reusable/Timer/Timer';
 import MenuTimer from './items/settings/TimerSettings';
+import { ERoutes } from '../../../routes';
 
 export function gameMenu({
   setStartGame,
@@ -90,7 +91,7 @@ export function gameMenu({
         node: {
           text: 'Out',
           action: function () {
-            navigate('/games');
+            navigate(ERoutes.Games);
           },
         },
         children: '',

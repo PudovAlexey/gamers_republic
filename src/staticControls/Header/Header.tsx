@@ -15,6 +15,7 @@ import { styleComponent } from './styles';
 import { useTheme } from '@emotion/react';
 import { useAppSelector } from '../../hooks/typedReduxHooks';
 import { authUser } from '../../store/authSlice/selectors';
+import { ERoutes } from '../../routes';
 
 const Header = () => {
   const user = useAppSelector(authUser);
@@ -80,11 +81,11 @@ const Header = () => {
           <AvatarComponent {...AuthUser} />
           {!user ? (
             <MenuItem>
-              <Link to="/login">Login</Link>
+              <Link to={ERoutes.Login}>Login</Link>
             </MenuItem>
           ) : (
             <MenuItem>
-              <Link to="/login">Logout</Link>
+              <Link to={ERoutes.Logout}>Logout</Link>
             </MenuItem>
           )}
           {AuthUser ? (

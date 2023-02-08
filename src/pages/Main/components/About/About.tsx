@@ -3,6 +3,7 @@ import { Box } from '@mui/system';
 import { Link } from 'react-router-dom';
 import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
+import { ERoutes } from '../../../../routes';
 import background from './img/background.png';
 
 function About() {
@@ -15,7 +16,7 @@ function About() {
           Purpose-built for team strategies, spectacular plays, and clutch
           moments. Make the play others will imitate for years to come.
         </TextTypography>
-        <Link to={'/register'}>
+        <Link to={ERoutes.Register}>
           <BorderedButton variant="contained">Start Game</BorderedButton>
         </Link>
       </RelativeStack>

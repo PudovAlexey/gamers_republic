@@ -22,6 +22,7 @@ import { AuthContext } from '../../../../components/AuthContext/AuthContext';
 import VideogameAssetIcon from '@mui/icons-material/VideogameAsset';
 import api from '../../../../api/api/api';
 import { Link } from 'react-router-dom';
+import { ERoutes } from '../../../../routes';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -68,6 +69,7 @@ function GameCard({
   }
 
   function onCopyLink() {}
+  const navGame = ERoutes.Games + path
 
   return (
     <Card sx={{ maxWidth: 345 }}>
@@ -112,7 +114,7 @@ function GameCard({
           <ShareIcon />
         </IconButton>
         <IconButton aria-label="play">
-          <Link to={`/games${path}`}>
+          <Link to={navGame}>
             <VideogameAssetIcon />
           </Link>
         </IconButton>

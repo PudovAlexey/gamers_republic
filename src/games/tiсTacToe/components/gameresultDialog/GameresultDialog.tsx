@@ -7,6 +7,7 @@ import { clearField } from "../../../utils/fiels";
 import { oposite } from "../../utils/utils";
 import { EGameItems } from "../../ts/enums";
 import { TGameField, TGamersConfig, TIconsDict } from "../../ts/types";
+import { ERoutes } from "../../../../routes";
 
 type TControlProps = {
   dialogOpen: boolean
@@ -47,7 +48,7 @@ function GameresultDialog({
         setFieldState(fild);
         setDraw(false);
         setDialogOpen(false);
-        navigate('/games');
+        navigate(ERoutes.Games);
       }
     return (
         <DialogControl

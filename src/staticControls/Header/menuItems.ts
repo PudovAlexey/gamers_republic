@@ -1,23 +1,25 @@
+import { ERoutes } from "../../routes";
+
 const menuItems = [
     {
       text: 'Home',
-      route: '/',
+      route: ERoutes.Home,
     },
     {
       text: 'Games',
-      route: '/games',
+      route: ERoutes.Games,
     },
     {
       text: 'News',
-      route: '/news',
+      route: ERoutes.News,
     },
     {
       text: 'Records',
-      route: '/records',
+      route: ERoutes.Records,
     },
     {
       text: 'Contact',
-      route: '/contact',
+      route: ERoutes.Contact,
     },
   ];
 
