@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
 import { ERoutes } from '../../../../routes';
 
-function LogoComponent() {
+function  LogoComponent() {
   return (
     <Stack direction={'row'} justifyContent={'center'}>
       <MainBox>

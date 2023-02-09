@@ -2,10 +2,13 @@ import { Box, Stack, styled } from '@mui/system';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { BlockSlider } from './components/BlockSlider';
 import { BlockText } from './components/BlockText';
+import { PathLine, PathLineStart } from './components/PathLine/Pathline';
 
 function Features() {
   return (
     <Block>
+      <PathLineStart/>
+      <PathLine/>
       <RelativeText>Features</RelativeText>
       <Stack
         position={'relative'}

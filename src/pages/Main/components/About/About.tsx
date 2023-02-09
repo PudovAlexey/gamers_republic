@@ -5,10 +5,12 @@ import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { ERoutes } from '../../../../routes';
 import background from './img/background.png';
+import { PathLine } from './PathLine/PathLine';
 
 function About() {
   return (
     <Wrapper>
+        <PathLine/>
         <RelativeText>ABOUT</RelativeText>
       <RelativeStack spacing={3}>
         <TextTypography>

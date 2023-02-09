@@ -5,10 +5,13 @@ import { RelatedGamesSlick } from "./components/RelatedGamesSlick/RelatedGamesSl
 import { popularGamesConfig } from "./popularGamesConfig"
 import girl from './assets/Girl.png'
 import { TitleText } from "../../../../components/reusable/layout/Typography"
+import { PathLine, PathLineStart } from "./PathLine"
 
 function PopularGames() {
     return (
         <DarkPaper>
+            <PathLineStart/>
+            <PathLine/>
             <RelativeTitle>GAmes</RelativeTitle>
             <DecorationGirl src={girl} alt={'girl'}/>
             <PaperWindow>

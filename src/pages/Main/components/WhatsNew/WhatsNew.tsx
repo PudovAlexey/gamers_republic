@@ -8,6 +8,7 @@ import {
 import { FanView } from '../../../../components/reusable/FanView/FanView';
 import ManImg from './img/Art.png'
 import { TitleText } from '../../../../components/reusable/layout/Typography';
+import { PathLine } from './PathLine/PathLine';
 
 
 const testIdx = new Array(100).fill('').map((_, idx) => idx + 1);
@@ -27,6 +28,7 @@ const testData = testIdx.reduce((dict, id) => {
 function WhatsNew() {
   return (
     <WhatsNewBlock>
+        <PathLine/>
           <RelativeTitle>Whats new</RelativeTitle>
         <Man src={ManImg}/>
         <Stack alignItems={'center'} spacing={1}>
