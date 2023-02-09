@@ -1,7 +1,7 @@
 {
   "name": "gamers_republic",
   "version": "0.1.0",
-  "homepage": "https://pudovalexey.github.io/gamers_republic/",
+  "homepage": "https://pudovalexey.github.io/gamers_republic",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",

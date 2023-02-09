@@ -3,6 +3,7 @@ import Games from '../pages/Games/Games';
 import MainPage from '../pages/Main/MainPage';
 import GamesList from '../games/GamesList/GamesList';
 import LoginPage from '../pages/LoginPage/LoginPage';
+import { ERoutes } from '.';
 type RouteEl = {
   path?: string;
   virtual?: boolean;
@@ -16,19 +17,19 @@ const routes: RouteTree = {
   node: { virtual: true, path: '' },
   children: [
     {
-      node: { path: '/', component: <MainPage /> },
+      node: { path: ERoutes.Home, component: <MainPage /> },
     },
     {
-      node: { path: '/login', component: <LoginPage /> },
+      node: { path: ERoutes.Login, component: <LoginPage /> },
     },
     {
-      node: { path: '/records', component: <div>{"records"}</div> },
+      node: { path: ERoutes.Records, component: <div>{'records'}</div> },
     },
     {
-      node: { path: '/registration', component: <div>{"records"}</div> },
+      node: { path: ERoutes.Registration, component: <div>{'records'}</div> },
     },
     {
-      node: { path: '/games', component: <Games /> },
+      node: { path: ERoutes.Games, component: <Games /> },
       children: [
         {
           node: {
