@@ -18,7 +18,7 @@ const TextBoldLight = styled(Typography)({
 const TitleText = styled(Typography)({
     textTransform: "uppercase",
     fontWeight: 'bold',
-    fontSize: '6rem',
+    fontSize: '6vw',
     color: '#d93644'
 })
 

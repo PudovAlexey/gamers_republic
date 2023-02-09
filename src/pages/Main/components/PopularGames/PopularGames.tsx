@@ -10,7 +10,7 @@ import { PathLine, PathLineStart } from "./PathLine"
 function PopularGames() {
     return (
         <DarkPaper>
-            <PathLineStart/>
+            {/* <PathLineStart/> */}
             <PathLine/>
             <RelativeTitle>GAmes</RelativeTitle>
             <DecorationGirl src={girl} alt={'girl'}/>
@@ -38,7 +38,7 @@ const DarkPaper = styled(Paper)({
 const RelativeTitle = styled(TitleText)({
     color: '#f8f8f8',
     position: 'absolute',
-    left: "70px",
+    left: "8vw",
     top: "15px"
   })
 

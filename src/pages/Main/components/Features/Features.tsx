@@ -7,7 +7,7 @@ import { PathLine, PathLineStart } from './components/PathLine/Pathline';
 function Features() {
   return (
     <Block>
-      <PathLineStart/>
+      {/* <PathLineStart/> */}
       <PathLine/>
       <RelativeText>Features</RelativeText>
       <Stack
@@ -28,7 +28,7 @@ function Features() {
 
 const RelativeText = styled(TitleText)({
   position: 'absolute',
-  right: '70px',
+  right: '7.5vw',
   top: '15px'
 })
 

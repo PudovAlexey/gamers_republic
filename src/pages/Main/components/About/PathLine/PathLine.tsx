@@ -7,27 +7,70 @@ function PathLine() {
     <Box
       sx={{
         position: 'absolute',
-        right: '15%',
-        top: '10px',
-        height: '90%',
+        right: '0.7%',
+        // top: '10px',
+        height: '100%',
       }}
     >
       <svg
-        width="847"
-        height="356"
-        viewBox="0 0 847 356"
+        width="100vw"
+        height="105vh"
+        viewBox="0 0 1487 838"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <path
-          d="M841.5 0C841.5 59.2504 841.5 31.1652 841.5 45.5M672.066 84.5021C447.462 84.5021 528.104 84.5021 520.5 84.5021L217 350.002H0.65094"
-          stroke="#D93644"
-          stroke-width="10"
-          style={{
-            strokeDashoffset: strokeDeshOffset + 'px',
-            strokeDasharray: strokeDasharray + 'px',
-          }}
-        />
+        <g clip-path="url(#clip0_115_16)" filter="url(#filter0_d_115_16)">
+          <path
+            d="M1438 -5C1438 54.7176 1438 82.549 1438 89H1413"
+            stroke="#0f1923"
+            stroke-width="10"
+          />
+          <path
+            d="M1102 90C945.182 90 898.271 90 894.417 90L633.557 357H431"
+            stroke="#D93644"
+            stroke-width="10"
+          />
+        </g>
+        <defs>
+          <filter
+            id="filter0_d_115_16"
+            x="-4"
+            y="0"
+            width="1495"
+            height="846"
+            filterUnits="userSpaceOnUse"
+            color-interpolation-filters="sRGB"
+          >
+            <feFlood flood-opacity="0" result="BackgroundImageFix" />
+            <feColorMatrix
+              in="SourceAlpha"
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"
+              result="hardAlpha"
+            />
+            <feOffset dy="4" />
+            <feGaussianBlur stdDeviation="2" />
+            <feComposite in2="hardAlpha" operator="out" />
+            <feColorMatrix
+              type="matrix"
+              values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.25 0"
+            />
+            <feBlend
+              mode="normal"
+              in2="BackgroundImageFix"
+              result="effect1_dropShadow_115_16"
+            />
+            <feBlend
+              mode="normal"
+              in="SourceGraphic"
+              in2="effect1_dropShadow_115_16"
+              result="shape"
+            />
+          </filter>
+          <clipPath id="clip0_115_16">
+            <rect width="1487" height="838" fill="white" />
+          </clipPath>
+        </defs>
       </svg>
     </Box>
   );
