@@ -25,6 +25,7 @@ function* lineSaga(action) {
   const event = eventChannel((emitter) => {
     gsap.to(container, {
       scrollTrigger: {
+        scrub: 10,
         start: 'start bottom',
         trigger: container,
         onEnter: (self) => {

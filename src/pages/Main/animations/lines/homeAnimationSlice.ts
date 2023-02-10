@@ -1,9 +1,6 @@
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { createSlice } from '@reduxjs/toolkit';
 const fullProgress = 2000;
 
-gsap.registerPlugin(ScrollTrigger);
 
 const initialState = {
   uploadCompleted: false,
