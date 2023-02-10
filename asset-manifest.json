@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/gamers_republic/static/css/main.20d1588c.css",
-    "main.js": "/gamers_republic/static/js/main.d3c5708a.js",
+    "main.js": "/gamers_republic/static/js/main.73f05ea4.js",
     "static/js/599.5dd5babc.chunk.js": "/gamers_republic/static/js/599.5dd5babc.chunk.js",
     "static/js/781.49c55f84.chunk.js": "/gamers_republic/static/js/781.49c55f84.chunk.js",
     "static/js/759.3e2dcbc6.chunk.js": "/gamers_republic/static/js/759.3e2dcbc6.chunk.js",
@@ -32,7 +32,7 @@
     "static/media/Turret.svg": "/gamers_republic/static/media/Turret.6d436d9d9e03ddf6ac2a.svg",
     "index.html": "/gamers_republic/index.html",
     "main.20d1588c.css.map": "/gamers_republic/static/css/main.20d1588c.css.map",
-    "main.d3c5708a.js.map": "/gamers_republic/static/js/main.d3c5708a.js.map",
+    "main.73f05ea4.js.map": "/gamers_republic/static/js/main.73f05ea4.js.map",
     "599.5dd5babc.chunk.js.map": "/gamers_republic/static/js/599.5dd5babc.chunk.js.map",
     "781.49c55f84.chunk.js.map": "/gamers_republic/static/js/781.49c55f84.chunk.js.map",
     "759.3e2dcbc6.chunk.js.map": "/gamers_republic/static/js/759.3e2dcbc6.chunk.js.map",
@@ -40,6 +40,6 @@
   },
   "entrypoints": [
     "static/css/main.20d1588c.css",
-    "static/js/main.d3c5708a.js"
+    "static/js/main.73f05ea4.js"
   ]
 }
