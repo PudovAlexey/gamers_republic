@@ -1,15 +1,36 @@
 import { Box, Stack, styled } from '@mui/system';
-import { TitleText } from '../../../../components/reusable/layout/Typography';
+import { useLayoutEffect, useRef } from 'react';
+import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
+import { setRef } from '../../animations/lines/homeAnimationSlice';
+import { featuresTitleProgressSelector } from '../../animations/lines/selectors';
+import { SmoothTitle } from '../containers/SmoothTitle';
 import { BlockSlider } from './components/BlockSlider';
 import { BlockText } from './components/BlockText';
-import { PathLine, PathLineStart } from './components/PathLine/Pathline';
-
+import { PathLine } from './components/PathLine/Pathline';
 function Features() {
+  const contentRef = useRef();
+  const dispatch = useAppDispatch();
+  useLayoutEffect(() => {
+    dispatch(
+      setRef({
+        type: 'featuresRef',
+        ref: contentRef.current,
+      })
+    );
+  });
+
   return (
-    <Block>
-      {/* <PathLineStart/> */}
-      <PathLine/>
-      <RelativeText>Features</RelativeText>
+    <Block ref={contentRef}>
+      <PathLine />
+      <RelativeText>
+        <SmoothTitle
+          selector={featuresTitleProgressSelector}
+          degs={290}
+          title={'Features'}
+          firstColor={"#f8f8f8"}
+          secondColor={"#d93644"}
+        />
+      </RelativeText>
       <Stack
         position={'relative'}
         top={'25vh'}
@@ -18,7 +39,6 @@ function Features() {
         direction={'row'}
         spacing={10}
       >
-
         <BlockSlider />
         <BlockText />
       </Stack>
@@ -26,11 +46,11 @@ function Features() {
   );
 }
 
-const RelativeText = styled(TitleText)({
+const RelativeText = styled(Box)({
   position: 'absolute',
-  right: '7.5vw',
-  top: '15px'
-})
+  right: '5vw',
+  top: '15px',
+});
 
 const Block = styled(Box)({
   position: 'relative',

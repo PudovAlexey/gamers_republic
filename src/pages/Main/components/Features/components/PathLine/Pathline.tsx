@@ -1,13 +1,15 @@
 import { Box } from '@mui/material';
+import { useAppSelector } from '../../../../../../hooks/typedReduxHooks';
+import { progressFeatureLineSelector } from '../../../../animations/lines/selectors';
 
 function PathLine() {
-  const strokeDeshOffset = 0;
+  const strokeDeshOffset = useAppSelector(progressFeatureLineSelector)
   const strokeDasharray = 2000;
   return (
     <Box
       sx={{
         position: 'absolute',
-        left: '0px',
+        left: '1.5px',
         top: '-2px',
         height: '100%',
       }}
@@ -15,20 +17,32 @@ function PathLine() {
       <svg
         width="100vw"
         height="105vh"
-        viewBox="0 0 1487 850"
+        viewBox="0 0 100vw 105vh"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        style={{
+          strokeDashoffset: strokeDeshOffset + 'px',
+          strokeDasharray: strokeDasharray + 'px',
+        }}
       >
         <g filter="url(#filter0_d_113_15)">
           <path
             d="M1406.91 86C1421.31 86 1441.64 86 1450 86V384.989L1359.99 419.603H855L572.307 728.123H182.282L35 793.841V842"
             stroke="#D93644"
             stroke-width="10"
+            // style={{
+            //   strokeDashoffset: strokeDeshOffset + 'px',
+            //   strokeDasharray: strokeDasharray + 'px',
+            // }}
           />
           <path
             d="M858 2C858 44.8308 858 75.8462 858 86H904"
             stroke="#F8F8F8"
             stroke-width="10"
+            // style={{
+            //   strokeDashoffset: strokeDeshOffset + 'px',
+            //   strokeDasharray: strokeDasharray + 'px',
+            // }}
           />
         </g>
         <defs>

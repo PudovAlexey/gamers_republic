@@ -1,15 +1,21 @@
 import './slickTheme.css';
 import { Shield } from '../../../../assets/main/common/Shield';
-import { Stack, styled, Typography } from '@mui/material';
+import { Stack, styled } from '@mui/material';
 import { Box } from '@mui/system';
-import {
-  LabelCard,
-} from '../../../../components/reusable/LabelCard/LabelCard';
+import { LabelCard } from '../../../../components/reusable/LabelCard/LabelCard';
 import { FanView } from '../../../../components/reusable/FanView/FanView';
-import ManImg from './img/Art.png'
+import ManImg from './img/Art.png';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { PathLine } from './PathLine/PathLine';
-
+import { useLayoutEffect, useRef } from 'react';
+import {
+  useAppDispatch,
+} from '../../../../hooks/typedReduxHooks';
+import { setRef } from '../../animations/lines/homeAnimationSlice';
+import {
+  WhatsNewTitleProgressSelector,
+} from '../../animations/lines/selectors';
+import { SmoothTitle } from '../containers/SmoothTitle';
 
 const testIdx = new Array(100).fill('').map((_, idx) => idx + 1);
 const testData = testIdx.reduce((dict, id) => {
@@ -26,24 +32,41 @@ const testData = testIdx.reduce((dict, id) => {
 }, {});
 
 function WhatsNew() {
+  const contentRef = useRef();
+  const dispatch = useAppDispatch();
+  useLayoutEffect(() => {
+    dispatch(
+      setRef({
+        type: 'whatsNewRef',
+        ref: contentRef.current,
+      })
+    );
+  });
+
   return (
-    <WhatsNewBlock>
-        <PathLine/>
-          <RelativeTitle>Whats new</RelativeTitle>
-        <Man src={ManImg}/>
-        <Stack alignItems={'center'} spacing={1}>
-      <SlickWrapper>
-        <FanView
-          fanIds={testIdx}
-          fanData={testData}
-          fanControl={(data) => {
-            return (
-              <LabelCard {...data} />
-            );
-          }}
+    <WhatsNewBlock ref={contentRef}>
+      <PathLine />
+      <RelativeTitle>
+        <SmoothTitle
+          title={'Whats new'}
+          selector={WhatsNewTitleProgressSelector}
+          degs={290}
+          firstColor={"#d93644"}
+          secondColor={"#0f1923"}
         />
-      </SlickWrapper>
-        </Stack>
+      </RelativeTitle>
+      <Man src={ManImg} />
+      <Stack alignItems={'center'} spacing={1}>
+        <SlickWrapper>
+          <FanView
+            fanIds={testIdx}
+            fanData={testData}
+            fanControl={(data) => {
+              return <LabelCard {...data} />;
+            }}
+          />
+        </SlickWrapper>
+      </Stack>
     </WhatsNewBlock>
   );
 }
@@ -51,8 +74,8 @@ function WhatsNew() {
 const RelativeTitle = styled(TitleText)({
   position: 'relative',
   color: '#0f1923',
-  left: "8vw"
-})
+  left: '5vw',
+});
 
 const WhatsNewBlock = styled(Box)({
   width: '100vw',
@@ -63,14 +86,14 @@ const WhatsNewBlock = styled(Box)({
 
 const Man = styled('img')({
   position: 'absolute',
-  left: '0px'
-})
+  left: '0px',
+});
 
 const SlickWrapper = styled(Box)({
   width: '60%',
   position: 'absolute',
-  right: '50px',
-  bottom: "2%"
+  right: '5vw',
+  bottom: '2%',
 });
 
 export { WhatsNew };

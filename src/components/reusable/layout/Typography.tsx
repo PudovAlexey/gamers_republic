@@ -16,10 +16,15 @@ const TextBoldLight = styled(Typography)({
 })
 
 const TitleText = styled(Typography)({
+    WebkitTextFillColor: 'transparent',
     textTransform: "uppercase",
     fontWeight: 'bold',
     fontSize: '6vw',
-    color: '#d93644'
+    color: 'transparent',
+    display: "table",
+    WebkitBackgroundClip: "text !important",
+    backgroundClip: "text !important",
+    background: '#d93644'
 })
 
 export {

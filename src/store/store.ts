@@ -9,6 +9,7 @@ import { rootSaga } from './sagas'
 import authSlice from './authSlice/authSlice'
 import debugSlice from '../utils/enviroment/debugPanel/store'
 import fanSlice from '../components/reusable/FanView/redux'
+import homeAnimationSlice from '../pages/Main/animations/lines/homeAnimationSlice'
 import { chatRedusers } from '../components/PartyComponent/parts/Chat/store/chatRedusers'
 
 let sagaMiddleware = createSagaMiddleware();
@@ -22,7 +23,8 @@ const store = configureStore({
         messagesSlice: messagesSlice,
         chatSlice: chatSlice,
         chatRedusers: chatRedusers,
-        fanSlice: fanSlice
+        fanSlice: fanSlice,
+        homeAnimationSlice: homeAnimationSlice
     },
     middleware: (getDefaultMiddleware) => [...getDefaultMiddleware(
       {
