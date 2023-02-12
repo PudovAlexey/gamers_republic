@@ -17,7 +17,7 @@ function PathLine() {
       <svg
         width="100vw"
         height="105vh"
-        viewBox="0 0 100vw 105vh"
+        viewBox="0 0 1489 850"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         style={{

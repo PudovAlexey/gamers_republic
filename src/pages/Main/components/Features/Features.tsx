@@ -48,7 +48,7 @@ function Features() {
 
 const RelativeText = styled(Box)({
   position: 'absolute',
-  right: '5vw',
+  right: '7.5vw',
   top: '15px',
 });
 

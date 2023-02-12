@@ -25,7 +25,7 @@ function PopularGames() {
 
   return (
     <DarkPaper ref={contentRef}>
-      {/* <PathLineStart/> */}
+      <DecorationGirl src={girl} alt={'girl'} />
       <PathLine />
       <RelativeTitle>
         <SmoothTitle
@@ -36,7 +36,6 @@ function PopularGames() {
         secondColor={"#f8f8f8"}
         />
       </RelativeTitle>
-      <DecorationGirl src={girl} alt={'girl'} />
       <PaperWindow>
         <Stack spacing={3}>
           <Typography variant="h4">{popularGamesConfig.title}</Typography>
@@ -50,9 +49,8 @@ function PopularGames() {
 
 const RelativeTitle = styled(Box)({
     position: 'absolute',
-    left: '5vw',
+    left: '8vw',
     top: '15px',
-    // background: `linear-gradient(70deg, #d93644 ${progress}%, #f8f8f8 ${altProgress}%)`,
   });
 
 const DarkPaper = styled(Paper)({
@@ -66,6 +64,7 @@ const DarkPaper = styled(Paper)({
 });
 
 const PaperWindow = styled(Paper)({
+  zIndex: 1,
   padding: '16px',
   maxWidth: '50%',
   maxHeight: '80%',
@@ -76,7 +75,7 @@ const DecorationGirl = styled('img')({
   right: '10%',
   bottom: '0',
   top: '0',
-  height: '100%',
+  height: '100vh',
   width: 'auto',
 });
 

@@ -21,9 +21,7 @@ function App({ children }) {
       <Box sx={styles.backgroundOverlay} 
         className="App">
         <Header />
-        <Box
-          sx={styles.mainPage}
-        >
+        <Box>
           <PartyComponent/>
           {children}
         </Box>

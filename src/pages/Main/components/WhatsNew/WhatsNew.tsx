@@ -74,7 +74,7 @@ function WhatsNew() {
 const RelativeTitle = styled(TitleText)({
   position: 'relative',
   color: '#0f1923',
-  left: '5vw',
+  left: '8vw',
 });
 
 const WhatsNewBlock = styled(Box)({

@@ -53,7 +53,7 @@ function About() {
 const RelativeText = styled(TitleText)({
   color: '#0f1923',
   position: 'absolute',
-  right: '5.8vw',
+  right: '7.8vw',
   top: '15px',
 });
 

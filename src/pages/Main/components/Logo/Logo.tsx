@@ -11,23 +11,23 @@ import { ERoutes } from '../../../../routes';
 
 function  LogoComponent() {
   return (
-    <Stack direction={'row'} justifyContent={'center'}>
+    <Stack alignItems={'center'} direction={'row'} justifyContent={'center'}>
       <MainBox>
         <MainGirl src={mainGirl} alt={'mainGirl'} />
-        <Stack alignItems={'center'} spacing={2}>
+        <Stack position={'inherit'} zIndex={1} alignItems={'center'} spacing={2}>
           <TitleStack
             justifyContent={'center'}
             alignItems={'center'}
             spacing={1}
           >
-            <StrokeText variant="h1">GAMERS REPUBLIC</StrokeText>
-            <Typography variant="h4">
+            <StrokeText fontSize={'7vw'} textAlign={'center'} variant="h1">GAMERS REPUBLIC</StrokeText>
+            <Typography textAlign={'center'} variant="h4">
               Let's start your adventure in the world of games and entertainment
             </Typography>
           </TitleStack>
-        </Stack>
+        <Box>
         <GridComponent
-          maxWidth={'70%'}
+          maxWidth={"70%"}
           gap={3}
           gridTemplateColumns={'1fr 1fr'}
           display={'grid'}
@@ -36,6 +36,7 @@ function  LogoComponent() {
             <LabelCard {...card} />
           ))}
         </GridComponent>
+        </Box>
         <StartJourneyButton>
           <Stack justifyContent={'center'} alignItems={'center'}>
             <Link to={ERoutes.Register}>
@@ -49,6 +50,7 @@ function  LogoComponent() {
             </Link>
           </Stack>
         </StartJourneyButton>
+        </Stack>
       </MainBox>
       <Link to={ERoutes.Register}></Link>
     </Stack>
@@ -56,13 +58,13 @@ function  LogoComponent() {
 }
 
 const MainBox = styled(Box)({
+  padding: '8px 8px',
   position: 'relative',
-  height: 'calc(100vh - 62px)',
-  width: '90vw',
+  minHeight: 'calc(100vh - 62px)',
+  width: '100vw',
 });
 
 const TitleStack = styled(Stack)({
-  position: 'absolute',
   margin: 'auto',
   top: '-60%',
   bottom: 0,
@@ -71,17 +73,13 @@ const TitleStack = styled(Stack)({
 });
 
 const StartJourneyButton = styled(Box)({
-  position: 'absolute',
-  bottom: '10px',
-  left: 0,
-  right: 0,
 });
 
 const GridComponent = styled(Grid)({
-  position: 'absolute',
-  left: '0',
-  bottom: '37%',
-  height: '30%',
+    // position: 'absolute',
+    // left: '0',
+    // bottom: '37%',
+    // height: '30%',
 });
 
 const MainGirl = styled('img')({
