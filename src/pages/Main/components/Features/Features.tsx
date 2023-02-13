@@ -55,7 +55,6 @@ const RelativeText = styled(Box)({
 const Block = styled(Box)({
   width: '100vw',
   height: '100vh',
-  // padding: '0 10%',
   position: 'relative',
   background: '#0F1923',
 });
