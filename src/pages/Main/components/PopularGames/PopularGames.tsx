@@ -10,7 +10,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
 import { gameTitleProgressSelector } from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
-import { Height } from '@mui/icons-material';
+import { DecorativeCode } from './components/RelatedGamesSlick/DecorativeCode';
 
 function PopularGames() {
   const contentRef = useRef();
@@ -26,35 +26,44 @@ function PopularGames() {
 
   return (
     <DarkPaper ref={contentRef}>
-     <Wrapper>
-     <PathLine />
-      <DecorationGirl src={girl} alt={'girl'} />
-      <RelativeTitle>
-        <SmoothTitle
-        title={"GAmes"}
-        degs={70}
-        selector={gameTitleProgressSelector}
-        firstColor={"#d93644"}
-        secondColor={"#f8f8f8"}
-        />
-      </RelativeTitle>
-      <PaperWindow>
-        <Stack spacing={3}>
-          <Typography variant="h4">{popularGamesConfig.title}</Typography>
-          <Typography>{popularGamesConfig.description}</Typography>
-          <RelatedGamesSlick />
-        </Stack>
-      </PaperWindow>
-     </Wrapper>
+      <Wrapper>
+        <PathLine />
+        <DecorationGirl src={girl} alt={'girl'} />
+        <RelativeTitle>
+          <SmoothTitle
+            title={'GAmes'}
+            degs={70}
+            selector={gameTitleProgressSelector}
+            firstColor={'#d93644'}
+            secondColor={'#f8f8f8'}
+          />
+        </RelativeTitle>
+        <PaperWindow>
+          <Stack spacing={3}>
+            <Typography variant="h4">{popularGamesConfig.title}</Typography>
+            <Typography>{popularGamesConfig.description}</Typography>
+            <RelatedGamesSlick />
+          </Stack>
+        </PaperWindow>
+      </Wrapper>
+      <DecorationComponent>
+          <DecorativeCode selector={gameTitleProgressSelector}/>
+      </DecorationComponent>
     </DarkPaper>
   );
 }
 
 const RelativeTitle = styled(Box)({
-    position: 'absolute',
-    left: '6.5vw',
-    top: '1vw',
-  });
+  position: 'absolute',
+  left: '6.5vw',
+  top: '1vw',
+});
+
+const DecorationComponent = styled(Box)({
+  position: 'absolute',
+  bottom: '5vw',
+  left: '15vw'
+})
 
 const DarkPaper = styled(Paper)({
   position: 'relative',
@@ -71,8 +80,8 @@ const Wrapper = styled(Box)({
   height: '100%',
   display: 'flex',
   alignItems: 'center',
-  padding: '0 10%'
-})
+  padding: '0 10%',
+});
 
 const PaperWindow = styled(Paper)({
   zIndex: 1,

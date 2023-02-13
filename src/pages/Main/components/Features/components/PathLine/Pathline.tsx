@@ -110,6 +110,7 @@ function PathLineStart() {
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
             strokeLinecap: 'round',
+            transition: 'all .5s ease-out'
           }}
         />
       </svg>

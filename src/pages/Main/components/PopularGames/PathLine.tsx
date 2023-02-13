@@ -25,6 +25,7 @@ function PathLine() {
           strokeDashoffset: strokeDeshOffset + 'px',
           strokeDasharray: strokeDasharray + 'px',
           strokeLinecap: 'round',
+          transition: 'all .5s ease-out',
         }}
       >
         <g clip-path="url(#clip0_110_4)" filter="url(#filter0_d_110_4)">
@@ -112,6 +113,7 @@ function PathLineStart() {
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
             strokeLinecap: 'round',
+            transition: 'all .5s ease-out'
           }}
         />
       </svg>

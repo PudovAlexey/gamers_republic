@@ -1,5 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 const fullProgress = 2000;
+const titleFullProgress = 100
 
 
 const initialState = {
@@ -8,10 +9,10 @@ const initialState = {
   progressFeatureLine: fullProgress,
   progressWhatsNew: fullProgress,
   progressAbout: fullProgress,
-  gameTitleProgress: 100,
-  featuresTitleProgress: 100,
-  WhatsNewTitleProgress: 100,
-  aboutTitleProgress: 100,
+  gameTitleProgress: titleFullProgress,
+  featuresTitleProgress: titleFullProgress,
+  WhatsNewTitleProgress: titleFullProgress,
+  aboutTitleProgress: titleFullProgress,
   gamesRef: null,
   featuresRef: null,
   whatsNewRef: null,
@@ -38,7 +39,7 @@ const homeAnimationSlice = createSlice({
     onChangeGameCoords: (state, action) => {
       const { type, self, titleType } = action.payload;
       const containerPosition = (fullProgress * (self.progress * 100)) / 100;
-      const calculate = fullProgress - containerPosition - 50;
+      const calculate = fullProgress - containerPosition;
       state[titleType] = 100 - self.progress * 100 + 10;
       state[type] = calculate;
     },
