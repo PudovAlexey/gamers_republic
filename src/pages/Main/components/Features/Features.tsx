@@ -27,8 +27,8 @@ function Features() {
           selector={featuresTitleProgressSelector}
           degs={290}
           title={'Features'}
-          firstColor={"#f8f8f8"}
-          secondColor={"#d93644"}
+          firstColor={'#f8f8f8'}
+          secondColor={'#d93644'}
         />
       </RelativeText>
       <Stack

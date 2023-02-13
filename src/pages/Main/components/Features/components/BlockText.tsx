@@ -4,6 +4,7 @@ import {
   LightTypography,
   TextBoldLight,
 } from '../../../../../components/reusable/layout/Typography';
+import { AnimationProgressBox } from './AnimationProgressBox';
 import { blockTextConfig } from './config';
 
 function BlockText() {
@@ -24,27 +25,11 @@ function BlockText() {
   );
 }
 
-function AnimationProgressBox({ title, description }) {
-  return (
-    <AnimationBox>
-      <Stack spacing={3}>
-        <TextBoldLight>{title}</TextBoldLight>
-        <DescriptionText color={'#1F2326'} maxWidth={'150px !important'}>
-          {description}
-        </DescriptionText>
-      </Stack>
-    </AnimationBox>
-  );
-}
-
-const AnimationBox = styled(Box)({
-  background: '#d93644',
-  padding: '8px',
-});
-
 const DescriptionText = styled(LightTypography)({
-    maxWidth: '365px',
-    fontStyle: 'italic',
+  maxWidth: '365px',
+  fontStyle: 'italic',
 });
+
+
 
 export { BlockText };

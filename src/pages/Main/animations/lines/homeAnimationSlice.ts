@@ -39,7 +39,7 @@ const homeAnimationSlice = createSlice({
     onChangeGameCoords: (state, action) => {
       const { type, self, titleType } = action.payload;
       const containerPosition = (fullProgress * (self.progress * 100)) / 100;
-      const calculate = fullProgress - containerPosition;
+      const calculate = fullProgress - containerPosition + 300;
       state[titleType] = 100 - self.progress * 100 + 10;
       state[type] = calculate;
     },
