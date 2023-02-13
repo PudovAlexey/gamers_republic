@@ -9,37 +9,34 @@ function PathLine() {
     <Box
       sx={{
         position: 'absolute',
-        right: '3px',
-        // right: '0.7%',
-        // top: '10px',
+        left: '0vw',
+        top: '0%',
         height: '100%',
       }}
     >
       <svg
-        width="100vw"
-        height="105vh"
-        viewBox="0 0 1489 850"
+          preserveAspectRatio="none"
+          width="100%"
+          height="105%"
+          viewBox="0 0 1490 850"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        style={{
+          strokeDashoffset: strokeDeshOffset + 'px',
+          strokeDasharray: strokeDasharray + 'px',
+          strokeLinecap: "round" 
+        }}
       >
         <g clip-path="url(#clip0_115_16)" filter="url(#filter0_d_115_16)">
           <path
-            d="M1438 -5C1438 54.7176 1438 82.549 1438 89H1413"
-            stroke="#0f1923"
-            stroke-width="10"
-            style={{
-              strokeDashoffset: strokeDeshOffset + 'px',
-              strokeDasharray: strokeDasharray + 'px',
-            }}
-          />
-          <path
-            d="M1102 90C945.182 90 898.271 90 894.417 90L633.557 357H431"
+            d="M1435 -30C1435 45.6 1435 80.8333 1435 89H1410"
             stroke="#D93644"
             stroke-width="10"
-            style={{
-              strokeDashoffset: strokeDeshOffset + 'px',
-              strokeDasharray: strokeDasharray + 'px',
-            }}
+          />
+          <path
+            d="M1086 90C929.182 90 882.271 90 878.417 90L617.557 357H415"
+            stroke="#D93644"
+            stroke-width="10"
           />
         </g>
         <defs>
@@ -114,6 +111,7 @@ function PathLineStart() {
           style={{
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
+            strokeLinecap: 'round',
           }}
         />
       </svg>

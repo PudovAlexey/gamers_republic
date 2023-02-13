@@ -74,13 +74,15 @@ function WhatsNew() {
 const RelativeTitle = styled(TitleText)({
   position: 'relative',
   color: '#0f1923',
-  left: '8vw',
+  left: '6.5vw',
+  top: '1vw',
 });
 
 const WhatsNewBlock = styled(Box)({
   width: '100vw',
   height: '100vh',
   position: 'relative',
+  // padding: '0 10%',
   background: '#f8f8f8',
 });
 

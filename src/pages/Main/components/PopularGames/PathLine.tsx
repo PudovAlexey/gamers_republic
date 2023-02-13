@@ -3,47 +3,40 @@ import { useAppSelector } from '../../../../hooks/typedReduxHooks';
 import { progressGameLineSelector } from '../../animations/lines/selectors';
 
 function PathLine() {
-  const strokeDeshOffset = useAppSelector(progressGameLineSelector)
+  const strokeDeshOffset = useAppSelector(progressGameLineSelector);
   const strokeDasharray = 2000;
   return (
     <Box
       sx={{
         position: 'absolute',
-        left: '0vw',
+        left: '0',
         top: '0%',
         height: '100%',
       }}
     >
       <svg
-      preserveAspectRatio="xMidYMid meet"
-        width="100vw"
-        height="105vh"
-        viewBox="0 0 1489 850"
+        preserveAspectRatio="none"
+        width="100%"
+        height="105%"
+        viewBox="0 0 1490 850"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         style={{
           strokeDashoffset: strokeDeshOffset + 'px',
           strokeDasharray: strokeDasharray + 'px',
+          strokeLinecap: 'round',
         }}
       >
         <g clip-path="url(#clip0_110_4)" filter="url(#filter0_d_110_4)">
           <path
-            d="M60.083 86C44.7469 86 26.971 86 20 86V567.31L179.461 754.714H860V852"
-            stroke="#F8F8F8"
-            stroke-width="10"
-            // style={{
-            //   strokeDashoffset: strokeDeshOffset + 'px',
-            //   strokeDasharray: strokeDasharray + 'px',
-            // }}
-          />
-          <path
-            d="M724 1C724 54.2174 724 79.8406 724 86H424"
+            d="M61.083 86C45.7469 86 27.971 86 21 86V567.31L180.461 754.714H861V852"
             stroke="#D93644"
             stroke-width="10"
-            // style={{
-            //   strokeDashoffset: strokeDeshOffset + 'px',
-            //   strokeDasharray: strokeDasharray + 'px',
-            // }}
+          />
+          <path
+            d="M745 1C745 54.2174 745 79.8406 745 86H445"
+            stroke="#D93644"
+            stroke-width="10"
           />
         </g>
         <defs>
@@ -51,7 +44,7 @@ function PathLine() {
             id="filter0_d_110_4"
             x="-4"
             y="0"
-            width="1497"
+            width="1498"
             height="850"
             filterUnits="userSpaceOnUse"
             color-interpolation-filters="sRGB"
@@ -83,7 +76,7 @@ function PathLine() {
             />
           </filter>
           <clipPath id="clip0_110_4">
-            <rect width="1489" height="842" fill="white" />
+            <rect width="1490" height="842" fill="white" />
           </clipPath>
         </defs>
       </svg>
@@ -118,6 +111,7 @@ function PathLineStart() {
           style={{
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
+            strokeLinecap: 'round',
           }}
         />
       </svg>

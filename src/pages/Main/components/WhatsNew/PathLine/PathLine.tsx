@@ -9,36 +9,34 @@ function PathLine() {
     <Box
       sx={{
         position: 'absolute',
-        // left: '43.5%',
-        // top: '8%',
+        left: '0vw',
+        top: '0%',
         height: '100%',
       }}
     >
       <svg
-        width="100vw"
-        height="105vh"
-        viewBox="0 0 1489 850"
-      fill="none"
+        preserveAspectRatio="none"
+        width="100%"
+        height="105%"
+        viewBox="0 0 1490 850"
+        fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        style={{
+          strokeDashoffset: strokeDeshOffset + 'px',
+          strokeDasharray: strokeDasharray + 'px',
+          strokeLinecap: "round" 
+        }}
       >
         <g clip-path="url(#clip0_115_7)" filter="url(#filter0_d_115_7)">
           <path
             d="M664 63C1176.44 63 1133.73 63 1165.75 63L1435 243.804V847"
             stroke="#0F1923"
             stroke-width="10"
-            style={{
-              strokeDashoffset: strokeDeshOffset + 'px',
-              strokeDasharray: strokeDasharray + 'px',
-            }}
           />
           <path
             d="M35 0C35 37.7227 35 57.7178 35 63H77"
             stroke="#D93644"
             stroke-width="10"
-            style={{
-              strokeDashoffset: strokeDeshOffset + 'px',
-              strokeDasharray: strokeDasharray + 'px',
-            }}
           />
         </g>
         <defs>

@@ -21,6 +21,7 @@ function Line({ blockHeight, color = '#d93644' }: TControlProps) {
         style={{
           strokeDashoffset: strokeDeshOffset + 'px',
           strokeDasharray: strokeDasharray + 'px', 
+          strokeLinecap: "round" 
         }}
       />
     </svg>

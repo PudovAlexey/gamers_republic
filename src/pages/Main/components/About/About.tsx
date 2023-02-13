@@ -53,11 +53,12 @@ function About() {
 const RelativeText = styled(TitleText)({
   color: '#0f1923',
   position: 'absolute',
-  right: '7.8vw',
-  top: '15px',
+  right: '5vw',
+  top: '1vw',
 });
 
 const Wrapper = styled(Box)({
+  // padding: '0 10%',
   position: 'relative',
   height: '100vh',
   width: '100vw',

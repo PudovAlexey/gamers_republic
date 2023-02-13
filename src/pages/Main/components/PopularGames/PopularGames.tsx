@@ -10,6 +10,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
 import { gameTitleProgressSelector } from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
+import { Height } from '@mui/icons-material';
 
 function PopularGames() {
   const contentRef = useRef();
@@ -25,8 +26,9 @@ function PopularGames() {
 
   return (
     <DarkPaper ref={contentRef}>
+     <Wrapper>
+     <PathLine />
       <DecorationGirl src={girl} alt={'girl'} />
-      <PathLine />
       <RelativeTitle>
         <SmoothTitle
         title={"GAmes"}
@@ -43,25 +45,34 @@ function PopularGames() {
           <RelatedGamesSlick />
         </Stack>
       </PaperWindow>
+     </Wrapper>
     </DarkPaper>
   );
 }
 
 const RelativeTitle = styled(Box)({
     position: 'absolute',
-    left: '8vw',
-    top: '15px',
+    left: '6.5vw',
+    top: '1vw',
   });
 
 const DarkPaper = styled(Paper)({
   position: 'relative',
-  padding: '0 10%',
-  display: 'flex',
-  alignItems: 'center',
   width: '100vw',
   height: '100vh',
+  // padding: '0 10%',
+  display: 'flex',
+  alignItems: 'center',
   background: '#1F2326',
 });
+
+const Wrapper = styled(Box)({
+  width: '100%',
+  height: '100%',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0 10%'
+})
 
 const PaperWindow = styled(Paper)({
   zIndex: 1,
@@ -72,7 +83,7 @@ const PaperWindow = styled(Paper)({
 
 const DecorationGirl = styled('img')({
   position: 'absolute',
-  right: '10%',
+  right: '-10%',
   bottom: '0',
   top: '0',
   height: '100vh',

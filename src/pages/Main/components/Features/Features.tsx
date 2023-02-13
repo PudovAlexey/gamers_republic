@@ -48,15 +48,16 @@ function Features() {
 
 const RelativeText = styled(Box)({
   position: 'absolute',
-  right: '7.5vw',
-  top: '15px',
+  right: '6.5vw',
+  top: '1vw',
 });
 
 const Block = styled(Box)({
+  width: '100vw',
+  height: '100vh',
+  // padding: '0 10%',
   position: 'relative',
   background: '#0F1923',
-  width: '99vw',
-  height: '100vh',
 });
 
 export { Features };
