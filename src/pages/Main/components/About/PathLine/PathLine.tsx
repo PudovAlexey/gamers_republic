@@ -1,10 +1,22 @@
 import { Box } from '@mui/material';
-import { useAppSelector } from '../../../../../hooks/typedReduxHooks';
+import { useEffect, useRef } from 'react';
+import { useAppDispatch, useAppSelector } from '../../../../../hooks/typedReduxHooks';
+import { setStartLine } from '../../../animations/lines/homeAnimationSlice';
 import { progressAboutSelector } from '../../../animations/lines/selectors';
 
 function PathLine() {
   const strokeDeshOffset = useAppSelector(progressAboutSelector);
   const strokeDasharray = 2000;
+  const pathRef = useRef();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    dispatch(
+      setStartLine({
+        ref: pathRef.current,
+        type: 'aboutStartLine',
+      })
+    );
+  });
   return (
     <Box
       sx={{
@@ -29,6 +41,7 @@ function PathLine() {
       >
         <g clip-path="url(#clip0_115_16)" filter="url(#filter0_d_115_16)">
           <path
+            ref={pathRef}
             d="M1435 -30C1435 45.6 1435 80.8333 1435 89H1410"
             stroke="#D93644"
             stroke-width="10"

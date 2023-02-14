@@ -2,7 +2,7 @@ import { Box, Stack, styled } from '@mui/system';
 import { useLayoutEffect, useRef } from 'react';
 import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
-import { featuresTitleProgressSelector } from '../../animations/lines/selectors';
+import { featuresStartLineSelector, featuresTitleProgressSelector } from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
 import { BlockSlider } from './components/BlockSlider';
 import { BlockText } from './components/BlockText';
@@ -29,6 +29,7 @@ function Features() {
           title={'Features'}
           firstColor={'#f8f8f8'}
           secondColor={'#d93644'}
+          startLineSelector={featuresStartLineSelector}
         />
       </RelativeText>
       <Stack

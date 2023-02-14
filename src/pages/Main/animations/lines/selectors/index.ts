@@ -20,13 +20,29 @@ const whatsNewRefSelector = (store) => store.homeAnimationSlice.whatsNewRef;
 
 const aboutRefSelector = (store) => store.homeAnimationSlice.aboutRef;
 
-const gameTitleProgressSelector = (store) => store.homeAnimationSlice.gameTitleProgress;
+const gameTitleProgressSelector = (store) =>
+  store.homeAnimationSlice.gameTitleProgress;
 
-const featuresTitleProgressSelector = (store) => store.homeAnimationSlice.featuresTitleProgress;
+const featuresTitleProgressSelector = (store) =>
+  store.homeAnimationSlice.featuresTitleProgress;
 
-const WhatsNewTitleProgressSelector = (store) => store.homeAnimationSlice.WhatsNewTitleProgress;
+const WhatsNewTitleProgressSelector = (store) =>
+  store.homeAnimationSlice.WhatsNewTitleProgress;
 
-const aboutTitleProgressSelector = (store) => store.homeAnimationSlice.aboutTitleProgress;
+const aboutTitleProgressSelector = (store) =>
+  store.homeAnimationSlice.aboutTitleProgress;
+
+const gamesStartLineSelector = (store) =>
+  store.homeAnimationSlice.gamesStartLine;
+
+const featuresStartLineSelector = (store) =>
+  store.homeAnimationSlice.featuresStartLine;
+
+const whatsNewStartLineSelector = (store) =>
+  store.homeAnimationSlice.whatsNewStartLine;
+
+const aboutStartLineSelector = (store) =>
+  store.homeAnimationSlice.aboutStartLine;
 export {
   progressGameLineSelector,
   progressFeatureLineSelector,
@@ -40,6 +56,9 @@ export {
   gameTitleProgressSelector,
   featuresTitleProgressSelector,
   WhatsNewTitleProgressSelector,
-  aboutTitleProgressSelector
-
+  aboutTitleProgressSelector,
+  gamesStartLineSelector,
+  featuresStartLineSelector,
+  whatsNewStartLineSelector,
+  aboutStartLineSelector,
 };

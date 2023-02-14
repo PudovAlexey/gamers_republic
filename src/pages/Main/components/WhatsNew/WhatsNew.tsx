@@ -13,6 +13,7 @@ import {
 } from '../../../../hooks/typedReduxHooks';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
 import {
+  whatsNewStartLineSelector,
   WhatsNewTitleProgressSelector,
 } from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
@@ -53,6 +54,7 @@ function WhatsNew() {
           degs={290}
           firstColor={"#d93644"}
           secondColor={"#0f1923"}
+          startLineSelector={whatsNewStartLineSelector}
         />
       </RelativeTitle>
       <Man src={ManImg} />

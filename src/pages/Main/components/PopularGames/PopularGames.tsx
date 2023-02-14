@@ -8,7 +8,7 @@ import { PathLine } from './PathLine';
 import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
 import { useLayoutEffect, useRef } from 'react';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
-import { gameTitleProgressSelector } from '../../animations/lines/selectors';
+import { gamesStartLineSelector, gameTitleProgressSelector } from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
 import { DecorativeCode } from './components/RelatedGamesSlick/DecorativeCode';
 
@@ -36,6 +36,7 @@ function PopularGames() {
             selector={gameTitleProgressSelector}
             firstColor={'#d93644'}
             secondColor={'#f8f8f8'}
+            startLineSelector={gamesStartLineSelector}
           />
         </RelativeTitle>
         <PaperWindow>

@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 const fullProgress = 2000;
-const titleFullProgress = 100
-
+const titleFullProgress = 100;
 
 const initialState = {
   uploadCompleted: false,
@@ -13,6 +12,10 @@ const initialState = {
   featuresTitleProgress: titleFullProgress,
   WhatsNewTitleProgress: titleFullProgress,
   aboutTitleProgress: titleFullProgress,
+  gamesStartLine: null,
+  featuresStartLine: null,
+  whatsNewStartLine: null,
+  aboutStartLine: null,
   gamesRef: null,
   featuresRef: null,
   whatsNewRef: null,
@@ -44,12 +47,30 @@ const homeAnimationSlice = createSlice({
       state[type] = calculate;
     },
 
+    setStartLine: (
+      state,
+      action: {
+        payload: {
+          ref: any;
+          type: string;
+        };
+      }
+    ) => {
+      const { ref, type } = action.payload;
+      state[type] = ref;
+    },
+
     onExit: (store) => {},
   },
   extraReducers: (builder) => {},
 });
 
-export const { setRef, onExit, onChangeGameCoords } =
+export const { 
+  setRef, 
+  onExit, 
+  onChangeGameCoords,
+  setStartLine
+} =
   homeAnimationSlice.actions;
 
 export default homeAnimationSlice.reducer;

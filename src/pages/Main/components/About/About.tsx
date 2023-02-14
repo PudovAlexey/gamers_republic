@@ -4,12 +4,13 @@ import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
-import {
-  useAppDispatch,
-} from '../../../../hooks/typedReduxHooks';
+import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
 import { ERoutes } from '../../../../routes';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
-import { aboutTitleProgressSelector } from '../../animations/lines/selectors';
+import {
+  aboutStartLineSelector,
+  aboutTitleProgressSelector,
+} from '../../animations/lines/selectors';
 import { SmoothTitle } from '../containers/SmoothTitle';
 import background from './img/background.png';
 import { PathLine } from './PathLine/PathLine';
@@ -34,6 +35,7 @@ function About() {
           degs={70}
           firstColor={'#0F1923'}
           secondColor={'#d93644'}
+          startLineSelector={aboutStartLineSelector}
         />
       </RelativeText>
       <RelativeStack spacing={3}>

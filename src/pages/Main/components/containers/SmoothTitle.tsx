@@ -7,6 +7,7 @@ type TProps = {
   title: string;
   degs: number;
   selector: any;
+  startLineSelector: any;
   firstColor: string;
   secondColor: string;
 };
@@ -17,8 +18,11 @@ const SmoothTitle = React.memo(function ({
   selector,
   firstColor,
   secondColor,
+  startLineSelector
 }: TProps) {
   const progress = useAppSelector(selector);
+  const startLine = useAppSelector(startLineSelector)
+  console.log(startLine, 'line')
   const altProgress = 100 - Number(progress);
 
   const Title = styled(TitleText)({
