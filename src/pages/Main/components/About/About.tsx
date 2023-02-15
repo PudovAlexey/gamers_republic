@@ -57,7 +57,7 @@ function SmoothTitle() {
 
   const Title = styled(TitleText)({
     position: 'absolute',
-    background: `linear-gradient(290deg, #0F1923 ${progress}%, #d93644 ${altProgress}%)`,
+    background: `linear-gradient(75deg, #0F1923 ${progress}%, #d93644 ${progress === 0 ? 0 + 'px' : "100px"})`,
     left: startRect?.x - (titleRef?.current?.offsetWidth || 0)  * 1 + 'px',
     top: startRect?.height / 2 + 'px',
   });

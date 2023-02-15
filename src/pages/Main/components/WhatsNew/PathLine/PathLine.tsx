@@ -5,21 +5,9 @@ import {
   useAppSelector,
 } from '../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../animations/lines/homeAnimationSlice';
-import { progressWhatsNewSelector } from '../../../animations/lines/selectors';
+import { fullProgressSelector, fullProgressStartLineSelector, progressFeatureLineSelector, progressWhatsNewSelector, progressWhatsNewStartSelector } from '../../../animations/lines/selectors';
 
 function PathLine() {
-  const pathRef = useRef();
-  const dispatch = useAppDispatch();
-  const strokeDeshOffset = useAppSelector(progressWhatsNewSelector);
-  const strokeDasharray = 2000;
-  useEffect(() => {
-    dispatch(
-      setStartLine({
-        ref: pathRef.current,
-        type: 'whatsNewStartLine',
-      })
-    );
-  });
   return (
     <Box
       sx={{
@@ -36,24 +24,21 @@ function PathLine() {
         viewBox="0 0 1487 848"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{
-          strokeDashoffset: strokeDeshOffset + 'px',
-          strokeDasharray: strokeDasharray + 'px',
-          strokeLinecap: 'round',
-        }}
       >
         <g clip-path="url(#clip0_115_7)" filter="url(#filter0_d_115_7)">
-          <path
+          {/* <path
             d="M694 63C1186.5 63 1145.45 63 1176.23 63L1435 243.804V847"
             stroke="#0F1923"
             stroke-width="10"
-            />
-          <path
+            /> */}
+            <PathMain/>
+          {/* <path
             ref={pathRef}
             d="M35 0C35 37.7227 35 57.7178 35 63H45"
             stroke="#D93644"
             stroke-width="10"
-          />
+          /> */}
+          <PathStart/>
         </g>
         <defs>
           <filter
@@ -97,6 +82,53 @@ function PathLine() {
         </defs>
       </svg>
     </Box>
+  );
+}
+
+function PathStart() {
+  const strokeDeshOffset = useAppSelector(progressWhatsNewStartSelector);
+  const strokeDasharray = useAppSelector(fullProgressStartLineSelector);
+  const dispatch = useAppDispatch();
+  const pathRef = useRef();
+  useEffect(() => {
+    dispatch(
+      setStartLine({
+        ref: pathRef.current,
+        type: 'whatsNewStartLine',
+      })
+    );
+  });
+  return (
+    <path
+    ref={pathRef}
+    d="M35 0C35 37.7227 35 57.7178 35 63H45"
+    stroke="#D93644"
+    stroke-width="10"
+    style={{
+      strokeDashoffset: strokeDeshOffset + 'px',
+      strokeDasharray: strokeDasharray + 'px',
+      strokeLinecap: 'round',
+      transition: 'all .5s ease-out',
+    }}
+  />
+  );
+}
+
+function PathMain() {
+  const strokeDeshOffset = useAppSelector(progressFeatureLineSelector);
+  const strokeDasharray = useAppSelector(fullProgressSelector);
+  return (
+    <path
+    d="M1438 86.3036C1452.43 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
+    stroke="#D93644"
+    stroke-width="10"
+    style={{
+      strokeDashoffset: strokeDeshOffset + 'px',
+      strokeDasharray: strokeDasharray + 'px',
+      strokeLinecap: 'round',
+      transition: 'all .5s ease-out',
+    }}
+          />
   );
 }
 

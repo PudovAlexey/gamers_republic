@@ -5,10 +5,16 @@ import { RelatedGamesSlick } from './components/RelatedGamesSlick/RelatedGamesSl
 import { popularGamesConfig } from './popularGamesConfig';
 import girl from './assets/Girl.png';
 import { PathLine } from './PathLine';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../hooks/typedReduxHooks';
 import { useLayoutEffect, useRef } from 'react';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
-import { gamesStartLineSelector, gameTitleProgressSelector } from '../../animations/lines/selectors';
+import {
+  gamesStartLineSelector,
+  gameTitleProgressSelector,
+} from '../../animations/lines/selectors';
 import { DecorativeCode } from './components/RelatedGamesSlick/DecorativeCode';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { $ } from '../../../../utils/DOM/DOM';
@@ -31,7 +37,7 @@ function PopularGames() {
         <PathLine />
         <DecorationGirl src={girl} alt={'girl'} />
         <RelativeTitle>
-          <SmoothTitle/>
+          <SmoothTitle />
         </RelativeTitle>
         <PaperWindow>
           <Stack spacing={3}>
@@ -42,24 +48,29 @@ function PopularGames() {
         </PaperWindow>
       </Wrapper>
       <DecorationComponent>
-          <DecorativeCode selector={gameTitleProgressSelector}/>
+        <DecorativeCode selector={gameTitleProgressSelector} />
       </DecorationComponent>
     </DarkPaper>
   );
 }
 
 function SmoothTitle() {
-  const titleRef = useRef()
+  const titleRef = useRef();
   const progress = useAppSelector(gameTitleProgressSelector);
-  const altProgress = 100 - Number(progress);
-  const startLine = useAppSelector(gamesStartLineSelector)
-  const startRect = startLine && $.rect(startLine)
-
+  const startLine = useAppSelector(gamesStartLineSelector);
+  const startRect = startLine && $.rect(startLine);
   const Title = styled(TitleText)({
     position: 'absolute',
-    background: `linear-gradient(71deg, #d93644 ${progress}%, #f8f8f8 ${altProgress}%)`,
-    left: startRect?.x - startRect?.width - (titleRef?.current?.offsetHeight || 0) * 1.1 + 'px',
-    top: startRect?.height - (titleRef?.current?.offsetHeight || 0) * 0.5 + 'px'
+    background: `linear-gradient(75deg, #d93644 ${progress}%, #f8f8f8 ${
+      progress === 0 ? 0 + 'px' : '100px'
+    })`,
+    left:
+      startRect?.x -
+      startRect?.width -
+      (titleRef?.current?.offsetHeight || 0) * 1.1 +
+      'px',
+    top:
+      startRect?.height - (titleRef?.current?.offsetHeight || 0) * 0.5 + 'px',
   });
 
   return <Title ref={titleRef}>Games</Title>;
@@ -74,8 +85,8 @@ const RelativeTitle = styled(Box)({
 const DecorationComponent = styled(Box)({
   position: 'absolute',
   bottom: '5vw',
-  left: '15vw'
-})
+  left: '15vw',
+});
 
 const DarkPaper = styled(Paper)({
   position: 'relative',

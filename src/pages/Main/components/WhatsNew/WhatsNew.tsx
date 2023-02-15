@@ -69,13 +69,12 @@ function WhatsNew() {
 function SmoothTitle() {
   const titleRef = useRef()
   const progress = useAppSelector(WhatsNewTitleProgressSelector);
-  const altProgress = 100 - Number(progress);
   const startLine = useAppSelector(whatsNewStartLineSelector)
   const startRect = startLine && $.rect(startLine)
 
   const Title = styled(TitleText)({
     position: 'absolute',
-    background: `linear-gradient(71deg, #d93644 ${progress}%, '#0f1923' ${altProgress}%)`,
+    background: `linear-gradient(290deg, #d93644 ${progress}%, #0f1923 ${progress === 0 ? 0 + 'px' : "100px"})`,
     left: startRect?.x - startRect?.width + titleRef?.current?.offsetHeight * 0.3  + 'px',
     top: startRect?.height - (titleRef?.current?.offsetHeight || 0) * 0.5 + 'px'
   });

@@ -72,25 +72,21 @@ function* initAnimation() {
     return;
   }
   yield all([
-     call(lineSaga, {
+    call(lineSaga, {
       container: gamesRef,
       type: 'progressGameLine',
-      titleType: 'gameTitleProgress'
     }),
-     call(lineSaga, {
+    call(lineSaga, {
       container: features,
       type: 'progressFeatureLine',
-      titleType: 'featuresTitleProgress'
     }),
-     call(lineSaga, {
+    call(lineSaga, {
       container: whatsNewRef,
       type: 'progressWhatsNew',
-      titleType: 'WhatsNewTitleProgress'
     }),
-     call(lineSaga, {
+    call(lineSaga, {
       container: aboutRef,
       type: 'progressAbout',
-      titleType: 'aboutTitleProgress'
     }),
   ]);
 }

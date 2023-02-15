@@ -1,4 +1,4 @@
-const fullProgressSelector = (store) => store.homeAnimationSlice.fullProgress;
+const fullProgressSelector = (store) => store.homeAnimationSlice.fullProgressLine;
 
 const fullProgressStartLineSelector = (store) => store.homeAnimationSlice.fullProgressStartLine;
 

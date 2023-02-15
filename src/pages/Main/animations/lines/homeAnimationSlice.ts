@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { eventConfig } from './config';
 const fullProgress = 2000;
 const fullProgressStart = 500;
 const titleFullProgress = 100;
@@ -47,24 +48,36 @@ const homeAnimationSlice = createSlice({
     },
 
     onChangeGameCoords: (state, action) => {
-      const { type, self, titleType } = action.payload;
-      const progress = self.progress * 100
-      if (type !== 'progressGameLine') {
+      const { self, type } = action.payload;
+      const progress = self.progress * 100;
+      const { startLine, title, mainLine, previousBlock } = eventConfig[type];
+      // const previous = eventConfig[previousBlock]
+      // if (state[previous?.mainLine] == fullProgress) {
+      //   console.log('start new block')
+      // } 
+      if (progress < 10) {
+        state[startLine] = fullProgressStart;
+        state[title] = titleFullProgress;
+        state[mainLine] = fullProgress;
         return;
       }
-      console.log(progress)
-      if ( progress > 0 && progress < 10) {
-        const calculate = fullProgressStart - (fullProgressStart * progress / 10)
-        state.progressGameStartLine = calculate
-      } else if (progress > 11 && progress < 20) {
-        state.gameTitleProgress = titleFullProgress - (titleFullProgress * progress / 19)
+      if (progress < 5) {
+        const calculate =
+          fullProgressStart - (fullProgressStart * progress) / 10;
+        state[startLine] = calculate <= 0 ? 0 : calculate;
       } else {
-        state.progressGameLine = fullProgress - (fullProgress * progress / 120)
+        state[startLine] = 0;
       }
-      // const containerPosition = (fullProgress * (self.progress * 100)) / 100;
-      // const calculate = fullProgress - containerPosition + 300;
-      // state[titleType] = 100 - self.progress * 100 + 10;
-      // state[type] = calculate;
+      if (state[startLine] === 0) {
+        const calculate = 100 - progress * self.progress * 10;
+        state[title] = calculate <= 0 ? 0 : calculate;
+      } else {
+        state[title] = 0;
+      }
+      if (state[title] === 0) {
+        const calculate = fullProgress - (fullProgress * progress) / 90 + 500;
+        state[mainLine] = calculate <= 0 ? 0 : calculate;
+      }
     },
 
     setStartLine: (
@@ -85,12 +98,7 @@ const homeAnimationSlice = createSlice({
   extraReducers: (builder) => {},
 });
 
-export const { 
-  setRef, 
-  onExit, 
-  onChangeGameCoords,
-  setStartLine
-} =
+export const { setRef, onExit, onChangeGameCoords, setStartLine } =
   homeAnimationSlice.actions;
 
 export default homeAnimationSlice.reducer;
