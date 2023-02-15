@@ -33,7 +33,7 @@ function PathLine() {
         preserveAspectRatio="none"
         width="100%"
         height="105%"
-        viewBox="0 0 1490 850"
+        viewBox="0 0 1487 848"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         style={{
@@ -44,13 +44,13 @@ function PathLine() {
       >
         <g clip-path="url(#clip0_115_7)" filter="url(#filter0_d_115_7)">
           <path
-            ref={pathRef}
-            d="M664 63C1176.44 63 1133.73 63 1165.75 63L1435 243.804V847"
+            d="M694 63C1186.5 63 1145.45 63 1176.23 63L1435 243.804V847"
             stroke="#0F1923"
             stroke-width="10"
-          />
+            />
           <path
-            d="M35 0C35 37.7227 35 57.7178 35 63H77"
+            ref={pathRef}
+            d="M35 0C35 37.7227 35 57.7178 35 63H45"
             stroke="#D93644"
             stroke-width="10"
           />

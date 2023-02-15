@@ -1,6 +1,9 @@
 import { Box } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../animations/lines/homeAnimationSlice';
 import { progressAboutSelector } from '../../../animations/lines/selectors';
 
@@ -27,27 +30,27 @@ function PathLine() {
       }}
     >
       <svg
-          preserveAspectRatio="none"
-          width="100%"
-          height="105%"
-          viewBox="0 0 1490 850"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
+        preserveAspectRatio="none"
+        width="100%"
+        height="105%"
+        viewBox="0 0 1490 850"
         style={{
           strokeDashoffset: strokeDeshOffset + 'px',
           strokeDasharray: strokeDasharray + 'px',
-          strokeLinecap: "round" 
+          strokeLinecap: 'round',
         }}
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
       >
         <g clip-path="url(#clip0_115_16)" filter="url(#filter0_d_115_16)">
           <path
             ref={pathRef}
-            d="M1435 -30C1435 45.6 1435 80.8333 1435 89H1410"
+            d="M1437 -30C1437 45.6 1437 80.8333 1437 89H1427"
             stroke="#D93644"
             stroke-width="10"
           />
           <path
-            d="M1086 90C929.182 90 882.271 90 878.417 90L617.557 357H415"
+            d="M1069 90C925.737 90 882.881 90 879.36 90L641.048 357H456"
             stroke="#D93644"
             stroke-width="10"
           />
@@ -57,7 +60,7 @@ function PathLine() {
             id="filter0_d_115_16"
             x="-4"
             y="0"
-            width="1495"
+            width="1497"
             height="846"
             filterUnits="userSpaceOnUse"
             color-interpolation-filters="sRGB"
@@ -89,7 +92,7 @@ function PathLine() {
             />
           </filter>
           <clipPath id="clip0_115_16">
-            <rect width="1487" height="838" fill="white" />
+            <rect width="1489" height="838" fill="white" />
           </clipPath>
         </defs>
       </svg>
@@ -125,7 +128,7 @@ function PathLineStart() {
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
             strokeLinecap: 'round',
-            transition: 'all .5s ease-out'
+            transition: 'all .5s ease-out',
           }}
         />
       </svg>

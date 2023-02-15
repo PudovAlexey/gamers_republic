@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { styled } from '@mui/system';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { useAppSelector } from '../../../../hooks/typedReduxHooks';
@@ -21,21 +21,22 @@ const SmoothTitle = React.memo(function ({
   secondColor,
   startLineSelector
 }: TProps) {
+  const titleRef = useRef()
   const degs = position === 'left' ? 70 : 290
   const progress = useAppSelector(selector);
-  const startLine = useAppSelector(startLineSelector)
   const altProgress = 100 - Number(progress);
-  // if (title.toLowerCase() === 'games') {
-  //   console.log(startLine?.clientHeight, 'start')
-  // }
+  const startLine = useAppSelector(startLineSelector)
+  if (title.toLowerCase() === 'games') {
+    console.log('call in games')
+  }
   let styles = {}
   const startRect = startLine && $.rect(startLine)
   if (position === 'left') {
-    styles.left = startRect?.x - startRect?.width - 90 + 'px'
+    styles.left = startRect?.x - startRect?.width - (titleRef?.current?.offsetHeight || 0) + 'px'
   } else {
-
+    styles.right = startRect?.x - startRect?.width - (titleRef?.current?.offsetHeight || 0) + 'px'
   }
-  styles.top = startRect?.height - 40 + 'px'
+  styles.top = startRect?.height - (titleRef?.current?.offsetHeight || 0) * 0.5 + 'px'
 
   const Title = styled(TitleText)({
     position: 'absolute',
@@ -43,7 +44,7 @@ const SmoothTitle = React.memo(function ({
     ...styles
   });
 
-  return <Title>{title}</Title>;
+  return <Title ref={titleRef}>{title}</Title>;
 });
 
 export { SmoothTitle };

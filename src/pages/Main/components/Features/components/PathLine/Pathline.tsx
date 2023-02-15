@@ -1,20 +1,25 @@
 import { Box } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../../animations/lines/homeAnimationSlice';
 import { progressFeatureLineSelector } from '../../../../animations/lines/selectors';
 
 function PathLine() {
-  const dispatch = useAppDispatch()
-  const pathRef = useRef()
+  const dispatch = useAppDispatch();
+  const pathRef = useRef();
   const strokeDeshOffset = useAppSelector(progressFeatureLineSelector);
   const strokeDasharray = 2000;
   useEffect(() => {
-    dispatch(setStartLine({
-      ref: pathRef.current,
-      type: 'featuresStartLine'
-    }))
-  })
+    dispatch(
+      setStartLine({
+        ref: pathRef.current,
+        type: 'featuresStartLine',
+      })
+    );
+  });
   return (
     <Box
       sx={{
@@ -23,29 +28,29 @@ function PathLine() {
         top: '0%',
         height: '100%',
       }}
-    >
+      >
       <svg
+        viewBox="0 0 1490 847"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="none"
         width="100%"
         height="105%"
-        viewBox="0 0 1490 850"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
         style={{
           strokeDashoffset: strokeDeshOffset + 'px',
           strokeDasharray: strokeDasharray + 'px',
-          strokeLinecap: "round" 
+          strokeLinecap: 'round',
         }}
       >
         <g clip-path="url(#clip0_113_15)" filter="url(#filter0_d_113_15)">
           <path
-            ref={pathRef}
-            d="M1409.82 86.3036C1424.25 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
+            d="M1438 86.3036C1452.43 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
             stroke="#D93644"
             stroke-width="10"
           />
           <path
-            d="M861 -88C861 0.875665 861 65.2339 861 86.3036H910"
+            ref={pathRef}
+            d="M858 -1C858 43.3604 858 75.4835 858 86H881"
             stroke="#F8F8F8"
             stroke-width="10"
           />
@@ -121,7 +126,7 @@ function PathLineStart() {
             strokeDashoffset: strokeDeshOffset + 'px',
             strokeDasharray: strokeDasharray + 'px',
             strokeLinecap: 'round',
-            transition: 'all .5s ease-out'
+            transition: 'all .5s ease-out',
           }}
         />
       </svg>

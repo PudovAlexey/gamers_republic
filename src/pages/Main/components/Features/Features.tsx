@@ -1,9 +1,10 @@
 import { Box, Stack, styled } from '@mui/system';
 import { useLayoutEffect, useRef } from 'react';
-import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
+import { TitleText } from '../../../../components/reusable/layout/Typography';
+import { useAppDispatch, useAppSelector } from '../../../../hooks/typedReduxHooks';
+import { $ } from '../../../../utils/DOM/DOM';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
 import { featuresStartLineSelector, featuresTitleProgressSelector } from '../../animations/lines/selectors';
-import { SmoothTitle } from '../containers/SmoothTitle';
 import { BlockSlider } from './components/BlockSlider';
 import { BlockText } from './components/BlockText';
 import { PathLine } from './components/PathLine/Pathline';
@@ -23,14 +24,7 @@ function Features() {
     <Block ref={contentRef}>
       <PathLine />
       <RelativeText>
-        <SmoothTitle
-          selector={featuresTitleProgressSelector}
-          position={'right'}
-          title={'Features'}
-          firstColor={'#f8f8f8'}
-          secondColor={'#d93644'}
-          startLineSelector={featuresStartLineSelector}
-        />
+        <SmoothTitle/>
       </RelativeText>
       <Stack
         position={'relative'}
@@ -47,9 +41,28 @@ function Features() {
   );
 }
 
+function SmoothTitle() {
+  const titleRef = useRef()
+  const progress = useAppSelector(featuresTitleProgressSelector);
+  const altProgress = 100 - Number(progress);
+  const startLine = useAppSelector(featuresStartLineSelector)
+  const startRect = startLine && $.rect(startLine)
+
+  console.log(startRect)
+
+  const Title = styled(TitleText)({
+    position: 'absolute',
+    background: `linear-gradient(290deg, #f8f8f8 ${progress}%, #d93644 ${altProgress}%)`,
+    left: startRect?.x + startRect?.width * 1.3 + 'px',
+    top: startRect?.height - (titleRef?.current?.offsetHeight || 0) * 0.5 + 'px'
+  });
+
+  return <Title ref={titleRef}>{"Features"}</Title>
+}
+
 const RelativeText = styled(Box)({
   position: 'absolute',
-  right: '0',
+  left: '0',
   top: '0',
 });
 

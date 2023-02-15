@@ -4,14 +4,17 @@ import { useLayoutEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { BorderedButton } from '../../../../components/reusable/layout/Buttons';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
-import { useAppDispatch } from '../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../hooks/typedReduxHooks';
 import { ERoutes } from '../../../../routes';
+import { $ } from '../../../../utils/DOM/DOM';
 import { setRef } from '../../animations/lines/homeAnimationSlice';
 import {
   aboutStartLineSelector,
   aboutTitleProgressSelector,
 } from '../../animations/lines/selectors';
-import { SmoothTitle } from '../containers/SmoothTitle';
 import background from './img/background.png';
 import { PathLine } from './PathLine/PathLine';
 function About() {
@@ -29,14 +32,7 @@ function About() {
     <Wrapper ref={contentRef}>
       <PathLine />
       <RelativeText>
-        <SmoothTitle
-          selector={aboutTitleProgressSelector}
-          title={'ABOUT'}
-          position={'right'}
-          firstColor={'#0F1923'}
-          secondColor={'#d93644'}
-          startLineSelector={aboutStartLineSelector}
-        />
+        <SmoothTitle />
       </RelativeText>
       <RelativeStack spacing={3}>
         <TextTypography>
@@ -52,10 +48,27 @@ function About() {
   );
 }
 
+function SmoothTitle() {
+  const titleRef = useRef();
+  const progress = useAppSelector(aboutTitleProgressSelector);
+  const altProgress = 100 - Number(progress);
+  const startLine = useAppSelector(aboutStartLineSelector);
+  const startRect = startLine && $.rect(startLine);
+
+  const Title = styled(TitleText)({
+    position: 'absolute',
+    background: `linear-gradient(290deg, #0F1923 ${progress}%, #d93644 ${altProgress}%)`,
+    left: startRect?.x - (titleRef?.current?.offsetWidth || 0)  * 1 + 'px',
+    top: startRect?.height / 2 + 'px',
+  });
+
+  return <Title ref={titleRef}>{'ABOUT'}</Title>;
+}
+
 const RelativeText = styled(TitleText)({
   color: '#0f1923',
   position: 'absolute',
-  right: '0',
+  left: '0',
   top: '0',
 });
 
