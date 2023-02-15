@@ -40,12 +40,12 @@ function PathLine() {
       >
         <g clip-path="url(#clip0_110_4)" filter="url(#filter0_d_110_4)">
           <path
-            ref={pathRef}
             d="M61.083 86C45.7469 86 27.971 86 21 86V567.31L180.461 754.714H861V852"
             stroke="#D93644"
             stroke-width="10"
-          />
+            />
           <path
+            ref={pathRef}
             d="M745 1C745 54.2174 745 79.8406 745 86H445"
             stroke="#D93644"
             stroke-width="10"

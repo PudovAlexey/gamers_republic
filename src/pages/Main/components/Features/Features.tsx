@@ -25,7 +25,7 @@ function Features() {
       <RelativeText>
         <SmoothTitle
           selector={featuresTitleProgressSelector}
-          degs={290}
+          position={'right'}
           title={'Features'}
           firstColor={'#f8f8f8'}
           secondColor={'#d93644'}
@@ -49,8 +49,8 @@ function Features() {
 
 const RelativeText = styled(Box)({
   position: 'absolute',
-  right: '6.5vw',
-  top: '1vw',
+  right: '0',
+  top: '0',
 });
 
 const Block = styled(Box)({

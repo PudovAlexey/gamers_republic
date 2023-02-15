@@ -16,6 +16,7 @@ const TextBoldLight = styled(Typography)({
 })
 
 const TitleText = styled(Typography)({
+    lineHeight: '0.7',
     WebkitTextFillColor: 'transparent',
     textTransform: "uppercase",
     fontWeight: 'bold',

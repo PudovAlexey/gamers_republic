@@ -32,7 +32,7 @@ function PopularGames() {
         <RelativeTitle>
           <SmoothTitle
             title={'GAmes'}
-            degs={70}
+            position={'left'}
             selector={gameTitleProgressSelector}
             firstColor={'#d93644'}
             secondColor={'#f8f8f8'}
@@ -56,8 +56,8 @@ function PopularGames() {
 
 const RelativeTitle = styled(Box)({
   position: 'absolute',
-  left: '6.5vw',
-  top: '1vw',
+  left: '0',
+  top: '0',
 });
 
 const DecorationComponent = styled(Box)({

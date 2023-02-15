@@ -32,7 +32,7 @@ function About() {
         <SmoothTitle
           selector={aboutTitleProgressSelector}
           title={'ABOUT'}
-          degs={70}
+          position={'right'}
           firstColor={'#0F1923'}
           secondColor={'#d93644'}
           startLineSelector={aboutStartLineSelector}
@@ -55,8 +55,8 @@ function About() {
 const RelativeText = styled(TitleText)({
   color: '#0f1923',
   position: 'absolute',
-  right: '5vw',
-  top: '1vw',
+  right: '0',
+  top: '0',
 });
 
 const Wrapper = styled(Box)({

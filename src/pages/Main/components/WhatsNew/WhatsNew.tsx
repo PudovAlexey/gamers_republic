@@ -51,7 +51,7 @@ function WhatsNew() {
         <SmoothTitle
           title={'Whats new'}
           selector={WhatsNewTitleProgressSelector}
-          degs={290}
+          position={'right'}
           firstColor={"#d93644"}
           secondColor={"#0f1923"}
           startLineSelector={whatsNewStartLineSelector}
@@ -76,8 +76,8 @@ function WhatsNew() {
 const RelativeTitle = styled(TitleText)({
   position: 'relative',
   color: '#0f1923',
-  left: '6.5vw',
-  top: '1vw',
+  left: '0',
+  top: '0',
 });
 
 const WhatsNewBlock = styled(Box)({
