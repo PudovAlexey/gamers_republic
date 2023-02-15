@@ -1,13 +1,29 @@
+const fullProgressSelector = (store) => store.homeAnimationSlice.fullProgress;
+
+const fullProgressStartLineSelector = (store) => store.homeAnimationSlice.fullProgressStartLine;
+
 const progressGameLineSelector = (store) =>
   store.homeAnimationSlice.progressGameLine;
+
+const progressGameStartLineSelector = (store) =>
+  store.homeAnimationSlice.progressGameStartLine;
 
 const progressFeatureLineSelector = (store) =>
   store.homeAnimationSlice.progressFeatureLine;
 
+const progressFeatureStartLineSelector = (store) =>
+  store.homeAnimationSlice.progressStartFeatureLine;
+
 const progressWhatsNewSelector = (store) =>
   store.homeAnimationSlice.progressWhatsNew;
 
+const progressWhatsNewStartSelector = (store) =>
+  store.homeAnimationSlice.progressWhatsNewStart;
+
 const progressAboutSelector = (store) => store.homeAnimationSlice.progressAbout;
+
+const progressStartAboutSelector = (store) =>
+  store.homeAnimationSlice.progressStartAbout;
 
 const gamesRefSelector = (store) => store.homeAnimationSlice.gamesRef;
 
@@ -61,4 +77,10 @@ export {
   featuresStartLineSelector,
   whatsNewStartLineSelector,
   aboutStartLineSelector,
+  progressGameStartLineSelector,
+  progressFeatureStartLineSelector,
+  progressWhatsNewStartSelector,
+  progressStartAboutSelector,
+  fullProgressSelector,
+  fullProgressStartLineSelector
 };

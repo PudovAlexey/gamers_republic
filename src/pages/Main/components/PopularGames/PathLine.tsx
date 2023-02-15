@@ -1,20 +1,18 @@
 import { Box } from '@mui/material';
 import { useEffect, useRef } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../../hooks/typedReduxHooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+} from '../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../animations/lines/homeAnimationSlice';
-import { progressGameLineSelector } from '../../animations/lines/selectors';
+import {
+  fullProgressSelector,
+  fullProgressStartLineSelector,
+  progressGameLineSelector,
+  progressGameStartLineSelector,
+} from '../../animations/lines/selectors';
 
 function PathLine() {
-  const dispatch = useAppDispatch()
-  const pathRef = useRef()
-  const strokeDeshOffset = useAppSelector(progressGameLineSelector);
-  const strokeDasharray = 2000;
-  useEffect(() => {
-    dispatch(setStartLine({
-      ref: pathRef.current,
-      type: 'gamesStartLine'
-    }))
-  })
   return (
     <Box
       sx={{
@@ -31,25 +29,10 @@ function PathLine() {
         viewBox="0 0 1490 850"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
-        style={{
-          strokeDashoffset: strokeDeshOffset + 'px',
-          strokeDasharray: strokeDasharray + 'px',
-          strokeLinecap: 'round',
-          transition: 'all .5s ease-out',
-        }}
       >
         <g clip-path="url(#clip0_110_4)" filter="url(#filter0_d_110_4)">
-          <path
-            d="M61.083 86C45.7469 86 27.971 86 21 86V567.31L180.461 754.714H861V852"
-            stroke="#D93644"
-            stroke-width="10"
-            />
-          <path
-            ref={pathRef}
-            d="M745 1C745 54.2174 745 79.8406 745 86H445"
-            stroke="#D93644"
-            stroke-width="10"
-          />
+          <PathMain />
+          <PathStart />
         </g>
         <defs>
           <filter
@@ -96,40 +79,52 @@ function PathLine() {
   );
 }
 
-function PathLineStart() {
-  const strokeDeshOffset = 0;
-  const strokeDasharray = 2000;
+function PathStart() {
+  const strokeDeshOffset = useAppSelector(progressGameStartLineSelector);
+  const strokeDasharray = useAppSelector(fullProgressStartLineSelector);
+  const dispatch = useAppDispatch();
+  const pathRef = useRef();
+  useEffect(() => {
+    dispatch(
+      setStartLine({
+        ref: pathRef.current,
+        type: 'gamesStartLine',
+      })
+    );
+  });
   return (
-    <Box
-      sx={{
-        position: 'absolute',
-        left: '22%',
-        right: '0',
-        top: '0%',
-        height: '90%',
+    <path
+      ref={pathRef}
+      d="M745 1C745 54.2174 745 79.8406 745 86H445"
+      stroke="#D93644"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
       }}
-    >
-      <svg
-        width="336"
-        height="93"
-        viewBox="0 0 336 93"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <path
-          d="M331 0C331 28 331 45.3333 331 50.5L136.078 88H0"
-          stroke="#D93644"
-          stroke-width="10"
-          style={{
-            strokeDashoffset: strokeDeshOffset + 'px',
-            strokeDasharray: strokeDasharray + 'px',
-            strokeLinecap: 'round',
-            transition: 'all .5s ease-out',
-          }}
-        />
-      </svg>
-    </Box>
+    />
   );
 }
 
-export { PathLine, PathLineStart };
+function PathMain() {
+  const strokeDeshOffset = useAppSelector(progressGameLineSelector);
+  const strokeDasharray = useAppSelector(fullProgressSelector);
+
+  return (
+    <path
+      d="M61.083 86C45.7469 86 27.971 86 21 86V567.31L180.461 754.714H861V852"
+      stroke="#D93644"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
+      }}
+    />
+  );
+}
+
+export { PathLine };
