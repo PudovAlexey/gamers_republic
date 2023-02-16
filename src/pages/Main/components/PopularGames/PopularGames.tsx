@@ -55,7 +55,7 @@ function PopularGames() {
 }
 
 function SmoothTitle() {
-  const titleRef = useRef();
+  const titleRef = useRef<HTMLElement>();
   const progress = useAppSelector(gameTitleProgressSelector);
   const startLine = useAppSelector(gamesStartLineSelector);
   const startRect = startLine && $.rect(startLine);

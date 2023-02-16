@@ -5,7 +5,13 @@ import {
   useAppSelector,
 } from '../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../animations/lines/homeAnimationSlice';
-import { fullProgressSelector, fullProgressStartLineSelector, progressFeatureLineSelector, progressWhatsNewSelector, progressWhatsNewStartSelector } from '../../../animations/lines/selectors';
+import {
+  fullProgressSelector,
+  fullProgressStartLineSelector,
+  progressFeatureLineSelector,
+  progressWhatsNewSelector,
+  progressWhatsNewStartSelector,
+} from '../../../animations/lines/selectors';
 
 function PathLine() {
   return (
@@ -31,14 +37,14 @@ function PathLine() {
             stroke="#0F1923"
             stroke-width="10"
             /> */}
-            <PathMain/>
+          <PathMain />
           {/* <path
             ref={pathRef}
             d="M35 0C35 37.7227 35 57.7178 35 63H45"
             stroke="#D93644"
             stroke-width="10"
           /> */}
-          <PathStart/>
+          <PathStart />
         </g>
         <defs>
           <filter
@@ -100,17 +106,17 @@ function PathStart() {
   });
   return (
     <path
-    ref={pathRef}
-    d="M35 0C35 37.7227 35 57.7178 35 63H45"
-    stroke="#D93644"
-    stroke-width="10"
-    style={{
-      strokeDashoffset: strokeDeshOffset + 'px',
-      strokeDasharray: strokeDasharray + 'px',
-      strokeLinecap: 'round',
-      transition: 'all .5s ease-out',
-    }}
-  />
+      ref={pathRef}
+      d="M35 0C35 37.7227 35 57.7178 35 63H45"
+      stroke="#D93644"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
+      }}
+    />
   );
 }
 
@@ -119,16 +125,16 @@ function PathMain() {
   const strokeDasharray = useAppSelector(fullProgressSelector);
   return (
     <path
-    d="M1438 86.3036C1452.43 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
-    stroke="#D93644"
-    stroke-width="10"
-    style={{
-      strokeDashoffset: strokeDeshOffset + 'px',
-      strokeDasharray: strokeDasharray + 'px',
-      strokeLinecap: 'round',
-      transition: 'all .5s ease-out',
-    }}
-          />
+      d="M694 63C1186.5 63 1145.45 63 1176.23 63L1435 243.804V847"
+      stroke="#0F1923"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
+      }}
+    />
   );
 }
 

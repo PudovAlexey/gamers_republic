@@ -67,7 +67,7 @@ function WhatsNew() {
 }
 
 function SmoothTitle() {
-  const titleRef = useRef()
+  const titleRef = useRef<HTMLElement>()
   const progress = useAppSelector(WhatsNewTitleProgressSelector);
   const startLine = useAppSelector(whatsNewStartLineSelector)
   const startRect = startLine && $.rect(startLine)
@@ -110,3 +110,5 @@ const SlickWrapper = styled(Box)({
 });
 
 export { WhatsNew };
+
+

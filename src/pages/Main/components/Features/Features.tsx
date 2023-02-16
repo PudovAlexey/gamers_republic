@@ -48,7 +48,7 @@ function Features() {
 }
 
 function SmoothTitle() {
-  const titleRef = useRef();
+  const titleRef = useRef<HTMLElement>();
   const progress = useAppSelector(featuresTitleProgressSelector);
   const startLine = useAppSelector(featuresStartLineSelector);
   const startRect = startLine && $.rect(startLine);
