@@ -12,7 +12,7 @@ const progressFeatureLineSelector = (store) =>
   store.homeAnimationSlice.progressFeatureLine;
 
 const progressFeatureStartLineSelector = (store) =>
-  store.homeAnimationSlice.progressStartFeatureLine;
+  store.homeAnimationSlice.progressFeatureStartLine;
 
 const progressWhatsNewSelector = (store) =>
   store.homeAnimationSlice.progressWhatsNew;

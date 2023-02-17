@@ -4,12 +4,8 @@ import {
   LightTypography,
   TextBoldLight,
 } from '../../../../../components/reusable/layout/Typography';
-import { useAppSelector } from '../../../../../hooks/typedReduxHooks';
-import { progressFeatureLineSelector } from '../../../animations/lines/selectors';
 
 function AnimationProgressBox({ title, description }) {
-  const progress = useAppSelector(progressFeatureLineSelector)
-  console.log(progress, 'in progresss')
   useLayoutEffect(() => {
 
   })

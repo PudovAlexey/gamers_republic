@@ -14,7 +14,6 @@ function DecorativeCode({ selector }) {
   const progress = useAppSelector(selector);
 
   useLayoutEffect(() => {
-    console.log(progress, 'progress');
     if (progress <= startAnimation && !called) {
       const tl = gsap.timeline({ delay: 1 });
       // console.log(topRef.current)

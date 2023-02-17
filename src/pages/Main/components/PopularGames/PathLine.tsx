@@ -111,7 +111,7 @@ function PathStart() {
 function PathMain() {
   const strokeDeshOffset = useAppSelector(progressGameLineSelector);
   const strokeDasharray = useAppSelector(fullProgressSelector);
-  console.log(strokeDeshOffset, 'offset')
+  
   return (
     <path
       d="M61.083 86C45.7469 86 27.971 86 21 86V567.31L180.461 754.714H861V852"

@@ -89,6 +89,7 @@ function PathStart() {
   const strokeDeshOffset = useAppSelector(progressFeatureStartLineSelector);
   const strokeDasharray = useAppSelector(fullProgressStartLineSelector);
   const dispatch = useAppDispatch();
+  console.log(strokeDeshOffset, 'stroke')
   const pathRef = useRef();
   useEffect(() => {
     dispatch(

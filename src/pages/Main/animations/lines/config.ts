@@ -1,27 +1,30 @@
-const eventConfig = {
+import {
+  EProgressMainLine,
+  EProgressStartLine,
+  EProgressTitle,
+  TLineConfig,
+} from './types';
+
+const eventConfig: TLineConfig = {
   progressGameLine: {
-    startLine: 'progressGameStartLine',
-    title: 'gameTitleProgress',
-    mainLine: 'progressGameLine',
-    previousBlock: null
+    startLine: EProgressStartLine.ProgressGameStartLine,
+    title: EProgressTitle.GameTitleProgress,
+    mainLine: EProgressMainLine.ProgressGameLine,
   },
   progressFeatureLine: {
-    startLine: 'progressFeatureStartLine',
-    title: 'featuresTitleProgress',
-    mainLine: 'progressFeatureLine',
-    previousBlock: 'progressGameLine'
+    startLine: EProgressStartLine.ProgressFeatureStartLine,
+    title: EProgressTitle.FeaturesTitleProgress,
+    mainLine: EProgressMainLine.ProgressFeatureLine,
   },
   progressWhatsNew: {
-    startLine: 'progressWhatsNewStart',
-    title: 'WhatsNewTitleProgress',
-    mainLine: 'progressWhatsNew',
-    previousBlock: 'progressFeatureLine'
+    startLine: EProgressStartLine.ProgressWhatsNewStart,
+    title: EProgressTitle.WhatsNewTitleProgress,
+    mainLine: EProgressMainLine.ProgressWhatsNew,
   },
   progressAbout: {
-    startLine: 'progressStartAbout',
-    title: 'aboutTitleProgress',
-    mainLine: 'progressAbout',
-    previousBlock: 'progressWhatsNew'
+    startLine: EProgressStartLine.ProgressStartAbout,
+    title: EProgressTitle.AboutTitleProgress,
+    mainLine: EProgressMainLine.ProgressAbout,
   },
 };
 

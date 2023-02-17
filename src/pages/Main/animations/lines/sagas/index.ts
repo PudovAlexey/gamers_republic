@@ -9,51 +9,32 @@ import {
   gamesRefSelector,
   whatsNewRefSelector,
 } from '../selectors';
-import { onChangeGameCoords } from '../homeAnimationSlice';
+import { animationTrigger } from '../homeAnimationSlice';
 import { INIT_ANIMATION } from '../actionCreators';
+import { EEventLine } from '../types';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function* onScrollChange({ action, self, type, titleType }) {
-  if (action === 'update') {
-    yield put(onChangeGameCoords({ self, type, titleType }));
-  }
+function* onScrollChange({ self, type, titleType }) {
+    yield put(animationTrigger({ self, type, titleType }));
 }
 
 function* lineSaga(action) {
-  const { type, container, titleType } = action;
+  const { type, container } = action;
   const event = eventChannel((emitter) => {
     gsap.to(container, {
       scrollTrigger: {
         scrub: 10,
         start: 'start bottom',
         trigger: container,
-        onEnter: (self) => {
-          emitter({
-            titleType,
-            type,
-            action: 'enter',
-            self,
-          });
-        },
         onUpdate: (self) => {
           emitter({
-            titleType,
             action: 'update',
             self,
             type,
           });
         },
-        onLeave: (self) => {
-          emitter({
-            titleType,
-            action: 'leave',
-            self,
-            type,
-          });
-        },
       },
-      // y: state.gamesRef.getBoundingClientRect().y,
     });
     return () => {};
   });
@@ -74,19 +55,19 @@ function* initAnimation() {
   yield all([
     call(lineSaga, {
       container: gamesRef,
-      type: 'progressGameLine',
+      type: EEventLine.ProgressGame,
     }),
     call(lineSaga, {
       container: features,
-      type: 'progressFeatureLine',
+      type: EEventLine.ProgressFeature,
     }),
     call(lineSaga, {
       container: whatsNewRef,
-      type: 'progressWhatsNew',
+      type: EEventLine.ProgressWhatsNew,
     }),
     call(lineSaga, {
       container: aboutRef,
-      type: 'progressAbout',
+      type: EEventLine.ProgressAbout,
     }),
   ]);
 }

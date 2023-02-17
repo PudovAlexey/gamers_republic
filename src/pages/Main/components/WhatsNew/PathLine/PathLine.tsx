@@ -9,7 +9,6 @@ import {
   fullProgressSelector,
   fullProgressStartLineSelector,
   progressFeatureLineSelector,
-  progressWhatsNewSelector,
   progressWhatsNewStartSelector,
 } from '../../../animations/lines/selectors';
 
@@ -32,18 +31,7 @@ function PathLine() {
         xmlns="http://www.w3.org/2000/svg"
       >
         <g clip-path="url(#clip0_115_7)" filter="url(#filter0_d_115_7)">
-          {/* <path
-            d="M694 63C1186.5 63 1145.45 63 1176.23 63L1435 243.804V847"
-            stroke="#0F1923"
-            stroke-width="10"
-            /> */}
           <PathMain />
-          {/* <path
-            ref={pathRef}
-            d="M35 0C35 37.7227 35 57.7178 35 63H45"
-            stroke="#D93644"
-            stroke-width="10"
-          /> */}
           <PathStart />
         </g>
         <defs>

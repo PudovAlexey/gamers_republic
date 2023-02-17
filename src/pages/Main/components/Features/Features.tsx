@@ -53,8 +53,6 @@ function SmoothTitle() {
   const startLine = useAppSelector(featuresStartLineSelector);
   const startRect = startLine && $.rect(startLine);
 
-  console.log(startRect);
-
   const Title = styled(TitleText)({
     position: 'absolute',
     background: `linear-gradient(290deg, #f8f8f8 ${progress}%, #d93644 ${
