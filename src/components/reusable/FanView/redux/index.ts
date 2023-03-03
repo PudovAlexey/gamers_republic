@@ -8,6 +8,8 @@ const initialState = {
     lastScrollTop: 0,
     scrollDirection: EScrollDirection.Draw,
     scrollContainerHeight: 0,
+    scrollPosition: 0,
+    slideToShow: 0,
     scrollSpeed: 1,
     slickRef: null,
     scrollRef: null,
@@ -30,17 +32,22 @@ const fanSlice = createSlice({
       },
       setView: (state, action) => {
         if (action.payload) {
-          const test = (state.fanIds.length * (action.payload.clientHeight) * (16)) / 2
+          const test = (state.fanIds.length * (action.payload.clientHeight)) / 2
+
           state.scrollContainerHeight = test
         }
       },
       onScroll: (state, action) => {
         function handleScrollTop() {
-          const {target} = action.payload
-     //   state.scrollSpeed =  (Math.abs(checkScrollSpeed())) / 1000
         var st = action.payload.target.scrollTop
-        console.log(st, 'scroll')
-        console.log(state.lastScrollTop, 'lastScroll')
+        const scrollHeight = action.payload.target.scrollHeight
+        state.scrollPosition = st / scrollHeight * 100
+        let currentSlide = +((state.fanIds.length * (st / scrollHeight * 100) / 92.5) || 1).toFixed(0)
+        if (currentSlide > state.fanIds.length) currentSlide = state.fanIds.length
+        state.slideToShow = currentSlide
+        state.slickRef.slickGoTo(currentSlide || 1)
+        console.log(currentSlide, 'slide')
+
         if (st > state.lastScrollTop) {
           state.scrollDirection = EScrollDirection.Up
         } else if (st < state.lastScrollTop) {
@@ -52,9 +59,8 @@ const fanSlice = createSlice({
         handleScrollTop()
       },
 
-      onNext: (state) => {
-        if (state.fireScroll) return
-        state.slickRef.slickNext()
+      onSlideNavigate: (state) => {
+        // state.slickRef.slickGoTo(state.slideToShow)
       },
 
       onFireChange: (state, action) => {
@@ -65,16 +71,11 @@ const fanSlice = createSlice({
         state.fireScroll = action.payload
       },
 
-      onPrev: (state) => {
-        if (state.fireScroll) return
-        state.slickRef.slickPrev()
-      },
-
       afterChange: (state, action) => {
-        console.log(state.fireChange)
-        if (state.fireChange) return
-        state.scrollRef.scrollTop = (state.scrollRef.scrollHeight / state.fanIds.length) * action.payload
-        state.currentSlide = action.payload
+        if (state.fireChange) return;
+        const scrollHeight = state.scrollRef.scrollHeight + state.scrollRef.offsetHeight
+        const delay = state.scrollDirection === EScrollDirection.Up ? +3 : -3
+        state.scrollRef.scrollTop =  ((scrollHeight * (action.payload + delay)) / 115)
       },
 
       onExit: (state) => {
@@ -91,36 +92,10 @@ export const {
     onScroll,
     afterChange,
     setView,
-    onNext,
-    onPrev,
+    onSlideNavigate,
     onFireScroll,
     onFireChange
 
 } = fanSlice.actions
 
 export default fanSlice.reducer
-
-const checkScrollSpeed = (function(settings){
-  settings = settings || {};
-
-  let lastPos, newPos, timer, delta, 
-      delay = settings.delay || 50;
-
-  function clear() {
-      lastPos = null;
-      delta = 0;
-  }
-
-  clear();
-
-  return function(){
-      newPos = document.querySelector('.css-lm4r9v').scrollTop;
-      if ( lastPos != null ){ // && newPos < maxScroll 
-          delta = newPos -  lastPos;
-      }
-      lastPos = newPos;
-      clearTimeout(timer);
-      timer = setTimeout(clear, delay);
-      return delta;
-  };
-})();

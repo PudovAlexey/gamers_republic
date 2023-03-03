@@ -2,12 +2,12 @@ import "./slick/theme.css"
 import Slider from "react-slick";
 import { useEffect, useRef } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/typedReduxHooks";
-import { onInit, onExit, onScroll, setView, afterChange } from "./redux";
+import { onInit, onExit, setView } from "./redux";
 import { slickOptions } from "./redux/slickOptions";
 import { fanControlSelector, fanDataByIdSelector, fanIdsSelector, scrollContainerHeightSelector, slickSpeedSelector } from "./redux/selectors";
 import { styled } from "@mui/material";
 import { Box } from "@mui/system";
-import { AFTER_CHANGE, SCROLL } from "./redux/actionCreators";
+import { AFTER_CHANGE, EXIT_FANCONTROL, INIT_FANCONTROL, SCROLL } from "./redux/actionCreators";
 
 type TProps = {
     fanIds: number[],
@@ -22,9 +22,11 @@ function FanView({fanIds, fanData, fanControl}: TProps) {
     const scrollRef = useRef()
     const dispatch = useAppDispatch()
     useEffect(() => {
+        dispatch(INIT_FANCONTROL())
         dispatch(onInit({fanIds, fanData, fanControl, slickRef: sliderRef.current, scrollRef: scrollRef.current}))
         return () => {
             dispatch(onExit())
+            dispatch(EXIT_FANCONTROL())
         }
     })
 

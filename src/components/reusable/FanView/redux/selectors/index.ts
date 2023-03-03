@@ -4,6 +4,8 @@ const fanIdsSelector = (state) => state.fanSlice.fanIds;
 
 const scrollDirectionSelector = (state) => state.fanSlice.scrollDirection;
 
+const scrollPositionSelector = (state) => state.fanSlice.scrollPosition;
+
 const fanDataSelector = (state) => {
   return state.fanSlice.fanData
 };
@@ -11,6 +13,8 @@ const fanDataSelector = (state) => {
 const slickSpeedSelector = (state) => state.fanSlice.scrollSpeed
 
 const scrollContainerHeightSelector = (state) => state.fanSlice.scrollContainerHeight
+
+const scrollContainerRefSelector = (state) => state.fanSlice.scrollRef
 const fanById = (_, id) => id;
 
 const fanDataByIdSelector = createSelector(
@@ -29,5 +33,7 @@ export {
   fanDataSelector,
   slickSpeedSelector,
   scrollContainerHeightSelector,
-  scrollDirectionSelector
+  scrollDirectionSelector,
+  scrollPositionSelector,
+  scrollContainerRefSelector
 };

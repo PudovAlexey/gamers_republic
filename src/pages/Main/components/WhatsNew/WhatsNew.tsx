@@ -104,10 +104,10 @@ const Man = styled('img')({
 });
 
 const SlickWrapper = styled(Box)({
-  width: '60%',
+  width: '40%',
   position: 'absolute',
-  right: '5vw',
-  bottom: '2%',
+  right: '26vw',
+  bottom: '5%',
 });
 
 export { WhatsNew };

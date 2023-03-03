@@ -1,27 +1,21 @@
-import { put, call, all, takeEvery, select, delay, takeLatest, debounce } from "redux-saga/effects"
-import { afterChange, onScroll, onFireScroll, onFireChange } from ".."
-import { EScrollDirection } from "../../../../../api/types"
+import { put, call, all, takeEvery, delay, select } from "redux-saga/effects"
+import { afterChange, onFireChange, onScroll } from ".."
 import { AFTER_CHANGE, SCROLL } from "../actionCreators"
-import { scrollDirectionSelector } from "../selectors"
-import {onNext, onPrev} from '../index'
+import {onSlideNavigate} from '../index'
 
 function* scrollSaga(action) {
     yield put(onScroll(action.payload))
-    const scrollDirection = yield select(scrollDirectionSelector)
-    if (scrollDirection === EScrollDirection.Up) {
-        yield put(onNext())
-    } else if (scrollDirection === EScrollDirection.Down) {
-        yield put(onPrev())
-    }
-    // yield put(onFireChange(true))
-    // yield delay(1000)
-    // yield put(onFireChange(false))
+    yield put(onSlideNavigate())
 }
 
 function* afterChangeSaga(action) {
-    // yield put(afterChange(action.payload))
-  
+    const fireChange = yield select(s => s.fanSlice.fireChange)
 
+    yield put(afterChange(action.payload))
+    if (fireChange) return
+    yield put(onFireChange(true))
+    yield delay(1000)
+    yield put(onFireChange(false))
 }
 
 function* fanEffects() {
