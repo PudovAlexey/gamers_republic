@@ -12,9 +12,7 @@ import { WhatsNew } from './components/WhatsNew/WhatsNew';
 function MainPage() {
   const dispatch = useAppDispatch()
   useEffect(() => {
-    dispatch({
-      type: INIT_ANIMATION().type
-    })
+    dispatch(INIT_ANIMATION())
   })
   return (
     <Box>

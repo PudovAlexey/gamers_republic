@@ -18,6 +18,7 @@ import {
 import { DecorativeCode } from './components/RelatedGamesSlick/DecorativeCode';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
 import { $ } from '../../../../utils/DOM/DOM';
+import { ELinesRef } from '../../animations/lines/types';
 
 function PopularGames() {
   const contentRef = useRef();
@@ -25,7 +26,7 @@ function PopularGames() {
   useLayoutEffect(() => {
     dispatch(
       setRef({
-        type: 'gamesRef',
+        type: ELinesRef.GamesRef,
         ref: contentRef.current,
       })
     );

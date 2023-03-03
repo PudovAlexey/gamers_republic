@@ -6,18 +6,9 @@ import {
 } from '../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../animations/lines/homeAnimationSlice';
 import { fullProgressSelector, fullProgressStartLineSelector, progressAboutSelector, progressStartAboutSelector } from '../../../animations/lines/selectors';
+import { ELinesRef } from '../../../animations/lines/types';
 
 function PathLine() {
-  const pathRef = useRef();
-  const dispatch = useAppDispatch();
-  useEffect(() => {
-    dispatch(
-      setStartLine({
-        ref: pathRef.current,
-        type: 'aboutStartLine',
-      })
-    );
-  });
   return (
     <Box
       sx={{
@@ -104,7 +95,7 @@ function PathStart() {
     dispatch(
       setStartLine({
         ref: pathRef.current,
-        type: 'aboutStartLine',
+        type: ELinesRef.AboutStartLine,
       })
     );
   });

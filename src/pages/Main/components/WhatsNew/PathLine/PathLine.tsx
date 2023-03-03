@@ -11,6 +11,7 @@ import {
   progressFeatureLineSelector,
   progressWhatsNewStartSelector,
 } from '../../../animations/lines/selectors';
+import { ELinesRef } from '../../../animations/lines/types';
 
 function PathLine() {
   return (
@@ -88,7 +89,7 @@ function PathStart() {
     dispatch(
       setStartLine({
         ref: pathRef.current,
-        type: 'whatsNewStartLine',
+        type: ELinesRef.WhatsNewStartLine,
       })
     );
   });

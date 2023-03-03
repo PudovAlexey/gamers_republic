@@ -5,7 +5,13 @@ import {
   useAppSelector,
 } from '../../../../../../hooks/typedReduxHooks';
 import { setStartLine } from '../../../../animations/lines/homeAnimationSlice';
-import { fullProgressSelector, fullProgressStartLineSelector, progressFeatureLineSelector, progressFeatureStartLineSelector } from '../../../../animations/lines/selectors';
+import {
+  fullProgressSelector,
+  fullProgressStartLineSelector,
+  progressFeatureLineSelector,
+  progressFeatureStartLineSelector,
+} from '../../../../animations/lines/selectors';
+import { ELinesRef } from '../../../../animations/lines/types';
 
 function PathLine() {
   return (
@@ -16,7 +22,7 @@ function PathLine() {
         top: '0%',
         height: '100%',
       }}
-      >
+    >
       <svg
         viewBox="0 0 1490 847"
         fill="none"
@@ -37,8 +43,8 @@ function PathLine() {
             stroke="#F8F8F8"
             stroke-width="10"
           /> */}
-          <PathMain/>
-          <PathStart/>
+          <PathMain />
+          <PathStart />
         </g>
         <defs>
           <filter
@@ -89,29 +95,29 @@ function PathStart() {
   const strokeDeshOffset = useAppSelector(progressFeatureStartLineSelector);
   const strokeDasharray = useAppSelector(fullProgressStartLineSelector);
   const dispatch = useAppDispatch();
-  console.log(strokeDeshOffset, 'stroke')
+  console.log(strokeDeshOffset, 'stroke');
   const pathRef = useRef();
   useEffect(() => {
     dispatch(
       setStartLine({
         ref: pathRef.current,
-        type: 'featuresStartLine',
+        type: ELinesRef.FeaturesStartLine,
       })
     );
   });
   return (
     <path
-    ref={pathRef}
-    d="M858 -1C858 43.3604 858 75.4835 858 86H881"
-    stroke="#F8F8F8"
-    stroke-width="10"
-    style={{
-      strokeDashoffset: strokeDeshOffset + 'px',
-      strokeDasharray: strokeDasharray + 'px',
-      strokeLinecap: 'round',
-      transition: 'all .5s ease-out',
-    }}
-  />
+      ref={pathRef}
+      d="M858 -1C858 43.3604 858 75.4835 858 86H881"
+      stroke="#F8F8F8"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
+      }}
+    />
   );
 }
 
@@ -120,18 +126,17 @@ function PathMain() {
   const strokeDasharray = useAppSelector(fullProgressSelector);
   return (
     <path
-    d="M1438 86.3036C1452.43 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
-    stroke="#D93644"
-    stroke-width="10"
-    style={{
-      strokeDashoffset: strokeDeshOffset + 'px',
-      strokeDasharray: strokeDasharray + 'px',
-      strokeLinecap: 'round',
-      transition: 'all .5s ease-out',
-    }}
-          />
+      d="M1438 86.3036C1452.43 86.3036 1444.62 86.3036 1453 86.3036V387.545L1362.8 422.42H856.739L573.446 733.265H182.594L35 799.478V848"
+      stroke="#D93644"
+      stroke-width="10"
+      style={{
+        strokeDashoffset: strokeDeshOffset + 'px',
+        strokeDasharray: strokeDasharray + 'px',
+        strokeLinecap: 'round',
+        transition: 'all .5s ease-out',
+      }}
+    />
   );
 }
-
 
 export { PathLine };

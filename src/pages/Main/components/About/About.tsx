@@ -15,6 +15,7 @@ import {
   aboutStartLineSelector,
   aboutTitleProgressSelector,
 } from '../../animations/lines/selectors';
+import { ELinesRef } from '../../animations/lines/types';
 import background from './img/background.png';
 import { PathLine } from './PathLine/PathLine';
 function About() {
@@ -23,7 +24,7 @@ function About() {
   useLayoutEffect(() => {
     dispatch(
       setRef({
-        type: 'aboutRef',
+        type: ELinesRef.AboutRef,
         ref: contentRef.current,
       })
     );

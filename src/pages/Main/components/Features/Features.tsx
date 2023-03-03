@@ -11,6 +11,7 @@ import {
   featuresStartLineSelector,
   featuresTitleProgressSelector,
 } from '../../animations/lines/selectors';
+import { ELinesRef } from '../../animations/lines/types';
 import { BlockSlider } from './components/BlockSlider';
 import { BlockText } from './components/BlockText';
 import { PathLine } from './components/PathLine/Pathline';
@@ -20,8 +21,8 @@ function Features() {
   useLayoutEffect(() => {
     dispatch(
       setRef({
-        type: 'featuresRef',
         ref: contentRef.current,
+        type: ELinesRef.FeaturesRef,
       })
     );
   });

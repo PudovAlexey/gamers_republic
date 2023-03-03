@@ -17,6 +17,7 @@ import {
 } from '../../animations/lines/selectors';
 import { $ } from '../../../../utils/DOM/DOM';
 import { TitleText } from '../../../../components/reusable/layout/Typography';
+import { ELinesRef } from '../../animations/lines/types';
 
 const testIdx = new Array(100).fill('').map((_, idx) => idx + 1);
 const testData = testIdx.reduce((dict, id) => {
@@ -38,7 +39,7 @@ function WhatsNew() {
   useLayoutEffect(() => {
     dispatch(
       setRef({
-        type: 'whatsNewRef',
+        type: ELinesRef.WhatsNewRef,
         ref: contentRef.current,
       })
     );
