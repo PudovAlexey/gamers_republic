@@ -1,5 +1,5 @@
 import { buildTree } from '../../utils/treeWalker/treeWalker';
-import { compareValue } from '../../utils/utils';
+import { compareValue } from '../../utils/others';
 import { GameCategories } from './data/Games/GameCategories';
 import { gamesList } from './data/Games/GamesList';
 import { AuthUser } from './data/Users/AuthUser';
@@ -12,6 +12,7 @@ import {
   filterMessagesMiddle,
   filterMessagesTop,
 } from './helpers/chat';
+import { ECompareValue } from '../../utils/types';
 
 class FakeApi {
   async getAuthUser(token) {
@@ -231,8 +232,8 @@ class FakeApi {
         ? gamesList
         : gamesList.filter((game) => {
             return (
-              compareValue(game.game, search, 'substringLower') ||
-              compareValue(game.hashTags, search, 'someOfLower')
+              compareValue(game.game, search, ECompareValue.SubstringLower) ||
+              compareValue(game.hashTags, search, ECompareValue.SomeOfLower)
             );
           });
       let reqGamesList = await this.fakeDelay(findGamesBySearch);

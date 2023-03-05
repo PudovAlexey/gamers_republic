@@ -15,8 +15,19 @@ export enum TTime {
   StringMonth = 'stringMonth'
 }
 
+type TDefaultReturnedTime = {
+  seconds: number,
+  minutes: number,
+  hours: number,
+  days: number,
+}
+
 export type TParseTime = {
   duration: number;
   type?: TimerType;
-  formatter?: (TimerType) => string;
+  formatter?: (val: TimerType) => string;
 };
+
+export type {
+  TDefaultReturnedTime
+}

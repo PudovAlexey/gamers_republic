@@ -1,4 +1,4 @@
-import { getNodeByPath } from '../utils/utils';
+import { getNodeByPath } from '../utils/others';
 
 function useLocalStorage() {
   function getState() {

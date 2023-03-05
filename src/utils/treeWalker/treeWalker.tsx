@@ -1,4 +1,4 @@
-import { getNodeByPath } from '../utils';
+import { getNodeByPath } from '../others';
 import { TBuildTreeProps, TmakeNodesTreeType } from './types';
 
 export function forEachTreeNodes(

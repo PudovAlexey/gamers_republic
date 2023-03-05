@@ -7,7 +7,7 @@ import {
   Events,
   PositionValue,
 } from '../../animationFrame/AnimationFrame';
-import { interval } from '../../utils/utils';
+import { interval } from '../../utils/numbers';
 import { GameSettings } from './types';
 type Position = number | PositionValue | [PositionValue, number];
 export type GameElement = {
@@ -104,14 +104,15 @@ class ArcanoidCore extends Levels {
   borderLimits(borders, x, y) {
     let validX = interval(x, { from: borders.left, to: borders.right });
     let validY = interval(y, { from: borders.bottom, to: borders.top });
-    if (!validX.isValid) {
-      const startFrom = validX.where === 'from' ? borders.left : borders.right;
-      x = startFrom;
-    }
-    if (!validY.isValid) {
-      let startFrom = validY.where === 'from' ? borders.bottom : borders.top;
-      y = startFrom;
-    }
+    // TODO check code here
+    // if (!validX.isValid) {
+    //   const startFrom = validX.where === 'from' ? borders.left : borders.right;
+    //   x = startFrom;
+    // }
+    // if (!validY.isValid) {
+    //   let startFrom = validY.where === 'from' ? borders.bottom : borders.top;
+    //   y = startFrom;
+    // }
     return {
       xBord: x,
       yBord: y,
@@ -123,7 +124,7 @@ class ArcanoidCore extends Levels {
       interval(this.gameElements.ball.coords[0], {
         from: this.gameElements.platform.coords[0] - 10,
         to: this.gameElements.platform.coords[0] + 80,
-      }).isValid && this.gameElements.ball.coords[1] === -30
+      }) && this.gameElements.ball.coords[1] === -30
     );
   }
 
@@ -131,11 +132,11 @@ class ArcanoidCore extends Levels {
     const isBouncedWallX = interval(ball.coords[0], {
       from: borders.left,
       to: +borders.right,
-    }).isValid;
+    });
     const isBouncedWallY = interval(ball.coords[1], {
       from: borders.bottom - 500,
       to: +borders.top - 120,
-    }).isValid;
+    });
 
     const isBouncedElements = elements.filter((object) => {
       const isBouncedWidth = interval(ball.coords[0], {
@@ -147,8 +148,8 @@ class ArcanoidCore extends Levels {
         to: object.coords[1] + 110,
       });
       return (
-        isBouncedWidth.isValid &&
-        inBouncedHeight.isValid &&
+        isBouncedWidth &&
+        inBouncedHeight &&
         object.broken === false
       );
     });
@@ -166,7 +167,6 @@ class ArcanoidCore extends Levels {
     if (isBouncedElements.length) {
       this.gameElements.ball.speed![0] = -this.gameElements.ball.speed![0];
       isBouncedElements.forEach((el) => (el.broken = true));
-      console.log('bounced');
     }
   }
 

@@ -21,6 +21,7 @@ import {
 import { mainStyles } from '../../../../../../../../styles';
 import MessageDate from '../../../MessageDate/MessageDate';
 import { MessageText } from './MessageParts/MessageLayout/MessageText';
+import { TError } from '../../../../../../../../types/index';
 export const selectionColor = `rgba(255, 70, 86, 0.2)`;
 
 function MessageControl({ messageId }) {
@@ -49,7 +50,7 @@ function MessageControl({ messageId }) {
         ></SelectionLayout>
         {AuthUser?.id === userId ? (
           <UserSend messageId={messageId}>
-            { <Message side={'left'} messageId={messageId} />}
+            {<Message side={'left'} messageId={messageId} />}
           </UserSend>
         ) : (
           <CompanionSend messageId={messageId}>
@@ -68,33 +69,38 @@ function Message({ messageId, side }) {
   const messageData = useAppSelector((state) =>
     messageByIdSelector(state, messageId)
   );
+
   if (!messageData) return null;
   const { message, adds, createdAt } = messageData;
+
+  const date = parseTimeByString({
+    time: createdAt,
+    formatter: ({ hours, minutes }) => `${hours}:${minutes}`,
+  });
+  const parseDate: string =
+    (date as TError)?.type === 'error'
+      ? (date as TError).message
+      : (date as string);
   return (
     <MessagePaper
       onDoubleClick={(e) => {
         dispatch(onAddReplyId(messageId));
       }}
     >
-      <Paper sx={{padding: '8px'}}>
+      <Paper sx={{ padding: '8px' }}>
         <Stack spacing={1}>
-        <ReplyControl messageId={messageId} />
-        <Box
-          sx={{
-            ...styles.select,
-          }}
-        >
-          <MessageText messageId={messageId}>{message}</MessageText>
-        </Box>
-        {adds && <AddsViewer adds={adds} />}
-        <Stack>
-        <Typography sx={{justifyContent: side}}>
-          {parseTimeByString({
-            time: createdAt,
-            formatter: ({ hours, minutes }) => `${hours}:${minutes}`,
-          })}
-        </Typography>
-        </Stack>
+          <ReplyControl messageId={messageId} />
+          <Box
+            sx={{
+              ...styles.select,
+            }}
+          >
+            <MessageText messageId={messageId}>{message}</MessageText>
+          </Box>
+          {adds && <AddsViewer adds={adds} />}
+          <Stack>
+            <Typography sx={{ justifyContent: side }}>{parseDate}</Typography>
+          </Stack>
         </Stack>
       </Paper>
     </MessagePaper>
@@ -102,8 +108,8 @@ function Message({ messageId, side }) {
 }
 
 const MessagePaper = styled(Paper)({
-  background: "#1F2326",
-})
+  background: '#1F2326',
+});
 
 const SelectionLayout = styled(Box)({
   position: 'absolute',

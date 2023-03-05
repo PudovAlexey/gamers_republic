@@ -1,4 +1,4 @@
-import { randomUnit } from '../../../../utils/utils';
+import { randomUnit } from '../../../../utils/numbers';
 import { forEachField, runByAllFields } from '../../../utils/fiels';
 import { compareWin, oposite } from '../../utils/utils';
 
@@ -157,8 +157,10 @@ class PC {
     ];
     const freeVariants = diahonalVariants.filter(variant => !this.fieldState[variant.col][variant.row].key, this)
     const randomIdx = randomUnit(0, freeVariants.length - 1);
-    const coords = freeVariants[randomIdx];
-    this.fieldState[coords.col][coords.row] = this.render;
+    if (typeof randomIdx === 'number') {
+      const coords = freeVariants[randomIdx];
+      this.fieldState[coords.col][coords.row] = this.render;
+    }
   }
 
   rangeSteps(steps) {

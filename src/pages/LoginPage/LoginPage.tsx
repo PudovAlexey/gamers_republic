@@ -11,6 +11,7 @@ import useLocalStorage from '../../hooks/useLocalStorage';
 import { User } from '../../types/types';
 import { AuthToast } from './types';
 import AuthorLogo from '../../assets/main/AuthorLogo';
+import { EValidators } from '../../utils/validators/types';
 
 function LoginPage() {
   const [_, setUser] = useContext(AuthContext);
@@ -28,8 +29,8 @@ function LoginPage() {
 
   function onLoginPress() {
     const validateValues = checkAll([
-      { value: output?.email || '', type: 'email' },
-      { value: output?.password || '', type: 'password' },
+      { value: String(output?.email) || '', type: EValidators.Email },
+      { value: String(output?.password) || '', type: EValidators.Password },
     ]);
 
     if (validateValues === true) {

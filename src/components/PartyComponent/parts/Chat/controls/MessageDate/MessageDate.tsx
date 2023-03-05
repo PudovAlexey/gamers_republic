@@ -1,6 +1,7 @@
 import { Stack, styled, Typography } from "@mui/material";
 import { Box } from "@mui/system";
 import { useAppSelector } from "../../../../../../hooks/typedReduxHooks";
+import { TError } from "../../../../../../types/index";
 import { parseTimeByString } from "../../../../../../utils/timer/timer";
 import { messageByIdSelector, nextMessageSelector, previousMessageSelector } from "../../store/selectors/chatSelector";
 
@@ -26,12 +27,15 @@ function MessageDate({messageId}) {
   }
   let date = message.messageId > prevMessage?.messageId ? prevMessage?.createdAt : nextMessage?.createdAt;
   let dateDiff = compareMessageDates(message.createdAt, date || message.createdAt);
+  const dateValue = parseTimeByString({
+    time: message.createdAt,
+    formatter: ({ day,stringMonth, year }) => `${day} ${stringMonth} ${year}`
+})
+
+const parseDate = (dateValue as TError)?.type === 'error' ? (dateValue as TError)?.message : dateValue as string
   return dateDiff && (
     <Stack direction={'row'} justifyContent={'center'}>
-         <LineTypography variant="h6">{parseTimeByString({
-            time: message.createdAt,
-            formatter: ({ day,stringMonth, year }) => `${day} ${stringMonth} ${year}`
-        })}</LineTypography>
+         <LineTypography variant="h6">{parseDate}</LineTypography>
     </Stack>
   )
 }
