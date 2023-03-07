@@ -1,5 +1,4 @@
 import { Stack, styled, Typography } from "@mui/material";
-import { Box } from "@mui/system";
 import { useAppSelector } from "../../../../../../hooks/typedReduxHooks";
 import { TError } from "../../../../../../types/index";
 import { parseTimeByString } from "../../../../../../utils/timer/timer";

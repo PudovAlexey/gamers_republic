@@ -1,5 +1,5 @@
 import { compareValue } from ".."
-import { ECompareValue } from "../../types"
+import { ECompareValue } from "../../TestTypes"
 
 
 describe('test function compare values', () => {

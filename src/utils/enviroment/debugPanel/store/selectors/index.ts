@@ -1,6 +1,8 @@
-const toggleDebugSelector = store => store.debug.toggleDebug
+import { RootState } from "@/store/store"
 
-const debugComponentSelector = store => store.debug.debugComponent
+const toggleDebugSelector = (store: RootState) => store.debug.toggleDebug
+
+const debugComponentSelector = (store: RootState) => store.debug.debugComponent
 
 export {
     toggleDebugSelector,

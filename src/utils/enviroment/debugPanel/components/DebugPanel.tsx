@@ -1,16 +1,16 @@
 import { IconButton, Paper, styled } from '@mui/material';
-import { getEnviroment } from '../..';
+import { getEnviroment } from '@/utils/enviroment/index';
 import {
   useAppDispatch,
   useAppSelector,
-} from '../../../../hooks/typedReduxHooks';
-import { EEnviroment } from '../../types';
+} from '@/hooks/typedReduxHooks';
+import { EEnviroment } from '@/utils/enviroment/types/index';
 import {
   debugComponentSelector,
   toggleDebugSelector,
 } from '../store/selectors';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import { toggleDebug } from '../store';
+import { toggleDebug } from '@/utils/enviroment/debugPanel/store/index';
 import { Box } from '@mui/system';
 
 function DebugPanel() {

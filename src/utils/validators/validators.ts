@@ -1,8 +1,8 @@
-import { TError } from '../../types/index';
-import { EValidators, TCheck } from './types';
+import { TError } from '@/types/index';
+import { EValidators, TCheck } from '@/utils/validators/types';
 
 function checkEmail(value: string): true | TError {
-  const validate = /[^@]+@[a-z]+\.[a-z]+/.test(value) && !value.includes(" ");
+  const validate = /[^@]+@[a-z]+\.[a-z]+/.test(value) && !value.includes(' ');
   return (
     validate || {
       type: 'error',
@@ -12,7 +12,9 @@ function checkEmail(value: string): true | TError {
 }
 
 function checkName(value: string, type: string): true | TError {
-  const validate = /^[a-zA-Zа-яА-Я'][a-zA-Zа-яА-Я-']+[a-zA-Zа-яА-Я']?$/u.test(value) && value.length >= 2
+  const validate =
+    /^[a-zA-Zа-яА-Я'][a-zA-Zа-яА-Я-']+[a-zA-Zа-яА-Я']?$/u.test(value) &&
+    value.length >= 2;
 
   return (
     validate || {
@@ -23,7 +25,7 @@ function checkName(value: string, type: string): true | TError {
 }
 
 function checkUserName(value): true | TError {
-  const validate = value.length >= 2 && !value.includes(" ")
+  const validate = value.length >= 2 && !value.includes(' ');
 
   return (
     validate || {

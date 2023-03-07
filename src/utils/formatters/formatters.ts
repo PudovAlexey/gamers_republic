@@ -1,6 +1,7 @@
-import { EMessageAdd } from "../../api/types";
+import { EMessageAdd } from "@/api/types";
+import { TError } from "@/types";
 
-function camelCaseToText(text) {
+function camelCaseToText(text: string): string {
   return text
     .split('')
     .reduce(
@@ -15,7 +16,7 @@ function camelCaseToText(text) {
     );
 }
 
-function parseFileByType(file: File): EMessageAdd {
+function parseFileByType(file: File): EMessageAdd | TError {
   const { type } = file;
   if (/image/.test(type)) {
     return EMessageAdd.Img
@@ -25,6 +26,11 @@ function parseFileByType(file: File): EMessageAdd {
     return EMessageAdd.Audio
   } else if (/application/.test(type)) {
     return EMessageAdd.File
+  } else {
+    return {
+      type: 'error',
+      message: 'unnoun type of file'
+    }
   }
 }
 

@@ -1,5 +1,5 @@
-import { TError } from '../../types/index';
-import { ECompareValue } from '../types';
+import { TError } from '@/types/index';
+import { ECompareValue } from '@/utils/TestTypes';
 
 function compareValue(
   val1: string,

@@ -1,4 +1,4 @@
-import { EEnviroment } from './types';
+import { EEnviroment } from '@/utils/enviroment/types/index';
 
 function getEnviroment(): EEnviroment {
   const href = window.location.href;

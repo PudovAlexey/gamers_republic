@@ -12,7 +12,7 @@ import {
   filterMessagesMiddle,
   filterMessagesTop,
 } from './helpers/chat';
-import { ECompareValue } from '../../utils/types';
+import { ECompareValue } from '../../utils/TestTypes';
 
 class FakeApi {
   async getAuthUser(token) {
