@@ -1,8 +1,9 @@
+import { TError } from '@/types/index';
 import { createSlice, current } from '@reduxjs/toolkit';
-import { TMessageAdds, TMessage, TRoom } from '../../../../../api/types';
-import { parseFileByType } from '../../../../../utils/formatters/formatters';
-import { generateAddsId } from '../services/helpers';
-import { TScrollService } from '../services/scrollService/types';
+import { TMessageAdds, TMessage, TRoom, EMessageAdd } from '@/api/types';
+import { parseFileByType } from '@/utils/formatters/formatters';
+import { generateAddsId } from '@/components/PartyComponent/parts/Chat/services/helpers';
+import { TScrollService } from '@/components/PartyComponent/parts/Chat/services/scrollService/types';
 import {
   ADD_MESSAGE,
   ADD_MESSAGES,
@@ -22,13 +23,13 @@ import {
   TOGGLE_NAV_ITEMS,
   UPDATE_MESSAGES_ON_SCREEN,
 } from './actionCreators';
-import { maxInputRows } from './constants';
-import { $ } from '../../../../../utils/DOM/DOM';
+import { maxInputRows } from '@/components/PartyComponent/parts/Chat/store/constants';
+import { $ } from '@/utils/DOM/DOM';
 
 const initialState: {
   chatInputRef: null | HTMLInputElement;
   emojiAnchor: null | HTMLElement;
-  roomInfo: TRoom | null,
+  roomInfo: TRoom | null;
   messagesOnScreen: HTMLElement[];
   showEmptySearch: boolean;
   showNavItems: boolean;
@@ -101,7 +102,7 @@ const chatSlice = createSlice({
       state.messageContainer = messageContainer;
     },
     setChatInputRef: (state, action) => {
-      state.chatInputRef = action.payload
+      state.chatInputRef = action.payload;
     },
 
     inputMessage: (state, action) => {
@@ -111,10 +112,10 @@ const chatSlice = createSlice({
       if (separation && separation.length < maxInputRows) {
         state.inputRows = separation.length;
       } else if (!separation) {
-        const valueWidth = $.getMeasureText(target)
-        const inputWidth = target.offsetWidth
-        const rows = Math.ceil(valueWidth / inputWidth)
-        state.inputRows = rows
+        const valueWidth = $.getMeasureText(target);
+        const inputWidth = target.offsetWidth;
+        const rows = Math.ceil(valueWidth / inputWidth);
+        state.inputRows = rows;
       }
       state.messageInput = target.value;
     },
@@ -162,13 +163,13 @@ const chatSlice = createSlice({
 
     toggleEmojiAnchor: (state, action) => {
       if (!action.payload) {
-        state.emojiAnchor = null
+        state.emojiAnchor = null;
         return;
       }
       if (state.emojiAnchor) {
-        state.emojiAnchor = null
+        state.emojiAnchor = null;
       } else {
-        state.emojiAnchor = action.payload
+        state.emojiAnchor = action.payload;
       }
     },
 
@@ -221,7 +222,7 @@ const chatSlice = createSlice({
       }
     ) => {
       state.showSearchPanel = action.payload;
-      state.showEmptySearch = action.payload
+      state.showEmptySearch = action.payload;
     },
 
     onCloseReply: (state) => {
@@ -283,10 +284,16 @@ const chatSlice = createSlice({
       const currentAdds = state.adds || {};
       Array.from(files).forEach((file) => {
         const parseType = parseFileByType(file);
+        const errorFileType = parseType as TError;
+        if (errorFileType.type === 'error') {
+          console.log(errorFileType.message);
+          return;
+        }
+        const successFileType = parseType as EMessageAdd;
         if (parseType) {
-          if (!currentAdds[parseType]) currentAdds[parseType] = [];
-          const nextId = generateAddsId(currentAdds[parseType]);
-          currentAdds[parseType].push({
+          if (!currentAdds[successFileType]) currentAdds[successFileType] = [];
+          const nextId = generateAddsId(currentAdds[successFileType]);
+          currentAdds[successFileType].push({
             ...file,
             id: nextId,
           });
@@ -299,11 +306,17 @@ const chatSlice = createSlice({
     builder.addCase(CHANGE_FILES, (state, action) => {
       const { files, id } = action.payload;
       const parseType = parseFileByType(files[0]);
-      const fileIndex = state.adds[parseType].findIndex(
+      const errorFileType = parseType as TError;
+      if (errorFileType.type === 'error') {
+        console.log(errorFileType.message);
+        return;
+      }
+      const successFileType = parseType as EMessageAdd;
+      const fileIndex = state.adds[successFileType].findIndex(
         (file) => file.id === id
       );
       if (fileIndex >= 0)
-        state.adds[parseType].splice(fileIndex, 1, {
+        state.adds[successFileType].splice(fileIndex, 1, {
           id,
           type: parseType,
           file: files[0],
@@ -315,7 +328,7 @@ const chatSlice = createSlice({
       const { messageId } = action.payload;
       const scrollService = current(state.scrollService);
       const scrolledMessage = scrollService.findById(messageId);
-      console.log('scrolled message')
+      console.log('scrolled message');
       if (scrolledMessage) {
         $.selectAndLight(scrolledMessage);
       } else {
@@ -391,19 +404,19 @@ const chatSlice = createSlice({
     });
 
     builder.addCase(UPDATE_MESSAGES_ON_SCREEN, (state, action) => {
-      state.messagesOnScreen = action.payload as any
+      state.messagesOnScreen = action.payload as any;
     });
 
     builder.addCase(SEARCH_MESSAGES_START, (state, action) => {
       const { messages, searchValue } = action.payload;
       if (searchValue && (!messages || messages.length === 0)) {
-        state.showEmptySearch = true
+        state.showEmptySearch = true;
         return;
       } else if (!messages) {
-        state.searchMessages = null
+        state.searchMessages = null;
         return;
       } else if (!searchValue) {
-        state.showSearchPanel = false
+        state.showSearchPanel = false;
         return;
       }
       state.searchMessages = messages
@@ -426,18 +439,18 @@ const chatSlice = createSlice({
         })
         .filter((m) => m.searchMessage.length > 1);
       state.searchMessageId = messages[messages.length - 1].messageId;
-      state.showEmptySearch = false
+      state.showEmptySearch = false;
     });
 
     builder.addCase(SET_ROOM_INFO, (state, action) => {
-      state.roomInfo = action.payload
-    })
+      state.roomInfo = action.payload;
+    });
 
     builder.addCase(INSERT_EMOJI, (state, action) => {
-      const chatInput = state.chatInputRef
-      const insertEmoji = $.insertText(chatInput, action.payload.emoji)
-      state.messageInput = insertEmoji
-    })
+      const chatInput = state.chatInputRef;
+      const insertEmoji = $.insertText(chatInput, action.payload.emoji);
+      state.messageInput = insertEmoji;
+    });
 
     builder.addCase(MARKDOWN_MESSAGES, (state, action) => {});
   },
@@ -457,7 +470,7 @@ export const {
   onSearchMessageUp,
   toggleSearchPanel,
   toggleEmojiAnchor,
-  setChatInputRef
+  setChatInputRef,
 } = chatSlice.actions;
 
 export default chatSlice.reducer;

@@ -1,11 +1,11 @@
 import { EMessageAdd } from "@/api/types"
-import { parseFileByType } from "../formatters"
+import {parseFileByType} from '@/utils/formatters/formatters'
 
 describe('parse File', () => {
 
     test('file error', () => {
         const file = {type: 'test'} as File
-        expect(parseFileByType(file)).toBe({
+        expect(parseFileByType(file)).toEqual({
             type: 'error',
             message: 'unnoun type of file'
         })

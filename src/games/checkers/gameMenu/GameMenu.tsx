@@ -1,23 +1,15 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  ButtonGroup,
-  Switch,
-  Typography,
-  Box,
-  Input,
-} from '@mui/material';
-import { parseTime } from '../../../utils/timer/timer';
-import Timer from '../../../components/reusable/Timer/Timer';
+import React from 'react';
+import { Button, ButtonGroup } from '@mui/material';
 import MenuTimer from './items/settings/TimerSettings';
-import { ERoutes } from '../../../routes';
+import { ERoutes } from '@/routes';
+import { TMenuTree } from '@/games/checkers/gameMenu/types';
 
 export function gameMenu({
   setStartGame,
   navigate,
   gameParams,
   setGameParams,
-}) {
+}): TMenuTree {
   function SideSelect({ action }) {
     return (
       <ButtonGroup>
@@ -42,7 +34,6 @@ export function gameMenu({
   }
 
   function onSetFirstStep(e) {
-    console.log(e);
     setGameParams((params) => ({
       ...params,
       firstStep: e,
@@ -54,29 +45,37 @@ export function gameMenu({
       {
         node: {
           text: 'Start Game',
+          type: 'button',
           action: function () {
             setStartGame((prev) => !prev);
           },
         },
       },
       {
-        node: { text: 'Options' },
+        node: {
+          text: 'Options',
+          type: 'control',
+          control: <div>{'Add control'}</div>,
+        },
         children: [
           {
             node: {
               text: 'Choose Top Side',
+              type: 'control',
               control: <SideSelect action={onSetSide} />,
             },
           },
           {
             node: {
               text: 'Who first Step',
+              type: 'control',
               control: <SideSelect action={onSetFirstStep} />,
             },
           },
           {
             node: {
               text: 'Timer',
+              type: 'control',
               control: (
                 <MenuTimer
                   setGameParams={setGameParams}
@@ -90,11 +89,11 @@ export function gameMenu({
       {
         node: {
           text: 'Out',
+          type: 'button',
           action: function () {
             navigate(ERoutes.Games);
           },
         },
-        children: '',
       },
     ],
   };

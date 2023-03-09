@@ -1,15 +1,13 @@
-import React, { useCallback, useState, useEffect } from 'react';
-import { Box, Toolbar, Divider, Button, Drawer, Slider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, Divider, Button, Drawer } from '@mui/material';
 import { TreeView, TreeItem } from '@mui/lab';
 import { ExpandMore, ExpandLess, ChevronRight } from '@mui/icons-material';
-import { makeNodesTree } from '../../../utils/treeWalker/treeWalker';
-import { useNavigate } from 'react-router-dom';
-import gamesTree from '../../../games/GamesList/GamesTree';
-import SearchField from '../../../components/reusable/SearchField/SearchField';
-import RangeSlider from '../../../components/reusable/RangeSlider/RangeSlider';
-import api from '../../../api/api/api';
-import { Node } from '../../../utils/treeWalker/types';
-import ToolbarComponent from '../../../components/reusable/ToolbarComponent/ToolbarComponent';
+import { makeNodesTree } from '@/utils/treeWalker/treeWalker';
+import SearchField from '@/components/reusable/SearchField/SearchField';
+import RangeSlider from '@/components/reusable/RangeSlider/RangeSlider';
+import api from '@/api/api/api';
+import { Node } from '@/utils/treeWalker/types';
+import ToolbarComponent from '@/components/reusable/ToolbarComponent/ToolbarComponent';
 
 function Master({ filterValues, setFilterValues, filters, setFilters }) {
   const [expandedTree, setExpandedTree] = React.useState<string[]>([]);
@@ -33,7 +31,8 @@ function Master({ filterValues, setFilterValues, filters, setFilters }) {
   }
 
   useEffect(() => {
-    api.getGameCategories().then((category: Node) => {
+    api.getGameCategories()
+    .then((category: Node) => {
       let childContent = function (node, nodeId, forEachData) {
         return forEachData(TreeItem, {
           label: node.text,

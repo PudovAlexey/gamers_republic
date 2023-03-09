@@ -1,5 +1,5 @@
 import { EMessageAdd } from "@/api/types";
-import { TError } from "@/types";
+import { TError } from "@/types/index";
 
 function camelCaseToText(text: string): string {
   return text

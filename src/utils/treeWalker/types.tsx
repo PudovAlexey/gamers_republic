@@ -29,10 +29,10 @@ export type TmakeNodesTreeType = {
   firstRowProps: (leaf: Node, updateId: string) => {};
 };
 
-export type TBuildTree = {
-  nodes: FlatNode[];
+export type TBuildTree<T> = {
+  nodes: (FlatNode & T)[];
   idProp?: string;
   parrentIdProp?: string;
 };
 
-export type TBuildTreeProps = TBuildTree & TTreeProps;
+export type TBuildTreeProps<T> = TBuildTree<T> & TTreeProps;

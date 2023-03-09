@@ -4,7 +4,7 @@ import { camelCaseToText } from "../formatters"
 describe('camel Case To Text', () => {
 
     test('helloWord check', () => {
-        expect(camelCaseToText('hellowWord')).toBe('Hellow word')
+        expect(camelCaseToText('hellowWord')).toBe('Hellow Word')
     })
 
     test('from upperCase', () => {

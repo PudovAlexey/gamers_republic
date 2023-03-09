@@ -12,21 +12,20 @@ import {
 } from '@mui/material';
 import {
   findTreeNodeById,
-  forEachTreeNodes,
-} from '../../utils/treeWalker/treeWalker';
+  makeTreeNodesId,
+} from '@/utils/treeWalker/treeWalker';
+import { TNode } from '@/games/checkers/gameMenu/types';
 
 function GameMenu({ menuTree }) {
   const [optionNode, setOptionNode] = useState(menuTree.children);
   const menuTreeWithIds = useMemo(() => {
-    let makeTreenodesIds = (node, parrentNode) => {};
-    return forEachTreeNodes(menuTree, makeTreenodesIds);
-  }, [optionNode]);
+    return makeTreeNodesId<TNode>(menuTree);
+  }, [menuTree]);
 
   function onTreeItemPress(treeNode) {
     if (treeNode.children) {
       setOptionNode(treeNode.children);
     } else if (treeNode.node.action) {
-      console.log('action');
       treeNode.node.action();
     }
   }
@@ -55,8 +54,8 @@ function GameMenu({ menuTree }) {
           height: '150%',
           background: 'rgba(0, 0, 0, .5)',
           position: 'absolute',
-          gap: "30px",
-          bottom: "100px",
+          gap: '30px',
+          bottom: '100px',
 
           color: 'white',
           margin: 'auto auto',
@@ -74,74 +73,77 @@ function GameMenu({ menuTree }) {
           sx={{
             zIndex: 2000,
             position: 'fixed',
-            left: "4%",
+            left: '4%',
             top: '28%',
-            backgroundColor: "#ff4655",
-            width: "150px",
-            height: "66px"
+            backgroundColor: '#ff4655',
+            width: '150px',
+            height: '66px',
           }}
           onClick={onNavBack}
-          >
-          <ArrowBackIosIcon/>
-        </Button>
-        {optionNode.map((treeNode) => (
-          treeNode.node.control ? <ListItem
-            sx={{
-              display: "flex",
-              flexDirection: 'column',
-              background: "transparent",
-              // border: "2px solid #F8F8F8",
-              width: "90%",
-              height: "max-content",
-              overflowY: "hidden",
-              overflowX: "hidden",
-              border: "none",
-              position: "relative",
-              "&:after": {
-                content: '""',
-                position: 'absolute',
-                width: '1158%',
-                height: '1000%',
-                top: '20px; right: -500%',
-                background: '#F8F8F8',
-                color: "",
-                transformOrigin: '48.3% 0',
-                transform: 'rotate(-41deg)',
-                zIndex: -1,
-              },
-              "&:hover": {
-                animation: "gameMenu 2s",
-              }
-            }}
-            key={treeNode.node.id}
-            component="button"
-            onClick={() => onTreeItemPress(treeNode)}
-          >
-            <ListItemText
-              primary={
-                <Typography variant="h4">{treeNode.node.text}</Typography>
-              }
-            />
-            {treeNode.node.control}
-          </ListItem> :
-          <ListItemButton
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            flexGrow: '0',
-          }}
-          key={treeNode.node.id}
-          component="button"
-          onClick={() => onTreeItemPress(treeNode)}
         >
-          <ListItemText
-            primary={
-              <Typography variant="h4">{treeNode.node.text}</Typography>
-            }
-          />
-          <Box>{treeNode.node.control}</Box>
-        </ListItemButton>
-        ))}
+          <ArrowBackIosIcon />
+        </Button>
+        {optionNode.map((treeNode) =>
+          treeNode.node.control ? (
+            <ListItem
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                background: 'transparent',
+                // border: "2px solid #F8F8F8",
+                width: '90%',
+                height: 'max-content',
+                overflowY: 'hidden',
+                overflowX: 'hidden',
+                border: 'none',
+                position: 'relative',
+                '&:after': {
+                  content: '""',
+                  position: 'absolute',
+                  width: '1158%',
+                  height: '1000%',
+                  top: '20px; right: -500%',
+                  background: '#F8F8F8',
+                  color: '',
+                  transformOrigin: '48.3% 0',
+                  transform: 'rotate(-41deg)',
+                  zIndex: -1,
+                },
+                '&:hover': {
+                  animation: 'gameMenu 2s',
+                },
+              }}
+              key={treeNode.node.id}
+              component="button"
+              onClick={() => onTreeItemPress(treeNode)}
+            >
+              <ListItemText
+                primary={
+                  <Typography variant="h4">{treeNode.node.text}</Typography>
+                }
+              />
+              {treeNode.node.control}
+            </ListItem>
+          ) : (
+            <ListItemButton
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                flexGrow: '0',
+              }}
+              key={treeNode.node.id}
+              component="button"
+              onClick={() => onTreeItemPress(treeNode)}
+            >
+              <ListItemText
+                primary={
+                  <Typography variant="h4">{treeNode.node.text}</Typography>
+                }
+              />
+              <Box>{treeNode.node.control}</Box>
+            </ListItemButton>
+          )
+        )}
       </List>
     </Box>
   );

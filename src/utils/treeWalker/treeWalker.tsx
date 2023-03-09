@@ -1,22 +1,46 @@
-import { getNodeByPath } from '../others';
-import { TBuildTreeProps, TmakeNodesTreeType } from './types';
-
-export function forEachTreeNodes(
+import { getNodeByPath } from '../others/index';
+import {
+  FlatNode,
+  TBuildTreeProps,
+  TmakeNodesTreeType,
+} from '@/utils/treeWalker/types';
+export function forEachTreeNodes<L>({
   tree,
   action,
   parrentNode = null,
   nodeId = '0',
   nodeName = 'node',
-  childName = 'children'
-) {
-  tree[nodeName].id = nodeId;
-  if (typeof action === 'function') action(tree[nodeName], parrentNode, nodeId);
-  if (Array.isArray(tree[childName]) && tree[childName].length) {
-    tree[childName].forEach((node, idx) =>
-      forEachTreeNodes(node, action, tree, `${nodeId}-${idx}`)
-    );
+  childName = 'children',
+}: {
+  tree: L;
+  action: (leaf: L, parrentLeaf: L, nodeId: string) => void | null;
+  parrentNode?: L | null;
+  nodeId?: string | '0';
+  nodeName?: string | 'node';
+  childName?: string | 'children';
+}): L {
+  function changeTree<L>(tree: L, nodeId: string): L {
+    const treeParse: L = {
+      [nodeName]: tree[nodeName]?.virtual
+        ? tree[nodeName]
+        : action(tree[nodeName], parrentNode, nodeId),
+    } as L;
+    if (!tree[nodeName]?.virtual) treeParse[nodeName]['nodeId'] = nodeId;
+    if (tree[childName])
+      treeParse[childName] = tree[childName].map((node, idx) =>
+        changeTree(node, `${nodeId}-${idx}`)
+      );
+    return treeParse;
   }
-  return tree;
+
+  return changeTree<L>(tree, nodeId);
+}
+
+export function makeTreeNodesId<L>(tree: L) {
+  return forEachTreeNodes<L>({
+    tree,
+    action: () => null,
+  });
 }
 
 export function makeNodesTree({
@@ -75,7 +99,15 @@ export function makeNodesTree({
   return handleTreeItems(treeChildren, 0);
 }
 
-export function findTreeNodeById({ treeNode, id, nodePath = 'nodeId' }) {
+export function findTreeNodeById<T, I, R>({
+  treeNode,
+  id,
+  nodePath = 'nodeId',
+}: {
+  treeNode: T;
+  id: I;
+  nodePath: string;
+}): R {
   let node;
   function findTreeNode(treeNode) {
     let nodeId = getNodeByPath({ node: treeNode, path: nodePath });
@@ -92,14 +124,22 @@ export function findTreeNodeById({ treeNode, id, nodePath = 'nodeId' }) {
   return findTreeNode(treeNode);
 }
 
-export function buildTree({
+export function buildTree<T>({
   nodes,
   sorter,
   nodeName = 'node',
   childName = 'children',
   idProp = 'nodeId',
   parrentIdProp = 'parrentId',
-}: TBuildTreeProps) {
+}: TBuildTreeProps<T>): {
+  [x: string]:
+    | {
+        [x: string]: FlatNode & T;
+      }[]
+    | {
+        virtual: boolean;
+      };
+} {
   let rootTree = nodes.filter((route) => route[parrentIdProp] === 0);
   let inTree = nodes.filter((route) => route[parrentIdProp] !== 0);
   let parseTreeNodes = inTree.reduce(
@@ -130,5 +170,5 @@ export function buildTree({
     }
   );
 
-  return parseTreeNodes;
+  return parseTreeNodes as FlatNode & T;
 }
